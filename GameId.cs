@@ -1,0 +1,70 @@
+﻿// Decompiled with JetBrains decompiler
+// Type: SimHaptics.GameId
+// Assembly: SimHaptics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
+// Assembly location: C:\Users\demas\Downloads\dnSpy-net-win64\SimHaptics.dll
+
+#nullable disable
+namespace SimHaptics
+{
+  public enum GameId
+  {
+    Other,
+    AC,
+    ACC,
+    AMS1,
+    AMS2,
+    D4,
+    DR2,
+    WRC23,
+    F12020,
+    F12021,
+    F12022,
+    F12023,
+    F12024,
+    F12025,
+    F12026,
+    Forza,
+    GTR2,
+    IRacing,
+    PC2,
+    RBR,
+    RF2,
+    RRRE,
+    DR,
+    GTL,
+    LFS,
+    RACE07,
+    GSCE,
+    WRC10,
+    WRCX,
+    WRCGen,
+    D2,
+    D3,
+    DShowdown,
+    F12012,
+    F12013,
+    F12014,
+    F12015,
+    F12016,
+    F12017,
+    F12018,
+    F12019,
+    G2,
+    G2019,
+    GAutosport,
+    GLegends,
+    KK,
+    PC1,
+    PC3,
+    RF1,
+    ATS,
+    ETS2,
+    BeamNG,
+    GPBikes,
+    MXBikes,
+    LMU,
+    GranTurismo7,
+    GranTurismoSport,
+  }
+}
