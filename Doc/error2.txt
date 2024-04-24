@@ -1,0 +1,8 @@
+Severity	Code	Description	Project	File	Line	Suppression State	Details
+Error	CS0571	'JToken.explicit operator bool(JToken)': cannot explicitly call operator or accessor	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	2326	N/A	
+Error	CS0571	'JToken.explicit operator bool(JToken)': cannot explicitly call operator or accessor	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	2316	N/A	
+Error	CS0571	'JToken.explicit operator bool(JToken)': cannot explicitly call operator or accessor	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	2318	N/A	
+Error	CS0571	'JToken.explicit operator bool(JToken)': cannot explicitly call operator or accessor	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	2320	N/A	
+Error	CS0571	'JToken.explicit operator bool(JToken)': cannot explicitly call operator or accessor	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	2322	N/A	
+Error	CS0571	'JToken.explicit operator bool(JToken)': cannot explicitly call operator or accessor	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	2324	N/A	
+Error	CS0571	'JToken.explicit operator bool(JToken)': cannot explicitly call operator or accessor	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	2328	N/A

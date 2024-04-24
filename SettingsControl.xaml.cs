@@ -17,8 +17,9 @@ using System.Windows.Markup;
 #nullable disable
 namespace SimHaptics
 {
-  public partial class SettingsControl : UserControl, IComponentConnector
+  public partial class SettingsControl : UserControl //, IComponentConnector
   {
+/*
     internal TextBox CarName;
     internal TextBox CarId;
     internal TextBox CarClass;
@@ -72,13 +73,11 @@ namespace SimHaptics
     internal TextBox SlipYGammaAll;
     internal TextBox SlipYGamma;
     private bool _contentLoaded;
-
+*/
     public SimHapticsPlugin Plugin { get; }
-
     public SettingsControl() => this.InitializeComponent();
 
-    public SettingsControl(SimHapticsPlugin plugin)
-      : this()
+    public SettingsControl(SimHapticsPlugin plugin) : this()
     {
       this.Plugin = plugin;
       this.DataContext = (object) this.Plugin;
@@ -99,7 +98,7 @@ namespace SimHaptics
       this.Plugin.Settings.Unlocked = !this.Plugin.Settings.Unlocked;
       this.Plugin.D.LockedText = this.Plugin.Settings.Unlocked ? "Lock" : "Unlock";
     }
-
+/*
     [DebuggerNonUserCode]
     [GeneratedCode("PresentationBuildTasks", "4.0.0.0")]
     public void InitializeComponent()
@@ -109,7 +108,8 @@ namespace SimHaptics
       this._contentLoaded = true;
       Application.LoadComponent((object) this, new Uri("/SimHaptics;component/settingscontrol.xaml", UriKind.Relative));
     }
-
+*/
+/*
     [DebuggerNonUserCode]
     [GeneratedCode("PresentationBuildTasks", "4.0.0.0")]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -280,5 +280,6 @@ namespace SimHaptics
           break;
       }
     }
+*/
   }
 }

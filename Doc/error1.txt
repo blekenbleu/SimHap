@@ -1,0 +1,58 @@
+Severity	Code	Description	Project	File	Line	Suppression State	Details
+Error	CS8646	'IComponentConnector.Connect(int, object)' is explicitly implemented more than once.	SimHap	D:\my\SimHub\PluginSdk\SimHap\SettingsControl.xaml.cs	20	N/A	
+Error	CS1112	Do not use 'System.Runtime.CompilerServices.ExtensionAttribute'. Use the 'this' keyword instead.	SimHap	D:\my\SimHub\PluginSdk\SimHap\AssemblyInfo.cs	5	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'ABSPulseLength'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	373	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'CarClass'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	70	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'CarId'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	66	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'CarName'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	62	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'CylinderCount'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	110	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'DisplacementCC'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	132	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'DownshiftDurationMs'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	85	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'EMaxPowerHP'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	128	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'EngineConfig'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	106	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'EngineLocation'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	114	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'EngineMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	98	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MaxPowerHP'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	122	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MaxRPM'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	79	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MaxTorqueNm'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	136	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionHeaveGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	221	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionHeaveMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	217	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionHeaveOffset'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	213	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionPitchGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	183	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionPitchMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	179	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionPitchOffset'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	175	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionRollGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	195	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionRollMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	191	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionRollOffset'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	187	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionSurgeGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	233	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionSurgeMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	229	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionSurgeOffset'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	225	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionSwayGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	245	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionSwayMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	241	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionSwayOffset'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	237	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionYawGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	207	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionYawMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	203	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'MotionYawOffset'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	199	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'PoweredWheels'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	118	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'Redline'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	75	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'RumbleMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	284	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'RumbleMultAll'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	277	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SlipXGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	367	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SlipXGammaAll'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	360	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SlipXMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	354	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SlipXMultAll'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	347	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SlipYGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	401	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SlipYGammaAll'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	394	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SlipYMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	388	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SlipYMultAll'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	381	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SuspensionGamma'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	310	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SuspensionGammaAll'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	303	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SuspensionMult'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	297	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'SuspensionMultAll'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	290	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'UpshiftDurationMs'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	91	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for 'Version'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	142	N/A	
+Error	CS0102	The type 'SettingsControl' already contains a definition for '_contentLoaded'	SimHap	D:\my\SimHub\PluginSdk\SimHap\obj\Debug\settingscontrol.g.cs	445	N/A	
+Error	CS0246	The type or namespace name 'Newtonsoft' could not be found (are you missing a using directive or an assembly reference?)	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	8	N/A	
+Error	CS0246	The type or namespace name 'Newtonsoft' could not be found (are you missing a using directive or an assembly reference?)	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	9	N/A	
+Error	CS0111	Type 'SettingsControl' already defines a member called 'InitializeComponent' with the same parameter types	SimHap	D:\my\SimHub\PluginSdk\SimHap\obj\Debug\settingscontrol.g.cs	452	N/A	
+Error	CS0111	Type 'SettingsControl' already defines a member called 'System.Windows.Markup.IComponentConnector.Connect' with the same parameter types	SimHap	D:\my\SimHub\PluginSdk\SimHap\obj\Debug\settingscontrol.g.cs	472	N/A	
