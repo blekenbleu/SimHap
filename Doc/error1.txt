@@ -52,7 +52,5 @@ Error	CS0102	The type 'SettingsControl' already contains a definition for 'Suspe
 Error	CS0102	The type 'SettingsControl' already contains a definition for 'UpshiftDurationMs'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	91	N/A	
 Error	CS0102	The type 'SettingsControl' already contains a definition for 'Version'	SimHap	D:\my\SimHub\PluginSdk\SimHap\settingscontrol.xaml	142	N/A	
 Error	CS0102	The type 'SettingsControl' already contains a definition for '_contentLoaded'	SimHap	D:\my\SimHub\PluginSdk\SimHap\obj\Debug\settingscontrol.g.cs	445	N/A	
-Error	CS0246	The type or namespace name 'Newtonsoft' could not be found (are you missing a using directive or an assembly reference?)	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	8	N/A	
-Error	CS0246	The type or namespace name 'Newtonsoft' could not be found (are you missing a using directive or an assembly reference?)	SimHap	D:\my\SimHub\PluginSdk\SimHap\SimHapticsPlugin.cs	9	N/A	
 Error	CS0111	Type 'SettingsControl' already defines a member called 'InitializeComponent' with the same parameter types	SimHap	D:\my\SimHub\PluginSdk\SimHap\obj\Debug\settingscontrol.g.cs	452	N/A	
 Error	CS0111	Type 'SettingsControl' already defines a member called 'System.Windows.Markup.IComponentConnector.Connect' with the same parameter types	SimHap	D:\my\SimHub\PluginSdk\SimHap\obj\Debug\settingscontrol.g.cs	472	N/A	

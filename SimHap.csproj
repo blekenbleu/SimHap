@@ -11,12 +11,11 @@
     <ProjectGuid>{19133D8C-01DC-4DDB-89ED-668A90978AFE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdk.Plugin</RootNamespace>
-    <AssemblyName>SimHaptics</AssemblyName>
+    <AssemblyName>sierses.SimHap</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>SimHaptics</RootNamespace>
+    <RootNamespace>sierses.SimHap</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>

@@ -1,5 +1,5 @@
 ﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.Properties.Resources
+// Type: sierses.SimHap.Properties.Resources
 // Assembly: SimHaptics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 // Assembly location: C:\Users\demas\Downloads\dnSpy-net-win64\SimHaptics.dll
@@ -13,7 +13,7 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 
 #nullable disable
-namespace SimHaptics.Properties
+namespace sierses.SimHap.Properties
 {
   [GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
   [DebuggerNonUserCode]
@@ -32,24 +32,24 @@ namespace SimHaptics.Properties
     {
       get
       {
-        if (SimHaptics.Properties.Resources.resourceMan == null)
-          SimHaptics.Properties.Resources.resourceMan = new ResourceManager("SimHaptics.Properties.Resources", typeof (SimHaptics.Properties.Resources).Assembly);
-        return SimHaptics.Properties.Resources.resourceMan;
+        if (sierses.SimHap.Properties.Resources.resourceMan == null)
+          sierses.SimHap.Properties.Resources.resourceMan = new ResourceManager("sierses.SimHap.Properties.Resources", typeof (sierses.SimHap.Properties.Resources).Assembly);
+        return sierses.SimHap.Properties.Resources.resourceMan;
       }
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     internal static CultureInfo Culture
     {
-      get => SimHaptics.Properties.Resources.resourceCulture;
-      set => SimHaptics.Properties.Resources.resourceCulture = value;
+      get => sierses.SimHap.Properties.Resources.resourceCulture;
+      set => sierses.SimHap.Properties.Resources.resourceCulture = value;
     }
 
     internal static Bitmap _100x100_Impacts_White
     {
       get
       {
-        return (Bitmap) SimHaptics.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Impacts_White), SimHaptics.Properties.Resources.resourceCulture);
+        return (Bitmap) sierses.SimHap.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Impacts_White), sierses.SimHap.Properties.Resources.resourceCulture);
       }
     }
 
@@ -57,7 +57,7 @@ namespace SimHaptics.Properties
     {
       get
       {
-        return (Bitmap) SimHaptics.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_RPM_White), SimHaptics.Properties.Resources.resourceCulture);
+        return (Bitmap) sierses.SimHap.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_RPM_White), sierses.SimHap.Properties.Resources.resourceCulture);
       }
     }
 
@@ -65,7 +65,7 @@ namespace SimHaptics.Properties
     {
       get
       {
-        return (Bitmap) SimHaptics.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Suspension_White), SimHaptics.Properties.Resources.resourceCulture);
+        return (Bitmap) sierses.SimHap.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Suspension_White), sierses.SimHap.Properties.Resources.resourceCulture);
       }
     }
 
@@ -73,7 +73,7 @@ namespace SimHaptics.Properties
     {
       get
       {
-        return (Bitmap) SimHaptics.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Traction_White), SimHaptics.Properties.Resources.resourceCulture);
+        return (Bitmap) sierses.SimHap.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Traction_White), sierses.SimHap.Properties.Resources.resourceCulture);
       }
     }
 
@@ -81,7 +81,7 @@ namespace SimHaptics.Properties
     {
       get
       {
-        return (Bitmap) SimHaptics.Properties.Resources.ResourceManager.GetObject(nameof (SimHapticsShakerStyleIcon_alt012), SimHaptics.Properties.Resources.resourceCulture);
+        return (Bitmap) sierses.SimHap.Properties.Resources.ResourceManager.GetObject(nameof (SimHapticsShakerStyleIcon_alt012), sierses.SimHap.Properties.Resources.resourceCulture);
       }
     }
   }

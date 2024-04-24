@@ -7,7 +7,7 @@
 using System;
 
 #nullable disable
-namespace SimHaptics
+namespace sierses.SimHap
 {
   internal static class Helpers
   {

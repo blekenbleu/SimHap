@@ -5,7 +5,7 @@
 // Assembly location: C:\Users\demas\Downloads\dnSpy-net-win64\SimHaptics.dll
 
 #nullable disable
-namespace SimHaptics
+namespace sierses.SimHap
 {
   public enum TimeInterval : long
   {
