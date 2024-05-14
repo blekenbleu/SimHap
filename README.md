@@ -13,7 +13,8 @@
 	*should be*:  
 	![](Doc/engine.jpg)  
 	- presumably based on wrong fix for [build errors](Doc/message.txt)  
-	- *14 May 2024*:&nbsp;  seemingly eliminated `SettingsControl.xaml.cs` stripping for missing engine data
+	- *14 May 2024*:&nbsp;  eliminated `SettingsControl.xaml.cs` stripping for missing engine data
+		- `Untoken()` replaced disallowed `JToken.op_Explicit(jtoken[(object) "name"])` 
 - lookup in .json for Internet fails
 	- For unknown id, plugin presents users with list of known names not already mapped.  
 	When users select a name, the new carID gets added to JSON for that name with old carID.
