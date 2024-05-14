@@ -92,10 +92,10 @@ namespace sierses.SimHap
 
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
-            FrameCountTicks = FrameCountTicks + DateTime.Now.Ticks - FrameTimeTicks;
-            FrameTimeTicks = DateTime.Now.Ticks;
+			FrameCountTicks = FrameCountTicks + DateTime.Now.Ticks - FrameTimeTicks;
+			FrameTimeTicks = DateTime.Now.Ticks;
 			if (FrameCountTicks > 864000000000L)
-                FrameCountTicks = 0L;
+				FrameCountTicks = 0L;
 			if (FrameCountTicks % 2500000L <= 150000L && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu) && Settings.Unlocked && data.NewData != null)
 				SetVehiclePerGame(pluginManager, ref data.NewData);
 			if (!data.GameRunning || data.OldData == null || data.NewData == null)
@@ -1630,7 +1630,7 @@ namespace sierses.SimHap
 				case GameId.AC:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1638,7 +1638,7 @@ namespace sierses.SimHap
 				case GameId.ACC:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1646,7 +1646,7 @@ namespace sierses.SimHap
 				case GameId.AMS1:
 					if (S.Id != db.CarId && S.Category != db.CarClass && FailedId != db.CarId && FailedCategory != db.CarClass)
 					{
-                        FetchCarData(db.CarId, db.CarClass, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, db.CarClass, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1654,7 +1654,7 @@ namespace sierses.SimHap
 				case GameId.AMS2:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						S.Name = db.CarModel;
 						S.Category = db.CarClass;
 						D.IdleRPM = db.MaxRpm * 0.25;
@@ -1664,7 +1664,7 @@ namespace sierses.SimHap
 				case GameId.D4:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = 10.0 * (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm");
 						break;
 					}
@@ -1672,7 +1672,7 @@ namespace sierses.SimHap
 				case GameId.DR2:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = 10.0 * (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm");
 						break;
 					}
@@ -1680,7 +1680,7 @@ namespace sierses.SimHap
 				case GameId.WRC23:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
+						FetchCarData(db.CarId, null, S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
 						D.IdleRPM = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle");
 						break;
 					}
@@ -1689,7 +1689,7 @@ namespace sierses.SimHap
 				case GameId.F12023:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = 10.0 * (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM");
 						break;
 					}
@@ -1697,7 +1697,7 @@ namespace sierses.SimHap
 				case GameId.Forza:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId.Substring(4), null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId.Substring(4), null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm");
 						break;
 					}
@@ -1705,7 +1705,7 @@ namespace sierses.SimHap
 				case GameId.GTR2:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1713,7 +1713,7 @@ namespace sierses.SimHap
 				case GameId.IRacing:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
 						D.GameAltText = pluginManager.GameName + (string) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 						break;
@@ -1722,7 +1722,7 @@ namespace sierses.SimHap
 				case GameId.PC2:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1730,7 +1730,7 @@ namespace sierses.SimHap
 				case GameId.RBR:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1738,7 +1738,7 @@ namespace sierses.SimHap
 				case GameId.RF2:
 					if (S.Id != db.CarId && S.Category != db.CarClass && FailedId != db.CarId && FailedCategory != db.CarClass)
 					{
-                        FetchCarData(db.CarId, db.CarClass, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, db.CarClass, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1746,7 +1746,7 @@ namespace sierses.SimHap
 				case GameId.RRRE:
 					if (S.Id != db.CarModel && FailedId != db.CarModel)
 					{
-                        FetchCarData(db.CarModel, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarModel, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1756,7 +1756,7 @@ namespace sierses.SimHap
 					{
 						S.Redline = db.MaxRpm;
 						S.MaxRPM = Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001 > 0.55 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0;
-                        FetchCarData(db.CarId, null, S, S.Redline, S.MaxRPM);
+						FetchCarData(db.CarId, null, S, S.Redline, S.MaxRPM);
 						D.IdleRPM = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm");
 						break;
 					}
@@ -1769,15 +1769,15 @@ namespace sierses.SimHap
 						D.IdleRPM = db.MaxRpm * 0.25;
 						S.MaxRPM = db.MaxRpm;
 						S.Redline = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM");
-                        LoadFinish = false;
-                        FetchStatus = APIStatus.Fail;
+						LoadFinish = false;
+						FetchStatus = APIStatus.Fail;
 						break;
 					}
 					break;
 				case GameId.LMU:
 					if (S.Id != db.CarId && S.Category != db.CarClass && FailedId != db.CarId && FailedCategory != db.CarClass)
 					{
-                        FetchCarData(db.CarId, db.CarClass, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, db.CarClass, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
@@ -1786,7 +1786,7 @@ namespace sierses.SimHap
 				case GameId.GranTurismoSport:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-                        FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						S.Redline = (short)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM");
 						S.MaxRPM = (short)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM");
 						D.IdleRPM = db.MaxRpm * 0.25;
@@ -1797,13 +1797,13 @@ namespace sierses.SimHap
 					D.IdleRPM = db.MaxRpm * 0.25;
 					S.Redline = db.CarSettings_CurrentGearRedLineRPM;
 					S.MaxRPM = db.MaxRpm;
-                    FetchStatus = APIStatus.Fail;
+					FetchStatus = APIStatus.Fail;
 					break;
 			}
 			if (!LoadFinish && FetchStatus == APIStatus.Success)
 			{
 				Settings.Vehicle = new Spec(S);
-                LoadStatus = DataStatus.SimHapticsAPI;
+				LoadStatus = DataStatus.SimHapticsAPI;
 				D.LoadStatusText = "DB Load Success";
 				FinalizeVehicleLoad();
 			}
@@ -1821,7 +1821,7 @@ namespace sierses.SimHap
 			if (Settings.Vehicle != null && (Settings.Vehicle.Id == db.CarId || Settings.Vehicle.Id == db.CarModel))
 			{
 				S = Settings.Vehicle;
-                LoadStatus = DataStatus.SettingsFile;
+				LoadStatus = DataStatus.SettingsFile;
 				D.LoadStatusText = "Load Fail: Loaded from Settings";
 			}
 			if (LoadStatus == DataStatus.SettingsFile)
@@ -1838,7 +1838,7 @@ namespace sierses.SimHap
 			S.MaxPower = 300.0;
 			S.ElectricMaxPower = 0.0;
 			S.MaxTorque = 250.0;
-            LoadStatus = DataStatus.GameData;
+			LoadStatus = DataStatus.GameData;
 			switch (CurrentGame)
 			{
 				case GameId.AC:
@@ -1968,7 +1968,7 @@ namespace sierses.SimHap
 			D.RumbleRightAvg = 0.0;
 			SetRPMIntervals();
 			SetRPMMix();
-            LoadFinish = true;
+			LoadFinish = true;
 		}
 
 		private void SetRPMIntervals()
@@ -2096,104 +2096,104 @@ namespace sierses.SimHap
 
 		public void SetGame(PluginManager pluginManager, SimData sd)
 		{
-            GameDBText = pluginManager.GameName;
+			GameDBText = pluginManager.GameName;
 			sd.GameAltText = pluginManager.GameName;
 			switch (GameDBText)
 			{
 				case "AssettoCorsa":
-                    CurrentGame = GameId.AC;
-                    GameDBText = "AC";
+					CurrentGame = GameId.AC;
+					GameDBText = "AC";
 					sd.RumbleFromPlugin = true;
 					break;
 				case "AssettoCorsaCompetizione":
-                    CurrentGame = GameId.ACC;
-                    GameDBText = "ACC";
+					CurrentGame = GameId.ACC;
+					GameDBText = "ACC";
 					break;
 				case "Automobilista":
-                    CurrentGame = GameId.AMS1;
-                    GameDBText = "AMS1";
+					CurrentGame = GameId.AMS1;
+					GameDBText = "AMS1";
 					break;
 				case "Automobilista2":
-                    CurrentGame = GameId.AMS2;
-                    GameDBText = "AMS2";
+					CurrentGame = GameId.AMS2;
+					GameDBText = "AMS2";
 					break;
 				case "FH4":
 				case "FH5":
 				case "FM7":
 				case "FM8":
-                    CurrentGame = GameId.Forza;
-                    GameDBText = "Forza";
+					CurrentGame = GameId.Forza;
+					GameDBText = "Forza";
 					break;
 				case "IRacing":
-                    CurrentGame = GameId.IRacing;
+					CurrentGame = GameId.IRacing;
 					sd.GameAltText += (string) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 					break;
 				case "KartKraft":
-                    CurrentGame = GameId.KK;
-                    GameDBText = "KK";
+					CurrentGame = GameId.KK;
+					GameDBText = "KK";
 					break;
 				case "LFS":
-                    CurrentGame = GameId.LFS;
+					CurrentGame = GameId.LFS;
 					break;
 				case "PCars1":
 				case "PCars2":
 				case "PCars3":
-                    CurrentGame = GameId.PC2;
-                    GameDBText = "PC2";
+					CurrentGame = GameId.PC2;
+					GameDBText = "PC2";
 					break;
 				case "RBR":
-                    CurrentGame = GameId.RBR;
+					CurrentGame = GameId.RBR;
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "RFactor1":
-                    CurrentGame = GameId.RF1;
-                    GameDBText = "RF1";
+					CurrentGame = GameId.RF1;
+					GameDBText = "RF1";
 					break;
 				case "RFactor2":
 				case "RFactor2Spectator":
-                    CurrentGame = GameId.RF2;
-                    GameDBText = "RF2";
+					CurrentGame = GameId.RF2;
+					GameDBText = "RF2";
 					break;
 				case "LMU":
-                    CurrentGame = GameId.LMU;
-                    GameDBText = "LMU";
+					CurrentGame = GameId.LMU;
+					GameDBText = "LMU";
 					break;
 				case "RRRE":
-                    CurrentGame = GameId.RRRE;
+					CurrentGame = GameId.RRRE;
 					break;
 				case "SIMBINGTLEGENDS":
-                    CurrentGame = GameId.GTL;
-                    GameDBText = "GTL";
+					CurrentGame = GameId.GTL;
+					GameDBText = "GTL";
 					break;
 				case "SIMBINGTR2":
-                    CurrentGame = GameId.GTR2;
-                    GameDBText = "GTR2";
+					CurrentGame = GameId.GTR2;
+					GameDBText = "GTR2";
 					break;
 				case "SIMBINRACE07":
-                    CurrentGame = GameId.RACE07;
-                    GameDBText = "RACE07";
+					CurrentGame = GameId.RACE07;
+					GameDBText = "RACE07";
 					break;
 				case "StockCarExtreme":
-                    CurrentGame = GameId.GSCE;
-                    GameDBText = "GSCE";
+					CurrentGame = GameId.GSCE;
+					GameDBText = "GSCE";
 					break;
 				case "CodemastersDirtRally1":
 				case "CodemastersDirtRally2":
-                    CurrentGame = GameId.DR2;
-                    GameDBText = "DR2";
+					CurrentGame = GameId.DR2;
+					GameDBText = "DR2";
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "CodemastersDirt2":
 				case "CodemastersDirt3":
 				case "CodemastersDirtShowdown":
 				case "CodemastersDirt4":
-                    CurrentGame = GameId.D4;
-                    GameDBText = "D4";
+					CurrentGame = GameId.D4;
+					GameDBText = "D4";
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "EAWRC23":
-                    CurrentGame = GameId.WRC23;
-                    GameDBText = "WRC23";
+					CurrentGame = GameId.WRC23;
+					GameDBText = "WRC23";
 					sd.AccSamples = 32;
 					sd.TireDiameterSampleCount = -1;
 					break;
@@ -2202,11 +2202,11 @@ namespace sierses.SimHap
 				case "F12014":
 				case "F12015":
 				case "F12016":
-                    CurrentGame = GameId.F12016;
-                    GameDBText = "F12016";
+					CurrentGame = GameId.F12016;
+					GameDBText = "F12016";
 					break;
 				case "F12017":
-                    CurrentGame = GameId.F12017;
+					CurrentGame = GameId.F12017;
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "F12018":
@@ -2214,64 +2214,64 @@ namespace sierses.SimHap
 				case "F12020":
 				case "F12021":
 				case "F12022":
-                    CurrentGame = GameId.F12022;
-                    GameDBText = "F12022";
+					CurrentGame = GameId.F12022;
+					GameDBText = "F12022";
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "F12023":
 				case "F12024":
 				case "F12025":
 				case "F12026":
-                    CurrentGame = GameId.F12023;
-                    GameDBText = "F12022";
+					CurrentGame = GameId.F12023;
+					GameDBText = "F12022";
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "CodemastersGrid2":
 				case "CodemastersGrid2019":
 				case "CodemastersAutosport":
 				case "CodemastersGridLegends":
-                    CurrentGame = GameId.GLegends;
-                    GameDBText = "Grid";
+					CurrentGame = GameId.GLegends;
+					GameDBText = "Grid";
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "BeamNgDrive":
-                    CurrentGame = GameId.BeamNG;
-                    GameDBText = "BeamNG";
+					CurrentGame = GameId.BeamNG;
+					GameDBText = "BeamNG";
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "GPBikes":
-                    CurrentGame = GameId.GPBikes;
+					CurrentGame = GameId.GPBikes;
 					sd.RumbleFromPlugin = true;
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "MXBikes":
-                    CurrentGame = GameId.MXBikes;
+					CurrentGame = GameId.MXBikes;
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "WRCGenerations":
-                    CurrentGame = GameId.WRCGen;
+					CurrentGame = GameId.WRCGen;
 					sd.TireDiameterSampleCount = -1;
 					break;
 				case "WRCX":
-                    CurrentGame = GameId.WRCX;
+					CurrentGame = GameId.WRCX;
 					break;
 				case "WRC10":
-                    CurrentGame = GameId.WRC10;
+					CurrentGame = GameId.WRC10;
 					break;
 				case "ATS":
-                    CurrentGame = GameId.ATS;
+					CurrentGame = GameId.ATS;
 					break;
 				case "ETS2":
-                    CurrentGame = GameId.ETS2;
+					CurrentGame = GameId.ETS2;
 					break;
 				case "GranTurismo7":
 				case "GranTurismoSport":
-                    CurrentGame = GameId.GranTurismo7;
-                    GameDBText = "GranTurismo7";
+					CurrentGame = GameId.GranTurismo7;
+					GameDBText = "GranTurismo7";
 					sd.TireDiameterSampleCount = -1;
 					break;
 				default:
-                    CurrentGame = GameId.Other;
+					CurrentGame = GameId.Other;
 					break;
 			}
 			D.AccHeave = new double[D.AccSamples];
@@ -2297,15 +2297,15 @@ namespace sierses.SimHap
 			{
 				if (FetchStatus == APIStatus.Waiting)
 					return;
-                FetchStatus = APIStatus.Waiting;
-                LoadFinish = false;
+				FetchStatus = APIStatus.Waiting;
+				LoadFinish = false;
 				Logging.Current.Info("SimHapticsPlugin: Loading " + category + " " + id);
 				if (id == null)
 					id = "0";
 				if (category == null)
 					category = "0";
 				Uri requestUri = new Uri("https://api.simhaptics.com/data/" + GameDBText
-                                 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
+								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
 				JObject jobject = (JObject) JsonConvert.DeserializeObject(async.Content.ReadAsStringAsync().Result);
@@ -2330,10 +2330,10 @@ namespace sierses.SimHap
 					if (CurrentGame == GameId.Forza)
 						v.Id = "Car_" + v.Id;
 					Logging.Current.Info("SimHapticsPlugin: Successfully loaded " + v.Name);
-                    LoadFailCount = 0;
-                    FailedId = "";
-                    FailedCategory = "";
-                    FetchStatus = APIStatus.Success;
+					LoadFailCount = 0;
+					FailedId = "";
+					FailedCategory = "";
+					FetchStatus = APIStatus.Success;
 				}
 				else
 				{
@@ -2341,19 +2341,19 @@ namespace sierses.SimHap
 					++LoadFailCount;
 					if (LoadFailCount > 3)
 					{
-                        FailedId = CurrentGame != GameId.Forza ? id : "Car_" + id;
-                        FailedCategory = category;
-                        FetchStatus = APIStatus.Fail;
+						FailedId = CurrentGame != GameId.Forza ? id : "Car_" + id;
+						FailedCategory = category;
+						FetchStatus = APIStatus.Fail;
 					}
 					else
-                        FetchStatus = APIStatus.Retry;
+						FetchStatus = APIStatus.Retry;
 				}
 			}
 			catch (HttpRequestException ex)
 			{
 				Logging.Current.Error("SimHapticsPlugin: " + ex.Message);
-                LoadFailCount = 0;
-                FetchStatus = APIStatus.Retry;
+				LoadFailCount = 0;
+				FetchStatus = APIStatus.Retry;
 			}
 		}
 
@@ -2464,13 +2464,19 @@ namespace sierses.SimHap
 			return new SettingsControl(this);
 		}
 
+		double GetSetting(string name, double trouble)	// Init() helper
+		{
+			double num;
+			return Settings.Motion.TryGetValue("MotionPitchOffset", out num) ? num : trouble;
+		}
+
 		public void Init(PluginManager pluginManager)
 		{
-            SimHubVersion = (string) pluginManager.GetPropertyValue("DataCorePlugin.SimHubVersion");
-            LoadFailCount = 0;
-            LoadFinish = false;
-            LoadStatus = DataStatus.None;
-            FetchStatus = APIStatus.None;
+			SimHubVersion = (string) pluginManager.GetPropertyValue("DataCorePlugin.SimHubVersion");
+			LoadFailCount = 0;
+			LoadFinish = false;
+			LoadStatus = DataStatus.None;
+			FetchStatus = APIStatus.None;
 			S = new Spec();
 			D = new SimData()
 			{
@@ -2612,42 +2618,24 @@ namespace sierses.SimHap
 			}
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
-			double num16;
-			D.MotionPitchOffset = Settings.Motion.TryGetValue("MotionPitchOffset", out num16) ? num16 : 0.0;
-			double num17;
-			D.MotionPitchMult = Settings.Motion.TryGetValue("MotionPitchMult", out num17) ? num17 : 1.6;
-			double num18;
-			D.MotionPitchGamma = Settings.Motion.TryGetValue("MotionPitchGamma", out num18) ? num18 : 1.5;
-			double num19;
-			D.MotionRollOffset = Settings.Motion.TryGetValue("MotionRollOffset", out num19) ? num19 : 0.0;
-			double num20;
-			D.MotionRollMult = Settings.Motion.TryGetValue("MotionRollMult", out num20) ? num20 : 1.2;
-			double num21;
-			D.MotionRollGamma = Settings.Motion.TryGetValue("MotionRollGamma", out num21) ? num21 : 1.5;
-			double num22;
-			D.MotionYawOffset = Settings.Motion.TryGetValue("MotionYawOffset", out num22) ? num22 : 0.0;
-			double num23;
-			D.MotionYawMult = Settings.Motion.TryGetValue("MotionYawMult", out num23) ? num23 : 1.0;
-			double num24;
-			D.MotionYawGamma = Settings.Motion.TryGetValue("MotionYawGamma", out num24) ? num24 : 1.0;
-			double num25;
-			D.MotionHeaveOffset = Settings.Motion.TryGetValue("MotionHeaveOffset", out num25) ? num25 : 0.0;
-			double num26;
-			D.MotionHeaveMult = Settings.Motion.TryGetValue("MotionHeaveMult", out num26) ? num26 : 1.0;
-			double num27;
-			D.MotionHeaveGamma = Settings.Motion.TryGetValue("MotionHeaveGamma", out num27) ? num27 : 1.0;
-			double num28;
-			D.MotionSurgeOffset = Settings.Motion.TryGetValue("MotionSurgeOffset", out num28) ? num28 : 0.0;
-			double num29;
-			D.MotionSurgeMult = Settings.Motion.TryGetValue("MotionSurgeMult", out num29) ? num29 : 1.0;
-			double num30;
-			D.MotionSurgeGamma = Settings.Motion.TryGetValue("MotionSurgeGamma", out num30) ? num30 : 1.0;
-			double num31;
-			D.MotionSwayOffset = Settings.Motion.TryGetValue("MotionSwayOffset", out num31) ? num31 : 0.0;
-			double num32;
-			D.MotionSwayMult = Settings.Motion.TryGetValue("MotionSwayMult", out num32) ? num32 : 1.0;
-			double num33;
-			D.MotionSwayGamma = Settings.Motion.TryGetValue("MotionSwayGamma", out num33) ? num33 : 1.0;
+			D.MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
+			D.MotionPitchMult = GetSetting("MotionPitchMult", 1.6);
+			D.MotionPitchGamma = GetSetting("MotionPitchGamma", 1.5);
+			D.MotionRollOffset = GetSetting("MotionRollOffset", 0.0);
+			D.MotionRollMult = GetSetting("MotionRollMult", 1.2);
+			D.MotionRollGamma = GetSetting("MotionRollGamma", 1.5);
+			D.MotionYawOffset = GetSetting("MotionYawOffset", 0.0);
+			D.MotionYawMult = GetSetting("MotionYawMult", 1.0);
+			D.MotionYawGamma = GetSetting("MotionYawGamma", 1.0);
+			D.MotionHeaveOffset = GetSetting("MotionHeaveOffset", 0.0);
+			D.MotionHeaveMult = GetSetting("MotionHeaveMult", 1.0);
+			D.MotionHeaveGamma = GetSetting("MotionHeaveGamma", 1.0);
+			D.MotionSurgeOffset = GetSetting("MotionSurgeOffset", 0.0);
+			D.MotionSurgeMult = GetSetting("MotionSurgeMult", 1.0);
+			D.MotionSurgeGamma = GetSetting("MotionSurgeGamma", 1.0);
+			D.MotionSwayOffset = GetSetting("MotionSwayOffset", 0.0);
+			D.MotionSwayMult = GetSetting("MotionSwayMult", 1.0);
+			D.MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
 			IPluginExtensions.AttachDelegate(this, "CarName", () => S.Name);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);
 			IPluginExtensions.AttachDelegate(this, "Category", () => S.Category);
@@ -2786,7 +2774,7 @@ namespace sierses.SimHap
 			IPluginExtensions.AttachDelegate(this, "MSway", () => D.MotionSway);
 			IPluginExtensions.AttachDelegate(this, "TireSamples", () => D.TireDiameterSampleCount);
 			IPluginExtensions.AttachDelegate(this, "VelocityX", () => D.VelocityX);
-            FrameTimeTicks = DateTime.Now.Ticks;
+			FrameTimeTicks = DateTime.Now.Ticks;
 		}
 	}
 }
