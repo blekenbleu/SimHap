@@ -2467,6 +2467,7 @@ namespace sierses.SimHap
 
 		public void End(PluginManager pluginManager)
 		{
+/*
 			string sjs = JsonConvert.SerializeObject(D, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
                 Logging.Current.Info("SimHapticsPlugin.End():  SimData Json Serializer failure");
@@ -2476,7 +2477,7 @@ namespace sierses.SimHap
 			if (0 == sjs.Length || "{}" == sjs)
                 Logging.Current.Info("SimHapticsPlugin.End():  Spec Json Serializer failure");
 			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".Spec.json", sjs);
-
+*/
 			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
 				Settings.EngineMult.Remove("AllGames");
 			if (Settings.EngineMult.TryGetValue(GameDBText, out double _))
