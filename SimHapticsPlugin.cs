@@ -1,8 +1,6 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: SimHaptics.SimHapticsPlugin
-// Assembly: SimHaptics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-// Assembly location: C:\Users\demas\Downloads\dnSpy-net-win64\SimHaptics.dll
 
 using GameReaderCommon;
 using Newtonsoft.Json;
@@ -95,9 +93,12 @@ namespace sierses.SimHap
 			FrameTimeTicks = DateTime.Now.Ticks;
 			if (FrameCountTicks > 864000000000L)
 				FrameCountTicks = 0L;
-			if (FrameCountTicks % 2500000L <= 150000L && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu) && Settings.Unlocked && data.NewData != null)
+			if (null == data.NewData)
+				return;
+			if (Settings.Unlocked && FrameCountTicks % 2500000L <= 150000L
+			 && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 				SetVehiclePerGame(pluginManager, ref data.NewData);
-			if (!data.GameRunning || data.OldData == null || data.NewData == null)
+			if (!data.GameRunning || data.OldData == null)
 				return;
 			D.FPS = (double) pluginManager.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			D.RPMPercent = data.NewData.Rpms * D.InvMaxRPM;
@@ -198,40 +199,28 @@ namespace sierses.SimHap
 			UpdateVehiclePerGame(pluginManager, ref data);
 			D.Airborne = D.AccHeave2S < -2.0 || Math.Abs(data.NewData.OrientationRoll) > 60.0;
 			if (D.Airborne && D.SuspensionFL < 0.1)
-			{
-				D.SlipXFL = 0.0;
-				D.SlipYFL = 0.0;
-			}
+				D.SlipXFL = D.SlipYFL = 0.0;
 			else
 			{
 				D.SlipXFL = D.SlipXMultAll * 100.0 * Math.Pow(Math.Max(D.SlipXFL, 0.0), 1.0 / (D.SlipXGammaBaseMult * D.SlipXGamma * D.SlipXGammaAll));
 				D.SlipYFL = D.SlipYFL < 0.0 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYFL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll)) : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYFL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
 			}
 			if (D.Airborne && D.SuspensionFR < 0.1)
-			{
-				D.SlipXFR = 0.0;
-				D.SlipYFR = 0.0;
-			}
+				D.SlipXFR = D.SlipYFR = 0.0;
 			else
 			{
 				D.SlipXFR = D.SlipXMultAll * 100.0 * Math.Pow(Math.Max(D.SlipXFR, 0.0), 1.0 / (D.SlipXGammaBaseMult * D.SlipXGamma * D.SlipXGammaAll));
 				D.SlipYFR = D.SlipYFR < 0.0 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYFR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll)) : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYFR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
 			}
 			if (D.Airborne && D.SuspensionRL < 0.1)
-			{
-				D.SlipXRL = 0.0;
-				D.SlipYRL = 0.0;
-			}
+				D.SlipXRL = D.SlipYRL = 0.0;
 			else
 			{
 				D.SlipXRL = D.SlipXMultAll * 100.0 * Math.Pow(Math.Max(D.SlipXRL, 0.0), 1.0 / (D.SlipXGammaBaseMult * D.SlipXGamma * D.SlipXGammaAll));
 				D.SlipYRL = D.SlipYRL < 0.0 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYRL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll)) : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYRL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
 			}
 			if (D.Airborne && D.SuspensionRR < 0.1)
-			{
-				D.SlipXRR = 0.0;
-				D.SlipYRR = 0.0;
-			}
+				D.SlipXRR = D.SlipYRR = 0.0;
 			else
 			{
 				D.SlipXRR = D.SlipXMultAll * 100.0 * Math.Pow(Math.Max(D.SlipXRR, 0.0), 1.0 / (D.SlipXGammaBaseMult * D.SlipXGamma * D.SlipXGammaAll));
@@ -240,7 +229,11 @@ namespace sierses.SimHap
 			D.Airborne = D.Airborne && D.SuspensionAll < 0.1;
 			D.SlipXAll = (D.SlipXFL + D.SlipXFR + D.SlipXRL + D.SlipXRR) * 0.5;
 			D.SlipYAll = (D.SlipYFL + D.SlipYFR + D.SlipYRL + D.SlipYRR) * 0.5;
-			D.WheelSpinAll = !(S.PoweredWheels == "F") ? (!(S.PoweredWheels == "R") ? (Math.Max(-D.SlipYFL, 0.0) + Math.Max(-D.SlipYFR, 0.0) + Math.Max(-D.SlipYRL, 0.0) + Math.Max(-D.SlipYRR, 0.0)) * 0.25 : (Math.Max(-D.SlipYRL, 0.0) + Math.Max(-D.SlipYRR, 0.0)) * 0.5) : (Math.Max(-D.SlipYFL, 0.0) + Math.Max(-D.SlipYFR, 0.0)) * 0.5;
+			D.WheelSpinAll = !(S.PoweredWheels == "F")
+				? (!(S.PoweredWheels == "R")
+					? (Math.Max(-D.SlipYFL, 0.0) + Math.Max(-D.SlipYFR, 0.0) + Math.Max(-D.SlipYRL, 0.0) + Math.Max(-D.SlipYRR, 0.0)) * 0.25
+					: (Math.Max(-D.SlipYRL, 0.0) + Math.Max(-D.SlipYRR, 0.0)) * 0.5)
+				: (Math.Max(-D.SlipYFL, 0.0) + Math.Max(-D.SlipYFR, 0.0)) * 0.5;
 			D.WheelLockAll = 0.0;
 			if (D.SlipYFL > 50.0)
 				D.WheelLockAll += D.SlipYFL - 50.0;
@@ -259,7 +252,11 @@ namespace sierses.SimHap
 			{
 				if (D.Gear != 0)
 					D.GearPrevious = D.Gear;
-				D.Gear = !(data.NewData.Gear == "N") ? (!(data.NewData.Gear == "R") ? Convert.ToInt32(data.NewData.Gear) : -1) : 0;
+				D.Gear = !(data.NewData.Gear == "N")
+						? (!(data.NewData.Gear == "R")
+							? Convert.ToInt32(data.NewData.Gear)
+							: -1)
+						: 0;
 				if (D.Gear != 0)
 				{
 					if (D.Gear < D.GearPrevious)
@@ -280,7 +277,9 @@ namespace sierses.SimHap
 					}
 				}
 			}
-			D.ABSPauseInterval = D.SlipYAll <= 0.0 ? (long) (1166667.0 - 666667.0 * ((data.NewData.SpeedKmh - 20.0) * 0.003333333).Clamp(0.0, 1.0)) : (long) (1250000.0 - 666667.0 * D.SlipYAll.Clamp(0.0, 1.0));
+			D.ABSPauseInterval = D.SlipYAll <= 0.0
+								? (long) (1166667.0 - 666667.0 * ((data.NewData.SpeedKmh - 20.0) * 0.003333333).Clamp(0.0, 1.0))
+								: (long) (1250000.0 - 666667.0 * D.SlipYAll.Clamp(0.0, 1.0));
 			D.ABSPulseInterval = 166666L * Settings.ABSPulseLength;
 			if (D.ABSActive)
 			{
@@ -293,16 +292,12 @@ namespace sierses.SimHap
 				}
 				now = DateTime.Now;
 				if (now.Ticks - D.ABSTicks < D.ABSPulseInterval)
-				{
 					D.ABSPulse = 100.0;
-				}
 				else
 				{
 					now = DateTime.Now;
 					if (now.Ticks - D.ABSTicks < D.ABSPauseInterval)
-					{
 						D.ABSPulse = 0.0;
-					}
 					else
 					{
 						D.ABSPulse = 100.0;
@@ -725,7 +720,17 @@ namespace sierses.SimHap
 				if (D.Accelerator < 20.0 && D.AccSurgeAvg < 0.0)
 					num22 += Math.Max(Math.Max(D.RPMPercent - D.IdlePercent * (1.0 + D.Gear * 0.2), 0.0) * (0.2 + 0.6 * D.MixDisplacement) - D.Accelerator * 0.05 * (0.2 + 0.6 * D.MixDisplacement), 0.0);
 			}
-			D.Gain1H = D.FreqHarmonic >= 25.0 ? (D.FreqHarmonic >= 40.0 ? (D.FreqHarmonic >= 65.0 ? (D.FreqHarmonic >= 95.0 ? (D.FreqHarmonic >= 125.0 ? 75.0 - (D.FreqHarmonic - 125.0) : 95.0 - (D.FreqHarmonic - 95.0) * 0.667) : 65.0 + (D.FreqHarmonic - 65.0) * 1.0) : 52.5 + (D.FreqHarmonic - 40.0) * 0.5) : 40.0 + (D.FreqHarmonic - 25.0) * 0.834) : 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
+			D.Gain1H = D.FreqHarmonic >= 25.0
+					? (D.FreqHarmonic >= 40.0
+						? (D.FreqHarmonic >= 65.0
+							? (D.FreqHarmonic >= 95.0
+								? (D.FreqHarmonic >= 125.0
+									? 75.0 - (D.FreqHarmonic - 125.0)
+									: 95.0 - (D.FreqHarmonic - 95.0) * 0.667)
+								: 65.0 + (D.FreqHarmonic - 65.0) * 1.0)
+							: 52.5 + (D.FreqHarmonic - 40.0) * 0.5)
+						: 40.0 + (D.FreqHarmonic - 25.0) * 0.834)
+					: 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
 			D.Gain1H = Math.Max(D.Gain1H, 0.0) * num21 * num22 * (0.8 + 0.2 * D.MixPower + 0.2 * D.MixCylinder);
 			D.Gain1H = Math.Floor(D.Gain1H.Clamp(0.0, sbyte.MaxValue));
 			D.Gain1H2 = D.FreqHarmonic >= 25.0 ? (D.FreqHarmonic >= 40.0 ? (D.FreqHarmonic >= 65.0 ? (D.FreqHarmonic >= 95.0 ? (D.FreqHarmonic >= 125.0 ? 75.0 - (D.FreqHarmonic - 125.0) : 95.0 - (D.FreqHarmonic - 95.0) * 0.667) : 65.0 + (D.FreqHarmonic - 65.0) * 1.0) : 52.5 + (D.FreqHarmonic - 40.0) * 0.5) : 40.0 + (D.FreqHarmonic - 25.0) * 0.834) : 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
@@ -1312,7 +1317,8 @@ namespace sierses.SimHap
 					D.SlipXRR *= 0.5;
 					if (data.NewData.Brake > 90.0)
 					{
-						D.ABSActive = ((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mBrakePressure") + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
+						D.ABSActive = ((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mBrakePressure")
+									 + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
 						break;
 					}
 					break;
@@ -1464,7 +1470,8 @@ namespace sierses.SimHap
 					D.WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afWheelSpeed02"));
 					D.WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afWheelSpeed02"));
 					SlipFromWheelSpeed();
-					if ((int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial01") == 7 || (int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial02") == 7)
+					if ((int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial01") == 7
+					 || (int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial02") == 7)
 					{
 						D.RumbleLeft = 50.0;
 						D.RumbleRight = 50.0;
@@ -1497,7 +1504,8 @@ namespace sierses.SimHap
 					D.SlipXRR = Math.Abs(D.SlipXRR - 1.0);
 					if (data.NewData.Brake > 80.0)
 					{
-						D.ABSActive = ((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mBrakePressure") + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
+						D.ABSActive = ((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mBrakePressure")
+									 + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
 						break;
 					}
 					break;
@@ -1528,7 +1536,9 @@ namespace sierses.SimHap
 
 		private void SlipFromRPS()
 		{
-			if (D.TireDiameterSampleCount < D.TireDiameterSampleMax && D.Accelerator < 60.0 && D.SpeedMs > 5.0 && Math.Abs(D.AccHeave2S) < 0.1 && Math.Abs(D.AccSurge2S) < 0.01 && Math.Abs(D.AccSway2S) < 0.08)
+			if (D.TireDiameterSampleCount < D.TireDiameterSampleMax
+			 && D.Accelerator < 60.0 && D.SpeedMs > 5.0 && Math.Abs(D.AccHeave2S) < 0.1
+			 && Math.Abs(D.AccSurge2S) < 0.01 && Math.Abs(D.AccSway2S) < 0.08)
 			{
 				D.TireDiameterSampleFL = 2.0 * D.SpeedMs / D.WheelRotationFL;
 				D.TireDiameterSampleFR = 2.0 * D.SpeedMs / D.WheelRotationFR;
@@ -1754,7 +1764,9 @@ namespace sierses.SimHap
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
 						S.Redline = db.MaxRpm;
-						S.MaxRPM = Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001 > 0.55 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0;
+						S.MaxRPM = Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001 > 0.55
+								 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
+								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0;
 						FetchCarData(db.CarId, null, S, S.Redline, S.MaxRPM);
 						D.IdleRPM = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm");
 						break;
@@ -2088,7 +2100,44 @@ namespace sierses.SimHap
 			}
 			D.MixPower = 1.0 - Math.Max(2000.0 - (S.MaxPower - S.ElectricMaxPower), 0.0) * Math.Max(2000.0 - (S.MaxPower - S.ElectricMaxPower), 0.0) * 2.5E-07;
 			D.MixTorque = 1.0 - Math.Max(2000.0 - S.MaxTorque, 0.0) * Math.Max(2000.0 - S.MaxTorque, 0.0) * 2.5E-07;
-			D.MixFront = !(S.EngineLocation == "F") ? (!(S.EngineLocation == "FM") ? (!(S.EngineLocation == "M") ? (!(S.EngineLocation == "RM") ? (!(S.PoweredWheels == "F") ? (!(S.PoweredWheels == "R") ? 0.2 : 0.1) : 0.3) : (!(S.PoweredWheels == "F") ? (!(S.PoweredWheels == "R") ? 0.3 : 0.2) : 0.4)) : (!(S.PoweredWheels == "F") ? (!(S.PoweredWheels == "R") ? 0.5 : 0.4) : 0.6)) : (!(S.PoweredWheels == "F") ? (!(S.PoweredWheels == "R") ? 0.7 : 0.6) : 0.8)) : (!(S.PoweredWheels == "F") ? (!(S.PoweredWheels == "R") ? 0.8 : 0.7) : 0.9);
+			D.MixFront = !(S.EngineLocation == "F")
+						 ? (!(S.EngineLocation == "FM")
+							 ? (!(S.EngineLocation == "M")
+								 ? (!(S.EngineLocation == "RM")
+									 ? (!(S.PoweredWheels == "F")
+										 ? (!(S.PoweredWheels == "R")
+											 ? 0.2
+											 : 0.1)
+										 : 0.3)
+									 : (!(S.PoweredWheels == "F")
+									 ? (!(S.PoweredWheels == "R")
+										 ? 0.3
+										 : 0.2)
+									 : 0.4)
+								   )
+								 : (!(S.PoweredWheels == "F")
+								 	? (!(S.PoweredWheels == "R")
+									 	? 0.5
+									 	: 0.4
+									  )
+									 : 0.6
+								   )
+							   )
+						 : (!(S.PoweredWheels == "F")
+							 ? (!(S.PoweredWheels == "R")
+								 ? 0.7
+								 : 0.6
+							   )
+							 : 0.8
+						   )
+						)
+					 : (!(S.PoweredWheels == "F")
+					 	? (!(S.PoweredWheels == "R")
+							 ? 0.8
+					 	 	: 0.7
+							)
+					 	: 0.9
+					   );
 			D.MixMiddle = Math.Abs(D.MixFront - 0.5) * 2.0;
 			D.MixRear = 1.0 - D.MixFront;
 		}
