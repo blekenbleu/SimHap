@@ -11,6 +11,7 @@ using SimHub.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Windows.Controls;
@@ -35,7 +36,7 @@ namespace sierses.SimHap
 		public static string GameDBText;
 		public static string FailedId = "";
 		public static string FailedCategory = "";
-		private static readonly HttpClient client = new HttpClient();
+		private static readonly HttpClient client = new();
 
 		public Spec S { get; set; }
 
@@ -47,46 +48,60 @@ namespace sierses.SimHap
 
 		public ImageSource PictureIcon
 		{
-			get
-			{
-				return this.ToIcon(Resources.SimHapticsShakerStyleIcon_alt012);
-			}
+			get { return this.ToIcon(Resources.SimHapticsShakerStyleIcon_alt012); }
 		}
 
 		public ImageSource RPMIcon
 		{
-			get
-			{
-				return this.ToIcon(Resources._100x100_RPM_White);
-			}
+			get { return this.ToIcon(Resources._100x100_RPM_White); }
 		}
 
 		public ImageSource ImpactsIcon
 		{
-			get
-			{
-				return this.ToIcon(Resources._100x100_Impacts_White);
-			}
+			get { return this.ToIcon(Resources._100x100_Impacts_White); }
 		}
 
 		public ImageSource SuspensionIcon
 		{
-			get
-			{
-				return this.ToIcon(Resources._100x100_Suspension_White);
-			}
+			get { return this.ToIcon(Resources._100x100_Suspension_White); }
 		}
 
 		public ImageSource TractionIcon
 		{
-			get
-			{
-				return this.ToIcon(Resources._100x100_Traction_White);
-			}
+			get { return this.ToIcon(Resources._100x100_Traction_White); }
+		}
+
+		private List<string[]> Sling(DownloadData data)
+		{
+			return new List<string[]>
+            {
+                new string[] { "notes", data.notes },
+                new string[] { "cc", data.cc.ToString() },
+                new string[] { "nm", data.nm.ToString() },
+                new string[] { "ehp", data.ehp.ToString() },
+                new string[] { "hp", data.hp.ToString() },
+                new string[] { "drive", data.drive },
+                new string[] { "config", data.config },
+                new string[] { "cyl", data.cyl.ToString() },
+                new string[] { "loc", data.loc },
+                new string[] { "maxrpm", data.maxrpm.ToString() },
+                new string[] { "redline", data.redline.ToString() },
+                new string[] { "category", data.category },
+                new string[] { "name", data.name },
+                new string[] { "id", data.id },
+                new string[] { "game", data.game }
+            };
 		}
 
 		public string LeftMenuTitle => "SimHaptics";
 
+		/// <summary>
+        /// Called one time per game data update, contains all normalized game data,
+        /// raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
+        /// This method is on the critical path, must execute as fast as possible and avoid throwing any error
+        /// </summary>
+        /// <param name="pluginManager"></param>
+        /// <param name="data">Current game data, including present and previous data frames.</param> 
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
 			FrameCountTicks = FrameCountTicks + DateTime.Now.Ticks - FrameTimeTicks;
@@ -95,11 +110,13 @@ namespace sierses.SimHap
 				FrameCountTicks = 0L;
 			if (null == data.NewData)
 				return;
+
 			if (Settings.Unlocked && FrameCountTicks % 2500000L <= 150000L
 			 && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 				SetVehiclePerGame(pluginManager, ref data.NewData);
 			if (!data.GameRunning || data.OldData == null)
 				return;
+
 			D.FPS = (double) pluginManager.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			D.RPMPercent = data.NewData.Rpms * D.InvMaxRPM;
 			D.SpeedMs = data.NewData.SpeedKmh * 0.277778;
@@ -139,8 +156,7 @@ namespace sierses.SimHap
 				else
 					D.YawRateAvg *= 1.25;
 			}
-			else
-				D.YawRateAvg = D.YawRate;
+			else D.YawRateAvg = D.YawRate;
 			++D.Acc0;
 			D.Acc1 = D.Acc0 - 1;
 			if (D.Acc0 >= D.AccSamples)
@@ -203,28 +219,36 @@ namespace sierses.SimHap
 			else
 			{
 				D.SlipXFL = D.SlipXMultAll * 100.0 * Math.Pow(Math.Max(D.SlipXFL, 0.0), 1.0 / (D.SlipXGammaBaseMult * D.SlipXGamma * D.SlipXGammaAll));
-				D.SlipYFL = D.SlipYFL < 0.0 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYFL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll)) : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYFL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
+				D.SlipYFL = D.SlipYFL < 0.0
+							 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYFL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll))
+							 : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYFL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
 			}
 			if (D.Airborne && D.SuspensionFR < 0.1)
 				D.SlipXFR = D.SlipYFR = 0.0;
 			else
 			{
 				D.SlipXFR = D.SlipXMultAll * 100.0 * Math.Pow(Math.Max(D.SlipXFR, 0.0), 1.0 / (D.SlipXGammaBaseMult * D.SlipXGamma * D.SlipXGammaAll));
-				D.SlipYFR = D.SlipYFR < 0.0 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYFR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll)) : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYFR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
+				D.SlipYFR = D.SlipYFR < 0.0
+							 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYFR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll))
+							 : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYFR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
 			}
 			if (D.Airborne && D.SuspensionRL < 0.1)
 				D.SlipXRL = D.SlipYRL = 0.0;
 			else
 			{
 				D.SlipXRL = D.SlipXMultAll * 100.0 * Math.Pow(Math.Max(D.SlipXRL, 0.0), 1.0 / (D.SlipXGammaBaseMult * D.SlipXGamma * D.SlipXGammaAll));
-				D.SlipYRL = D.SlipYRL < 0.0 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYRL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll)) : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYRL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
+				D.SlipYRL = D.SlipYRL < 0.0
+							 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYRL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll))
+							 : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYRL, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
 			}
 			if (D.Airborne && D.SuspensionRR < 0.1)
 				D.SlipXRR = D.SlipYRR = 0.0;
 			else
 			{
 				D.SlipXRR = D.SlipXMultAll * 100.0 * Math.Pow(Math.Max(D.SlipXRR, 0.0), 1.0 / (D.SlipXGammaBaseMult * D.SlipXGamma * D.SlipXGammaAll));
-				D.SlipYRR = D.SlipYRR < 0.0 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYRR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll)) : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYRR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
+				D.SlipYRR = D.SlipYRR < 0.0
+							 ? D.SlipYMultAll * -100.0 * Math.Pow(-D.SlipYRR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll))
+							 : D.SlipYMultAll * 100.0 * Math.Pow(D.SlipYRR, 1.0 / (D.SlipYGammaBaseMult * D.SlipYGamma * D.SlipYGammaAll));
 			}
 			D.Airborne = D.Airborne && D.SuspensionAll < 0.1;
 			D.SlipXAll = (D.SlipXFL + D.SlipXFR + D.SlipXRL + D.SlipXRR) * 0.5;
@@ -718,7 +742,8 @@ namespace sierses.SimHap
 			{
 				num21 -= D.AccSurge2S.Clamp(0.0, 15.0) * 0.01;
 				if (D.Accelerator < 20.0 && D.AccSurgeAvg < 0.0)
-					num22 += Math.Max(Math.Max(D.RPMPercent - D.IdlePercent * (1.0 + D.Gear * 0.2), 0.0) * (0.2 + 0.6 * D.MixDisplacement) - D.Accelerator * 0.05 * (0.2 + 0.6 * D.MixDisplacement), 0.0);
+					num22 += Math.Max(0.0, Math.Max(0.0, D.RPMPercent - D.IdlePercent * (1.0 + D.Gear * 0.2))
+											* (0.2 + 0.6 * D.MixDisplacement) - D.Accelerator * 0.05 * (0.2 + 0.6 * D.MixDisplacement));
 			}
 			D.Gain1H = D.FreqHarmonic >= 25.0
 					? (D.FreqHarmonic >= 40.0
@@ -733,13 +758,40 @@ namespace sierses.SimHap
 					: 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
 			D.Gain1H = Math.Max(D.Gain1H, 0.0) * num21 * num22 * (0.8 + 0.2 * D.MixPower + 0.2 * D.MixCylinder);
 			D.Gain1H = Math.Floor(D.Gain1H.Clamp(0.0, sbyte.MaxValue));
-			D.Gain1H2 = D.FreqHarmonic >= 25.0 ? (D.FreqHarmonic >= 40.0 ? (D.FreqHarmonic >= 65.0 ? (D.FreqHarmonic >= 95.0 ? (D.FreqHarmonic >= 125.0 ? 75.0 - (D.FreqHarmonic - 125.0) : 95.0 - (D.FreqHarmonic - 95.0) * 0.667) : 65.0 + (D.FreqHarmonic - 65.0) * 1.0) : 52.5 + (D.FreqHarmonic - 40.0) * 0.5) : 40.0 + (D.FreqHarmonic - 25.0) * 0.834) : 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
+			D.Gain1H2 = D.FreqHarmonic >= 25.0 ? (D.FreqHarmonic >= 40.0
+												 ? (D.FreqHarmonic >= 65.0
+													 ? (D.FreqHarmonic >= 95.0
+														 ? (D.FreqHarmonic >= 125.0
+															 ? 75.0 - (D.FreqHarmonic - 125.0)
+															 : 95.0 - (D.FreqHarmonic - 95.0) * 0.667)
+														 : 65.0 + (D.FreqHarmonic - 65.0) * 1.0)
+													 : 52.5 + (D.FreqHarmonic - 40.0) * 0.5)
+												 : 40.0 + (D.FreqHarmonic - 25.0) * 0.834)
+											 : 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
 			D.Gain1H2 = Math.Max(D.Gain1H2, 0.0) * num21 * num22 * (0.8 + 0.1 * D.MixDisplacement + 0.3 * D.MixCylinder);
 			D.Gain1H2 = Math.Floor(D.Gain1H2.Clamp(0.0, sbyte.MaxValue));
-			D.Gain2H = D.FreqHarmonic >= 25.0 ? (D.FreqHarmonic >= 40.0 ? (D.FreqHarmonic >= 65.0 ? (D.FreqHarmonic >= 95.0 ? (D.FreqHarmonic >= 125.0 ? 75.0 - (D.FreqHarmonic - 125.0) : 95.0 - (D.FreqHarmonic - 95.0) * 0.667) : 65.0 + (D.FreqHarmonic - 65.0) * 1.0) : 52.5 + (D.FreqHarmonic - 40.0) * 0.5) : 40.0 + (D.FreqHarmonic - 25.0) * 0.834) : 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
+			D.Gain2H = D.FreqHarmonic >= 25.0 ? (D.FreqHarmonic >= 40.0
+												 ? (D.FreqHarmonic >= 65.0
+													 ? (D.FreqHarmonic >= 95.0
+														 ? (D.FreqHarmonic >= 125.0
+															 ? 75.0 - (D.FreqHarmonic - 125.0)
+															 : 95.0 - (D.FreqHarmonic - 95.0) * 0.667)
+														 : 65.0 + (D.FreqHarmonic - 65.0) * 1.0)
+													 : 52.5 + (D.FreqHarmonic - 40.0) * 0.5)
+												 : 40.0 + (D.FreqHarmonic - 25.0) * 0.834)
+											 : 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
 			D.Gain2H = Math.Max(D.Gain2H, 0.0) * num21 * num22 * (0.8 + 0.3 * D.MixPower + 0.1 * D.MixCylinder);
 			D.Gain2H = Math.Floor(D.Gain2H.Clamp(0.0, sbyte.MaxValue));
-			D.Gain4H = D.FreqHarmonic >= 25.0 ? (D.FreqHarmonic >= 40.0 ? (D.FreqHarmonic >= 65.0 ? (D.FreqHarmonic >= 95.0 ? (D.FreqHarmonic >= 125.0 ? 75.0 - (D.FreqHarmonic - 125.0) : 95.0 - (D.FreqHarmonic - 95.0) * 0.667) : 66.0 + (D.FreqHarmonic - 65.0) * 1.0) : 52.5 + (D.FreqHarmonic - 40.0) * 0.5) : 40.0 + (D.FreqHarmonic - 25.0) * 0.834) : 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
+			D.Gain4H = D.FreqHarmonic >= 25.0 ? (D.FreqHarmonic >= 40.0
+												 ? (D.FreqHarmonic >= 65.0
+													 ? (D.FreqHarmonic >= 95.0
+														 ? (D.FreqHarmonic >= 125.0
+															 ? 75.0 - (D.FreqHarmonic - 125.0)
+															 : 95.0 - (D.FreqHarmonic - 95.0) * 0.667)
+														 : 66.0 + (D.FreqHarmonic - 65.0) * 1.0)
+													 : 52.5 + (D.FreqHarmonic - 40.0) * 0.5)
+												 : 40.0 + (D.FreqHarmonic - 25.0) * 0.834)
+											 : 30.0 + (D.FreqHarmonic - 15.0) * 1.0;
 			D.Gain4H = Math.Max(D.Gain4H, 0.0) * num21 * num22 * (0.8 + 0.2 * D.MixPower + 0.2 * D.MixDisplacement);
 			D.Gain4H = Math.Floor(D.Gain4H.Clamp(0.0, sbyte.MaxValue));
 			D.GainOctave = D.FreqOctave >= 55.0 ? (D.FreqOctave >= 80.0 ? 75.0 - (D.FreqOctave - 80.0) * 0.75 : 30.0 + (D.FreqOctave - 55.0) * 1.8) : (D.FreqOctave - 30.0) * 1.2;
@@ -1834,9 +1886,8 @@ namespace sierses.SimHap
 				S = Settings.Vehicle;
 				LoadStatus = DataStatus.SettingsFile;
 				D.LoadStatusText = "Load Fail: Loaded from Settings";
-			}
-			if (LoadStatus == DataStatus.SettingsFile)
 				return;
+			}
 			S.Game = GameDBText;
 			S.Name = db.CarModel;
 			S.Id = db.CarId;
@@ -2330,9 +2381,8 @@ namespace sierses.SimHap
 		private static JToken jtoken;									// shared between FetchCarData() and Untoken()
 		private static double Untoken(string token, double trouble)		// helper for FetchCarData()
 		{
-			double result;
-			return double.TryParse((string)jtoken[token], out result) ? result : trouble;
-		}
+            return double.TryParse((string)jtoken[token], out double result) ? result : trouble;
+        }
 
 		private static async void FetchCarData(
 			string id,
@@ -2348,19 +2398,25 @@ namespace sierses.SimHap
 				FetchStatus = APIStatus.Waiting;
 				LoadFinish = false;
 				Logging.Current.Info("SimHapticsPlugin: Loading " + category + " " + id);
-				if (id == null)
-					id = "0";
-				if (category == null)
-					category = "0";
-				Uri requestUri = new Uri("https://api.simhaptics.com/data/" + GameDBText
+				id ??= "0";
+				category ??= "0";
+				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
 								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
-				JObject jobject = (JObject) JsonConvert.DeserializeObject(async.Content.ReadAsStringAsync().Result);
+				string dls;
+				JObject jobject = (JObject) JsonConvert.DeserializeObject(dls = async.Content.ReadAsStringAsync().Result);
 				Logging.Current.Info(jobject);
 				if (jobject["data"].HasValues)
 				{
 					jtoken = jobject["data"][0];
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                 
+                    Download dljc = JsonConvert.DeserializeObject<Download>(dls, settings);
 					v.Game = GameDBText;
 					v.Id = Convert.ToString(jtoken[nameof(id)]);
 					v.Category = Convert.ToString(jtoken[nameof(category)]);
@@ -2382,6 +2438,10 @@ namespace sierses.SimHap
 					FailedId = "";
 					FailedCategory = "";
 					FetchStatus = APIStatus.Success;
+                    File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
+                                      			JsonConvert.SerializeObject(dljc, Formatting.Indented));
+                    File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
+												JsonConvert.SerializeObject(jobject, Formatting.Indented));
 				}
 				else
 				{
@@ -2407,6 +2467,16 @@ namespace sierses.SimHap
 
 		public void End(PluginManager pluginManager)
 		{
+			string sjs = JsonConvert.SerializeObject(D, Formatting.Indented);
+			if (0 == sjs.Length || "{}" == sjs)
+                Logging.Current.Info("SimHapticsPlugin.End():  SimData Json Serializer failure");
+			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".SimData.json", sjs);
+
+			sjs = JsonConvert.SerializeObject(S, Formatting.Indented);
+			if (0 == sjs.Length || "{}" == sjs)
+                Logging.Current.Info("SimHapticsPlugin.End():  Spec Json Serializer failure");
+			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".Spec.json", sjs);
+
 			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
 				Settings.EngineMult.Remove("AllGames");
 			if (Settings.EngineMult.TryGetValue(GameDBText, out double _))
@@ -2514,9 +2584,8 @@ namespace sierses.SimHap
 
 		double GetSetting(string name, double trouble)	// Init() helper
 		{
-			double num;
-			return Settings.Motion.TryGetValue("MotionPitchOffset", out num) ? num : trouble;
-		}
+            return Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
+        }
 
 		public void Init(PluginManager pluginManager)
 		{
@@ -2555,9 +2624,9 @@ namespace sierses.SimHap
 			Settings.UpshiftDurationMs = Settings.UpshiftDurationMs > 0 ? Settings.UpshiftDurationMs : 400;
 			if (Settings.EngineMult == null)
 				Settings.EngineMult = new Dictionary<string, double>();
-			double num1;
-			D.EngineMult = !Settings.EngineMult.TryGetValue(GameDBText, out num1) ? 1.0 : num1;
-			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
+            double num;
+            D.EngineMult = !Settings.EngineMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
+            if (Settings.EngineMult.TryGetValue("AllGames", out double _))
 			{
 				D.EngineMultAll = 1.0;
 			}
@@ -2568,13 +2637,11 @@ namespace sierses.SimHap
 			}
 			if (Settings.RumbleMult == null)
 				Settings.RumbleMult = new Dictionary<string, double>();
-			double num2;
-			D.RumbleMult = !Settings.RumbleMult.TryGetValue(GameDBText, out num2) ? 1.0 : num2;
-			double num3;
-			if (Settings.RumbleMult.TryGetValue("AllGames", out num3))
-			{
-				D.RumbleMultAll = num3;
-			}
+			
+			D.RumbleMult = !Settings.RumbleMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
+			
+			if (Settings.RumbleMult.TryGetValue("AllGames", out num))
+				D.RumbleMultAll = num;
 			else
 			{
 				D.RumbleMultAll = 5.0;
@@ -2582,13 +2649,9 @@ namespace sierses.SimHap
 			}
 			if (Settings.SuspensionMult == null)
 				Settings.SuspensionMult = new Dictionary<string, double>();
-			double num4;
-			D.SuspensionMult = !Settings.SuspensionMult.TryGetValue(GameDBText, out num4) ? 1.0 : num4;
-			double num5;
-			if (Settings.SuspensionMult.TryGetValue("AllGames", out num5))
-			{
-				D.SuspensionMultAll = num5;
-			}
+			D.SuspensionMult = !Settings.SuspensionMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
+			if (Settings.SuspensionMult.TryGetValue("AllGames", out num))
+				D.SuspensionMultAll = num;
 			else
 			{
 				D.SuspensionMultAll = 1.5;
@@ -2596,13 +2659,9 @@ namespace sierses.SimHap
 			}
 			if (Settings.SuspensionGamma == null)
 				Settings.SuspensionGamma = new Dictionary<string, double>();
-			double num6;
-			D.SuspensionGamma = !Settings.SuspensionGamma.TryGetValue(GameDBText, out num6) ? 1.0 : num6;
-			double num7;
-			if (Settings.SuspensionGamma.TryGetValue("AllGames", out num7))
-			{
-				D.SuspensionGammaAll = num7;
-			}
+			D.SuspensionGamma = !Settings.SuspensionGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
+			if (Settings.SuspensionGamma.TryGetValue("AllGames", out num))
+				D.SuspensionGammaAll = num;
 			else
 			{
 				D.SuspensionGammaAll = 1.75;
@@ -2610,12 +2669,10 @@ namespace sierses.SimHap
 			}
 			if (Settings.SlipXMult == null)
 				Settings.SlipXMult = new Dictionary<string, double>();
-			double num8;
-			D.SlipXMult = !Settings.SlipXMult.TryGetValue(GameDBText, out num8) ? 1.0 : num8;
-			double num9;
-			if (Settings.SlipXMult.TryGetValue("AllGames", out num9))
+			D.SlipXMult = !Settings.SlipXMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
+			if (Settings.SlipXMult.TryGetValue("AllGames", out num))
 			{
-				D.SlipXMultAll = num9;
+				D.SlipXMultAll = num;
 			}
 			else
 			{
@@ -2624,12 +2681,10 @@ namespace sierses.SimHap
 			}
 			if (Settings.SlipYMult == null)
 				Settings.SlipYMult = new Dictionary<string, double>();
-			double num10;
-			D.SlipYMult = !Settings.SlipYMult.TryGetValue(GameDBText, out num10) ? 1.0 : num10;
-			double num11;
-			if (Settings.SlipYMult.TryGetValue("AllGames", out num11))
+			D.SlipYMult = !Settings.SlipYMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
+			if (Settings.SlipYMult.TryGetValue("AllGames", out num))
 			{
-				D.SlipYMultAll = num11;
+				D.SlipYMultAll = num;
 			}
 			else
 			{
@@ -2638,12 +2693,10 @@ namespace sierses.SimHap
 			}
 			if (Settings.SlipXGamma == null)
 				Settings.SlipXGamma = new Dictionary<string, double>();
-			double num12;
-			D.SlipXGamma = !Settings.SlipXGamma.TryGetValue(GameDBText, out num12) ? 1.0 : num12;
-			double num13;
-			if (Settings.SlipXGamma.TryGetValue("AllGames", out num13))
+			D.SlipXGamma = !Settings.SlipXGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
+			if (Settings.SlipXGamma.TryGetValue("AllGames", out num))
 			{
-				D.SlipXGammaAll = num13;
+				D.SlipXGammaAll = num;
 			}
 			else
 			{
@@ -2652,12 +2705,10 @@ namespace sierses.SimHap
 			}
 			if (Settings.SlipYGamma == null)
 				Settings.SlipYGamma = new Dictionary<string, double>();
-			double num14;
-			D.SlipYGamma = !Settings.SlipYGamma.TryGetValue(GameDBText, out num14) ? 1.0 : num14;
-			double num15;
-			if (Settings.SlipYGamma.TryGetValue("AllGames", out num15))
+			D.SlipYGamma = !Settings.SlipYGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
+			if (Settings.SlipYGamma.TryGetValue("AllGames", out num))
 			{
-				D.SlipYGammaAll = num15;
+				D.SlipYGammaAll = num;
 			}
 			else
 			{

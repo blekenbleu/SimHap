@@ -6,6 +6,30 @@ using System.ComponentModel;
 
 namespace sierses.SimHap
 {
+	public class DownloadData
+	{
+		public string notes;
+		public ushort cc;
+		public ushort nm;
+		public ushort ehp;
+		public ushort hp;
+		public string drive;
+		public string config;
+		public ushort cyl;
+		public string loc;
+		public ushort maxrpm;
+		public ushort redline;
+		public string category;
+		public string name;
+		public string id;
+		public string game;
+	}
+
+	public class Download
+	{
+		public DownloadData[] data;
+	}
+
   public class Spec : INotifyPropertyChanged
   {
     private string game;
