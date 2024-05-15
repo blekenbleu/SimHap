@@ -174,11 +174,11 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="200">Pitch Multiplier:</TextBlock>
-              <TextBox Name="MotionPitchMult" MinWidth="100" Text="{Binding D.MotionPitchMult}"/>
+                            <TextBox Name="MotionPitchMult" MinWidth="100" Text="{Binding D.MotionPitchMult,Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="200">Pitch Gamma:</TextBlock>
-              <TextBox Name="MotionPitchGamma" MinWidth="100" Text="{Binding D.MotionPitchGamma}"/>
+                            <TextBox Name="MotionPitchGamma" MinWidth="100" Text="{Binding D.MotionPitchGamma,Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,8,0,2">
               <TextBlock MinWidth="200">Roll Offset:</TextBlock>
