@@ -4,7 +4,6 @@
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 // Assembly location: C:\Users\demas\Downloads\dnSpy-net-win64\SimHaptics.dll
 
-#nullable disable
 namespace sierses.SimHap
 {
   public enum APIStatus

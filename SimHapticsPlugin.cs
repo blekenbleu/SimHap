@@ -18,7 +18,6 @@ using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-#nullable disable
 namespace sierses.SimHap
 {
 	[PluginDescription("Properties for haptic feedback and more")]

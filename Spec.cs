@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 
-#nullable disable
 namespace sierses.SimHap
 {
   public class Spec : INotifyPropertyChanged

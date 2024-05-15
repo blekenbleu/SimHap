@@ -6,7 +6,6 @@
 
 using System;
 
-#nullable disable
 namespace sierses.SimHap
 {
   internal static class Helpers
