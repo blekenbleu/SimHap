@@ -9,13 +9,13 @@
   <FrameworkElement.Resources>
     <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
       <Setter Property="UIElement.Opacity" Value="0.9"/>
-      <Setter Property="Shape.Fill" Value="{DynamicResource BlackBrush}"/>
+      <Setter Property="Shape.Fill" Value="White"/>
       <Setter Property="FrameworkElement.Height" Value="50"/>
       <Setter Property="FrameworkElement.Width" Value="50"/>
     </Style>
     <Style x:Key="StatusCircle" TargetType="{x:Type Rectangle}">
       <Setter Property="UIElement.Opacity" Value="0.9"/>
-      <Setter Property="Shape.Fill" Value="{DynamicResource BlackBrush}"/>
+      <Setter Property="Shape.Fill" Value="White"/>
       <Setter Property="FrameworkElement.Height" Value="10"/>
       <Setter Property="FrameworkElement.Width" Value="10"/>
     </Style>
@@ -67,7 +67,6 @@
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="75">Category:</TextBlock>
               <TextBox Name="CarClass" MinWidth="200" Text="{Binding S.Category}"/>
-              <Image Source="./ImageLibrary/Leds/Set3/LED On.png" Width="10" Height="10" Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="100">Redline:</TextBlock>
