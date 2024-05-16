@@ -28,6 +28,7 @@ namespace sierses.SimHap
 		public static string SimHubVersion;
 		public static int LoadFailCount;
 		public static bool LoadFinish;
+		public static bool Changed;
 		public static DataStatus LoadStatus;
 		public static APIStatus FetchStatus;
 		public static long FrameTimeTicks = 0;
@@ -2572,7 +2573,7 @@ namespace sierses.SimHap
 		{
 			SimHubVersion = (string) pluginManager.GetPropertyValue("DataCorePlugin.SimHubVersion");
 			LoadFailCount = 0;
-			LoadFinish = false;
+			Changed = LoadFinish = false;
 			LoadStatus = DataStatus.None;
 			FetchStatus = APIStatus.None;
 			S = new Spec();
@@ -2605,9 +2606,8 @@ namespace sierses.SimHap
 			Settings.UpshiftDurationMs = Settings.UpshiftDurationMs > 0 ? Settings.UpshiftDurationMs : 400;
 			if (Settings.EngineMult == null)
 				Settings.EngineMult = new Dictionary<string, double>();
-			double num;
-			D.EngineMult = !Settings.EngineMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
-			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
+            D.EngineMult = !Settings.EngineMult.TryGetValue(GameDBText, out double num) ? 1.0 : num;
+            if (Settings.EngineMult.TryGetValue("AllGames", out double _))
 				D.EngineMultAll = 1.0;
 			else Settings.EngineMult.Add("AllGames", D.EngineMultAll = 1.0);
 			if (Settings.RumbleMult == null)
