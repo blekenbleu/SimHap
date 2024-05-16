@@ -70,38 +70,38 @@ namespace sierses.SimHap
 		{
 			get { return this.ToIcon(Resources._100x100_Traction_White); }
 		}
-
+/*
 		private List<string[]> Sling(DownloadData data)
 		{
 			return new List<string[]>
-            {
-                new string[] { "notes", data.notes },
-                new string[] { "cc", data.cc.ToString() },
-                new string[] { "nm", data.nm.ToString() },
-                new string[] { "ehp", data.ehp.ToString() },
-                new string[] { "hp", data.hp.ToString() },
-                new string[] { "drive", data.drive },
-                new string[] { "config", data.config },
-                new string[] { "cyl", data.cyl.ToString() },
-                new string[] { "loc", data.loc },
-                new string[] { "maxrpm", data.maxrpm.ToString() },
-                new string[] { "redline", data.redline.ToString() },
-                new string[] { "category", data.category },
-                new string[] { "name", data.name },
-                new string[] { "id", data.id },
-                new string[] { "game", data.game }
-            };
-		}
+			{
+				new string[] { "notes", data.notes },
+				new string[] { "cc", data.cc.ToString() },
+				new string[] { "nm", data.nm.ToString() },
+				new string[] { "ehp", data.ehp.ToString() },
+				new string[] { "hp", data.hp.ToString() },
+				new string[] { "drive", data.drive },
+				new string[] { "config", data.config },
+				new string[] { "cyl", data.cyl.ToString() },
+				new string[] { "loc", data.loc },
+				new string[] { "maxrpm", data.maxrpm.ToString() },
+				new string[] { "redline", data.redline.ToString() },
+				new string[] { "category", data.category },
+				new string[] { "name", data.name },
+				new string[] { "id", data.id },
+				new string[] { "game", data.game }
+			};
+		}		*/
 
 		public string LeftMenuTitle => "SimHaptics";
 
 		/// <summary>
-        /// Called one time per game data update, contains all normalized game data,
-        /// raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
-        /// This method is on the critical path, must execute as fast as possible and avoid throwing any error
-        /// </summary>
-        /// <param name="pluginManager"></param>
-        /// <param name="data">Current game data, including present and previous data frames.</param> 
+		/// Called one time per game data update, contains all normalized game data,
+		/// raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
+		/// This method is on the critical path, must execute as fast as possible and avoid throwing any error
+		/// </summary>
+		/// <param name="pluginManager"></param>
+		/// <param name="data">Current game data, including present and previous data frames.</param> 
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
 			FrameCountTicks = FrameCountTicks + DateTime.Now.Ticks - FrameTimeTicks;
@@ -1726,7 +1726,7 @@ namespace sierses.SimHap
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
 						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						D.IdleRPM = 10.0 * (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm");
+						D.IdleRPM = 10.0 * (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm");
 						break;
 					}
 					break;
@@ -1734,7 +1734,7 @@ namespace sierses.SimHap
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
 						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						D.IdleRPM = 10.0 * (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm");
+						D.IdleRPM = 10.0 * (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm");
 						break;
 					}
 					break;
@@ -1751,7 +1751,7 @@ namespace sierses.SimHap
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
 						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						D.IdleRPM = 10.0 * (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM");
+						D.IdleRPM = 10.0 * (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM");
 						break;
 					}
 					break;
@@ -1759,7 +1759,7 @@ namespace sierses.SimHap
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
 						FetchCarData(db.CarId.Substring(4), null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						D.IdleRPM = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm");
+						D.IdleRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm");
 						break;
 					}
 					break;
@@ -1775,7 +1775,7 @@ namespace sierses.SimHap
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
 						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						D.IdleRPM = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
+						D.IdleRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
 						D.GameAltText = pluginManager.GameName + (string) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 						break;
 					}
@@ -2378,12 +2378,6 @@ namespace sierses.SimHap
 			D.AccSway = new double[D.AccSamples];
 		}
 
-		private static JToken jtoken;									// shared between FetchCarData() and Untoken()
-		private static double Untoken(string token, double trouble)		// helper for FetchCarData()
-		{
-            return double.TryParse((string)jtoken[token], out double result) ? result : trouble;
-        }
-
 		private static async void FetchCarData(
 			string id,
 			string category,
@@ -2404,44 +2398,39 @@ namespace sierses.SimHap
 								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
-				string dls;
-				JObject jobject = (JObject) JsonConvert.DeserializeObject(dls = async.Content.ReadAsStringAsync().Result);
-				Logging.Current.Info(jobject);
-				if (jobject["data"].HasValues)
+				string dls = async.Content.ReadAsStringAsync().Result;
+				Download dljc = JsonConvert.DeserializeObject<Download>(dls,
+				new JsonSerializerSettings
 				{
-					jtoken = jobject["data"][0];
-                    var settings = new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Ignore,
-                        MissingMemberHandling = MissingMemberHandling.Ignore
-                    };
-                 
-                    Download dljc = JsonConvert.DeserializeObject<Download>(dls, settings);
+					NullValueHandling = NullValueHandling.Ignore,
+					MissingMemberHandling = MissingMemberHandling.Ignore
+				});
+				if (null != dljc && 0 < dljc.data.Length)
+				{
 					v.Game = GameDBText;
-					v.Id = Convert.ToString(jtoken[nameof(id)]);
-					v.Category = Convert.ToString(jtoken[nameof(category)]);
-					v.Name = Convert.ToString(jtoken["name"]);
-					v.EngineLocation = Convert.ToString(jtoken["loc"]);
-					v.PoweredWheels = Convert.ToString(jtoken["drive"]);
-					v.EngineConfiguration = Convert.ToString(jtoken["config"]);
-					v.EngineCylinders = Untoken("cyl", 0.0);
-					v.Redline = Untoken("redline", redlineFromGame);
-					v.MaxRPM = Untoken("maxrpm", maxRPMFromGame);
-					v.MaxPower = Untoken("hp", 333.0);
-					v.ElectricMaxPower = Untoken("ehp", 0.0);
-					v.Displacement = Untoken("cc", 3333.0);
-					v.MaxTorque = Untoken("nm", v.MaxPower);
-					if (CurrentGame == GameId.Forza)
-						v.Id = "Car_" + v.Id;
+					v.Id = (CurrentGame == GameId.Forza) ? "Car_" + dljc.data[0].id : dljc.data[0].id;
+					v.Category = 			dljc.data[0].category;
+					v.Name = 				dljc.data[0].name;
+					v.EngineLocation = 		dljc.data[0].loc;
+					v.PoweredWheels = 		dljc.data[0].drive;
+					v.EngineConfiguration = dljc.data[0].config;
+					v.EngineCylinders = 	dljc.data[0].cyl;
+					v.Redline =		  (0 == dljc.data[0].redline) ? redlineFromGame : dljc.data[0].redline;
+					v.MaxRPM =		  (0 == dljc.data[0].maxrpm)  ? maxRPMFromGame  : dljc.data[0].maxrpm;
+					v.MaxPower = 	  (0 == dljc.data[0].hp) 	  ? 333 			: dljc.data[0].hp;
+					v.ElectricMaxPower = 	dljc.data[0].ehp;
+					v.Displacement = 		dljc.data[0].cc;
+					v.MaxTorque = 			dljc.data[0].nm;
+
 					Logging.Current.Info("SimHapticsPlugin: Successfully loaded " + v.Name);
 					LoadFailCount = 0;
 					FailedId = "";
 					FailedCategory = "";
 					FetchStatus = APIStatus.Success;
-                    File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
-                                      			JsonConvert.SerializeObject(dljc, Formatting.Indented));
-                    File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
-												JsonConvert.SerializeObject(jobject, Formatting.Indented));
+					File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
+									  			JsonConvert.SerializeObject(dljc, Formatting.Indented));
+//				  File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
+//										JsonConvert.SerializeObject(jobject, Formatting.Indented));
 				}
 				else
 				{
@@ -2453,8 +2442,7 @@ namespace sierses.SimHap
 						FailedCategory = category;
 						FetchStatus = APIStatus.Fail;
 					}
-					else
-						FetchStatus = APIStatus.Retry;
+					else FetchStatus = APIStatus.Retry;
 				}
 			}
 			catch (HttpRequestException ex)
@@ -2470,12 +2458,12 @@ namespace sierses.SimHap
 /*
 			string sjs = JsonConvert.SerializeObject(D, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
-                Logging.Current.Info("SimHapticsPlugin.End():  SimData Json Serializer failure");
+				Logging.Current.Info("SimHapticsPlugin.End():  SimData Json Serializer failure");
 			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".SimData.json", sjs);
 
 			sjs = JsonConvert.SerializeObject(S, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
-                Logging.Current.Info("SimHapticsPlugin.End():  Spec Json Serializer failure");
+				Logging.Current.Info("SimHapticsPlugin.End():  Spec Json Serializer failure");
 			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".Spec.json", sjs);
 */
 			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
@@ -2484,8 +2472,7 @@ namespace sierses.SimHap
 			{
 				if (D.EngineMult == 1.0)
 					Settings.EngineMult.Remove(GameDBText);
-				else
-					Settings.EngineMult[GameDBText] = D.EngineMult;
+				else Settings.EngineMult[GameDBText] = D.EngineMult;
 			}
 			else if (D.EngineMult != 1.0)
 				Settings.EngineMult.Add(GameDBText, D.EngineMult);
@@ -2493,8 +2480,7 @@ namespace sierses.SimHap
 			{
 				if (D.RumbleMult == 1.0)
 					Settings.RumbleMult.Remove(GameDBText);
-				else
-					Settings.RumbleMult[GameDBText] = D.RumbleMult;
+				else Settings.RumbleMult[GameDBText] = D.RumbleMult;
 			}
 			else if (D.RumbleMult != 1.0)
 				Settings.RumbleMult.Add(GameDBText, D.RumbleMult);
@@ -2502,8 +2488,7 @@ namespace sierses.SimHap
 			{
 				if (D.SuspensionMult == 1.0)
 					Settings.SuspensionMult.Remove(GameDBText);
-				else
-					Settings.SuspensionMult[GameDBText] = D.SuspensionMult;
+				else Settings.SuspensionMult[GameDBText] = D.SuspensionMult;
 			}
 			else if (D.SuspensionMult != 1.0)
 				Settings.SuspensionMult.Add(GameDBText, D.SuspensionMult);
@@ -2511,8 +2496,7 @@ namespace sierses.SimHap
 			{
 				if (D.SuspensionGamma == 1.0)
 					Settings.SuspensionGamma.Remove(GameDBText);
-				else
-					Settings.SuspensionGamma[GameDBText] = D.SuspensionGamma;
+				else Settings.SuspensionGamma[GameDBText] = D.SuspensionGamma;
 			}
 			else if (D.SuspensionGamma != 1.0)
 				Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
@@ -2520,8 +2504,7 @@ namespace sierses.SimHap
 			{
 				if (D.SlipXMult == 1.0)
 					Settings.SlipXMult.Remove(GameDBText);
-				else
-					Settings.SlipXMult[GameDBText] = D.SlipXMult;
+				else Settings.SlipXMult[GameDBText] = D.SlipXMult;
 			}
 			else if (D.SlipXMult != 1.0)
 				Settings.SlipXMult.Add(GameDBText, D.SlipXMult);
@@ -2529,8 +2512,7 @@ namespace sierses.SimHap
 			{
 				if (D.SlipYMult == 1.0)
 					Settings.SlipYMult.Remove(GameDBText);
-				else
-					Settings.SlipYMult[GameDBText] = D.SlipYMult;
+				else Settings.SlipYMult[GameDBText] = D.SlipYMult;
 			}
 			else if (D.SlipYMult != 1.0)
 				Settings.SlipYMult.Add(GameDBText, D.SlipYMult);
@@ -2538,8 +2520,7 @@ namespace sierses.SimHap
 			{
 				if (D.SlipXGamma == 1.0)
 					Settings.SlipXGamma.Remove(GameDBText);
-				else
-					Settings.SlipXGamma[GameDBText] = D.SlipXGamma;
+				else Settings.SlipXGamma[GameDBText] = D.SlipXGamma;
 			}
 			else if (D.SlipXGamma != 1.0)
 				Settings.SlipXGamma.Add(GameDBText, D.SlipXGamma);
@@ -2547,8 +2528,7 @@ namespace sierses.SimHap
 			{
 				if (D.SlipYGamma == 1.0)
 					Settings.SlipYGamma.Remove(GameDBText);
-				else
-					Settings.SlipYGamma[GameDBText] = D.SlipYGamma;
+				else Settings.SlipYGamma[GameDBText] = D.SlipYGamma;
 			}
 			else if (D.SlipYGamma != 1.0)
 				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
@@ -2585,8 +2565,8 @@ namespace sierses.SimHap
 
 		double GetSetting(string name, double trouble)	// Init() helper
 		{
-            return Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
-        }
+			return Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
+		}
 
 		public void Init(PluginManager pluginManager)
 		{
@@ -2625,17 +2605,11 @@ namespace sierses.SimHap
 			Settings.UpshiftDurationMs = Settings.UpshiftDurationMs > 0 ? Settings.UpshiftDurationMs : 400;
 			if (Settings.EngineMult == null)
 				Settings.EngineMult = new Dictionary<string, double>();
-            double num;
-            D.EngineMult = !Settings.EngineMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
-            if (Settings.EngineMult.TryGetValue("AllGames", out double _))
-			{
+			double num;
+			D.EngineMult = !Settings.EngineMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
+			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
 				D.EngineMultAll = 1.0;
-			}
-			else
-			{
-				D.EngineMultAll = 1.0;
-				Settings.EngineMult.Add("AllGames", D.EngineMultAll);
-			}
+			else Settings.EngineMult.Add("AllGames", D.EngineMultAll = 1.0);
 			if (Settings.RumbleMult == null)
 				Settings.RumbleMult = new Dictionary<string, double>();
 			
@@ -2643,79 +2617,43 @@ namespace sierses.SimHap
 			
 			if (Settings.RumbleMult.TryGetValue("AllGames", out num))
 				D.RumbleMultAll = num;
-			else
-			{
-				D.RumbleMultAll = 5.0;
-				Settings.RumbleMult.Add("AllGames", D.RumbleMultAll);
-			}
+			else Settings.RumbleMult.Add("AllGames", D.RumbleMultAll = 5.0);
 			if (Settings.SuspensionMult == null)
 				Settings.SuspensionMult = new Dictionary<string, double>();
 			D.SuspensionMult = !Settings.SuspensionMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
 			if (Settings.SuspensionMult.TryGetValue("AllGames", out num))
 				D.SuspensionMultAll = num;
-			else
-			{
-				D.SuspensionMultAll = 1.5;
-				Settings.SuspensionMult.Add("AllGames", D.SuspensionMultAll);
-			}
+			else Settings.SuspensionMult.Add("AllGames", D.SuspensionMultAll - 1.5);
 			if (Settings.SuspensionGamma == null)
 				Settings.SuspensionGamma = new Dictionary<string, double>();
 			D.SuspensionGamma = !Settings.SuspensionGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
 			if (Settings.SuspensionGamma.TryGetValue("AllGames", out num))
 				D.SuspensionGammaAll = num;
-			else
-			{
-				D.SuspensionGammaAll = 1.75;
-				Settings.SuspensionGamma.Add("AllGames", D.SuspensionGammaAll);
-			}
+			else Settings.SuspensionGamma.Add("AllGames", D.SuspensionGammaAll = 1.75);
 			if (Settings.SlipXMult == null)
 				Settings.SlipXMult = new Dictionary<string, double>();
 			D.SlipXMult = !Settings.SlipXMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
 			if (Settings.SlipXMult.TryGetValue("AllGames", out num))
-			{
 				D.SlipXMultAll = num;
-			}
-			else
-			{
-				D.SlipXMultAll = 1.0;
-				Settings.SlipXMult.Add("AllGames", D.SlipXMultAll);
-			}
+			else Settings.SlipXMult.Add("AllGames", D.SlipXMultAll = 1.6);
 			if (Settings.SlipYMult == null)
 				Settings.SlipYMult = new Dictionary<string, double>();
 			D.SlipYMult = !Settings.SlipYMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
 			if (Settings.SlipYMult.TryGetValue("AllGames", out num))
-			{
 				D.SlipYMultAll = num;
-			}
-			else
-			{
-				D.SlipYMultAll = 1.0;
-				Settings.SlipYMult.Add("AllGames", D.SlipYMultAll);
-			}
+			else Settings.SlipYMult.Add("AllGames", D.SlipYMultAll = 1.0);
 			if (Settings.SlipXGamma == null)
 				Settings.SlipXGamma = new Dictionary<string, double>();
 			D.SlipXGamma = !Settings.SlipXGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
 			if (Settings.SlipXGamma.TryGetValue("AllGames", out num))
-			{
 				D.SlipXGammaAll = num;
-			}
-			else
-			{
-				D.SlipXGammaAll = 1.0;
-				Settings.SlipXGamma.Add("AllGames", D.SlipXGammaAll);
-			}
+			else Settings.SlipXGamma.Add("AllGames", D.SlipXGammaAll = 1.0);
 			if (Settings.SlipYGamma == null)
 				Settings.SlipYGamma = new Dictionary<string, double>();
 			D.SlipYGamma = !Settings.SlipYGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
 			if (Settings.SlipYGamma.TryGetValue("AllGames", out num))
-			{
 				D.SlipYGammaAll = num;
-			}
-			else
-			{
-				D.SlipYGammaAll = 1.0;
-				Settings.SlipYGamma.Add("AllGames", D.SlipYGammaAll);
-			}
+			else Settings.SlipYGamma.Add("AllGames", D.SlipYGammaAll = 1.0);
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
 			D.MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
