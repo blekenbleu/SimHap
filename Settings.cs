@@ -56,8 +56,6 @@ namespace sierses.SimHap
 				return false;
 
 			property = value;
-			if (nameof(Unlocked) != propertyName)
-				SimHapticsPlugin.Changed = true;	
 			PropertyChangedEventHandler handle = this.PropertyChanged;
 			if (handle == null)
 				return false;
