@@ -29,6 +29,7 @@
 	- `SetVehiclePerGame()` based on time
 		- better done by event...
 		- calls `FetchCarData()`
+		- may call SetDefaultVehicle(), which calls Spec Init()
 	- update physics:
 		- Yaw, YawRate, YawRateAvg
 		- AccHeave, AccSurge, AccSway, Jerk[XYZ]
@@ -45,4 +46,10 @@
 	- Load and hack Settings
 	- initialize SimData
 	- AttachDelegate Spec, SimData
+
+- UI
+	- Motion, Suspension and Traction settings are saved in Settings Dictionaries
+		- Only one set of Motion properties, all in a single Dictionary
+		- Suspension and Traction have per-game dictionaries
+	- Engine specs are downloaded
 	
