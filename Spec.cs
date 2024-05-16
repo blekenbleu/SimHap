@@ -2,6 +2,7 @@
 // Type: SimHaptics.Spec
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 
+using GameReaderCommon;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -16,8 +17,8 @@ namespace sierses.SimHap
 		public event PropertyChangedEventHandler PropertyChanged;
 		protected virtual void OnPropertyChanged(string propertyName)
 		{
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
 		protected bool SetField<T>(ref T field, T value, string propertyName)
 		{
@@ -85,6 +86,114 @@ namespace sierses.SimHap
 
 		public Spec()
 		{
+		}
+
+		internal string Init(string game, StatusDataBase db, GameId CurrentGame)
+		{
+			Game = game;
+			Name = db.CarModel;
+			Id = db.CarId;
+			Category = db.CarClass;
+			EngineConfiguration = "V";
+			EngineCylinders = 6.0;
+			EngineLocation = "RM";
+			PoweredWheels = "A";
+			Displacement = 3000.0;
+			MaxPower = 300.0;
+			ElectricMaxPower = 0.0;
+			MaxTorque = 250.0;
+			string LoadStatusText;
+			switch (CurrentGame)
+			{
+				case GameId.AC:
+				case GameId.ACC:
+				case GameId.AMS1:
+				case GameId.AMS2:
+				case GameId.Forza:
+				case GameId.GTR2:
+				case GameId.IRacing:
+				case GameId.PC2:
+				case GameId.RBR:
+				case GameId.RF2:
+				case GameId.RRRE:
+				case GameId.BeamNG:
+					LoadStatusText = "Not in DB: using generic car";
+					break;
+				case GameId.D4:
+				case GameId.DR2:
+				case GameId.WRC23:
+					LoadStatusText = "Not in DB: using generic Rally2";
+					EngineConfiguration = "I";
+					EngineCylinders = 4.0;
+					EngineLocation = "F";
+					PoweredWheels = "A";
+					Displacement = 1600.0;
+					MaxPower = 300.0;
+					ElectricMaxPower = 0.0;
+					MaxTorque = 400.0;
+					break;
+				case GameId.F12022:
+				case GameId.F12023:
+					LoadStatusText = "Not in DB: using generic F1";
+					EngineConfiguration = "V";
+					EngineCylinders = 6.0;
+					EngineLocation = "RM";
+					PoweredWheels = "R";
+					Displacement = 1600.0;
+					MaxPower = 1000.0;
+					ElectricMaxPower = 0.0;
+					MaxTorque = 650.0;
+					break;
+				case GameId.KK:
+					LoadStatusText = "Not in DB: using generic Kart";
+					EngineConfiguration = "I";
+					EngineCylinders = 1.0;
+					EngineLocation = "RM";
+					PoweredWheels = "R";
+					Displacement = 130.0;
+					MaxPower = 34.0;
+					ElectricMaxPower = 0.0;
+					MaxTorque = 24.0;
+					break;
+				case GameId.GPBikes:
+					LoadStatusText = "Not in DB: using generic Superbike";
+					EngineConfiguration = "I";
+					EngineCylinders = 4.0;
+					EngineLocation = "M";
+					PoweredWheels = "R";
+					Displacement = 998.0;
+					MaxPower = 200.0;
+					ElectricMaxPower = 0.0;
+					MaxTorque = 100.0;
+					break;
+				case GameId.MXBikes:
+					LoadStatusText = "Not in DB: using generic MX Bike";
+					EngineConfiguration = "I";
+					EngineCylinders = 1.0;
+					EngineLocation = "M";
+					PoweredWheels = "R";
+					Displacement = 450.0;
+					MaxPower = 50.0;
+					ElectricMaxPower = 0.0;
+					MaxTorque = 45.0;
+					break;
+				case GameId.GranTurismo7:
+				case GameId.GranTurismoSport:
+					LoadStatusText = "Not in DB: redline loaded from game";
+					EngineConfiguration = "V";
+					EngineCylinders = 6.0;
+					EngineLocation = "RM";
+					PoweredWheels = "R";
+					Displacement = 4000.0;
+					MaxPower = 500.0;
+					ElectricMaxPower = 0.0;
+					MaxTorque = 400.0;
+					break;
+				default:
+					LoadStatusText = "Load Fail: Specs not available for this game";
+					break;
+			}
+			return LoadStatusText;
 		}
 
 		public Spec(Spec s) : this()
