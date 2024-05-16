@@ -21,3 +21,28 @@
 	When users select a name, the new carID gets added to JSON for that name with old carID.
 	![](Doc/spreadsheet.jpg)  
 	*carID is columnC*
+### New to me
+- [async](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/async-scenarios)
+- [Dictionary](https://stackoverflow.com/questions/4245064/method-to-add-new-or-update-existing-item-in-c-sharp-dictionary)
+### How it works
+- with game running: `DataUpdate()`
+	- `SetVehiclePerGame()` based on time
+		- better done by event...
+		- calls `FetchCarData()`
+	- update physics:
+		- Yaw, YawRate, YawRateAvg
+		- AccHeave, AccSurge, AccSway, Jerk[XYZ]
+		- MotionPitch, MotionRoll, MotionYaw, MotionHeave
+		- WheelLoads, Slips, Gear, ABS
+		- Suspension, EngineLoad
+- End()
+	- fiddle with Settings Dictionaries
+	- update Settings.Motion from D.Motion
+
+- Init()
+	- new Spec(), SimData()
+	- SetGame()
+	- Load and hack Settings
+	- initialize SimData
+	- AttachDelegate Spec, SimData
+	
