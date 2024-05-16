@@ -1886,115 +1886,16 @@ namespace sierses.SimHap
 			{
 				S = Settings.Vehicle;
 				LoadStatus = DataStatus.SettingsFile;
-				D.LoadStatusText = "Load Fail: Loaded from Settings";
+				D.LoadStatusText = "Loaded from Settings";
 				return;
 			}
-			S.Game = GameDBText;
-			S.Name = db.CarModel;
-			S.Id = db.CarId;
-			S.Category = db.CarClass;
-			S.EngineConfiguration = "V";
-			S.EngineCylinders = 6.0;
-			S.EngineLocation = "RM";
-			S.PoweredWheels = "A";
-			S.Displacement = 3000.0;
-			S.MaxPower = 300.0;
-			S.ElectricMaxPower = 0.0;
-			S.MaxTorque = 250.0;
-			LoadStatus = DataStatus.GameData;
-			switch (CurrentGame)
-			{
-				case GameId.AC:
-				case GameId.ACC:
-				case GameId.AMS1:
-				case GameId.AMS2:
-				case GameId.Forza:
-				case GameId.GTR2:
-				case GameId.IRacing:
-				case GameId.PC2:
-				case GameId.RBR:
-				case GameId.RF2:
-				case GameId.RRRE:
-				case GameId.BeamNG:
-					D.LoadStatusText = "Not in DB: using generic car";
-					break;
-				case GameId.D4:
-				case GameId.DR2:
-				case GameId.WRC23:
-					D.LoadStatusText = "Not in DB: using generic Rally2";
-					S.EngineConfiguration = "I";
-					S.EngineCylinders = 4.0;
-					S.EngineLocation = "F";
-					S.PoweredWheels = "A";
-					S.Displacement = 1600.0;
-					S.MaxPower = 300.0;
-					S.ElectricMaxPower = 0.0;
-					S.MaxTorque = 400.0;
-					break;
-				case GameId.F12022:
-				case GameId.F12023:
-					D.LoadStatusText = "Not in DB: using generic F1";
-					S.EngineConfiguration = "V";
-					S.EngineCylinders = 6.0;
-					S.EngineLocation = "RM";
-					S.PoweredWheels = "R";
-					S.Displacement = 1600.0;
-					S.MaxPower = 1000.0;
-					S.ElectricMaxPower = 0.0;
-					S.MaxTorque = 650.0;
-					break;
-				case GameId.KK:
-					D.LoadStatusText = "Not in DB: using generic Kart";
-					S.EngineConfiguration = "I";
-					S.EngineCylinders = 1.0;
-					S.EngineLocation = "RM";
-					S.PoweredWheels = "R";
-					S.Displacement = 130.0;
-					S.MaxPower = 34.0;
-					S.ElectricMaxPower = 0.0;
-					S.MaxTorque = 24.0;
-					break;
-				case GameId.GPBikes:
-					D.LoadStatusText = "Not in DB: using generic Superbike";
-					S.EngineConfiguration = "I";
-					S.EngineCylinders = 4.0;
-					S.EngineLocation = "M";
-					S.PoweredWheels = "R";
-					S.Displacement = 998.0;
-					S.MaxPower = 200.0;
-					S.ElectricMaxPower = 0.0;
-					S.MaxTorque = 100.0;
-					break;
-				case GameId.MXBikes:
-					D.LoadStatusText = "Not in DB: using generic MX Bike";
-					S.EngineConfiguration = "I";
-					S.EngineCylinders = 1.0;
-					S.EngineLocation = "M";
-					S.PoweredWheels = "R";
-					S.Displacement = 450.0;
-					S.MaxPower = 50.0;
-					S.ElectricMaxPower = 0.0;
-					S.MaxTorque = 45.0;
-					break;
-				case GameId.GranTurismo7:
-				case GameId.GranTurismoSport:
-					D.LoadStatusText = "Not in DB: redline loaded from game";
-					S.EngineConfiguration = "V";
-					S.EngineCylinders = 6.0;
-					S.EngineLocation = "RM";
-					S.PoweredWheels = "R";
-					S.Displacement = 4000.0;
-					S.MaxPower = 500.0;
-					S.ElectricMaxPower = 0.0;
-					S.MaxTorque = 400.0;
-					break;
-				default:
-					D.LoadStatusText = "Load Fail: Specs not available for this game";
-					break;
-			}
-			if (CurrentGame != GameId.RRRE && CurrentGame != GameId.D4 && CurrentGame != GameId.DR2)
-				return;
-			S.Id = db.CarModel;
+
+			string status = S.Init(GameDBText, db, CurrentGame);
+			if (0 < status.Length)
+				D.LoadStatusText = status;
+            LoadStatus = DataStatus.GameData;
+			if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
+				S.Id = db.CarModel;
 		}
 
 		private void FinalizeVehicleLoad()
@@ -2379,6 +2280,7 @@ namespace sierses.SimHap
 			D.AccSway = new double[D.AccSamples];
 		}
 
+		// must be void and static
 		private static async void FetchCarData(
 			string id,
 			string category,
@@ -2467,6 +2369,7 @@ namespace sierses.SimHap
 				Logging.Current.Info("SimHapticsPlugin.End():  Spec Json Serializer failure");
 			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".Spec.json", sjs);
 */
+			// removed many default values from per-game dictionaries
 			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
 				Settings.EngineMult.Remove("AllGames");
 			if (Settings.EngineMult.TryGetValue(GameDBText, out double _))
@@ -2533,6 +2436,8 @@ namespace sierses.SimHap
 			}
 			else if (D.SlipYGamma != 1.0)
 				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
+
+			// unconditionally save some
 			Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
 			Settings.SuspensionGamma["AllGames"] = D.SuspensionGammaAll;
 			Settings.SuspensionMult["AllGames"] = D.SuspensionMultAll;
@@ -2562,11 +2467,6 @@ namespace sierses.SimHap
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
 			return new SettingsControl(this);
-		}
-
-		double GetSetting(string name, double trouble)	// Init() helper
-		{
-			return Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
 		}
 
 		public void Init(PluginManager pluginManager)
@@ -2600,80 +2500,44 @@ namespace sierses.SimHap
 			};
 			SetGame(pluginManager, D);
 			Settings = IPluginExtensions.ReadCommonSettings(this, "Settings", () => new Settings());
-			D.LockedText = Settings.Unlocked ? "Lock" : "Unlock";
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;
 			Settings.DownshiftDurationMs = Settings.DownshiftDurationMs > 0 ? Settings.DownshiftDurationMs : 400;
 			Settings.UpshiftDurationMs = Settings.UpshiftDurationMs > 0 ? Settings.UpshiftDurationMs : 400;
-			if (Settings.EngineMult == null)
-				Settings.EngineMult = new Dictionary<string, double>();
-            D.EngineMult = !Settings.EngineMult.TryGetValue(GameDBText, out double num) ? 1.0 : num;
-            if (Settings.EngineMult.TryGetValue("AllGames", out double _))
-				D.EngineMultAll = 1.0;
-			else Settings.EngineMult.Add("AllGames", D.EngineMultAll = 1.0);
+            if (Settings.EngineMult == null)
+                Settings.EngineMult = new Dictionary<string, double>();
+            if (!Settings.EngineMult.TryGetValue("AllGames", out double num))
+				Settings.EngineMult.Add("AllGames", 1.0);
 			if (Settings.RumbleMult == null)
 				Settings.RumbleMult = new Dictionary<string, double>();
-			
-			D.RumbleMult = !Settings.RumbleMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
-			
-			if (Settings.RumbleMult.TryGetValue("AllGames", out num))
-				D.RumbleMultAll = num;
-			else Settings.RumbleMult.Add("AllGames", D.RumbleMultAll = 5.0);
+			if (!Settings.RumbleMult.TryGetValue("AllGames", out num))
+				Settings.RumbleMult.Add("AllGames", 5.0);
 			if (Settings.SuspensionMult == null)
 				Settings.SuspensionMult = new Dictionary<string, double>();
-			D.SuspensionMult = !Settings.SuspensionMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
-			if (Settings.SuspensionMult.TryGetValue("AllGames", out num))
-				D.SuspensionMultAll = num;
-			else Settings.SuspensionMult.Add("AllGames", D.SuspensionMultAll - 1.5);
+			if (!Settings.SuspensionMult.TryGetValue("AllGames", out num))
+				Settings.SuspensionMult.Add("AllGames", 1.5);
 			if (Settings.SuspensionGamma == null)
 				Settings.SuspensionGamma = new Dictionary<string, double>();
-			D.SuspensionGamma = !Settings.SuspensionGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
-			if (Settings.SuspensionGamma.TryGetValue("AllGames", out num))
-				D.SuspensionGammaAll = num;
-			else Settings.SuspensionGamma.Add("AllGames", D.SuspensionGammaAll = 1.75);
+			if (!Settings.SuspensionGamma.TryGetValue("AllGames", out num))
+				Settings.SuspensionGamma.Add("AllGames", 1.75);
 			if (Settings.SlipXMult == null)
 				Settings.SlipXMult = new Dictionary<string, double>();
-			D.SlipXMult = !Settings.SlipXMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
-			if (Settings.SlipXMult.TryGetValue("AllGames", out num))
-				D.SlipXMultAll = num;
-			else Settings.SlipXMult.Add("AllGames", D.SlipXMultAll = 1.6);
+			if (!Settings.SlipXMult.TryGetValue("AllGames", out num))
+				Settings.SlipXMult.Add("AllGames", 1.6);
 			if (Settings.SlipYMult == null)
 				Settings.SlipYMult = new Dictionary<string, double>();
-			D.SlipYMult = !Settings.SlipYMult.TryGetValue(GameDBText, out num) ? 1.0 : num;
-			if (Settings.SlipYMult.TryGetValue("AllGames", out num))
-				D.SlipYMultAll = num;
-			else Settings.SlipYMult.Add("AllGames", D.SlipYMultAll = 1.0);
+			if (!Settings.SlipYMult.TryGetValue("AllGames", out num))
+				Settings.SlipYMult.Add("AllGames", 1.0);
 			if (Settings.SlipXGamma == null)
 				Settings.SlipXGamma = new Dictionary<string, double>();
-			D.SlipXGamma = !Settings.SlipXGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
-			if (Settings.SlipXGamma.TryGetValue("AllGames", out num))
-				D.SlipXGammaAll = num;
-			else Settings.SlipXGamma.Add("AllGames", D.SlipXGammaAll = 1.0);
+			if (!Settings.SlipXGamma.TryGetValue("AllGames", out num))
+				Settings.SlipXGamma.Add("AllGames", 1.0);
 			if (Settings.SlipYGamma == null)
 				Settings.SlipYGamma = new Dictionary<string, double>();
-			D.SlipYGamma = !Settings.SlipYGamma.TryGetValue(GameDBText, out num) ? 1.0 : num;
-			if (Settings.SlipYGamma.TryGetValue("AllGames", out num))
-				D.SlipYGammaAll = num;
-			else Settings.SlipYGamma.Add("AllGames", D.SlipYGammaAll = 1.0);
+			if (!Settings.SlipYGamma.TryGetValue("AllGames", out num))
+				Settings.SlipYGamma.Add("AllGames", 1.0);
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
-			D.MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
-			D.MotionPitchMult = GetSetting("MotionPitchMult", 1.6);
-			D.MotionPitchGamma = GetSetting("MotionPitchGamma", 1.5);
-			D.MotionRollOffset = GetSetting("MotionRollOffset", 0.0);
-			D.MotionRollMult = GetSetting("MotionRollMult", 1.2);
-			D.MotionRollGamma = GetSetting("MotionRollGamma", 1.5);
-			D.MotionYawOffset = GetSetting("MotionYawOffset", 0.0);
-			D.MotionYawMult = GetSetting("MotionYawMult", 1.0);
-			D.MotionYawGamma = GetSetting("MotionYawGamma", 1.0);
-			D.MotionHeaveOffset = GetSetting("MotionHeaveOffset", 0.0);
-			D.MotionHeaveMult = GetSetting("MotionHeaveMult", 1.0);
-			D.MotionHeaveGamma = GetSetting("MotionHeaveGamma", 1.0);
-			D.MotionSurgeOffset = GetSetting("MotionSurgeOffset", 0.0);
-			D.MotionSurgeMult = GetSetting("MotionSurgeMult", 1.0);
-			D.MotionSurgeGamma = GetSetting("MotionSurgeGamma", 1.0);
-			D.MotionSwayOffset = GetSetting("MotionSwayOffset", 0.0);
-			D.MotionSwayMult = GetSetting("MotionSwayMult", 1.0);
-			D.MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
+			D.Init(Settings, GameDBText);
 			IPluginExtensions.AttachDelegate(this, "CarName", () => S.Name);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);
 			IPluginExtensions.AttachDelegate(this, "Category", () => S.Category);
