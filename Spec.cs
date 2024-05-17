@@ -3,8 +3,10 @@
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 
 using GameReaderCommon;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace sierses.SimHap
 {
@@ -35,11 +37,20 @@ namespace sierses.SimHap
 	public class ListDictionary : NotifyPropertyChanged
 	{
 		private Dictionary<string, List<Download>> internalDictionary = new();
-		public void Add(string key, Download value)
+
+		public bool Add(Download value)
 		{
-			if (this.internalDictionary.ContainsKey(key))
-				this.internalDictionary[key].Add(value);
-			else this.internalDictionary.Add(key, new() { value });
+			if (null == value || null == value.game || null == value.id || 0 == value.game.Length || 0 == value.id.Length)
+				return false;
+			if (this.internalDictionary.ContainsKey(value.game))
+			{
+				int Index = this.internalDictionary[value.game].FindIndex(x => x.id == value.id);
+				if (0 <= Index)
+					this.internalDictionary[value.game][Index] = value;
+				else this.internalDictionary[value.game].Add(value);
+			}
+			else this.internalDictionary.Add(value.game, new() { value });
+			return true;
 		}
 
 		public Dictionary<string, List<Download>> InternalDictionary
@@ -49,7 +60,7 @@ namespace sierses.SimHap
 		}
 	}
 
-	public class DownloadData
+	public class Download
 	{
 		public string notes;
 		public ushort cc;
@@ -68,9 +79,10 @@ namespace sierses.SimHap
 		public string game;
 	}
 
-	public class Download
+	// format for downloading from website
+	public class Download_array
 	{
-		public DownloadData[] data;
+		public Download[] data;
 	}
 
 	public class Spec : NotifyPropertyChanged
@@ -89,6 +101,26 @@ namespace sierses.SimHap
 		private ushort electricMaxPower;
 		private ushort displacement;
 		private ushort maxTorque;
+
+		internal Download Car => new()
+		{
+			cc = this.displacement,
+			nm = this.maxTorque,
+			ehp = this.electricMaxPower,
+			hp = this.maxPower,
+			drive = this.poweredWheels,
+			config = this.engineConfiguration,
+			cyl = this.engineCylinders,
+			loc = this.engineLocation,
+			maxrpm = this.maxRPM,
+			redline = this.redline,
+			category = this.category,
+			name = this.name,
+			id = this.id,
+			game = this.game
+		};
+
+		internal Download Emit() => Car;
 
 		public Spec()
 		{
