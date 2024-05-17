@@ -73,16 +73,16 @@ namespace sierses.SimHap
 		private string name;
 		private string id;
 		private string category;
-		private double redline;
-		private double maxRPM;
+		private ushort redline;
+		private ushort maxRPM;
 		private string engineConfiguration;
-		private double engineCylinders;
+		private ushort engineCylinders;
 		private string engineLocation;
 		private string poweredWheels;
-		private double maxPower;
-		private double electricMaxPower;
-		private double displacement;
-		private double maxTorque;
+		private ushort maxPower;
+		private ushort electricMaxPower;
+		private ushort displacement;
+		private ushort maxTorque;
 
 		public Spec()
 		{
@@ -95,13 +95,13 @@ namespace sierses.SimHap
 			Id = db.CarId;
 			Category = db.CarClass;
 			EngineConfiguration = "V";
-			EngineCylinders = 6.0;
+			EngineCylinders = 6;
 			EngineLocation = "RM";
 			PoweredWheels = "A";
-			Displacement = 3000.0;
-			MaxPower = 300.0;
-			ElectricMaxPower = 0.0;
-			MaxTorque = 250.0;
+			Displacement = 3000;
+			MaxPower = 300;
+			ElectricMaxPower = 0;
+			MaxTorque = 250;
 			string LoadStatusText;
 			switch (CurrentGame)
 			{
@@ -124,70 +124,70 @@ namespace sierses.SimHap
 				case GameId.WRC23:
 					LoadStatusText = "Not in DB: using generic Rally2";
 					EngineConfiguration = "I";
-					EngineCylinders = 4.0;
+					EngineCylinders = 4;
 					EngineLocation = "F";
 					PoweredWheels = "A";
-					Displacement = 1600.0;
-					MaxPower = 300.0;
-					ElectricMaxPower = 0.0;
-					MaxTorque = 400.0;
+					Displacement = 1600;
+					MaxPower = 300;
+					ElectricMaxPower = 0;
+					MaxTorque = 400;
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
 					LoadStatusText = "Not in DB: using generic F1";
 					EngineConfiguration = "V";
-					EngineCylinders = 6.0;
+					EngineCylinders = 6;
 					EngineLocation = "RM";
 					PoweredWheels = "R";
-					Displacement = 1600.0;
-					MaxPower = 1000.0;
-					ElectricMaxPower = 0.0;
-					MaxTorque = 650.0;
+					Displacement = 1600;
+					MaxPower = 1000;
+					ElectricMaxPower = 0;
+					MaxTorque = 650;
 					break;
 				case GameId.KK:
 					LoadStatusText = "Not in DB: using generic Kart";
 					EngineConfiguration = "I";
-					EngineCylinders = 1.0;
+					EngineCylinders = 1;
 					EngineLocation = "RM";
 					PoweredWheels = "R";
-					Displacement = 130.0;
-					MaxPower = 34.0;
-					ElectricMaxPower = 0.0;
-					MaxTorque = 24.0;
+					Displacement = 130;
+					MaxPower = 34;
+					ElectricMaxPower = 0;
+					MaxTorque = 24;
 					break;
 				case GameId.GPBikes:
 					LoadStatusText = "Not in DB: using generic Superbike";
 					EngineConfiguration = "I";
-					EngineCylinders = 4.0;
+					EngineCylinders = 4;
 					EngineLocation = "M";
 					PoweredWheels = "R";
-					Displacement = 998.0;
-					MaxPower = 200.0;
-					ElectricMaxPower = 0.0;
-					MaxTorque = 100.0;
+					Displacement = 998;
+					MaxPower = 200;
+					ElectricMaxPower = 0;
+					MaxTorque = 100;
 					break;
 				case GameId.MXBikes:
 					LoadStatusText = "Not in DB: using generic MX Bike";
 					EngineConfiguration = "I";
-					EngineCylinders = 1.0;
+					EngineCylinders = 1;
 					EngineLocation = "M";
 					PoweredWheels = "R";
-					Displacement = 450.0;
-					MaxPower = 50.0;
-					ElectricMaxPower = 0.0;
-					MaxTorque = 45.0;
+					Displacement = 450;
+					MaxPower = 50;
+					ElectricMaxPower = 0;
+					MaxTorque = 45;
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
 					LoadStatusText = "Not in DB: redline loaded from game";
 					EngineConfiguration = "V";
-					EngineCylinders = 6.0;
+					EngineCylinders = 6;
 					EngineLocation = "RM";
 					PoweredWheels = "R";
-					Displacement = 4000.0;
-					MaxPower = 500.0;
-					ElectricMaxPower = 0.0;
-					MaxTorque = 400.0;
+					Displacement = 4000;
+					MaxPower = 500;
+					ElectricMaxPower = 0;
+					MaxTorque = 400;
 					break;
 				default:
 					LoadStatusText = "Load Fail: Specs not available for this game";
@@ -238,13 +238,13 @@ namespace sierses.SimHap
 			set { SetField(ref this.category, value, nameof(Category)); }
 		}
 
-		public double Redline
+		public ushort Redline
 		{
 			get => this.redline;
 			set { SetField(ref this.redline, value, nameof(Redline)); }
 		}
 	
-		public double MaxRPM
+		public ushort MaxRPM
 		{
 			get => this.maxRPM;
 			set { SetField(ref this.maxRPM, value, nameof(MaxRPM)); }
@@ -256,7 +256,7 @@ namespace sierses.SimHap
 			set { SetField(ref this.engineConfiguration, value, nameof(EngineConfiguration)); }
 		}
 	
-		public double EngineCylinders
+		public ushort EngineCylinders
 		{
 			get => this.engineCylinders;
 			set { SetField(ref this.engineCylinders, value, nameof(EngineCylinders)); }
@@ -274,25 +274,25 @@ namespace sierses.SimHap
 			set { SetField(ref this.poweredWheels, value, nameof(PoweredWheels)); }
 		}
 
-		public double MaxPower
+		public ushort MaxPower
 		{
 			get => this.maxPower;
 			set { SetField(ref this.maxPower, value, nameof(MaxPower)); }
 		}
 	
-		public double ElectricMaxPower
+		public ushort ElectricMaxPower
 		{
 			get => this.electricMaxPower;
 			set { SetField(ref this.electricMaxPower, value, nameof(ElectricMaxPower)); }
 		}
 	
-		public double Displacement
+		public ushort Displacement
 		{
 			get => this.displacement;
 			set { SetField(ref this.displacement, value, nameof(Displacement)); }
 		}
 	
-		public double MaxTorque
+		public ushort MaxTorque
 		{
 			get => this.maxTorque;
 			set { SetField(ref this.maxTorque, value, nameof(MaxTorque)); }

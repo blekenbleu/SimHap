@@ -1816,10 +1816,10 @@ namespace sierses.SimHap
 				case GameId.BeamNG:
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
-						S.Redline = db.MaxRpm;
-						S.MaxRPM = Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001 > 0.55
+						S.Redline = (ushort) (0.5 + db.MaxRpm);
+						S.MaxRPM = (ushort) (Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001 > 0.55
 								 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
-								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0;
+								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0);
 						FetchCarData(db.CarId, null, S, S.Redline, S.MaxRPM);
 						D.IdleRPM = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm");
 						break;
@@ -1831,8 +1831,8 @@ namespace sierses.SimHap
 					{
 						S.Id = db.CarId;
 						D.IdleRPM = db.MaxRpm * 0.25;
-						S.MaxRPM = db.MaxRpm;
-						S.Redline = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM");
+						S.MaxRPM = (ushort) (0.5 + db.MaxRpm);
+						S.Redline = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM");
 						LoadFinish = false;
 						FetchStatus = APIStatus.Fail;
 						break;
@@ -1851,16 +1851,16 @@ namespace sierses.SimHap
 					if (S.Id != db.CarId && FailedId != db.CarId)
 					{
 						FetchCarData(db.CarId, null, S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						S.Redline = (short)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM");
-						S.MaxRPM = (short)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM");
+						S.Redline = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM");
+						S.MaxRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM");
 						D.IdleRPM = db.MaxRpm * 0.25;
 						break;
 					}
 					break;
 				default:
 					D.IdleRPM = db.MaxRpm * 0.25;
-					S.Redline = db.CarSettings_CurrentGearRedLineRPM;
-					S.MaxRPM = db.MaxRpm;
+					S.Redline = (ushort)db.CarSettings_CurrentGearRedLineRPM;
+					S.MaxRPM = (ushort)db.MaxRpm;
 					FetchStatus = APIStatus.Fail;
 					break;
 			}
@@ -2318,9 +2318,9 @@ namespace sierses.SimHap
 					v.PoweredWheels = 		dljc.data[0].drive;
 					v.EngineConfiguration = dljc.data[0].config;
 					v.EngineCylinders = 	dljc.data[0].cyl;
-					v.Redline =		  (0 == dljc.data[0].redline) ? redlineFromGame : dljc.data[0].redline;
-					v.MaxRPM =		  (0 == dljc.data[0].maxrpm)  ? maxRPMFromGame  : dljc.data[0].maxrpm;
-					v.MaxPower = 	  (0 == dljc.data[0].hp) 	  ? 333 			: dljc.data[0].hp;
+					v.Redline = (ushort)((0 == dljc.data[0].redline) ? redlineFromGame : dljc.data[0].redline);
+					v.MaxRPM = (ushort)((0 == dljc.data[0].maxrpm)  ? maxRPMFromGame  : dljc.data[0].maxrpm);
+					v.MaxPower = (ushort)((0 == dljc.data[0].hp) 	  ? 333 			: dljc.data[0].hp);
 					v.ElectricMaxPower = 	dljc.data[0].ehp;
 					v.Displacement = 		dljc.data[0].cc;
 					v.MaxTorque = 			dljc.data[0].nm;
