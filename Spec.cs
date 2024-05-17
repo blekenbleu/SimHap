@@ -32,7 +32,7 @@ namespace sierses.SimHap
 	}
 
 
-	public class ListDictionary
+	public class ListDictionary : NotifyPropertyChanged
 	{
 		private Dictionary<string, List<Download>> internalDictionary = new();
 		public void Add(string key, Download value)
@@ -40,6 +40,12 @@ namespace sierses.SimHap
 			if (this.internalDictionary.ContainsKey(key))
 				this.internalDictionary[key].Add(value);
 			else this.internalDictionary.Add(key, new() { value });
+		}
+
+		public Dictionary<string, List<Download>> InternalDictionary
+		{
+			get => this.internalDictionary;
+			set { SetField(ref this.internalDictionary, value, nameof(InternalDictionary)); }
 		}
 	}
 
