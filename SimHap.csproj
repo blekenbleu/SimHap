@@ -88,7 +88,6 @@
   <ItemGroup>
     <Compile Include="Helpers.cs" />
     <Compile Include="SimData.cs" />
-    <Compile Include="SpecStatus.cs" />
     <Compile Include="Spec.cs" />
     <Compile Include="SimHapticsPlugin.cs" />
     <Compile Include="Settings.cs" />
