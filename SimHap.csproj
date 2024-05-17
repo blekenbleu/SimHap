@@ -91,7 +91,6 @@
     <Compile Include="Spec.cs" />
     <Compile Include="SimHapticsPlugin.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="TimeInterval.cs" />
     <Compile Include="DataStatus.cs" />
     <Compile Include="APIStatus.cs" />
     <Compile Include="GameId.cs" />
