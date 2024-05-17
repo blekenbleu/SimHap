@@ -37,7 +37,7 @@
 		- WheelLoads, Slips, Gear, ABS
 		- Suspension, EngineLoad
 - End()
-	- fiddle with Settings Dictionaries
+	- remove some defaults from Settings Dictionaries
 	- update Settings.Motion from D.Motion
 
 - Init()
