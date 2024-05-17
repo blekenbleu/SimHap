@@ -1524,6 +1524,7 @@ namespace sierses.SimHap
 				SHP.SetDefaultVehicle(ref db);
 				FinalizeVehicleLoad();
 			}
+			SHP.LD.Add(SHP.S.Emit());
 			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
 			GearInterval = 1 / Gears;
 		}
