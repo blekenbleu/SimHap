@@ -43,6 +43,8 @@ namespace sierses.SimHap
 
 		public SimData D { get; set; }
 
+		public ListDictionary LD { get; set; }
+
 		public Settings Settings { get; set; }
 
 		public PluginManager PluginManager { get; set; }
@@ -318,6 +320,7 @@ namespace sierses.SimHap
 					CurrentGame = GameId.Other;
 					break;
 			}
+
 			D.AccHeave = new double[D.AccSamples];
 			D.AccSurge = new double[D.AccSamples];
 			D.AccSway = new double[D.AccSamples];
@@ -328,13 +331,15 @@ namespace sierses.SimHap
 			string id,
 			string category,
 			Spec v,
-			double redlineFromGame,
-			double maxRPMFromGame)
+			double doubleRedline,
+			double doubleMaxRPM)
 		{
 			try
 			{
 				if (FetchStatus == APIStatus.Waiting)
 					return;
+				ushort gameRedline = (ushort) (0.5 + doubleRedline);
+				ushort gameMaxRPM = (ushort)  (0.5 + doubleMaxRPM);
 				FetchStatus = APIStatus.Waiting;
 				LoadFinish = false;
 				Logging.Current.Info("SimHapticsPlugin: Loading " + category + " " + id);
@@ -345,14 +350,13 @@ namespace sierses.SimHap
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
 				string dls = async.Content.ReadAsStringAsync().Result;
-				Download dljc = JsonConvert.DeserializeObject<Download>(dls,
-				new JsonSerializerSettings
+				Download_array dljc = JsonConvert.DeserializeObject<Download_array>(dls, new JsonSerializerSettings
 				{
 					NullValueHandling = NullValueHandling.Ignore,
 					MissingMemberHandling = MissingMemberHandling.Ignore
 				});
-				if (null != dljc && 0 < dljc.data.Length)
-				{
+				if (null != dljc && null != dljc.data && 0 < dljc.data.Length)
+				{	
 					v.Game = GameDBText;
 					v.Id = (CurrentGame == GameId.Forza) ? "Car_" + dljc.data[0].id : dljc.data[0].id;
 					v.Category = 			dljc.data[0].category;
@@ -361,9 +365,9 @@ namespace sierses.SimHap
 					v.PoweredWheels = 		dljc.data[0].drive;
 					v.EngineConfiguration = dljc.data[0].config;
 					v.EngineCylinders = 	dljc.data[0].cyl;
-					v.Redline = (ushort)((0 == dljc.data[0].redline) ? redlineFromGame : dljc.data[0].redline);
-					v.MaxRPM = (ushort)((0 == dljc.data[0].maxrpm)  ? maxRPMFromGame  : dljc.data[0].maxrpm);
-					v.MaxPower = (ushort)((0 == dljc.data[0].hp) 	  ? 333 			: dljc.data[0].hp);
+					v.Redline  = 0 == dljc.data[0].redline ? gameRedline : dljc.data[0].redline;
+					v.MaxRPM   = 0 == dljc.data[0].maxrpm  ? gameMaxRPM  : dljc.data[0].maxrpm;
+					v.MaxPower = 0 == dljc.data[0].hp 		? (ushort)333 : dljc.data[0].hp;
 					v.ElectricMaxPower = 	dljc.data[0].ehp;
 					v.Displacement = 		dljc.data[0].cc;
 					v.MaxTorque = 			dljc.data[0].nm;
@@ -374,8 +378,8 @@ namespace sierses.SimHap
 					FailedCategory = "";
 					FetchStatus = APIStatus.Success;
 					File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
-									  			JsonConvert.SerializeObject(dljc, Formatting.Indented));
-//				  File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
+									 			JsonConvert.SerializeObject(dljc, Formatting.Indented));
+//					File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
 //										JsonConvert.SerializeObject(jobject, Formatting.Indented));
 				}
 				else
@@ -401,15 +405,14 @@ namespace sierses.SimHap
 
 		public void End(PluginManager pluginManager)
 		{
-/*
-			string sjs = JsonConvert.SerializeObject(D, Formatting.Indented);
+			string sjs = JsonConvert.SerializeObject(LD.InternalDictionary, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHapticsPlugin.End():  SimData Json Serializer failure");
-			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".SimData.json", sjs);
-
+				Logging.Current.Info("SimHapticsPlugin.End(): Download Json Serializer failure");
+			else File.WriteAllText("PluginsData/blekenbleu.Download.SimHap.json", sjs);
+/*
 			sjs = JsonConvert.SerializeObject(S, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHapticsPlugin.End():  Spec Json Serializer failure");
+				Logging.Current.Info("SimHapticsPlugin.End(): Spec Json Serializer failure");
 			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".Spec.json", sjs);
 */
 			// removed many default values from per-game dictionaries
@@ -541,6 +544,7 @@ namespace sierses.SimHap
 				SlipXGammaBaseMult = 1.0,
 				SlipYGammaBaseMult = 1.0
 			};
+			LD = new ListDictionary();
 			SetGame(pluginManager, D);
 			Settings = IPluginExtensions.ReadCommonSettings(this, "Settings", () => new Settings());
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;
