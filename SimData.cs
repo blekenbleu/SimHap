@@ -1391,7 +1391,7 @@ namespace sierses.SimHap
 				case GameId.GTR2:
 					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-					break
+					break;
 				case GameId.IRacing:
 					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
 					{
