@@ -104,13 +104,20 @@ namespace sierses.SimHap
 			{
 				S = Settings.Vehicle;
 				LoadStatus = DataStatus.SettingsFile;
-				D.LoadStatusText = "Loaded from Settings";
+				D.LoadStatusText = "Reloaded from Settings";
 				return;
 			}
 
 			string status = S.Init(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
 				D.LoadStatusText = status;
+			if (0 == S.Redline)
+				S.Redline = 6000;
+			if (0 == S.MaxRPM)
+				S.MaxRPM = 6500;
+			if (string.IsNullOrEmpty(S.Category))
+				S.Category = "street";
+			//D.IdleRPM = S.IdleRPM;
 			LoadStatus = DataStatus.GameData;
 			if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
 				S.Id = db.CarModel;
@@ -407,7 +414,7 @@ namespace sierses.SimHap
 		{
 			string sjs = JsonConvert.SerializeObject(LD.InternalDictionary, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHapticsPlugin.End(): Download Json Serializer failure");
+				Logging.Current.Info("SimHapticsPlugin.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
 			else File.WriteAllText("PluginsData/blekenbleu.Download.SimHap.json", sjs);
 /*
 			sjs = JsonConvert.SerializeObject(S, Formatting.Indented);

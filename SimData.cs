@@ -42,7 +42,7 @@ namespace sierses.SimHap
 		public long ShiftTicks;
 		public double CylinderDisplacement;
 		public double EngineLoad;
-		public double IdleRPM;
+		public ushort IdleRPM;
 		public int WiperStatus;
 		public int CarInitCount;
 		public int IdleSampleCount;
@@ -1479,17 +1479,16 @@ namespace sierses.SimHap
 			if (0 == IdleRPM)
 				IdleRPM = (ushort)(db.MaxRpm * 0.25);
 
-			if (!SimHapticsPlugin.LoadFinish && SimHapticsPlugin.FetchStatus == APIStatus.Success)
+			if (!SimHapticsPlugin.LoadFinish)
 			{
-				SHP.Settings.Vehicle = new Spec(SHP.S);
-				SimHapticsPlugin.LoadStatus = DataStatus.SimHapticsAPI;
-				LoadStatusText = "DB Load Success";
-				FinalizeVehicleLoad();
-			}
-			if (!SimHapticsPlugin.LoadFinish && SimHapticsPlugin.FetchStatus == APIStatus.Fail)
-			{
-				SHP.SetDefaultVehicle(ref db);
-				FinalizeVehicleLoad();
+				if (SimHapticsPlugin.FetchStatus == APIStatus.Success)
+				{
+					SHP.Settings.Vehicle = new Spec(SHP.S);
+					SimHapticsPlugin.LoadStatus = DataStatus.SimHapticsAPI;
+					LoadStatusText = "DB Load Success";
+				}
+				else SHP.SetDefaultVehicle(ref db); // sets LoadStatusText
+                FinalizeVehicleLoad();
 			}
 
 			SHP.LD.Add(SHP.S.Emit());
@@ -2096,7 +2095,7 @@ namespace sierses.SimHap
 				double num19 = Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS;
 				if (data.NewData.Rpms > data.NewData.MaxRpm * 0.1 && data.NewData.Rpms <= IdleRPM + 20.0 && num19 < 40.0)
 				{
-					IdleRPM = (ushort)(1 + IdleRPM + data.NewData.Rpms) >> 1;
+					IdleRPM = (ushort)((1 + IdleRPM + (int)data.NewData.Rpms) >> 1);
 					++IdleSampleCount;
 					double num20 = IdleRPM * 0.008333333;
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
