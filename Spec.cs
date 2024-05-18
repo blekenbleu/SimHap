@@ -92,7 +92,6 @@ namespace sierses.SimHap
 		{
 		}
 
-		internal string Init(string game, StatusDataBase db, GameId CurrentGame)
 		private string game;
 		private string name;
 		private string id;
