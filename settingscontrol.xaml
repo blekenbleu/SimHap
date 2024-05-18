@@ -76,6 +76,10 @@
               <TextBlock MinWidth="100">Max RPM:</TextBlock>
               <TextBox Name="MaxRPM" MinWidth="175" Text="{Binding S.MaxRPM}"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,2">
+              <TextBlock MinWidth="100">Idle RPM:</TextBlock>
+              <TextBox Name="IdleRPM" MinWidth="175" Text="{Binding S.IdleRPM}"/>
+            </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,24,0,0">
               <TextBlock MinWidth="200">
                 Downshift Hold Duration (ms):

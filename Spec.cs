@@ -72,6 +72,7 @@ namespace sierses.SimHap
 		public ushort cyl;
 		public string loc;
 		public ushort maxrpm;
+		public ushort idlerpm;
 		public ushort redline;
 		public string category;
 		public string name;
@@ -93,6 +94,7 @@ namespace sierses.SimHap
 		private string category;
 		private ushort redline;
 		private ushort maxRPM;
+		private ushort idleRPM;
 		private string engineConfiguration;
 		private ushort engineCylinders;
 		private string engineLocation;
@@ -113,6 +115,7 @@ namespace sierses.SimHap
 			cyl = this.engineCylinders,
 			loc = this.engineLocation,
 			maxrpm = this.maxRPM,
+			idlerpm = this.idleRPM,
 			redline = this.redline,
 			category = this.category,
 			name = this.name,
@@ -128,6 +131,8 @@ namespace sierses.SimHap
 
 		internal string Init(string game, StatusDataBase db, GameId CurrentGame)
 		{
+			string LoadStatusText;
+
 			Game = game;
 			Name = db.CarModel;
 			Id = db.CarId;
@@ -140,7 +145,8 @@ namespace sierses.SimHap
 			MaxPower = 300;
 			ElectricMaxPower = 0;
 			MaxTorque = 250;
-			string LoadStatusText;
+			IdleRPM = 800;
+
 			switch (CurrentGame)
 			{
 				case GameId.AC:
@@ -228,7 +234,7 @@ namespace sierses.SimHap
 					MaxTorque = 400;
 					break;
 				default:
-					LoadStatusText = "Load Fail: Specs not available for this game";
+					LoadStatusText = $"Specs unavailable for {CurrentGame}";
 					break;
 			}
 			return LoadStatusText;
@@ -242,6 +248,7 @@ namespace sierses.SimHap
 			this.category = s.category;
 			this.redline = s.redline;
 			this.maxRPM = s.maxRPM;
+			this.idleRPM = s.idleRPM;
 			this.engineConfiguration = s.engineConfiguration;
 			this.engineCylinders = s.engineCylinders;
 			this.engineLocation = s.engineLocation;
@@ -286,6 +293,11 @@ namespace sierses.SimHap
 		{
 			get => this.maxRPM;
 			set { SetField(ref this.maxRPM, value, nameof(MaxRPM)); }
+		}
+		public ushort IdleRPM
+		{
+			get => this.idleRPM;
+			set { SetField(ref this.idleRPM, value, nameof(IdleRPM)); }
 		}
 
 		public string EngineConfiguration
