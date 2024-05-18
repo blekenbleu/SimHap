@@ -527,8 +527,25 @@ namespace sierses.SimHap
 			MixRear = 1.0 - MixFront;
 		}
 
+		PluginManager PM;
+		private float Data(string prop)
+		{
+			return (float)PM.GetPropertyValue("DataCorePlugin.GameRawData.Data."+prop);
+		}
+
+		private float Physics(string prop)
+		{
+			return (float)PM.GetPropertyValue("DataCorePlugin.GameRawData.Physics."+prop);
+		}
+
+		private float Raw(string prop)
+		{
+			return (float)PM.GetPropertyValue("DataCorePlugin.GameRawData."+prop);
+		}
+
 		private void UpdateVehiclePerGame(PluginManager pluginManager, ref GameData data)
 		{
+			PM = pluginManager;
 			SuspensionDistFLP = SuspensionDistFL;
 			SuspensionDistFRP = SuspensionDistFR;
 			SuspensionDistRLP = SuspensionDistRL;
@@ -558,19 +575,19 @@ namespace sierses.SimHap
 			switch (SimHapticsPlugin.CurrentGame)
 			{
 				case GameId.AC:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.SuspensionTravel01");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.SuspensionTravel02");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.SuspensionTravel03");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.SuspensionTravel04");
-					WheelRotationFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelAngularSpeed01"));
-					WheelRotationFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelAngularSpeed02"));
-					WheelRotationRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelAngularSpeed03"));
-					WheelRotationRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelAngularSpeed04"));
+					SuspensionDistFL = Physics("SuspensionTravel01");
+					SuspensionDistFR = Physics("SuspensionTravel02");
+					SuspensionDistRL = Physics("SuspensionTravel03");
+					SuspensionDistRR = Physics("SuspensionTravel04");
+					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
+					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
+					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
+					WheelRotationRR = Math.Abs(Physics("WheelAngularSpeed04"));
 					SlipFromRPS();
-					SlipXFL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelSlip01") - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelSlip02") - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelSlip03") - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelSlip04") - Math.Abs(SlipYRR) * 1.0, 0.0);
+					SlipXFL = Math.Max(Physics("WheelSlip01") - Math.Abs(SlipYFL) * 1.0, 0.0);
+					SlipXFR = Math.Max(Physics("WheelSlip02") - Math.Abs(SlipYFR) * 1.0, 0.0);
+					SlipXRL = Math.Max(Physics("WheelSlip03") - Math.Abs(SlipYRL) * 1.0, 0.0);
+					SlipXRR = Math.Max(Physics("WheelSlip04") - Math.Abs(SlipYRR) * 1.0, 0.0);
 					if (TireDiameterFL == 0.0)
 					{
 						SlipXFL *= 0.5;
@@ -578,8 +595,8 @@ namespace sierses.SimHap
 						SlipXRL *= 0.5;
 						SlipXRR *= 0.5;
 					}
-					TiresLeft = 1.0 + (double) Math.Max((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.TyreContactHeading01.Y"), (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.TyreContactHeading03.Y"));
-					TiresRight = 1.0 + (double) Math.Max((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.TyreContactHeading02.Y"), (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.TyreContactHeading04.Y"));
+					TiresLeft = 1.0 + (double) Math.Max(Physics("TyreContactHeading01.Y"), Physics("TyreContactHeading03.Y"));
+					TiresRight = 1.0 + (double) Math.Max(Physics("TyreContactHeading02.Y"), Physics("TyreContactHeading04.Y"));
 					if (RumbleLeftAvg == 0.0)
 						RumbleLeftAvg = TiresLeft;
 					if (RumbleRightAvg == 0.0)
@@ -590,20 +607,20 @@ namespace sierses.SimHap
 					RumbleRight = Math.Abs(TiresRight / RumbleRightAvg - 1.0) * 2000.0;
 					break;
 				case GameId.ACC:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.SuspensionTravel01");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.SuspensionTravel02");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.SuspensionTravel03");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.SuspensionTravel04");
+					SuspensionDistFL = Physics("SuspensionTravel01");
+					SuspensionDistFR = Physics("SuspensionTravel02");
+					SuspensionDistRL = Physics("SuspensionTravel03");
+					SuspensionDistRR = Physics("SuspensionTravel04");
 					WiperStatus = (int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Graphics.WiperLV");
-					WheelRotationFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelAngularSpeed01"));
-					WheelRotationFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelAngularSpeed02"));
-					WheelRotationRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelAngularSpeed03"));
-					WheelRotationRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelAngularSpeed04"));
+					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
+					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
+					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
+					WheelRotationRR = Math.Abs(Physics("WheelAngularSpeed04"));
 					SlipFromRPS();
-					SlipXFL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelSlip01") - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelSlip02") - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelSlip03") - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Physics.WheelSlip04") - Math.Abs(SlipYRR) * 2.0, 0.0);
+					SlipXFL = Math.Max(Physics("WheelSlip01") - Math.Abs(SlipYFL) * 2.0, 0.0);
+					SlipXFR = Math.Max(Physics("WheelSlip02") - Math.Abs(SlipYFR) * 2.0, 0.0);
+					SlipXRL = Math.Max(Physics("WheelSlip03") - Math.Abs(SlipYRL) * 2.0, 0.0);
+					SlipXRR = Math.Max(Physics("WheelSlip04") - Math.Abs(SlipYRR) * 2.0, 0.0);
 					if (TireDiameterFL == 0.0)
 					{
 						SlipXFL *= 0.5;
@@ -614,21 +631,21 @@ namespace sierses.SimHap
 					}
 					break;
 				case GameId.AMS1:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel01.suspensionDeflection");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel02.suspensionDeflection");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel03.suspensionDeflection");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel04.suspensionDeflection");
-					SpeedMs = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayer.speed");
+					SuspensionDistFL = Data("wheel01.suspensionDeflection");
+					SuspensionDistFR = Data("wheel02.suspensionDeflection");
+					SuspensionDistRL = Data("wheel03.suspensionDeflection");
+					SuspensionDistRR = Data("wheel04.suspensionDeflection");
+					SpeedMs = Raw("CurrentPlayer.speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
-					WheelRotationFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel01.rotation"));
-					WheelRotationFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel02.rotation"));
-					WheelRotationRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel03.rotation"));
-					WheelRotationRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel04.rotation"));
+					WheelRotationFL = Math.Abs(Data("wheel01.rotation"));
+					WheelRotationFR = Math.Abs(Data("wheel02.rotation"));
+					WheelRotationRL = Math.Abs(Data("wheel03.rotation"));
+					WheelRotationRR = Math.Abs(Data("wheel04.rotation"));
 					SlipFromRPS();
-					SlipXFL = Math.Max(1.0 - (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel01.gripFract") - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max(1.0 - (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel02.gripFract") - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max(1.0 - (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel03.gripFract") - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max(1.0 - (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel04.gripFract") - Math.Abs(SlipYRR) * 1.0, 0.0);
+					SlipXFL = Math.Max(1.0 - (double) Data("wheel01.gripFract") - Math.Abs(SlipYFL) * 1.0, 0.0);
+					SlipXFR = Math.Max(1.0 - (double) Data("wheel02.gripFract") - Math.Abs(SlipYFR) * 1.0, 0.0);
+					SlipXRL = Math.Max(1.0 - (double) Data("wheel03.gripFract") - Math.Abs(SlipYRL) * 1.0, 0.0);
+					SlipXRR = Math.Max(1.0 - (double) Data("wheel04.gripFract") - Math.Abs(SlipYRR) * 1.0, 0.0);
 					if (TireDiameterFL == 0.0)
 					{
 						SlipXFL *= 0.5;
@@ -639,19 +656,19 @@ namespace sierses.SimHap
 					}
 					break;
 				case GameId.AMS2:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mSuspensionTravel01");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mSuspensionTravel02");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mSuspensionTravel03");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mSuspensionTravel04");
-					WheelRotationFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreRPS01"));
-					WheelRotationFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreRPS02"));
-					WheelRotationRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreRPS03"));
-					WheelRotationRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreRPS04"));
+					SuspensionDistFL = Raw("mSuspensionTravel01");
+					SuspensionDistFR = Raw("mSuspensionTravel02");
+					SuspensionDistRL = Raw("mSuspensionTravel03");
+					SuspensionDistRR = Raw("mSuspensionTravel04");
+					WheelRotationFL = Math.Abs(Raw("mTyreRPS01"));
+					WheelRotationFR = Math.Abs(Raw("mTyreRPS02"));
+					WheelRotationRL = Math.Abs(Raw("mTyreRPS03"));
+					WheelRotationRR = Math.Abs(Raw("mTyreRPS04"));
 					SlipFromRPS();
-					SlipXFL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreSlipSpeed01") * 0.1 - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreSlipSpeed02") * 0.1 - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreSlipSpeed03") * 0.1 - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreSlipSpeed04") * 0.1 - Math.Abs(SlipYRR) * 1.0, 0.0);
+					SlipXFL = Math.Max(Raw("mTyreSlipSpeed01") * 0.1 - Math.Abs(SlipYFL) * 1.0, 0.0);
+					SlipXFR = Math.Max(Raw("mTyreSlipSpeed02") * 0.1 - Math.Abs(SlipYFR) * 1.0, 0.0);
+					SlipXRL = Math.Max(Raw("mTyreSlipSpeed03") * 0.1 - Math.Abs(SlipYRL) * 1.0, 0.0);
+					SlipXRR = Math.Max(Raw("mTyreSlipSpeed04") * 0.1 - Math.Abs(SlipYRR) * 1.0, 0.0);
 					if (TireDiameterFL == 0.0)
 					{
 						SlipXFL *= 0.5;
@@ -662,27 +679,27 @@ namespace sierses.SimHap
 					}
 					break;
 				case GameId.D4:
-					SuspensionDistFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontLeft") * 0.001;
-					SuspensionDistFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontRight") * 0.001;
-					SuspensionDistRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionRearLeft") * 0.001;
-					SuspensionDistRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionRearRight") * 0.001;
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearRight"));
+					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
+					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
+					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
+					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
+					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
+					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
+					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
+					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
 					break;
 				case GameId.DR2:
-					SuspensionDistFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontLeft") * 0.001;
-					SuspensionDistFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontRight") * 0.001;
-					SuspensionDistRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionRearLeft") * 0.001;
-					SuspensionDistRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionRearRight") * 0.001;
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearRight"));
+					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
+					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
+					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
+					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
+					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
+					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
+					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
+					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
-					VelocityX = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WorldSpeedX") * Math.Sin((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.XR"));
+					VelocityX = Raw("WorldSpeedX") * Math.Sin(Raw("XR"));
 					YawRate = data.NewData.OrientationYawAcceleration;
 					if (VelocityX < 0.0)
 					{
@@ -721,18 +738,18 @@ namespace sierses.SimHap
 					SlipXRR = Math.Max(SlipXFL, 0.0);
 					break;
 				case GameId.WRC23:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_hub_position_fl");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_hub_position_fr");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_hub_position_bl");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_hub_position_br");
-					SpeedMs = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_speed");
+					SuspensionDistFL = Raw("SessionUpdate.vehicle_hub_position_fl");
+					SuspensionDistFR = Raw("SessionUpdate.vehicle_hub_position_fr");
+					SuspensionDistRL = Raw("SessionUpdate.vehicle_hub_position_bl");
+					SuspensionDistRR = Raw("SessionUpdate.vehicle_hub_position_br");
+					SpeedMs = Raw("SessionUpdate.vehicle_speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_cp_forward_speed_fl"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_cp_forward_speed_fr"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_cp_forward_speed_bl"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_cp_forward_speed_br"));
+					WheelSpeedFL = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_fl"));
+					WheelSpeedFR = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_fr"));
+					WheelSpeedRL = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_bl"));
+					WheelSpeedRR = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_br"));
 					SlipFromWheelSpeed();
-					VelocityX = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdateLocalVelocity.X");
+					VelocityX = Raw("SessionUpdateLocalVelocity.X");
 					YawRate = data.NewData.OrientationYawAcceleration;
 					if (VelocityX < 0.0)
 					{
@@ -771,49 +788,49 @@ namespace sierses.SimHap
 					SlipXRR = Math.Max(SlipXFL, 0.0);
 					break;
 				case GameId.F12022:
-					SuspensionDistFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_suspensionPosition01") * 0.001;
-					SuspensionDistFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_suspensionPosition02") * 0.001;
-					SuspensionDistRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_suspensionPosition03") * 0.001;
-					SuspensionDistRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_suspensionPosition04") * 0.001;
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_wheelSpeed03"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_wheelSpeed04"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_wheelSpeed01"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_wheelSpeed02"));
+					SuspensionDistFL = Raw("PlayerMotionData.m_suspensionPosition01") * 0.001;
+					SuspensionDistFR = Raw("PlayerMotionData.m_suspensionPosition02") * 0.001;
+					SuspensionDistRL = Raw("PlayerMotionData.m_suspensionPosition03") * 0.001;
+					SuspensionDistRR = Raw("PlayerMotionData.m_suspensionPosition04") * 0.001;
+					WheelSpeedFL = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed03"));
+					WheelSpeedFR = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed04"));
+					WheelSpeedRL = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed01"));
+					WheelSpeedRR = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed02"));
 					SlipFromWheelSpeed();
-					SlipXFL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_wheelSlip03") - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_wheelSlip04") - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_wheelSlip01") - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerMotionData.m_wheelSlip02") - Math.Abs(SlipYRR) * 2.0, 0.0);
+					SlipXFL = Math.Max(Raw("PlayerMotionData.m_wheelSlip03") - Math.Abs(SlipYFL) * 2.0, 0.0);
+					SlipXFR = Math.Max(Raw("PlayerMotionData.m_wheelSlip04") - Math.Abs(SlipYFR) * 2.0, 0.0);
+					SlipXRL = Math.Max(Raw("PlayerMotionData.m_wheelSlip01") - Math.Abs(SlipYRL) * 2.0, 0.0);
+					SlipXRR = Math.Max(Raw("PlayerMotionData.m_wheelSlip02") - Math.Abs(SlipYRR) * 2.0, 0.0);
 					break;
 				case GameId.F12023:
-					SuspensionDistFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_suspensionPosition01") * 0.001;
-					SuspensionDistFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_suspensionPosition02") * 0.001;
-					SuspensionDistRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_suspensionPosition03") * 0.001;
-					SuspensionDistRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_suspensionPosition04") * 0.001;
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_wheelSpeed03"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_wheelSpeed04"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_wheelSpeed01"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_wheelSpeed02"));
+					SuspensionDistFL = Raw("PacketMotionExData.m_suspensionPosition01") * 0.001;
+					SuspensionDistFR = Raw("PacketMotionExData.m_suspensionPosition02") * 0.001;
+					SuspensionDistRL = Raw("PacketMotionExData.m_suspensionPosition03") * 0.001;
+					SuspensionDistRR = Raw("PacketMotionExData.m_suspensionPosition04") * 0.001;
+					WheelSpeedFL = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed03"));
+					WheelSpeedFR = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed04"));
+					WheelSpeedRL = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed01"));
+					WheelSpeedRR = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed02"));
 					SlipFromWheelSpeed();
-					SlipXFL = Math.Max((double) Math.Abs((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_wheelSlipRatio01")) * 5.0 - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max((double) Math.Abs((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_wheelSlipRatio02")) * 5.0 - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max((double) Math.Abs((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_wheelSlipRatio03")) * 5.0 - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max((double) Math.Abs((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PacketMotionExData.m_wheelSlipRatio04")) * 5.0 - Math.Abs(SlipYRR) * 1.0, 0.0);
+					SlipXFL = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio01")) * 5.0 - Math.Abs(SlipYFL) * 1.0, 0.0);
+					SlipXFR = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio02")) * 5.0 - Math.Abs(SlipYFR) * 1.0, 0.0);
+					SlipXRL = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio03")) * 5.0 - Math.Abs(SlipYRL) * 1.0, 0.0);
+					SlipXRR = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio04")) * 5.0 - Math.Abs(SlipYRR) * 1.0, 0.0);
 					break;
 				case GameId.Forza:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionTravelMetersFrontLeft");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionTravelMetersFrontRight");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionTravelMetersRearLeft");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionTravelMetersRearRight");
-					WheelRotationFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelRotationSpeedFrontLeft"));
-					WheelRotationFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelRotationSpeedFrontRight"));
-					WheelRotationRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelRotationSpeedRearLeft"));
-					WheelRotationRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelRotationSpeedRearRight"));
+					SuspensionDistFL = Raw("SuspensionTravelMetersFrontLeft");
+					SuspensionDistFR = Raw("SuspensionTravelMetersFrontRight");
+					SuspensionDistRL = Raw("SuspensionTravelMetersRearLeft");
+					SuspensionDistRR = Raw("SuspensionTravelMetersRearRight");
+					WheelRotationFL = Math.Abs(Raw("WheelRotationSpeedFrontLeft"));
+					WheelRotationFR = Math.Abs(Raw("WheelRotationSpeedFrontRight"));
+					WheelRotationRL = Math.Abs(Raw("WheelRotationSpeedRearLeft"));
+					WheelRotationRR = Math.Abs(Raw("WheelRotationSpeedRearRight"));
 					SlipFromRPS();
-					SlipXFL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TireCombinedSlipFrontLeft") - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TireCombinedSlipFrontRight") - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TireCombinedSlipRearLeft") - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TireCombinedSlipRearRight") - Math.Abs(SlipYRR) * 2.0, 0.0);
+					SlipXFL = Math.Max(Raw("TireCombinedSlipFrontLeft") - Math.Abs(SlipYFL) * 2.0, 0.0);
+					SlipXFR = Math.Max(Raw("TireCombinedSlipFrontRight") - Math.Abs(SlipYFR) * 2.0, 0.0);
+					SlipXRL = Math.Max(Raw("TireCombinedSlipRearLeft") - Math.Abs(SlipYRL) * 2.0, 0.0);
+					SlipXRR = Math.Max(Raw("TireCombinedSlipRearRight") - Math.Abs(SlipYRR) * 2.0, 0.0);
 					if (TireDiameterFL == 0.0)
 					{
 						SlipXFL *= 0.5;
@@ -826,21 +843,21 @@ namespace sierses.SimHap
 				case GameId.GTR2:
 				case GameId.GSCE:
 				case GameId.RF1:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel01.suspensionDeflection");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel02.suspensionDeflection");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel03.suspensionDeflection");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel04.suspensionDeflection");
-					SpeedMs = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayer.speed");
+					SuspensionDistFL = Data("wheel01.suspensionDeflection");
+					SuspensionDistFR = Data("wheel02.suspensionDeflection");
+					SuspensionDistRL = Data("wheel03.suspensionDeflection");
+					SuspensionDistRR = Data("wheel04.suspensionDeflection");
+					SpeedMs = Raw("CurrentPlayer.speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
-					WheelRotationFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel01.rotation"));
-					WheelRotationFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel02.rotation"));
-					WheelRotationRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel03.rotation"));
-					WheelRotationRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel04.rotation"));
+					WheelRotationFL = Math.Abs(Data("wheel01.rotation"));
+					WheelRotationFR = Math.Abs(Data("wheel02.rotation"));
+					WheelRotationRL = Math.Abs(Data("wheel03.rotation"));
+					WheelRotationRR = Math.Abs(Data("wheel04.rotation"));
 					SlipFromRPS();
-					SlipXFL = Math.Max(1.0 - (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel01.gripFract") - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max(1.0 - (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel02.gripFract") - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max(1.0 - (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel03.gripFract") - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max(1.0 - (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Data.wheel04.gripFract") - Math.Abs(SlipYRR) * 1.0, 0.0);
+					SlipXFL = Math.Max(1.0 - Data("wheel01.gripFract") - Math.Abs(SlipYFL) * 1.0, 0.0);
+					SlipXFR = Math.Max(1.0 - Data("wheel02.gripFract") - Math.Abs(SlipYFR) * 1.0, 0.0);
+					SlipXRL = Math.Max(1.0 - Data("wheel03.gripFract") - Math.Abs(SlipYRL) * 1.0, 0.0);
+					SlipXRR = Math.Max(1.0 - Data("wheel04.gripFract") - Math.Abs(SlipYRR) * 1.0, 0.0);
 					if (TireDiameterFL == 0.0)
 					{
 						SlipXFL *= 0.5;
@@ -853,40 +870,40 @@ namespace sierses.SimHap
 				case GameId.IRacing:
 					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFshockDefl") != null)
 					{
-						SuspensionDistFL = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFshockDefl"));
-						SuspensionDistFR = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.RFshockDefl"));
+						SuspensionDistFL = Raw("Telemetry.LFshockDefl");
+						SuspensionDistFR = Raw("Telemetry.RFshockDefl");
 					}
 					else if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFSHshockDefl") != null)
 					{
-						SuspensionDistFL = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFSHshockDefl"));
-						SuspensionDistFR = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.RFSHshockDefl"));
+						SuspensionDistFL = Raw("Telemetry.LFSHshockDefl");
+						SuspensionDistFR = Raw("Telemetry.RFSHshockDefl");
 					}
 					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRshockDefl") != null)
 					{
-						SuspensionDistRL = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRshockDefl"));
-						SuspensionDistRR = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.RRshockDefl"));
+						SuspensionDistRL = Raw("Telemetry.LRshockDefl");
+						SuspensionDistRR = Raw("Telemetry.RRshockDefl");
 					}
 					else if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRSHshockDefl") != null)
 					{
-						SuspensionDistRL = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRSHshockDefl"));
-						SuspensionDistRR = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.RRSHshockDefl"));
+						SuspensionDistRL = Raw("Telemetry.LRSHshockDefl");
+						SuspensionDistRR = Raw("Telemetry.RRSHshockDefl");
 					}
 					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CFshockDefl") != null)
 					{
-						SuspensionDistFL = 0.5 * SuspensionDistFL + Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CFshockDefl"));
-						SuspensionDistFR = 0.5 * SuspensionDistFR + Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CFshockDefl"));
+						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.CFshockDefl");
+						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.CFshockDefl");
 					}
 					else if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.HFshockDefl") != null)
 					{
-						SuspensionDistFL = 0.5 * SuspensionDistFL + Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.HFshockDefl"));
-						SuspensionDistFR = 0.5 * SuspensionDistFR + Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.HFshockDefl"));
+						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.HFshockDefl");
+						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.HFshockDefl");
 					}
 					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CRshockDefl") != null)
 					{
-						SuspensionDistRL = 0.5 * SuspensionDistRL + Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CRshockDefl"));
-						SuspensionDistRR = 0.5 * SuspensionDistRR + Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CRshockDefl"));
+						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
+						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
 					}
-					VelocityX = Convert.ToDouble(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.VelocityY")) * 10.0;
+					VelocityX = Raw("Telemetry.VelocityY") * 10.0;
 					if (VelocityX < 0.0)
 					{
 						if (YawRate < 0.0)
@@ -959,19 +976,19 @@ namespace sierses.SimHap
 					SlipYRR = 0.0;
 					break;
 				case GameId.PC2:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mSuspensionTravel01");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mSuspensionTravel02");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mSuspensionTravel03");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mSuspensionTravel04");
-					WheelRotationFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreRPS01"));
-					WheelRotationFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreRPS02"));
-					WheelRotationRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreRPS03"));
-					WheelRotationRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreRPS04"));
+					SuspensionDistFL = Raw("mSuspensionTravel01");
+					SuspensionDistFR = Raw("mSuspensionTravel02");
+					SuspensionDistRL = Raw("mSuspensionTravel03");
+					SuspensionDistRR = Raw("mSuspensionTravel04");
+					WheelRotationFL = Math.Abs(Raw("mTyreRPS01"));
+					WheelRotationFR = Math.Abs(Raw("mTyreRPS02"));
+					WheelRotationRL = Math.Abs(Raw("mTyreRPS03"));
+					WheelRotationRR = Math.Abs(Raw("mTyreRPS04"));
 					SlipFromRPS();
-					SlipXFL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreSlipSpeed01") * 0.1 - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreSlipSpeed02") * 0.1 - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreSlipSpeed03") * 0.1 - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.mTyreSlipSpeed04") * 0.1 - Math.Abs(SlipYRR) * 1.0, 0.0);
+					SlipXFL = Math.Max(Raw("mTyreSlipSpeed01") * 0.1 - Math.Abs(SlipYFL) * 1.0, 0.0);
+					SlipXFR = Math.Max(Raw("mTyreSlipSpeed02") * 0.1 - Math.Abs(SlipYFR) * 1.0, 0.0);
+					SlipXRL = Math.Max(Raw("mTyreSlipSpeed03") * 0.1 - Math.Abs(SlipYRL) * 1.0, 0.0);
+					SlipXRR = Math.Max(Raw("mTyreSlipSpeed04") * 0.1 - Math.Abs(SlipYRR) * 1.0, 0.0);
 					if (TireDiameterFL == 0.0)
 					{
 						SlipXFL *= 0.5;
@@ -982,140 +999,140 @@ namespace sierses.SimHap
 					}
 					break;
 				case GameId.RBR:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.NGPTelemetry.car.suspensionLF.springDeflection");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.NGPTelemetry.car.suspensionRF.springDeflection");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.NGPTelemetry.car.suspensionLB.springDeflection");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.NGPTelemetry.car.suspensionRB.springDeflection");
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFL"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFR"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRL"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRR"));
+					SuspensionDistFL = Raw("NGPTelemetry.car.suspensionLF.springDeflection");
+					SuspensionDistFR = Raw("NGPTelemetry.car.suspensionRF.springDeflection");
+					SuspensionDistRL = Raw("NGPTelemetry.car.suspensionLB.springDeflection");
+					SuspensionDistRR = Raw("NGPTelemetry.car.suspensionRB.springDeflection");
+					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFL"));
+					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFR"));
+					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRL"));
+					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRR"));
 					SlipFromWheelSpeed();
 					break;
 				case GameId.RF2:
-					SuspensionDistFL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mSuspensionDeflection");
-					SuspensionDistFR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
-					SuspensionDistRL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
-					SuspensionDistRR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
-					WheelRotationFL = Math.Abs((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mRotation"));
-					WheelRotationFR = Math.Abs((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mRotation"));
-					WheelRotationRL = Math.Abs((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels03.mRotation"));
-					WheelRotationRR = Math.Abs((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels04.mRotation"));
+					SuspensionDistFL = Raw("CurrentPlayerTelemetry.mWheels01.mSuspensionDeflection");
+					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
+					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
+					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
+					WheelRotationFL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels01.mRotation"));
+					WheelRotationFR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels02.mRotation"));
+					WheelRotationRL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels03.mRotation"));
+					WheelRotationRR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels04.mRotation"));
 					SlipFromRPS();
-					SlipXFL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mLateralGroundVel");
-					SlipXFL = SlipXFL == 0.0 ? 0.0 : (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mLateralPatchVel") / SlipXFL;
-					SlipXFR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mLateralGroundVel");
-					SlipXFR = SlipXFR == 0.0 ? 0.0 : (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mLateralPatchVel") / SlipXFR;
-					SlipXRL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels03.mLateralGroundVel");
-					SlipXRL = SlipXRL == 0.0 ? 0.0 : (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels03.mLateralPatchVel") / SlipXRL;
-					SlipXRR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels04.mLateralGroundVel");
-					SlipXRR = SlipXRR == 0.0 ? 0.0 : (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels04.mLateralPatchVel") / SlipXRR;
+					SlipXFL = Raw("CurrentPlayerTelemetry.mWheels01.mLateralGroundVel");
+					SlipXFL = SlipXFL == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels01.mLateralPatchVel") / SlipXFL;
+					SlipXFR = Raw("CurrentPlayerTelemetry.mWheels02.mLateralGroundVel");
+					SlipXFR = SlipXFR == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels02.mLateralPatchVel") / SlipXFR;
+					SlipXRL = Raw("CurrentPlayerTelemetry.mWheels03.mLateralGroundVel");
+					SlipXRL = SlipXRL == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels03.mLateralPatchVel") / SlipXRL;
+					SlipXRR = Raw("CurrentPlayerTelemetry.mWheels04.mLateralGroundVel");
+					SlipXRR = SlipXRR == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels04.mLateralPatchVel") / SlipXRR;
 					SlipXFL *= 0.5;
 					SlipXFR *= 0.5;
 					SlipXRL *= 0.5;
 					SlipXRR *= 0.5;
 					if (data.NewData.Brake > 90.0)
 					{
-						ABSActive = ((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mBrakePressure")
-									 + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
+						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
+								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
 						break;
 					}
 					break;
 				case GameId.RRRE:
 					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.FrontLeft") != null)
 					{
-						SuspensionDistFL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.FrontLeft");
-						SuspensionDistFR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.FrontRight");
+						SuspensionDistFL = Raw("Player.SuspensionDeflection.FrontLeft");
+						SuspensionDistFR = Raw("Player.SuspensionDeflection.FrontRight");
 					}
 					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.RearLeft") != null)
 					{
-						SuspensionDistRL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.RearLeft");
-						SuspensionDistRR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.RearRight");
+						SuspensionDistRL = Raw("Player.SuspensionDeflection.RearLeft");
+						SuspensionDistRR = Raw("Player.SuspensionDeflection.RearRight");
 					}
 					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionFront") != null)
 					{
-						SuspensionDistFL = 0.5 * SuspensionDistFL + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionFront");
-						SuspensionDistFR = 0.5 * SuspensionDistFR + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionFront");
+						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Player.ThirdSpringSuspensionDeflectionFront");
+						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 					}
 					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionRear") != null)
 					{
-						SuspensionDistRL = 0.5 * SuspensionDistRL + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionRear");
-						SuspensionDistRR = 0.5 * SuspensionDistRR + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionRear");
+						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Player.ThirdSpringSuspensionDeflectionRear");
+						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 					}
-					WheelRotationFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TireRps.FrontLeft"));
-					WheelRotationFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TireRps.FrontRight"));
-					WheelRotationRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TireRps.RearLeft"));
-					WheelRotationRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TireRps.RearRight"));
+					WheelRotationFL = Math.Abs(Raw("TireRps.FrontLeft"));
+					WheelRotationFR = Math.Abs(Raw("TireRps.FrontRight"));
+					WheelRotationRL = Math.Abs(Raw("TireRps.RearLeft"));
+					WheelRotationRR = Math.Abs(Raw("TireRps.RearRight"));
 					SlipFromRPS();
 					break;
 				case GameId.GTL:
 				case GameId.RACE07:
-					double num1 = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.carCGLocY") * 0.2;
+					double num1 = Raw("carCGLocY") * 0.2;
 					SuspensionDistFL = num1 * WheelLoadFL;
 					SuspensionDistFR = num1 * WheelLoadFR;
 					SuspensionDistRL = num1 * WheelLoadRL;
 					SuspensionDistRR = num1 * WheelLoadRR;
 					break;
 				case GameId.LFS:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.OutSim2.OSWheels01.SuspDeflect");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.OutSim2.OSWheels02.SuspDeflect");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.OutSim2.OSWheels03.SuspDeflect");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.OutSim2.OSWheels04.SuspDeflect");
+					SuspensionDistFL = Raw("OutSim2.OSWheels01.SuspDeflect");
+					SuspensionDistFR = Raw("OutSim2.OSWheels02.SuspDeflect");
+					SuspensionDistRL = Raw("OutSim2.OSWheels03.SuspDeflect");
+					SuspensionDistRR = Raw("OutSim2.OSWheels04.SuspDeflect");
 					break;
 				case GameId.WRC10:
 				case GameId.WRCX:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_position01");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_position02");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_position03");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_position04");
+					SuspensionDistFL = Raw("suspension_position01");
+					SuspensionDistFR = Raw("suspension_position02");
+					SuspensionDistRL = Raw("suspension_position03");
+					SuspensionDistRR = Raw("suspension_position04");
 					break;
 				case GameId.WRCGen:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontLeft");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontRight");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionRearLeft");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionRearRight");
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearRight"));
+					SuspensionDistFL = Raw("SuspensionPositionFrontLeft");
+					SuspensionDistFR = Raw("SuspensionPositionFrontRight");
+					SuspensionDistRL = Raw("SuspensionPositionRearLeft");
+					SuspensionDistRR = Raw("SuspensionPositionRearRight");
+					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
+					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
+					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
+					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
 					break;
 				case GameId.F12016:
-					SuspensionDistFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontLeft") * 0.001;
-					SuspensionDistFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontLeft") * 0.001;
-					SuspensionDistRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontLeft") * 0.001;
-					SuspensionDistRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontLeft") * 0.001;
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearRight"));
+					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
+					SuspensionDistFR = Raw("SuspensionPositionFrontLeft") * 0.001;
+					SuspensionDistRL = Raw("SuspensionPositionFrontLeft") * 0.001;
+					SuspensionDistRR = Raw("SuspensionPositionFrontLeft") * 0.001;
+					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
+					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
+					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
+					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
 					break;
 				case GameId.F12017:
-					SuspensionDistFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_susp_pos01") * 0.001;
-					SuspensionDistFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_susp_pos02") * 0.001;
-					SuspensionDistRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_susp_pos03") * 0.001;
-					SuspensionDistRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_susp_pos04") * 0.001;
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_wheelSpeed03"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_wheelSpeed04"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_wheelSpeed01"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_wheelSpeed02"));
+					SuspensionDistFL = Raw("m_susp_pos01") * 0.001;
+					SuspensionDistFR = Raw("m_susp_pos02") * 0.001;
+					SuspensionDistRL = Raw("m_susp_pos03") * 0.001;
+					SuspensionDistRR = Raw("m_susp_pos04") * 0.001;
+					WheelSpeedFL = Math.Abs(Raw("m_wheelSpeed03"));
+					WheelSpeedFR = Math.Abs(Raw("m_wheelSpeed04"));
+					WheelSpeedRL = Math.Abs(Raw("m_wheelSpeed01"));
+					WheelSpeedRR = Math.Abs(Raw("m_wheelSpeed02"));
 					SlipFromWheelSpeed();
 					break;
 				case GameId.GLegends:
-					SuspensionDistFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontLeft") * 0.001;
-					SuspensionDistFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionFrontRight") * 0.001;
-					SuspensionDistRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionRearLeft") * 0.001;
-					SuspensionDistRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SuspensionPositionRearRight") * 0.001;
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WheelSpeedRearRight"));
+					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
+					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
+					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
+					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
+					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
+					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
+					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
+					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
 					break;
 				case GameId.KK:
 					flag = false;
-					double propertyValue = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Motion.VelocityZ");
+					double propertyValue = Raw("Motion.VelocityZ");
 					if (VelocityZAvg == 0.0)
 						VelocityZAvg = propertyValue;
 					VelocityZAvg = (VelocityZAvg + propertyValue) * 0.5;
@@ -1127,47 +1144,47 @@ namespace sierses.SimHap
 					break;
 				case GameId.ATS:
 				case GameId.ETS2:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TruckValues.CurrentValues.WheelsValues.SuspDeflection01");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TruckValues.CurrentValues.WheelsValues.SuspDeflection02");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TruckValues.CurrentValues.WheelsValues.SuspDeflection03");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TruckValues.CurrentValues.WheelsValues.SuspDeflection04");
+					SuspensionDistFL = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection01");
+					SuspensionDistFR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection02");
+					SuspensionDistRL = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection03");
+					SuspensionDistRR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection04");
 					WiperStatus = (bool) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
 					break;
 				case GameId.BeamNG:
 					flag = false;
-					SuspensionDistFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_position_fl") * 0.05;
-					SuspensionDistFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_position_fr") * 0.05;
-					SuspensionDistRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_position_rl") * 0.05;
-					SuspensionDistRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_position_rr") * 0.05;
-					SuspensionVelFL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_velocity_fl") * 0.05;
-					SuspensionVelFR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_velocity_fr") * 0.05;
-					SuspensionVelRL = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_velocity_rl") * 0.05;
-					SuspensionVelRR = (double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.suspension_velocity_rr") * 0.05;
-					WheelSpeedFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.wheel_speed_fl");
-					WheelSpeedFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.wheel_speed_fr");
-					WheelSpeedRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.wheel_speed_rl");
-					WheelSpeedRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.wheel_speed_rr");
+					SuspensionDistFL = Raw("suspension_position_fl") * 0.05;
+					SuspensionDistFR = Raw("suspension_position_fr") * 0.05;
+					SuspensionDistRL = Raw("suspension_position_rl") * 0.05;
+					SuspensionDistRR = Raw("suspension_position_rr") * 0.05;
+					SuspensionVelFL = Raw("suspension_velocity_fl") * 0.05;
+					SuspensionVelFR = Raw("suspension_velocity_fr") * 0.05;
+					SuspensionVelRL = Raw("suspension_velocity_rl") * 0.05;
+					SuspensionVelRR = Raw("suspension_velocity_rr") * 0.05;
+					WheelSpeedFL = Raw("wheel_speed_fl");
+					WheelSpeedFR = Raw("wheel_speed_fr");
+					WheelSpeedRL = Raw("wheel_speed_rl");
+					WheelSpeedRR = Raw("wheel_speed_rr");
 					SlipFromWheelSpeed();
-					SlipXFL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.wheel_slip_fl") * 0.1 - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.wheel_slip_fr") * 0.1 - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.wheel_slip_rl") * 0.1 - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.wheel_slip_rr") * 0.1 - Math.Abs(SlipYRR) * 2.0, 0.0);
+					SlipXFL = Math.Max(Raw("wheel_slip_fl") * 0.1 - Math.Abs(SlipYFL) * 2.0, 0.0);
+					SlipXFR = Math.Max(Raw("wheel_slip_fr") * 0.1 - Math.Abs(SlipYFR) * 2.0, 0.0);
+					SlipXRL = Math.Max(Raw("wheel_slip_rl") * 0.1 - Math.Abs(SlipYRL) * 2.0, 0.0);
+					SlipXRR = Math.Max(Raw("wheel_slip_rr") * 0.1 - Math.Abs(SlipYRR) * 2.0, 0.0);
 					break;
 				case GameId.GPBikes:
 				case GameId.MXBikes:
 					flag = false;
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afSuspLength01");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afSuspLength01");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afSuspLength02");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afSuspLength02");
-					SuspensionVelFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afSuspVelocity01");
-					SuspensionVelFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afSuspVelocity01");
-					SuspensionVelRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afSuspVelocity02");
-					SuspensionVelRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afSuspVelocity02");
-					WheelSpeedFL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afWheelSpeed01"));
-					WheelSpeedFR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afWheelSpeed01"));
-					WheelSpeedRL = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afWheelSpeed02"));
-					WheelSpeedRR = Math.Abs((float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_afWheelSpeed02"));
+					SuspensionDistFL = Raw("m_sData.m_afSuspLength01");
+					SuspensionDistFR = Raw("m_sData.m_afSuspLength01");
+					SuspensionDistRL = Raw("m_sData.m_afSuspLength02");
+					SuspensionDistRR = Raw("m_sData.m_afSuspLength02");
+					SuspensionVelFL = Raw("m_sData.m_afSuspVelocity01");
+					SuspensionVelFR = Raw("m_sData.m_afSuspVelocity01");
+					SuspensionVelRL = Raw("m_sData.m_afSuspVelocity02");
+					SuspensionVelRR = Raw("m_sData.m_afSuspVelocity02");
+					WheelSpeedFL = Math.Abs(Raw("m_sData.m_afWheelSpeed01"));
+					WheelSpeedFR = Math.Abs(Raw("m_sData.m_afWheelSpeed01"));
+					WheelSpeedRL = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
+					WheelSpeedRR = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					SlipFromWheelSpeed();
 					if ((int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial01") == 7
 					 || (int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial02") == 7)
@@ -1180,49 +1197,49 @@ namespace sierses.SimHap
 					RumbleRight = 0.0;
 					break;
 				case GameId.LMU:
-					SuspensionDistFL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mSuspensionDeflection");
-					SuspensionDistFR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
-					SuspensionDistRL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
-					SuspensionDistRR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
-					WheelRotationFL = Math.Abs((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mRotation"));
-					WheelRotationFR = Math.Abs((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mRotation"));
-					WheelRotationRL = Math.Abs((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels03.mRotation"));
-					WheelRotationRR = Math.Abs((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels04.mRotation"));
+					SuspensionDistFL = Raw("CurrentPlayerTelemetry.mWheels01.mSuspensionDeflection");
+					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
+					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
+					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
+					WheelRotationFL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels01.mRotation"));
+					WheelRotationFR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels02.mRotation"));
+					WheelRotationRL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels03.mRotation"));
+					WheelRotationRR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels04.mRotation"));
 					SlipFromRPS();
-					SlipXFL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mLateralGroundVel");
-					SlipXFL = SlipXFL == 0.0 ? 0.0 : (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mLateralPatchVel") / SlipXFL;
-					SlipXFR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mLateralGroundVel");
-					SlipXFR = SlipXFR == 0.0 ? 0.0 : (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mLateralPatchVel") / SlipXFR;
-					SlipXRL = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels03.mLateralGroundVel");
-					SlipXRL = SlipXRL == 0.0 ? 0.0 : (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels03.mLateralPatchVel") / SlipXRL;
-					SlipXRR = (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels04.mLateralGroundVel");
-					SlipXRR = SlipXRR == 0.0 ? 0.0 : (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels04.mLateralPatchVel") / SlipXRR;
+					SlipXFL = Raw("CurrentPlayerTelemetry.mWheels01.mLateralGroundVel");
+					SlipXFL = SlipXFL == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels01.mLateralPatchVel") / SlipXFL;
+					SlipXFR = Raw("CurrentPlayerTelemetry.mWheels02.mLateralGroundVel");
+					SlipXFR = SlipXFR == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels02.mLateralPatchVel") / SlipXFR;
+					SlipXRL = Raw("CurrentPlayerTelemetry.mWheels03.mLateralGroundVel");
+					SlipXRL = SlipXRL == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels03.mLateralPatchVel") / SlipXRL;
+					SlipXRR = Raw("CurrentPlayerTelemetry.mWheels04.mLateralGroundVel");
+					SlipXRR = SlipXRR == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels04.mLateralPatchVel") / SlipXRR;
 					SlipXFL = Math.Abs(SlipXFL - 1.0);
 					SlipXFR = Math.Abs(SlipXFR - 1.0);
 					SlipXRL = Math.Abs(SlipXRL - 1.0);
 					SlipXRR = Math.Abs(SlipXRR - 1.0);
 					if (data.NewData.Brake > 80.0)
 					{
-						ABSActive = ((double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels01.mBrakePressure")
-									 + (double) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
+						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
+								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
 						break;
 					}
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
-					SuspensionDistFL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Tire_SusHeight01");
-					SuspensionDistFR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Tire_SusHeight02");
-					SuspensionDistRL = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Tire_SusHeight03");
-					SuspensionDistRR = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Tire_SusHeight04");
-					WheelSpeedFL = (double) Math.Abs((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Wheel_Speed01")) * 0.277778;
-					WheelSpeedFR = (double) Math.Abs((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Wheel_Speed02")) * 0.277778;
-					WheelSpeedRL = (double) Math.Abs((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Wheel_Speed03")) * 0.277778;
-					WheelSpeedRR = (double) Math.Abs((float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Wheel_Speed04")) * 0.277778;
+					SuspensionDistFL = Raw("Tire_SusHeight01");
+					SuspensionDistFR = Raw("Tire_SusHeight02");
+					SuspensionDistRL = Raw("Tire_SusHeight03");
+					SuspensionDistRR = Raw("Tire_SusHeight04");
+					WheelSpeedFL = (double) Math.Abs(Raw("Wheel_Speed01")) * 0.277778;
+					WheelSpeedFR = (double) Math.Abs(Raw("Wheel_Speed02")) * 0.277778;
+					WheelSpeedRL = (double) Math.Abs(Raw("Wheel_Speed03")) * 0.277778;
+					WheelSpeedRR = (double) Math.Abs(Raw("Wheel_Speed04")) * 0.277778;
 					SlipFromWheelSpeed();
-					SlipXFL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Wheel_Slip01") - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Wheel_Slip02") - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Wheel_Slip03") - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max((double) (float) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Wheel_Slip04") - Math.Abs(SlipYRR) * 2.0, 0.0);
+					SlipXFL = Math.Max(Raw("Wheel_Slip01") - Math.Abs(SlipYFL) * 2.0, 0.0);
+					SlipXFR = Math.Max(Raw("Wheel_Slip02") - Math.Abs(SlipYFR) * 2.0, 0.0);
+					SlipXRL = Math.Max(Raw("Wheel_Slip03") - Math.Abs(SlipYRL) * 2.0, 0.0);
+					SlipXRR = Math.Max(Raw("Wheel_Slip04") - Math.Abs(SlipYRR) * 2.0, 0.0);
 					break;
 			}
 			if (!flag)
@@ -1338,19 +1355,19 @@ namespace sierses.SimHap
 			switch (SimHapticsPlugin.CurrentGame)
 			{
 				case GameId.AC:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.ACC:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.AMS1:
-					if (SHP.S.Id != db.CarId && SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
+					if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
 						SimHapticsPlugin.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.AMS2:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 					{
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						SHP.S.Name = db.CarModel;
@@ -1358,42 +1375,42 @@ namespace sierses.SimHap
 					}
 					break;
 				case GameId.D4:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort)(10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 					break;
 				case GameId.DR2:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort) (10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 					break;
 				case GameId.WRC23:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle");
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort)(10 * (int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
 					break;
 				case GameId.Forza:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm");
 					break;
 				case GameId.GTR2:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.IRacing:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 					{
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						GameAltText = pluginManager.GameName + (string) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
@@ -1402,15 +1419,15 @@ namespace sierses.SimHap
 						IdleRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
 					break;
 				case GameId.PC2:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.RBR:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.RF2:
-					if (SHP.S.Id != db.CarId && SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
+					if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
 						SimHapticsPlugin.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.RRRE:
@@ -1418,7 +1435,7 @@ namespace sierses.SimHap
 						SimHapticsPlugin.FetchCarData(db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.BeamNG:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 					{
 						SHP.S.Redline = (ushort) (0.5 + db.MaxRpm);
 						SHP.S.MaxRPM = (ushort) (Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001 > 0.55
@@ -1441,12 +1458,12 @@ namespace sierses.SimHap
 					}
 					break;
 				case GameId.LMU:
-					if (SHP.S.Id != db.CarId && SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
+					if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
 						SimHapticsPlugin.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
-					if (SHP.S.Id != db.CarId && SimHapticsPlugin.FailedId != db.CarId)
+					if (SimHapticsPlugin.FailedId != db.CarId)
 					{
 						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						SHP.S.Redline = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM");
@@ -1536,9 +1553,9 @@ namespace sierses.SimHap
 			AccSway[Acc0] = data.NewData.AccelerationSway.GetValueOrDefault();
 			if (!data.NewData.AccelerationHeave.HasValue)
 			{
-				AccHeave[Acc0] = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WorldSpeedY");
+				AccHeave[Acc0] = Raw("WorldSpeedY");
 				AccHeave[Acc0] = (AccHeave[Acc0] - WorldSpeedY) * FPS;
-				WorldSpeedY = (float)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.WorldSpeedY");
+				WorldSpeedY = Raw("WorldSpeedY");
 			}
 			AccHeave2S = (AccHeave[Acc0] + AccHeave[Acc1]) * 0.5;
 			AccSurge2S = (AccSurge[Acc0] + AccSurge[Acc1]) * 0.5;
