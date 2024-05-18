@@ -132,7 +132,7 @@ namespace sierses.SimHap
 			if (null == data.NewData)
 				return;
 
-			if (Settings.Unlocked && FrameCountTicks % 2500000L <= 150000L
+			if (S.Id != data.NewData.CarId && Settings.Unlocked && FrameCountTicks % 2500000L <= 150000L
 			 && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 				D.SetVehiclePerGame(pluginManager, ref data.NewData, this);
 			if (!data.GameRunning || data.OldData == null)
