@@ -88,6 +88,11 @@ namespace sierses.SimHap
 
 	public class Spec : NotifyPropertyChanged
 	{
+		public Spec()
+		{
+		}
+
+		internal string Init(string game, StatusDataBase db, GameId CurrentGame)
 		private string game;
 		private string name;
 		private string id;
@@ -104,32 +109,26 @@ namespace sierses.SimHap
 		private ushort displacement;
 		private ushort maxTorque;
 
-		internal Download Car => new()
+		public Spec(Spec s) : this()
 		{
-			cc = this.displacement,
-			nm = this.maxTorque,
-			ehp = this.electricMaxPower,
-			hp = this.maxPower,
-			drive = this.poweredWheels,
-			config = this.engineConfiguration,
-			cyl = this.engineCylinders,
-			loc = this.engineLocation,
-			maxrpm = this.maxRPM,
-			idlerpm = this.idleRPM,
-			redline = this.redline,
-			category = this.category,
-			name = this.name,
-			id = this.id,
-			game = this.game
-		};
-
-		internal Download Emit() => Car;
-
-		public Spec()
-		{
+			Game = s.game;
+			Name = s.name;
+			Id = s.id;
+			Category = s.category;
+			Redline = s.redline;
+			MaxRPM = s.maxRPM;
+			IdleRPM = s.idleRPM;
+			EngineConfiguration = s.engineConfiguration;
+			EngineCylinders = s.engineCylinders;
+			EngineLocation = s.engineLocation;
+			PoweredWheels = s.poweredWheels;
+			MaxPower = s.maxPower;
+			ElectricMaxPower = s.electricMaxPower;
+			Displacement = s.displacement;
+			MaxTorque = s.maxTorque;
 		}
 
-		internal string Init(string game, StatusDataBase db, GameId CurrentGame)
+		internal string Init(string game, StatusDataBase db, GameId CurrentGame)	
 		{
 			string LoadStatusText;
 
@@ -240,24 +239,26 @@ namespace sierses.SimHap
 			return LoadStatusText;
 		}
 
-		public Spec(Spec s) : this()
+		internal Download Car => new()
 		{
-			this.game = s.game;
-			this.name = s.name;
-			this.id = s.id;
-			this.category = s.category;
-			this.redline = s.redline;
-			this.maxRPM = s.maxRPM;
-			this.idleRPM = s.idleRPM;
-			this.engineConfiguration = s.engineConfiguration;
-			this.engineCylinders = s.engineCylinders;
-			this.engineLocation = s.engineLocation;
-			this.poweredWheels = s.poweredWheels;
-			this.maxPower = s.maxPower;
-			this.electricMaxPower = s.electricMaxPower;
-			this.displacement = s.displacement;
-			this.maxTorque = s.maxTorque;
-		}
+			cc = this.displacement,
+			nm = this.maxTorque,
+			ehp = this.electricMaxPower,
+			hp = this.maxPower,
+			drive = this.poweredWheels,
+			config = this.engineConfiguration,
+			cyl = this.engineCylinders,
+			loc = this.engineLocation,
+			maxrpm = this.maxRPM,
+			idlerpm = this.idleRPM,
+			redline = this.redline,
+			category = this.category,
+			name = this.name,
+			id = this.id,
+			game = this.game
+		};
+
+		internal Download Emit() => Car;
 
 		public string Game
 		{
