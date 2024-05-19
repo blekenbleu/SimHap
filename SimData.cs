@@ -280,6 +280,30 @@ namespace sierses.SimHap
 		private double slipYMultAll;
 		private double slipYGamma;
 		private double slipYGammaAll;
+		private ushort idleRPM;
+
+		public SimData()
+		{
+			GameAltText = "";
+			LoadStatusText = "Not Loaded";
+			Gear = 0;
+			GearPrevious = 0;
+			Downshift = false;
+			Upshift = false;
+			CarInitCount = 0;
+			IdleSampleCount = 0;
+			RumbleFromPlugin = false;
+			SuspensionDistFLP = 0.0;
+			SuspensionDistFRP = 0.0;
+			SuspensionDistRLP = 0.0;
+			SuspensionDistRRP = 0.0;
+			AccSamples = 16;
+			Acc1 = 0;
+			TireDiameterSampleMax = 100;
+			SlipXGammaBaseMult = 1.0;
+			SlipYGammaBaseMult = 1.0;
+			idleRPM = 2500;
+		}
 
 		Settings MySet;
 		double GetSetting(string name, double trouble)	// Init() helper
@@ -333,6 +357,7 @@ namespace sierses.SimHap
 		{
 			CarInitCount = 0;
 			IdleSampleCount = 0;
+			idleRPM = 2500;
 			Gear = 0;
 			SuspensionFL = 0.0;
 			SuspensionFR = 0.0;
@@ -1507,7 +1532,7 @@ namespace sierses.SimHap
 		}
 
 		// called from DataUpdate()
-		internal void Update(ref GameData Gdat, PluginManager pluginManager, SimHapticsPlugin shp)
+		internal void Refresh(ref GameData Gdat, PluginManager pluginManager, SimHapticsPlugin shp, long FrameCountTicks)
 		{
 			SHP = shp;
 			PM = pluginManager;
@@ -1746,7 +1771,7 @@ namespace sierses.SimHap
 			SuspensionRight = SuspensionFR + SuspensionRR;
 			SuspensionAll = (SuspensionFL + SuspensionFR + SuspensionRL + SuspensionRR) * 0.5;
 			SuspensionAccAll = (SuspensionAccFL + SuspensionAccFR + SuspensionAccRL + SuspensionAccRR) * 0.5;
-			if (CarInitCount < 10 && SimHapticsPlugin.FrameCountTicks % 2000000L <= 150000L)
+			if (CarInitCount < 10 && FrameCountTicks % 2000000L <= 150000L)
 			{
 				SuspensionFL *= 0.1 * CarInitCount;
 				SuspensionFR *= 0.1 * CarInitCount;
@@ -2102,18 +2127,26 @@ namespace sierses.SimHap
 				EngineLoad += 200.0 * Math.Sin(data.NewData.OrientationPitch * 0.0174533);
 			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
 			EngineLoad *= data.NewData.Throttle * 0.01 * 0.01;
-			if (IdleSampleCount < 20 && SimHapticsPlugin.FrameCountTicks % 2500000L <= 150000L)
+
+            if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/
+                if (data.NewData.Rpms > 300)
+					if (data.NewData.Rpms <= idleRPM * 1.1)
 			{
 				double num19 = Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS;
-				if (data.NewData.Rpms > data.NewData.MaxRpm * 0.1 && data.NewData.Rpms <= SHP.S.IdleRPM + 20.0 && num19 < 40.0)
+
+				if (num19 < 40.0)
 				{
-					SHP.S.IdleRPM = Convert.ToUInt16((1 + SHP.S.IdleRPM + (int)data.NewData.Rpms) >> 1);
+					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1);
 					++IdleSampleCount;
-					double num20 = SHP.S.IdleRPM * 0.008333333;
+					double num20 = idleRPM * 0.008333333;
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
+				if (20 == IdleSampleCount)
+					if (0 == SHP.S.IdleRPM)
+						SHP.S.IdleRPM = idleRPM;
 			}
-			if (SimHapticsPlugin.FrameCountTicks % 5000000L <= 150000L)
+
+			if (FrameCountTicks % 5000000L <= 150000L)
 			{
 				SetRPMIntervals();
 				SetRPMMix();

@@ -143,7 +143,7 @@ namespace sierses.SimHap
 			MaxPower = 300;
 			ElectricMaxPower = 0;
 			MaxTorque = 250;
-			IdleRPM = 800;
+			IdleRPM = 0;
 
 			switch (CurrentGame)
 			{

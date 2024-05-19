@@ -117,7 +117,6 @@ namespace sierses.SimHap
 				S.MaxRPM = 6500;
 			if (string.IsNullOrEmpty(S.Category))
 				S.Category = "street";
-			//D.IdleRPM = S.IdleRPM;
 			LoadStatus = DataStatus.GameData;
 			if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
 				S.Id = db.CarModel;
@@ -150,27 +149,22 @@ namespace sierses.SimHap
 			if (S.Id == data.NewData.CarId)
 			{
 				if (data.GameRunning && null != data.OldData)
-				{
-					Ticks();	
-					D.Update(ref data, pluginManager, this);
-				}
+					D.Refresh(ref data, pluginManager, this, Ticks());
 			}
-			else if ((data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
-					 && Settings.Unlocked && Ticks() % 2500000L <= 150000L)
+			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 				D.SetVehiclePerGame(pluginManager, ref data.NewData, this);
 
 		}
 
-		public void SetGame(PluginManager pluginManager, SimData sd)
+		public void SetGame(PluginManager pm)
 		{
-			GameDBText = pluginManager.GameName;
-			sd.GameAltText = pluginManager.GameName;
+			GameDBText = D.GameAltText = pm.GameName;
 			switch (GameDBText)
 			{
 				case "AssettoCorsa":
 					CurrentGame = GameId.AC;
 					GameDBText = "AC";
-					sd.RumbleFromPlugin = true;
+					D.RumbleFromPlugin = true;
 					break;
 				case "AssettoCorsaCompetizione":
 					CurrentGame = GameId.ACC;
@@ -193,7 +187,7 @@ namespace sierses.SimHap
 					break;
 				case "IRacing":
 					CurrentGame = GameId.IRacing;
-					sd.GameAltText += (string) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
+					D.GameAltText += (string) pm.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 					break;
 				case "KartKraft":
 					CurrentGame = GameId.KK;
@@ -210,7 +204,7 @@ namespace sierses.SimHap
 					break;
 				case "RBR":
 					CurrentGame = GameId.RBR;
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "RFactor1":
 					CurrentGame = GameId.RF1;
@@ -248,7 +242,7 @@ namespace sierses.SimHap
 				case "CodemastersDirtRally2":
 					CurrentGame = GameId.DR2;
 					GameDBText = "DR2";
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "CodemastersDirt2":
 				case "CodemastersDirt3":
@@ -256,13 +250,13 @@ namespace sierses.SimHap
 				case "CodemastersDirt4":
 					CurrentGame = GameId.D4;
 					GameDBText = "D4";
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "EAWRC23":
 					CurrentGame = GameId.WRC23;
 					GameDBText = "WRC23";
-					sd.AccSamples = 32;
-					sd.TireDiameterSampleCount = -1;
+					D.AccSamples = 32;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12012":
 				case "F12013":
@@ -274,7 +268,7 @@ namespace sierses.SimHap
 					break;
 				case "F12017":
 					CurrentGame = GameId.F12017;
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12018":
 				case "F12019":
@@ -283,7 +277,7 @@ namespace sierses.SimHap
 				case "F12022":
 					CurrentGame = GameId.F12022;
 					GameDBText = "F12022";
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12023":
 				case "F12024":
@@ -291,7 +285,7 @@ namespace sierses.SimHap
 				case "F12026":
 					CurrentGame = GameId.F12023;
 					GameDBText = "F12022";
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "CodemastersGrid2":
 				case "CodemastersGrid2019":
@@ -299,25 +293,25 @@ namespace sierses.SimHap
 				case "CodemastersGridLegends":
 					CurrentGame = GameId.GLegends;
 					GameDBText = "Grid";
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "BeamNgDrive":
 					CurrentGame = GameId.BeamNG;
 					GameDBText = "BeamNG";
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "GPBikes":
 					CurrentGame = GameId.GPBikes;
-					sd.RumbleFromPlugin = true;
-					sd.TireDiameterSampleCount = -1;
+					D.RumbleFromPlugin = true;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "MXBikes":
 					CurrentGame = GameId.MXBikes;
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "WRCGenerations":
 					CurrentGame = GameId.WRCGen;
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				case "WRCX":
 					CurrentGame = GameId.WRCX;
@@ -335,7 +329,7 @@ namespace sierses.SimHap
 				case "GranTurismoSport":
 					CurrentGame = GameId.GranTurismo7;
 					GameDBText = "GranTurismo7";
-					sd.TireDiameterSampleCount = -1;
+					D.TireDiameterSampleCount = -1;
 					break;
 				default:
 					CurrentGame = GameId.Other;
@@ -567,29 +561,9 @@ namespace sierses.SimHap
 			LoadStatus = DataStatus.None;
 			FetchStatus = APIStatus.None;
 			S = new Spec();
-			D = new SimData()
-			{
-				GameAltText = "",
-				LoadStatusText = "Not Loaded",
-				Gear = 0,
-				GearPrevious = 0,
-				Downshift = false,
-				Upshift = false,
-				CarInitCount = 0,
-				IdleSampleCount = 0,
-				RumbleFromPlugin = false,
-				SuspensionDistFLP = 0.0,
-				SuspensionDistFRP = 0.0,
-				SuspensionDistRLP = 0.0,
-				SuspensionDistRRP = 0.0,
-				AccSamples = 16,
-				Acc1 = 0,
-				TireDiameterSampleMax = 100,
-				SlipXGammaBaseMult = 1.0,
-				SlipYGammaBaseMult = 1.0
-			};
+			D = new SimData();
 			LD = new ListDictionary();
-			SetGame(pluginManager, D);
+			SetGame(pluginManager);
 			Settings = IPluginExtensions.ReadCommonSettings(this, "Settings", () => new Settings());
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;
 			Settings.DownshiftDurationMs = Settings.DownshiftDurationMs > 0 ? Settings.DownshiftDurationMs : 400;
