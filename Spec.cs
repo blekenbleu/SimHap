@@ -127,9 +127,9 @@ namespace sierses.SimHap
 			MaxTorque = s.maxTorque;
 		}
 
-		internal string Init(string game, StatusDataBase db, GameId CurrentGame)	
+		internal string Load(string game, StatusDataBase db, GameId CurrentGame)	
 		{
-			string LoadStatusText;
+			string StatusText;
 
 			Game = game;
 			Name = db.CarModel;
@@ -159,12 +159,12 @@ namespace sierses.SimHap
 				case GameId.RF2:
 				case GameId.RRRE:
 				case GameId.BeamNG:
-					LoadStatusText = "Not in DB: using generic car";
+					StatusText = "Not in DB: using generic car";
 					break;
 				case GameId.D4:
 				case GameId.DR2:
 				case GameId.WRC23:
-					LoadStatusText = "Not in DB: using generic Rally2";
+					StatusText = "Not in DB: using generic Rally2";
 					EngineConfiguration = "I";
 					EngineCylinders = 4;
 					EngineLocation = "F";
@@ -176,7 +176,7 @@ namespace sierses.SimHap
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
-					LoadStatusText = "Not in DB: using generic F1";
+					StatusText = "Not in DB: using generic F1";
 					EngineConfiguration = "V";
 					EngineCylinders = 6;
 					EngineLocation = "RM";
@@ -187,7 +187,7 @@ namespace sierses.SimHap
 					MaxTorque = 650;
 					break;
 				case GameId.KK:
-					LoadStatusText = "Not in DB: using generic Kart";
+					StatusText = "Not in DB: using generic Kart";
 					EngineConfiguration = "I";
 					EngineCylinders = 1;
 					EngineLocation = "RM";
@@ -198,7 +198,7 @@ namespace sierses.SimHap
 					MaxTorque = 24;
 					break;
 				case GameId.GPBikes:
-					LoadStatusText = "Not in DB: using generic Superbike";
+					StatusText = "Not in DB: using generic Superbike";
 					EngineConfiguration = "I";
 					EngineCylinders = 4;
 					EngineLocation = "M";
@@ -209,7 +209,7 @@ namespace sierses.SimHap
 					MaxTorque = 100;
 					break;
 				case GameId.MXBikes:
-					LoadStatusText = "Not in DB: using generic MX Bike";
+					StatusText = "Not in DB: using generic MX Bike";
 					EngineConfiguration = "I";
 					EngineCylinders = 1;
 					EngineLocation = "M";
@@ -221,7 +221,7 @@ namespace sierses.SimHap
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
-					LoadStatusText = "Not in DB: redline loaded from game";
+					StatusText = "Not in DB: redline loaded from game";
 					EngineConfiguration = "V";
 					EngineCylinders = 6;
 					EngineLocation = "RM";
@@ -232,10 +232,10 @@ namespace sierses.SimHap
 					MaxTorque = 400;
 					break;
 				default:
-					LoadStatusText = $"Specs unavailable for {CurrentGame}";
+					StatusText = $"Specs unavailable for {CurrentGame}";
 					break;
 			}
-			return LoadStatusText;
+			return StatusText;
 		}
 
 		internal Download Car => new()

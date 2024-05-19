@@ -108,7 +108,7 @@ namespace sierses.SimHap
 				return;
 			}
 
-			string status = S.Init(GameDBText, db, CurrentGame);
+			string status = S.Load(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
 				D.LoadStatusText = status;
 			if (0 == S.Redline)
@@ -363,13 +363,12 @@ namespace sierses.SimHap
 			v.EngineCylinders = 	dljc.cyl;
 			v.Redline  = 0 == dljc.redline ? gameRedline : dljc.redline;
 			v.MaxRPM   = 0 == dljc.maxrpm  ? gameMaxRPM  : dljc.maxrpm;
-			v.MaxPower = 0 == dljc.hp 	   ? (ushort)333 : dljc.hp;
+			v.MaxPower = 0 == dljc.hp 	   ? Convert.ToUInt16(333) : dljc.hp;
 			v.ElectricMaxPower = 	dljc.ehp;
 			v.Displacement = 		dljc.cc;
 			v.MaxTorque = 			dljc.nm;
 
 			Logging.Current.Info("SimHapticsPlugin: Successfully loaded " + v.Name);
-//			D.LoadStatusText = "DB Load Success";
 //			File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
 //						 			JsonConvert.SerializeObject(dljc, Formatting.Indented));
 //			File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
@@ -397,8 +396,8 @@ namespace sierses.SimHap
 					}
 					return;
 				}
-				gameRedline = (ushort) (0.5 + doubleRedline);
-				gameMaxRPM = (ushort)  (0.5 + doubleMaxRPM);
+				gameRedline = Convert.ToUInt16(0.5 + doubleRedline);
+				gameMaxRPM = Convert.ToUInt16(0.5 + doubleMaxRPM);
 				FetchStatus = APIStatus.Waiting;
 				LoadFinish = false;
 				Logging.Current.Info("SimHapticsPlugin: Loading " + category + " " + id);
@@ -646,7 +645,7 @@ namespace sierses.SimHap
 			IPluginExtensions.AttachDelegate(this, "MaxTorqueNm", () => S.MaxTorque);
 			IPluginExtensions.AttachDelegate(this, "LoadStatus", () => (int)LoadStatus);
 			IPluginExtensions.AttachDelegate(this, "EngineLoad", () => D.EngineLoad);
-			IPluginExtensions.AttachDelegate(this, "IdleRPM", () => D.IdleRPM);
+			IPluginExtensions.AttachDelegate(this, "IdleRPM", () => S.IdleRPM);
 			IPluginExtensions.AttachDelegate(this, "FreqHarmonic", () => D.FreqHarmonic);
 			IPluginExtensions.AttachDelegate(this, "FreqOctave", () => D.FreqOctave);
 			IPluginExtensions.AttachDelegate(this, "FreqIntervalA1", () => D.FreqIntervalA1);
