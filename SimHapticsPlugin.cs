@@ -123,6 +123,14 @@ namespace sierses.SimHap
 				S.Id = db.CarModel;
 		}
 
+		long Ticks()	// presumably intended to delay between server hits
+		{
+			FrameCountTicks = FrameCountTicks + DateTime.Now.Ticks - FrameTimeTicks;
+			FrameTimeTicks = DateTime.Now.Ticks;
+			if (FrameCountTicks > 864000000000L)
+				FrameCountTicks = 0L;
+			return FrameCountTicks;		
+		}
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data,
 		/// raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
@@ -130,21 +138,27 @@ namespace sierses.SimHap
 		/// </summary>
 		/// <param name="pluginManager"></param>
 		/// <param name="data">Current game data, including present and previous data frames.</param> 
+		static GameData Gdat;
+		static PluginManager PM;
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
-			FrameCountTicks = FrameCountTicks + DateTime.Now.Ticks - FrameTimeTicks;
-			FrameTimeTicks = DateTime.Now.Ticks;
-			if (FrameCountTicks > 864000000000L)
-				FrameCountTicks = 0L;
+			Gdat = data;
+			PM = pluginManager;
 			if (null == data.NewData)
 				return;
 
-			if (S.Id != data.NewData.CarId && Settings.Unlocked && FrameCountTicks % 2500000L <= 150000L
-			 && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
+			if (S.Id == data.NewData.CarId)
+			{
+				if (data.GameRunning && null != data.OldData)
+				{
+					Ticks();	
+					D.Update(ref data, pluginManager, this);
+				}
+			}
+			else if ((data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
+					 && Settings.Unlocked && Ticks() % 2500000L <= 150000L)
 				D.SetVehiclePerGame(pluginManager, ref data.NewData, this);
-			if (!data.GameRunning || data.OldData == null)
-				return;
-			D.Update(data, pluginManager, this);
+
 		}
 
 		public void SetGame(PluginManager pluginManager, SimData sd)
@@ -331,10 +345,41 @@ namespace sierses.SimHap
 			D.AccHeave = new double[D.AccSamples];
 			D.AccSurge = new double[D.AccSamples];
 			D.AccSway = new double[D.AccSamples];
+		}	// SetGame()
+
+		// reuse this for json input
+		static ushort gameRedline, gameMaxRPM;
+		static bool Set_v (Spec v, Download dljc)
+		{
+			if (null == dljc.name || null == dljc.id)
+				return false;
+			v.Game = GameDBText;
+			v.Id = (CurrentGame == GameId.Forza) ? "Car_" + dljc.id : dljc.id;
+			v.Category = 			dljc.category;
+			v.Name = 				dljc.name;
+			v.EngineLocation = 		dljc.loc;
+			v.PoweredWheels = 		dljc.drive;
+			v.EngineConfiguration = dljc.config;
+			v.EngineCylinders = 	dljc.cyl;
+			v.Redline  = 0 == dljc.redline ? gameRedline : dljc.redline;
+			v.MaxRPM   = 0 == dljc.maxrpm  ? gameMaxRPM  : dljc.maxrpm;
+			v.MaxPower = 0 == dljc.hp 	   ? (ushort)333 : dljc.hp;
+			v.ElectricMaxPower = 	dljc.ehp;
+			v.Displacement = 		dljc.cc;
+			v.MaxTorque = 			dljc.nm;
+
+			Logging.Current.Info("SimHapticsPlugin: Successfully loaded " + v.Name);
+//			D.LoadStatusText = "DB Load Success";
+//			File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
+//						 			JsonConvert.SerializeObject(dljc, Formatting.Indented));
+//			File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
+//									JsonConvert.SerializeObject(jobject, Formatting.Indented));
+			return true;
 		}
 
 		// must be void and static
 		internal static async void FetchCarData(
+			SimData SD,
 			string id,
 			string category,
 			Spec v,
@@ -344,9 +389,16 @@ namespace sierses.SimHap
 			try
 			{
 				if (FetchStatus == APIStatus.Waiting)
+				{
+					if ( 3 < LoadFailCount++)
+					{
+						FetchStatus = APIStatus.Retry;
+						LoadFailCount = 0;
+					}
 					return;
-				ushort gameRedline = (ushort) (0.5 + doubleRedline);
-				ushort gameMaxRPM = (ushort)  (0.5 + doubleMaxRPM);
+				}
+				gameRedline = (ushort) (0.5 + doubleRedline);
+				gameMaxRPM = (ushort)  (0.5 + doubleMaxRPM);
 				FetchStatus = APIStatus.Waiting;
 				LoadFinish = false;
 				Logging.Current.Info("SimHapticsPlugin: Loading " + category + " " + id);
@@ -358,36 +410,21 @@ namespace sierses.SimHap
 				async.EnsureSuccessStatusCode();
 				string dls = async.Content.ReadAsStringAsync().Result;
 				Download_array dljc = JsonConvert.DeserializeObject<Download_array>(dls, new JsonSerializerSettings
+								{
+									NullValueHandling = NullValueHandling.Ignore,
+									MissingMemberHandling = MissingMemberHandling.Ignore
+								});
+				if (null != dljc && null != dljc.data && 0 < dljc.data.Length
+					&& Set_v(v, dljc.data[0]))
 				{
-					NullValueHandling = NullValueHandling.Ignore,
-					MissingMemberHandling = MissingMemberHandling.Ignore
-				});
-				if (null != dljc && null != dljc.data && 0 < dljc.data.Length)
-				{	
-					v.Game = GameDBText;
-					v.Id = (CurrentGame == GameId.Forza) ? "Car_" + dljc.data[0].id : dljc.data[0].id;
-					v.Category = 			dljc.data[0].category;
-					v.Name = 				dljc.data[0].name;
-					v.EngineLocation = 		dljc.data[0].loc;
-					v.PoweredWheels = 		dljc.data[0].drive;
-					v.EngineConfiguration = dljc.data[0].config;
-					v.EngineCylinders = 	dljc.data[0].cyl;
-					v.Redline  = 0 == dljc.data[0].redline ? gameRedline : dljc.data[0].redline;
-					v.MaxRPM   = 0 == dljc.data[0].maxrpm  ? gameMaxRPM  : dljc.data[0].maxrpm;
-					v.MaxPower = 0 == dljc.data[0].hp 		? (ushort)333 : dljc.data[0].hp;
-					v.ElectricMaxPower = 	dljc.data[0].ehp;
-					v.Displacement = 		dljc.data[0].cc;
-					v.MaxTorque = 			dljc.data[0].nm;
-
-					Logging.Current.Info("SimHapticsPlugin: Successfully loaded " + v.Name);
-					LoadFailCount = 0;
-					FailedId = "";
-					FailedCategory = "";
 					FetchStatus = APIStatus.Success;
-					File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
-									 			JsonConvert.SerializeObject(dljc, Formatting.Indented));
-//					File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
-//										JsonConvert.SerializeObject(jobject, Formatting.Indented));
+					LoadFinish = false;
+					LoadFailCount = 0;
+					// FetchCarData() seeminly does not return to SetVehiclePerGame()
+					// before NEXT CarId change.  Consequently, call it with FailedId = id
+					FailedId = id;
+					FailedCategory = "";
+					SD.SetVehiclePerGame(PM, ref Gdat.NewData, null);
 				}
 				else
 				{
@@ -398,6 +435,7 @@ namespace sierses.SimHap
 						FailedId = CurrentGame != GameId.Forza ? id : "Car_" + id;
 						FailedCategory = category;
 						FetchStatus = APIStatus.Fail;
+						LoadFailCount = 0;
 					}
 					else FetchStatus = APIStatus.Retry;
 				}
@@ -591,7 +629,7 @@ namespace sierses.SimHap
 				Settings.SlipYGamma.Add("AllGames", 1.0);
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
-			D.Init(Settings, GameDBText);
+			D.Init(Settings);
 			IPluginExtensions.AttachDelegate(this, "CarName", () => S.Name);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);
 			IPluginExtensions.AttachDelegate(this, "Category", () => S.Category);

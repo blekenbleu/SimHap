@@ -7,7 +7,7 @@ namespace sierses.SimHap
   public enum APIStatus
   {
     None,
-    Waiting,
+    Waiting,	// disables attemting another FetchCarData()
     Retry,
     Fail,
     Success,

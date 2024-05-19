@@ -288,24 +288,25 @@ namespace sierses.SimHap
 			return MySet.Motion.TryGetValue(name, out double num) ? num : trouble;
 		}
 
-		internal void Init (Settings Settings, string GameDBText)
+		internal void Init (Settings Settings)
 		{
 			MySet = Settings;
-			EngineMult = Settings.EngineMult.TryGetValue(GameDBText, out double num) ? num : 1.0;
+			string GDBtext = SimHapticsPlugin.GameDBText;
+			EngineMult = Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
 			EngineMultAll = Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
-			RumbleMult = Settings.RumbleMult.TryGetValue(GameDBText, out num) ? num : 1.0;
+			RumbleMult = Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
 			RumbleMultAll = Settings.RumbleMult.TryGetValue("AllGames", out num) ? num : 5.0;
-			SuspensionMult = Settings.SuspensionMult.TryGetValue(GameDBText, out num) ? num : 1.0;
+			SuspensionMult = Settings.SuspensionMult.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionMultAll = Settings.SuspensionMult.TryGetValue("AllGames", out num) ? num : 1.5;
-			SuspensionGamma = Settings.SuspensionGamma.TryGetValue(GameDBText, out num) ? num : 1.0;
+			SuspensionGamma = Settings.SuspensionGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionGammaAll = Settings.SuspensionGamma.TryGetValue("AllGames", out num) ? num : 1.75;
-			SlipXMult = Settings.SlipXMult.TryGetValue(GameDBText, out num) ? num : 1.0;
+			SlipXMult = Settings.SlipXMult.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipXMultAll = Settings.SlipXMult.TryGetValue("AllGames", out num) ? num : 1.6;
-			SlipYMult = Settings.SlipYMult.TryGetValue(GameDBText, out num) ? num : 1.0;
+			SlipYMult = Settings.SlipYMult.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipYMultAll = Settings.SlipYMult.TryGetValue("AllGames", out num) ? num : 1.0;
-			SlipXGamma = Settings.SlipXGamma.TryGetValue(GameDBText, out num) ? num : 1.0;
+			SlipXGamma = Settings.SlipXGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipXGammaAll = Settings.SlipXGamma.TryGetValue("AllGames", out num) ? num : 1.0;
-			SlipYGamma = Settings.SlipYGamma.TryGetValue(GameDBText, out num) ? num : 1.0;
+			SlipYGamma = Settings.SlipYGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipYGammaAll = Settings.SlipYGamma.TryGetValue("AllGames", out num) ? num : 1.0;
 
 			LockedText = Settings.Unlocked ? "Lock" : "Unlock";
@@ -527,7 +528,8 @@ namespace sierses.SimHap
 			MixRear = 1.0 - MixFront;
 		}
 
-		PluginManager PM;
+		static PluginManager PM;
+		static GameData data;
 		private float Data(string prop)
 		{
 			return (float)PM.GetPropertyValue("DataCorePlugin.GameRawData.Data."+prop);
@@ -543,9 +545,10 @@ namespace sierses.SimHap
 			return (float)PM.GetPropertyValue("DataCorePlugin.GameRawData."+prop);
 		}
 
-		private void UpdateVehiclePerGame(PluginManager pluginManager, ref GameData data)
+		private void UpdateVehiclePerGame(PluginManager pluginManager, ref GameData Gdat)
 		{
 			PM = pluginManager;
+			data = Gdat;
 			SuspensionDistFLP = SuspensionDistFL;
 			SuspensionDistFRP = SuspensionDistFR;
 			SuspensionDistRLP = SuspensionDistRL;
@@ -1351,98 +1354,94 @@ namespace sierses.SimHap
 		// called from DataUpdate()
 		internal void SetVehiclePerGame(PluginManager pluginManager, ref StatusDataBase db, SimHapticsPlugin shp)
 		{
-			SHP = shp;
+			if (null != shp)	// null when called by FetchCarData()
+				SHP = shp;
 			switch (SimHapticsPlugin.CurrentGame)
 			{
 				case GameId.AC:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.ACC:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.AMS1:
 					if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
-						SimHapticsPlugin.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.AMS2:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-					{
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						SHP.S.Name = db.CarModel;
-						SHP.S.Category = db.CarClass;
-					}
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+					SHP.S.Name = db.CarModel;
+					SHP.S.Category = db.CarClass;
 					break;
 				case GameId.D4:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort)(10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 					break;
 				case GameId.DR2:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort) (10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 					break;
 				case GameId.WRC23:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle");
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort)(10 * (int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
 					break;
 				case GameId.Forza:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm");
 					break;
 				case GameId.GTR2:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.IRacing:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-					{
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						GameAltText = pluginManager.GameName + (string) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
-					}
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+					GameAltText = pluginManager.GameName + (string) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 					if (0 == IdleRPM)
 						IdleRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
 					break;
 				case GameId.PC2:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.RBR:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.RF2:
 					if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
-						SimHapticsPlugin.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.RRRE:
 					if (SHP.S.Id != db.CarModel && SimHapticsPlugin.FailedId != db.CarModel)
-						SimHapticsPlugin.FetchCarData(db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.BeamNG:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-					{
-						SHP.S.Redline = (ushort) (0.5 + db.MaxRpm);
-						SHP.S.MaxRPM = (ushort) (Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001 > 0.55
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S,
+							SHP.S.Redline = (ushort)(0.5 + db.MaxRpm),
+							SHP.S.MaxRPM = (ushort)((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
 								 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
-								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0);
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, SHP.S.Redline, SHP.S.MaxRPM);
-					}
+								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0)
+						);
 					if (0 == IdleRPM)
 						IdleRPM = (ushort)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm");
 					break;
@@ -1459,16 +1458,14 @@ namespace sierses.SimHap
 					break;
 				case GameId.LMU:
 					if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedId != db.CarId && SimHapticsPlugin.FailedCategory != db.CarClass)
-						SimHapticsPlugin.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHapticsPlugin.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
 					if (SimHapticsPlugin.FailedId != db.CarId)
-					{
-						SimHapticsPlugin.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						SHP.S.Redline = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM");
-						SHP.S.MaxRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM");
-					}
+						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+					SHP.S.Redline = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM");
+					SHP.S.MaxRPM = (ushort) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM");
 					break;
 				default:
 					SHP.S.Redline = (ushort)db.CarSettings_CurrentGearRedLineRPM;
@@ -1479,16 +1476,17 @@ namespace sierses.SimHap
 			if (0 == IdleRPM)
 				IdleRPM = (ushort)(db.MaxRpm * 0.25);
 
-			if (!SimHapticsPlugin.LoadFinish)
+			if (!SimHapticsPlugin.LoadFinish && SimHapticsPlugin.FetchStatus != APIStatus.Waiting)
 			{
 				if (SimHapticsPlugin.FetchStatus == APIStatus.Success)
 				{
 					SHP.Settings.Vehicle = new Spec(SHP.S);
 					SimHapticsPlugin.LoadStatus = DataStatus.SimHapticsAPI;
 					LoadStatusText = "DB Load Success";
+					SimHapticsPlugin.FailedId = "";
 				}
 				else SHP.SetDefaultVehicle(ref db); // sets LoadStatusText
-                FinalizeVehicleLoad();
+                FinalizeVehicleLoad();				// sets LoadFinish = true
 			}
 
 			SHP.LD.Add(SHP.S.Emit());
@@ -1497,9 +1495,11 @@ namespace sierses.SimHap
 		}
 
 		// called from DataUpdate()
-		internal void Update(GameData data, PluginManager pluginManager, SimHapticsPlugin shp)
+		internal void Update(ref GameData Gdat, PluginManager pluginManager, SimHapticsPlugin shp)
 		{
 			SHP = shp;
+			PM = pluginManager;
+			data = Gdat;
 			FPS = (double) pluginManager.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			RPMPercent = data.NewData.Rpms * InvMaxRPM;
 			SpeedMs = data.NewData.SpeedKmh * 0.277778;
