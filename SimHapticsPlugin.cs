@@ -4,7 +4,6 @@
 
 using GameReaderCommon;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using sierses.SimHap.Properties;
 using SimHub;
 using SimHub.Plugins;
@@ -24,8 +23,7 @@ namespace sierses.SimHap
 	[PluginName("SimHap")]
 	public class SimHapticsPlugin : IPlugin, IDataPlugin, IWPFSettingsV2, IWPFSettings
 	{
-		public static string PluginVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
-		public static string SimHubVersion;
+		public string PluginVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
 		public static bool LoadFinish;
 		public static bool Changed;
@@ -41,14 +39,9 @@ namespace sierses.SimHap
 		private string myfile = "PluginsData/blekenbleu.Download.SimHap.json";
 
 		public Spec S { get; set; }
-
-		public SimData D { get; set; }
-
 		public ListDictionary LD { get; set; }
 
-		public Settings Settings { get; set; }
-
-		public PluginManager PluginManager { get; set; }
+		public SimData D { get; set; }
 
 		public ImageSource PictureIcon
 		{
@@ -98,8 +91,20 @@ namespace sierses.SimHap
 		}
  */
 
+		// boilerplate SimHub -------------------------------------------
 		public string LeftMenuTitle => "SimHap";
 
+		public Control GetWPFSettingsControl(PluginManager pluginManager)
+		{
+			return new SettingsControl(this);
+		}
+
+		public Settings Settings { get; set; }
+
+		public PluginManager PluginManager { get; set; }
+		// ----------------------------------------------------------------
+
+		// called by SetVehicle() in DataUpdate() when car not found
 		internal void SetDefaultVehicle(ref StatusDataBase db)
 		{
 			if (Settings.Vehicle != null && (Settings.Vehicle.Id == db.CarId || Settings.Vehicle.Id == db.CarModel))
@@ -146,9 +151,112 @@ namespace sierses.SimHap
 					D.Refresh(ref data, pluginManager, this);
 			}
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
-				D.SetVehiclePerGame(pluginManager, ref data.NewData, this);
+				D.SetVehicle(pluginManager, ref data.NewData, this);
 		}
 
+		public void End(PluginManager pluginManager)
+		{
+			string sjs = JsonConvert.SerializeObject(LD.InternalDictionary, Formatting.Indented);
+			if (0 == sjs.Length || "{}" == sjs)
+				Logging.Current.Info("SimHap.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
+			else File.WriteAllText(myfile, sjs);
+
+			// Remove default values from Settings per-game dictionaries
+			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
+				Settings.EngineMult.Remove("AllGames");
+			if (Settings.EngineMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.EngineMult == 1.0)
+					Settings.EngineMult.Remove(GameDBText);
+				else Settings.EngineMult[GameDBText] = D.EngineMult;
+			}
+			else if (D.EngineMult != 1.0)
+				Settings.EngineMult.Add(GameDBText, D.EngineMult);
+			if (Settings.RumbleMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.RumbleMult == 1.0)
+					Settings.RumbleMult.Remove(GameDBText);
+				else Settings.RumbleMult[GameDBText] = D.RumbleMult;
+			}
+			else if (D.RumbleMult != 1.0)
+				Settings.RumbleMult.Add(GameDBText, D.RumbleMult);
+			if (Settings.SuspensionMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SuspensionMult == 1.0)
+					Settings.SuspensionMult.Remove(GameDBText);
+				else Settings.SuspensionMult[GameDBText] = D.SuspensionMult;
+			}
+			else if (D.SuspensionMult != 1.0)
+				Settings.SuspensionMult.Add(GameDBText, D.SuspensionMult);
+			if (Settings.SuspensionGamma.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SuspensionGamma == 1.0)
+					Settings.SuspensionGamma.Remove(GameDBText);
+				else Settings.SuspensionGamma[GameDBText] = D.SuspensionGamma;
+			}
+			else if (D.SuspensionGamma != 1.0)
+				Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
+			if (Settings.SlipXMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SlipXMult == 1.0)
+					Settings.SlipXMult.Remove(GameDBText);
+				else Settings.SlipXMult[GameDBText] = D.SlipXMult;
+			}
+			else if (D.SlipXMult != 1.0)
+				Settings.SlipXMult.Add(GameDBText, D.SlipXMult);
+			if (Settings.SlipYMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SlipYMult == 1.0)
+					Settings.SlipYMult.Remove(GameDBText);
+				else Settings.SlipYMult[GameDBText] = D.SlipYMult;
+			}
+			else if (D.SlipYMult != 1.0)
+				Settings.SlipYMult.Add(GameDBText, D.SlipYMult);
+			if (Settings.SlipXGamma.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SlipXGamma == 1.0)
+					Settings.SlipXGamma.Remove(GameDBText);
+				else Settings.SlipXGamma[GameDBText] = D.SlipXGamma;
+			}
+			else if (D.SlipXGamma != 1.0)
+				Settings.SlipXGamma.Add(GameDBText, D.SlipXGamma);
+			if (Settings.SlipYGamma.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SlipYGamma == 1.0)
+					Settings.SlipYGamma.Remove(GameDBText);
+				else Settings.SlipYGamma[GameDBText] = D.SlipYGamma;
+			}
+			else if (D.SlipYGamma != 1.0)
+				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
+
+			// unconditionally save some
+			Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
+			Settings.SuspensionGamma["AllGames"] = D.SuspensionGammaAll;
+			Settings.SuspensionMult["AllGames"] = D.SuspensionMultAll;
+			Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
+			Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
+			Settings.Motion["MotionPitchOffset"] = D.MotionPitchOffset;
+			Settings.Motion["MotionPitchMult"] = D.MotionPitchMult;
+			Settings.Motion["MotionPitchGamma"] = D.MotionPitchGamma;
+			Settings.Motion["MotionRollOffset"] = D.MotionRollOffset;
+			Settings.Motion["MotionRollMult"] = D.MotionRollMult;
+			Settings.Motion["MotionRollGamma"] = D.MotionRollGamma;
+			Settings.Motion["MotionYawOffset"] = D.MotionYawOffset;
+			Settings.Motion["MotionYawMult"] = D.MotionYawMult;
+			Settings.Motion["MotionYawGamma"] = D.MotionYawGamma;
+			Settings.Motion["MotionHeaveOffset"] = D.MotionHeaveOffset;
+			Settings.Motion["MotionHeaveMult"] = D.MotionHeaveMult;
+			Settings.Motion["MotionHeaveGamma"] = D.MotionHeaveGamma;
+			Settings.Motion["MotionSurgeOffset"] = D.MotionSurgeOffset;
+			Settings.Motion["MotionSurgeMult"] = D.MotionSurgeMult;
+			Settings.Motion["MotionSurgeGamma"] = D.MotionSurgeGamma;
+			Settings.Motion["MotionSwayOffset"] = D.MotionSwayOffset;
+			Settings.Motion["MotionSwayMult"] = D.MotionSwayMult;
+			Settings.Motion["MotionSwayGamma"] = D.MotionSwayGamma;
+			IPluginExtensions.SaveCommonSettings(this, "Settings", Settings);
+		}
+
+		// Init() methods -----------------------------
 		public void SetGame(PluginManager pm)
 		{
 			GameDBText = D.GameAltText = pm.GameName;
@@ -334,7 +442,7 @@ namespace sierses.SimHap
 			D.AccSway = new double[D.AccSamples];
 		}	// SetGame()
 
-		// reuse this for json input
+		// reuse these for json input
 		static ushort gameRedline, gameMaxRPM;
 		static bool Set_v (Spec v, Download data)
 		{
@@ -357,9 +465,9 @@ namespace sierses.SimHap
 			v.MaxTorque = 			data.nm;
 
 			return true;
-		}
+		}	// Set_v()
 
-		// must be void and static
+		// must be void and static;  invoked by D.SetVehicle()
 		internal static async void FetchCarData(
 			SimData SD,
 			string id,
@@ -407,7 +515,7 @@ namespace sierses.SimHap
 					// before NEXT CarId change.  Consequently, call it with FailedId = id
 					FailedId = id;
 					FailedCategory = "";
-					SD.SetVehiclePerGame(PM, ref Gdat.NewData, null);
+					SD.SetVehicle(PM, ref Gdat.NewData, null);
 				}
 				else
 				{
@@ -429,123 +537,10 @@ namespace sierses.SimHap
 				LoadFailCount = 0;
 				FetchStatus = APIStatus.Retry;
 			}
-		}
-
-		public void End(PluginManager pluginManager)
-		{
-			string sjs = JsonConvert.SerializeObject(LD.InternalDictionary, Formatting.Indented);
-			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHap.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
-			else File.WriteAllText(myfile, sjs);
-/*
-			sjs = JsonConvert.SerializeObject(S, Formatting.Indented);
-			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHap.End(): Spec Json Serializer failure");
-			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".Spec.json", sjs);
-*/
-			// removed many default values from per-game dictionaries
-			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
-				Settings.EngineMult.Remove("AllGames");
-			if (Settings.EngineMult.TryGetValue(GameDBText, out double _))
-			{
-				if (D.EngineMult == 1.0)
-					Settings.EngineMult.Remove(GameDBText);
-				else Settings.EngineMult[GameDBText] = D.EngineMult;
-			}
-			else if (D.EngineMult != 1.0)
-				Settings.EngineMult.Add(GameDBText, D.EngineMult);
-			if (Settings.RumbleMult.TryGetValue(GameDBText, out double _))
-			{
-				if (D.RumbleMult == 1.0)
-					Settings.RumbleMult.Remove(GameDBText);
-				else Settings.RumbleMult[GameDBText] = D.RumbleMult;
-			}
-			else if (D.RumbleMult != 1.0)
-				Settings.RumbleMult.Add(GameDBText, D.RumbleMult);
-			if (Settings.SuspensionMult.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SuspensionMult == 1.0)
-					Settings.SuspensionMult.Remove(GameDBText);
-				else Settings.SuspensionMult[GameDBText] = D.SuspensionMult;
-			}
-			else if (D.SuspensionMult != 1.0)
-				Settings.SuspensionMult.Add(GameDBText, D.SuspensionMult);
-			if (Settings.SuspensionGamma.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SuspensionGamma == 1.0)
-					Settings.SuspensionGamma.Remove(GameDBText);
-				else Settings.SuspensionGamma[GameDBText] = D.SuspensionGamma;
-			}
-			else if (D.SuspensionGamma != 1.0)
-				Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
-			if (Settings.SlipXMult.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SlipXMult == 1.0)
-					Settings.SlipXMult.Remove(GameDBText);
-				else Settings.SlipXMult[GameDBText] = D.SlipXMult;
-			}
-			else if (D.SlipXMult != 1.0)
-				Settings.SlipXMult.Add(GameDBText, D.SlipXMult);
-			if (Settings.SlipYMult.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SlipYMult == 1.0)
-					Settings.SlipYMult.Remove(GameDBText);
-				else Settings.SlipYMult[GameDBText] = D.SlipYMult;
-			}
-			else if (D.SlipYMult != 1.0)
-				Settings.SlipYMult.Add(GameDBText, D.SlipYMult);
-			if (Settings.SlipXGamma.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SlipXGamma == 1.0)
-					Settings.SlipXGamma.Remove(GameDBText);
-				else Settings.SlipXGamma[GameDBText] = D.SlipXGamma;
-			}
-			else if (D.SlipXGamma != 1.0)
-				Settings.SlipXGamma.Add(GameDBText, D.SlipXGamma);
-			if (Settings.SlipYGamma.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SlipYGamma == 1.0)
-					Settings.SlipYGamma.Remove(GameDBText);
-				else Settings.SlipYGamma[GameDBText] = D.SlipYGamma;
-			}
-			else if (D.SlipYGamma != 1.0)
-				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
-
-			// unconditionally save some
-			Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
-			Settings.SuspensionGamma["AllGames"] = D.SuspensionGammaAll;
-			Settings.SuspensionMult["AllGames"] = D.SuspensionMultAll;
-			Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
-			Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
-			Settings.Motion["MotionPitchOffset"] = D.MotionPitchOffset;
-			Settings.Motion["MotionPitchMult"] = D.MotionPitchMult;
-			Settings.Motion["MotionPitchGamma"] = D.MotionPitchGamma;
-			Settings.Motion["MotionRollOffset"] = D.MotionRollOffset;
-			Settings.Motion["MotionRollMult"] = D.MotionRollMult;
-			Settings.Motion["MotionRollGamma"] = D.MotionRollGamma;
-			Settings.Motion["MotionYawOffset"] = D.MotionYawOffset;
-			Settings.Motion["MotionYawMult"] = D.MotionYawMult;
-			Settings.Motion["MotionYawGamma"] = D.MotionYawGamma;
-			Settings.Motion["MotionHeaveOffset"] = D.MotionHeaveOffset;
-			Settings.Motion["MotionHeaveMult"] = D.MotionHeaveMult;
-			Settings.Motion["MotionHeaveGamma"] = D.MotionHeaveGamma;
-			Settings.Motion["MotionSurgeOffset"] = D.MotionSurgeOffset;
-			Settings.Motion["MotionSurgeMult"] = D.MotionSurgeMult;
-			Settings.Motion["MotionSurgeGamma"] = D.MotionSurgeGamma;
-			Settings.Motion["MotionSwayOffset"] = D.MotionSwayOffset;
-			Settings.Motion["MotionSwayMult"] = D.MotionSwayMult;
-			Settings.Motion["MotionSwayGamma"] = D.MotionSwayGamma;
-			IPluginExtensions.SaveCommonSettings(this, "Settings", Settings);
-		}
-
-		public Control GetWPFSettingsControl(PluginManager pluginManager)
-		{
-			return new SettingsControl(this);
-		}
+		}		// FetchCarData()
 
 		public void Init(PluginManager pluginManager)
 		{
-			SimHubVersion = (string) pluginManager.GetPropertyValue("DataCorePlugin.SimHubVersion");
 			LoadFailCount = 0;
 			Changed = LoadFinish = false;
 			LoadStatus = DataStatus.None;
