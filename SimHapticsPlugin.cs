@@ -97,7 +97,7 @@ namespace sierses.SimHap
 			};
 		}		*/
 
-		public string LeftMenuTitle => "SimHaptics";
+		public string LeftMenuTitle => "SimHap";
 
 		internal void SetDefaultVehicle(ref StatusDataBase db)
 		{
@@ -363,7 +363,7 @@ namespace sierses.SimHap
 			v.Displacement = 		dljc.cc;
 			v.MaxTorque = 			dljc.nm;
 
-			Logging.Current.Info("SimHapticsPlugin: Successfully loaded " + v.Name);
+			Logging.Current.Info("SimHap: Successfully loaded " + v.Name);
 //			File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
 //						 			JsonConvert.SerializeObject(dljc, Formatting.Indented));
 //			File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
@@ -395,7 +395,7 @@ namespace sierses.SimHap
 				gameMaxRPM = Convert.ToUInt16(0.5 + doubleMaxRPM);
 				FetchStatus = APIStatus.Waiting;
 				LoadFinish = false;
-				Logging.Current.Info("SimHapticsPlugin: Loading " + category + " " + id);
+				Logging.Current.Info("SimHap: Loading " + category + " " + id);
 				id ??= "0";
 				category ??= "0";
 				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
@@ -422,7 +422,7 @@ namespace sierses.SimHap
 				}
 				else
 				{
-					Logging.Current.Info("SimHapticsPlugin: Failed to load " + id + " : " + category);
+					Logging.Current.Info("SimHap: Failed to load " + id + " : " + category);
 					++LoadFailCount;
 					if (LoadFailCount > 3)
 					{
@@ -436,7 +436,7 @@ namespace sierses.SimHap
 			}
 			catch (HttpRequestException ex)
 			{
-				Logging.Current.Error("SimHapticsPlugin: " + ex.Message);
+				Logging.Current.Error("SimHap: " + ex.Message);
 				LoadFailCount = 0;
 				FetchStatus = APIStatus.Retry;
 			}
@@ -446,12 +446,12 @@ namespace sierses.SimHap
 		{
 			string sjs = JsonConvert.SerializeObject(LD.InternalDictionary, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHapticsPlugin.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
+				Logging.Current.Info("SimHap.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
 			else File.WriteAllText(myfile, sjs);
 /*
 			sjs = JsonConvert.SerializeObject(S, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHapticsPlugin.End(): Spec Json Serializer failure");
+				Logging.Current.Info("SimHap.End(): Spec Json Serializer failure");
 			else File.WriteAllText("PluginsData/"+S.Name+"."+S.Game+".Spec.json", sjs);
 */
 			// removed many default values from per-game dictionaries
@@ -607,10 +607,10 @@ namespace sierses.SimHap
 			{
 				LD.InternalDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<Download>>>(File.ReadAllText(myfile));
 				if (null != LD.InternalDictionary)
-					Logging.Current.Info($"SimHaptic.Init():  {LD.InternalDictionary.Count} games in " + myfile);
-				else Logging.Current.Info("SimHaptic.Init(): "+myfile+" load failure");
+					Logging.Current.Info($"SimHap.Init():  {LD.InternalDictionary.Count} games in " + myfile);
+				else Logging.Current.Info("SimHap.Init(): "+myfile+" load failure");
 			}
-			else Logging.Current.Info("SimHaptic.Init():  "+myfile+" not found"); 
+			else Logging.Current.Info("SimHap.Init():  "+myfile+" not found"); 
 			D.Init(Settings);
 			IPluginExtensions.AttachDelegate(this, "CarName", () => S.Name);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);
