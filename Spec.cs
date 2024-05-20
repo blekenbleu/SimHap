@@ -99,64 +99,33 @@ namespace sierses.SimHap
 		{
 		}
 
-		private string game;
-		private string name;
-		private string id;
-		private string category;
-		private ushort redline;
-		private ushort maxRPM;
-		private ushort idleRPM;
-		private string engineConfiguration;
-		private ushort engineCylinders;
-		private string engineLocation;
-		private string poweredWheels;
-		private ushort maxPower;
-		private ushort electricMaxPower;
-		private ushort displacement;
-		private ushort maxTorque;
+		private Download car { get; set; }
 
-		public Spec(Spec s) : this()
+		public Spec(Spec s)
 		{
-			Game = s.game;
-			Name = s.name;
-			Id = s.id;
-			Category = s.category;
-			Redline = s.redline;
-			MaxRPM = s.maxRPM;
-			IdleRPM = s.idleRPM;
-			EngineConfiguration = s.engineConfiguration;
-			EngineCylinders = s.engineCylinders;
-			EngineLocation = s.engineLocation;
-			PoweredWheels = s.poweredWheels;
-			MaxPower = s.maxPower;
-			ElectricMaxPower = s.electricMaxPower;
-			Displacement = s.displacement;
-			MaxTorque = s.maxTorque;
+			Import(s.car);
 		}
 
-		internal Spec Import(Download d)
+		internal void Import(Download d)
 		{
-			return new()
-			{
-				Game = d.game,
-				Name = d.name,
-				Id = d.id,
-				Category = d.category,
-				Redline = d.redline,
-				MaxRPM = d.maxrpm,
-				IdleRPM = d.idlerpm,
-				EngineConfiguration = d.config,
-				EngineCylinders = d.cyl,
-				EngineLocation = d.loc,
-				PoweredWheels = d.drive,
-				MaxPower = d.hp,
-				ElectricMaxPower = d.ehp,
-				Displacement = d.cc,
-				MaxTorque = d.nm,
-			};
+			Game = d.game;
+			Name = d.name;
+			Id = d.id;
+			Category = d.category;
+			Redline = d.redline;
+			MaxRPM = d.maxrpm;
+			IdleRPM = d.idlerpm;
+			EngineConfiguration = d.config;
+			EngineCylinders = d.cyl;
+			EngineLocation = d.loc;
+			PoweredWheels = d.drive;
+			MaxPower = d.hp;
+			ElectricMaxPower = d.ehp;
+			Displacement = d.cc;
+			MaxTorque = d.nm;
 		}
 
-		internal string Default(string game, StatusDataBase db, GameId CurrentGame)	
+		internal string Defaults(string game, StatusDataBase db, GameId CurrentGame)	
 		{
 			string StatusText;
 
@@ -267,114 +236,95 @@ namespace sierses.SimHap
 			return StatusText;
 		}
 
-		internal Download Car => new()
-		{
-			cc = this.displacement,
-			nm = this.maxTorque,
-			ehp = this.electricMaxPower,
-			hp = this.maxPower,
-			drive = this.poweredWheels,
-			config = this.engineConfiguration,
-			cyl = this.engineCylinders,
-			loc = this.engineLocation,
-			maxrpm = this.maxRPM,
-			idlerpm = this.idleRPM,
-			redline = this.redline,
-			category = this.category,
-			name = this.name,
-			id = this.id,
-			game = this.game
-		};
-
-		internal Download Emit() => Car;
+		internal Download Car { get => this.car; }
 
 		public string Game
 		{
-			get => this.game;
-			set { SetField(ref this.game, value, nameof(Game)); }
+			get => this.car.game;
+			set { SetField(ref this.car.game, value, nameof(Game)); }
 		}
 
 		public string Name
 		{
-			get => this.name;
-			set { SetField(ref this.name, value, nameof(Name)); }
+			get => this.car.name;
+			set { SetField(ref this.car.name, value, nameof(Name)); }
 		}
 
 		public string Id
 		{
-			get => this.id;
-			set { SetField(ref this.id, value, nameof(Id)); }
+			get => this.car.id;
+			set { SetField(ref this.car.id, value, nameof(Id)); }
 		}
 
 		public string Category
 		{
-			get => this.category;
-			set { SetField(ref this.category, value, nameof(Category)); }
+			get => this.car.category;
+			set { SetField(ref this.car.category, value, nameof(Category)); }
 		}
 
 		public ushort Redline
 		{
-			get => this.redline;
-			set { SetField(ref this.redline, value, nameof(Redline)); }
+			get => this.car.redline;
+			set { SetField(ref this.car.redline, value, nameof(Redline)); }
 		}
 	
 		public ushort MaxRPM
 		{
-			get => this.maxRPM;
-			set { SetField(ref this.maxRPM, value, nameof(MaxRPM)); }
+			get => this.car.maxrpm;
+			set { SetField(ref this.car.maxrpm, value, nameof(MaxRPM)); }
 		}
 		public ushort IdleRPM
 		{
-			get => this.idleRPM;
-			set { SetField(ref this.idleRPM, value, nameof(IdleRPM)); }
+			get => this.car.idlerpm;
+			set { SetField(ref this.car.idlerpm, value, nameof(IdleRPM)); }
 		}
 
 		public string EngineConfiguration
 		{
-			get => this.engineConfiguration;
-			set { SetField(ref this.engineConfiguration, value, nameof(EngineConfiguration)); }
+			get => this.car.config;
+			set { SetField(ref this.car.config, value, nameof(EngineConfiguration)); }
 		}
 	
 		public ushort EngineCylinders
 		{
-			get => this.engineCylinders;
-			set { SetField(ref this.engineCylinders, value, nameof(EngineCylinders)); }
+			get => this.car.cyl;
+			set { SetField(ref this.car.cyl, value, nameof(EngineCylinders)); }
 		}
 
 		public string EngineLocation
 		{
-			get => this.engineLocation;
-			set { SetField(ref this.engineLocation, value, nameof(EngineLocation)); }
+			get => this.car.loc;
+			set { SetField(ref this.car.loc, value, nameof(EngineLocation)); }
 		}
 
 		public string PoweredWheels
 		{
-			get => this.poweredWheels;
-			set { SetField(ref this.poweredWheels, value, nameof(PoweredWheels)); }
+			get => this.car.drive;
+			set { SetField(ref this.car.drive, value, nameof(PoweredWheels)); }
 		}
 
 		public ushort MaxPower
 		{
-			get => this.maxPower;
-			set { SetField(ref this.maxPower, value, nameof(MaxPower)); }
+			get => this.car.hp;
+			set { SetField(ref this.car.hp, value, nameof(MaxPower)); }
 		}
 	
 		public ushort ElectricMaxPower
 		{
-			get => this.electricMaxPower;
-			set { SetField(ref this.electricMaxPower, value, nameof(ElectricMaxPower)); }
+			get => this.car.ehp;
+			set { SetField(ref this.car.ehp, value, nameof(ElectricMaxPower)); }
 		}
 	
 		public ushort Displacement
 		{
-			get => this.displacement;
-			set { SetField(ref this.displacement, value, nameof(Displacement)); }
+			get => this.car.cc;
+			set { SetField(ref this.car.cc, value, nameof(Displacement)); }
 		}
 	
 		public ushort MaxTorque
 		{
-			get => this.maxTorque;
-			set { SetField(ref this.maxTorque, value, nameof(MaxTorque)); }
+			get => this.car.nm;
+			set { SetField(ref this.car.nm, value, nameof(MaxTorque)); }
 		}
 	}
 }
