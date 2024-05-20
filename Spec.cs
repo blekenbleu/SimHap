@@ -3,10 +3,8 @@
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 
 using GameReaderCommon;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
 namespace sierses.SimHap
 {
@@ -36,33 +34,44 @@ namespace sierses.SimHap
 
 	public class ListDictionary : NotifyPropertyChanged
 	{
-		private Dictionary<string, List<Download>> internalDictionary = new();
+		private Dictionary<string, List<Download>> internalDictionary;
 
-		public bool Add(Download value)
+		public bool Add(Spec s)
 		{
-			if (null == value || null == value.game || null == value.id || 0 == value.game.Length || 0 == value.id.Length)
+			int Index;
+
+			if (null == s)
 				return false;
-			if (this.internalDictionary.ContainsKey(value.game))
+
+			Download car = s.Internal_Car;
+			if (null == car || null == car.game || null == car.id || 0 == car.game.Length || 0 == car.id.Length)
+				return false;
+
+			if (null == internalDictionary)
+				internalDictionary = new();
+			if (internalDictionary.ContainsKey(car.game))
 			{
-				int Index = this.internalDictionary[value.game].FindIndex(x => x.id == value.id);
+				Index = internalDictionary[car.game].FindIndex(x => x.id == car.id);
 				if (0 <= Index)
-					this.internalDictionary[value.game][Index] = value;
-				else this.internalDictionary[value.game].Add(value);
+					internalDictionary[car.game][Index] = car;
+
+				else
+					internalDictionary[car.game].Add(car);
 			}
-			else this.internalDictionary.Add(value.game, new() { value });
+			else internalDictionary.Add(car.game, new List<Download> { car });
 			return true;
 		}
 
 		public Dictionary<string, List<Download>> InternalDictionary
 		{
-			get => this.internalDictionary;
-			set { SetField(ref this.internalDictionary, value, nameof(InternalDictionary)); }
+			get => internalDictionary;
+			set { SetField(ref internalDictionary, value, nameof(InternalDictionary)); }
 		}
 
 		public List<Download> Extract(string game)
 		{
 			if (!internalDictionary.ContainsKey(game))
-				internalDictionary.Add(game, new() {});
+				return null;
 			return internalDictionary[game];
 		}
 	}
@@ -97,14 +106,14 @@ namespace sierses.SimHap
 	{
 		public Spec()
 		{
-			car = new();
+			Internal_Car = new();
 		}
 
-		private Download car { get; set; }
+		internal Download Internal_Car { get; set; }
 
 		public Spec(Spec s)
 		{
-			Import(s.car);
+			Import(s.Internal_Car);
 		}
 
 		internal void Import(Download d)
@@ -128,7 +137,7 @@ namespace sierses.SimHap
 
 		internal string Defaults(string game, StatusDataBase db, GameId CurrentGame)	
 		{
-			string StatusText = "";
+			string StatusText;
 
 			if (null != game)
 				Game = game;
@@ -239,95 +248,95 @@ namespace sierses.SimHap
 			return StatusText;
 		}
 
-		internal Download Car { get => this.car; }
+		internal Download Car { get => Internal_Car; }
 
 		public string Game
 		{
-			get => this.car.game;
-			set { SetField(ref this.car.game, value, nameof(Game)); }
+			get => Internal_Car.game;
+			set { SetField(ref Internal_Car.game, value, nameof(Game)); }
 		}
 
 		public string Name
 		{
-			get => this.car.name;
-			set { SetField(ref this.car.name, value, nameof(Name)); }
+			get => Internal_Car.name;
+			set { SetField(ref Internal_Car.name, value, nameof(Name)); }
 		}
 
 		public string Id
 		{
-			get => this.car.id;
-			set { SetField(ref this.car.id, value, nameof(Id)); }
+			get => Internal_Car.id;
+			set { SetField(ref Internal_Car.id, value, nameof(Id)); }
 		}
 
 		public string Category
 		{
-			get => this.car.category;
-			set { SetField(ref this.car.category, value, nameof(Category)); }
+			get => Internal_Car.category;
+			set { SetField(ref Internal_Car.category, value, nameof(Category)); }
 		}
 
 		public ushort Redline
 		{
-			get => this.car.redline;
-			set { SetField(ref this.car.redline, value, nameof(Redline)); }
+			get => Internal_Car.redline;
+			set { SetField(ref Internal_Car.redline, value, nameof(Redline)); }
 		}
 	
 		public ushort MaxRPM
 		{
-			get => this.car.maxrpm;
-			set { SetField(ref this.car.maxrpm, value, nameof(MaxRPM)); }
+			get => Internal_Car.maxrpm;
+			set { SetField(ref Internal_Car.maxrpm, value, nameof(MaxRPM)); }
 		}
 		public ushort IdleRPM
 		{
-			get => this.car.idlerpm;
-			set { SetField(ref this.car.idlerpm, value, nameof(IdleRPM)); }
+			get => Internal_Car.idlerpm;
+			set { SetField(ref Internal_Car.idlerpm, value, nameof(IdleRPM)); }
 		}
 
 		public string EngineConfiguration
 		{
-			get => this.car.config;
-			set { SetField(ref this.car.config, value, nameof(EngineConfiguration)); }
+			get => Internal_Car.config;
+			set { SetField(ref Internal_Car.config, value, nameof(EngineConfiguration)); }
 		}
 	
 		public ushort EngineCylinders
 		{
-			get => this.car.cyl;
-			set { SetField(ref this.car.cyl, value, nameof(EngineCylinders)); }
+			get => Internal_Car.cyl;
+			set { SetField(ref Internal_Car.cyl, value, nameof(EngineCylinders)); }
 		}
 
 		public string EngineLocation
 		{
-			get => this.car.loc;
-			set { SetField(ref this.car.loc, value, nameof(EngineLocation)); }
+			get => Internal_Car.loc;
+			set { SetField(ref Internal_Car.loc, value, nameof(EngineLocation)); }
 		}
 
 		public string PoweredWheels
 		{
-			get => this.car.drive;
-			set { SetField(ref this.car.drive, value, nameof(PoweredWheels)); }
+			get => Internal_Car.drive;
+			set { SetField(ref Internal_Car.drive, value, nameof(PoweredWheels)); }
 		}
 
 		public ushort MaxPower
 		{
-			get => this.car.hp;
-			set { SetField(ref this.car.hp, value, nameof(MaxPower)); }
+			get => Internal_Car.hp;
+			set { SetField(ref Internal_Car.hp, value, nameof(MaxPower)); }
 		}
 	
 		public ushort ElectricMaxPower
 		{
-			get => this.car.ehp;
-			set { SetField(ref this.car.ehp, value, nameof(ElectricMaxPower)); }
+			get => Internal_Car.ehp;
+			set { SetField(ref Internal_Car.ehp, value, nameof(ElectricMaxPower)); }
 		}
 	
 		public ushort Displacement
 		{
-			get => this.car.cc;
-			set { SetField(ref this.car.cc, value, nameof(Displacement)); }
+			get => Internal_Car.cc;
+			set { SetField(ref Internal_Car.cc, value, nameof(Displacement)); }
 		}
 	
 		public ushort MaxTorque
 		{
-			get => this.car.nm;
-			set { SetField(ref this.car.nm, value, nameof(MaxTorque)); }
+			get => Internal_Car.nm;
+			set { SetField(ref Internal_Car.nm, value, nameof(MaxTorque)); }
 		}
 	}
 }
