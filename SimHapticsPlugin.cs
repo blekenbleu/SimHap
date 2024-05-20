@@ -95,7 +95,8 @@ namespace sierses.SimHap
 				new string[] { "id", data.id },
 				new string[] { "game", data.game }
 			};
-		}		*/
+		}
+ */
 
 		public string LeftMenuTitle => "SimHap";
 
@@ -109,7 +110,7 @@ namespace sierses.SimHap
 				return;
 			}
 
-			string status = S.Default(GameDBText, db, CurrentGame);
+			string status = S.Defaults(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
 				D.LoadStatusText = status;
 			if (0 == S.Redline)
@@ -121,15 +122,6 @@ namespace sierses.SimHap
 			LoadStatus = DataStatus.GameData;
 			if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
 				S.Id = db.CarModel;
-		}
-
-		long Ticks()	// presumably intended to delay between server hits
-		{
-			FrameCountTicks = FrameCountTicks + DateTime.Now.Ticks - FrameTimeTicks;
-			FrameTimeTicks = DateTime.Now.Ticks;
-			if (FrameCountTicks > 864000000000L)
-				FrameCountTicks = 0L;
-			return FrameCountTicks;		
 		}
 
 		/// <summary>
@@ -151,7 +143,7 @@ namespace sierses.SimHap
 			if (S.Id == data.NewData.CarId)
 			{
 				if (data.GameRunning && null != data.OldData)
-					D.Refresh(ref data, pluginManager, this, Ticks());
+					D.Refresh(ref data, pluginManager, this);
 			}
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 				D.SetVehiclePerGame(pluginManager, ref data.NewData, this);
@@ -344,30 +336,26 @@ namespace sierses.SimHap
 
 		// reuse this for json input
 		static ushort gameRedline, gameMaxRPM;
-		static bool Set_v (Spec v, Download dljc)
+		static bool Set_v (Spec v, Download data)
 		{
-			if (null == dljc.name || null == dljc.id)
+			if (null == data.name || null == data.id)
 				return false;
-			v.Game = GameDBText;
-			v.Id = (CurrentGame == GameId.Forza) ? "Car_" + dljc.id : dljc.id;
-			v.Category = 			dljc.category;
-			v.Name = 				dljc.name;
-			v.EngineLocation = 		dljc.loc;
-			v.PoweredWheels = 		dljc.drive;
-			v.EngineConfiguration = dljc.config;
-			v.EngineCylinders = 	dljc.cyl;
-			v.Redline  = 0 == dljc.redline ? gameRedline : dljc.redline;
-			v.MaxRPM   = 0 == dljc.maxrpm  ? gameMaxRPM  : dljc.maxrpm;
-			v.MaxPower = 0 == dljc.hp 	   ? Convert.ToUInt16(333) : dljc.hp;
-			v.ElectricMaxPower = 	dljc.ehp;
-			v.Displacement = 		dljc.cc;
-			v.MaxTorque = 			dljc.nm;
 
-			Logging.Current.Info("SimHap: Successfully loaded " + v.Name);
-//			File.WriteAllText("PluginsData/" + v.Name + "." + v.Game + ".Converted.json",
-//						 			JsonConvert.SerializeObject(dljc, Formatting.Indented));
-//			File.WriteAllText("PluginsData/"+v.Name+"."+v.Game+".jobject.json",
-//									JsonConvert.SerializeObject(jobject, Formatting.Indented));
+			v.Game = GameDBText;
+			v.Id = CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;
+			v.Redline  =	 0 == data.redline ? gameRedline 	: data.redline;
+			v.MaxRPM   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
+			v.MaxPower =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
+			v.Category = 			data.category;
+			v.Name = 				data.name;
+			v.EngineLocation = 		data.loc;
+			v.PoweredWheels = 		data.drive;
+			v.EngineConfiguration = data.config;
+			v.EngineCylinders = 	data.cyl;
+			v.ElectricMaxPower = 	data.ehp;
+			v.Displacement = 		data.cc;
+			v.MaxTorque = 			data.nm;
+
 			return true;
 		}
 
@@ -411,6 +399,7 @@ namespace sierses.SimHap
 				if (null != dljc && null != dljc.data && 0 < dljc.data.Length
 					&& Set_v(v, dljc.data[0]))
 				{
+					Logging.Current.Info("SimHap: Successfully loaded " + v.Name);
 					FetchStatus = APIStatus.Success;
 					LoadFinish = false;
 					LoadFailCount = 0;
