@@ -58,6 +58,13 @@ namespace sierses.SimHap
 			get => this.internalDictionary;
 			set { SetField(ref this.internalDictionary, value, nameof(InternalDictionary)); }
 		}
+
+		public List<Download> Extract(string game)
+		{
+			if (!internalDictionary.ContainsKey(game))
+				internalDictionary.Add(game, new() {});
+			return internalDictionary[game];
+		}
 	}
 
 	public class Download
@@ -127,7 +134,29 @@ namespace sierses.SimHap
 			MaxTorque = s.maxTorque;
 		}
 
-		internal string Load(string game, StatusDataBase db, GameId CurrentGame)	
+		internal Spec Import(Download d)
+		{
+			return new()
+			{
+				Game = d.game,
+				Name = d.name,
+				Id = d.id,
+				Category = d.category,
+				Redline = d.redline,
+				MaxRPM = d.maxrpm,
+				IdleRPM = d.idlerpm,
+				EngineConfiguration = d.config,
+				EngineCylinders = d.cyl,
+				EngineLocation = d.loc,
+				PoweredWheels = d.drive,
+				MaxPower = d.hp,
+				ElectricMaxPower = d.ehp,
+				Displacement = d.cc,
+				MaxTorque = d.nm,
+			};
+		}
+
+		internal string Default(string game, StatusDataBase db, GameId CurrentGame)	
 		{
 			string StatusText;
 

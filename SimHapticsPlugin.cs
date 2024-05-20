@@ -38,6 +38,7 @@ namespace sierses.SimHap
 		public static string FailedId = "";
 		public static string FailedCategory = "";
 		private static readonly HttpClient client = new();
+		private string myfile = "PluginsData/blekenbleu.Download.SimHap.json";
 
 		public Spec S { get; set; }
 
@@ -108,7 +109,7 @@ namespace sierses.SimHap
 				return;
 			}
 
-			string status = S.Load(GameDBText, db, CurrentGame);
+			string status = S.Default(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
 				D.LoadStatusText = status;
 			if (0 == S.Redline)
@@ -130,6 +131,7 @@ namespace sierses.SimHap
 				FrameCountTicks = 0L;
 			return FrameCountTicks;		
 		}
+
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data,
 		/// raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
@@ -153,7 +155,6 @@ namespace sierses.SimHap
 			}
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 				D.SetVehiclePerGame(pluginManager, ref data.NewData, this);
-
 		}
 
 		public void SetGame(PluginManager pm)
@@ -446,7 +447,7 @@ namespace sierses.SimHap
 			string sjs = JsonConvert.SerializeObject(LD.InternalDictionary, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
 				Logging.Current.Info("SimHapticsPlugin.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
-			else File.WriteAllText("PluginsData/blekenbleu.Download.SimHap.json", sjs);
+			else File.WriteAllText(myfile, sjs);
 /*
 			sjs = JsonConvert.SerializeObject(S, Formatting.Indented);
 			if (0 == sjs.Length || "{}" == sjs)
@@ -602,6 +603,14 @@ namespace sierses.SimHap
 				Settings.SlipYGamma.Add("AllGames", 1.0);
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
+			if (File.Exists(myfile))
+			{
+				LD.InternalDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<Download>>>(File.ReadAllText(myfile));
+				if (null != LD.InternalDictionary)
+					Logging.Current.Info($"SimHaptic.Init():  {LD.InternalDictionary.Count} games in " + myfile);
+				else Logging.Current.Info("SimHaptic.Init(): "+myfile+" load failure");
+			}
+			else Logging.Current.Info("SimHaptic.Init():  "+myfile+" not found"); 
 			D.Init(Settings);
 			IPluginExtensions.AttachDelegate(this, "CarName", () => S.Name);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);

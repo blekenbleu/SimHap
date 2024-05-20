@@ -556,19 +556,19 @@ namespace sierses.SimHap
 		static GameData data;
 		private float Data(string prop)
 		{
-            var foo = PM.GetPropertyValue("DataCorePlugin.GameRawData.Data."+prop);
-            if (foo != null)
-                return Convert.ToSingle(foo);
-            return 0;
-        }
+			var foo = PM.GetPropertyValue("DataCorePlugin.GameRawData.Data."+prop);
+			if (foo != null)
+				return Convert.ToSingle(foo);
+			return 0;
+		}
 
 		private float Physics(string prop)
 		{
-            var foo = PM.GetPropertyValue("DataCorePlugin.GameRawData.Physics."+prop);
-            if (foo != null)
-                return Convert.ToSingle(foo);
-            return 0;
-        }
+			var foo = PM.GetPropertyValue("DataCorePlugin.GameRawData.Physics."+prop);
+			if (foo != null)
+				return Convert.ToSingle(foo);
+			return 0;
+		}
 
 		private float Raw(string prop)
 		{
@@ -576,7 +576,7 @@ namespace sierses.SimHap
 			if (foo != null)
 				return Convert.ToSingle(foo);
 			return 0;
-        }
+		}
 
 		private void UpdateVehiclePerGame(PluginManager pluginManager, ref GameData Gdat)
 		{
@@ -1389,7 +1389,11 @@ namespace sierses.SimHap
 		{
 			if (null != shp)	// null when called by FetchCarData()
 				SHP = shp;
-			switch (SimHapticsPlugin.CurrentGame)
+			string cid = db.CarId;
+			var foo = SHP.LD.Extract(db.CarId);
+			int Index = foo.FindIndex(x => x.id == cid);
+			if (0 > Index)
+				switch (SimHapticsPlugin.CurrentGame)
 			{
 				case GameId.AC:
 					if (SimHapticsPlugin.FailedId != db.CarId)
@@ -1450,9 +1454,9 @@ namespace sierses.SimHap
 					GameAltText = pluginManager.GameName + (string) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 					if (0 == SHP.S.IdleRPM)
 					{
-						var foo = pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
-						if (null != foo)
-								SHP.S.IdleRPM = Convert.ToUInt16(foo);
+						var rpm = pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
+						if (null != rpm)
+								SHP.S.IdleRPM = Convert.ToUInt16(rpm);
 					}
 					break;
 				case GameId.PC2:
@@ -1517,13 +1521,16 @@ namespace sierses.SimHap
 			{
 				if (SimHapticsPlugin.FetchStatus == APIStatus.Success)
 				{
+					if (0 <= Index)
+						SHP.S = SHP.S.Import(foo[Index]);
+					else SimHapticsPlugin.Changed = true;
 					SHP.Settings.Vehicle = new Spec(SHP.S);
 					SimHapticsPlugin.LoadStatus = DataStatus.SimHapticsAPI;
 					LoadStatusText = "DB Load Success";
 					SimHapticsPlugin.FailedId = "";
 				}
 				else SHP.SetDefaultVehicle(ref db); // sets LoadStatusText
-                FinalizeVehicleLoad();				// sets LoadFinish = true
+				FinalizeVehicleLoad();				// sets LoadFinish = true
 			}
 
 			SHP.LD.Add(SHP.S.Emit());
@@ -2128,8 +2135,8 @@ namespace sierses.SimHap
 			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
 			EngineLoad *= data.NewData.Throttle * 0.01 * 0.01;
 
-            if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/
-                if (data.NewData.Rpms > 300)
+			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/
+				if (data.NewData.Rpms > 300)
 					if (data.NewData.Rpms <= idleRPM * 1.1)
 			{
 				double num19 = Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS;

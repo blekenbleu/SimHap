@@ -27,6 +27,10 @@
 	- `SetVehiclePerGame()` based on time
 		- better done by event...
 		- calls `FetchCarData()`
+			- `async await` caused `FetchCarData()`  
+				to *not return* during the same invocation,   
+				so modified it to *recall its invoking method*  
+				for completion in that invocation.   
 		- may call SetDefaultVehicle(), which calls Spec Init()
 	- update physics:
 		- Yaw, YawRate, YawRateAvg
@@ -50,4 +54,16 @@
 		- Only one set of Motion properties, all in a single Dictionary
 		- Suspension and Traction have per-game dictionaries
 	- Engine specs are downloaded
-	
+
+### changes
+- consolidate `SimData` methods in that source file
+- likewise for `Spec`
+- created a `ListDictionary` class for download server compatibility
+- began writing (and eventually reading) local json to preserve changed values
+- reworked `IdleRPM` handling
+
+### to do
+- writing json when values change
+- performance improvements and code simplifications
+- share `Download` class between `Spec` and `SimData`  
+	 to save storage and eliminate copying
