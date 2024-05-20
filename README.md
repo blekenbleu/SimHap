@@ -24,7 +24,7 @@
 - [Dictionary](https://stackoverflow.com/questions/4245064/method-to-add-new-or-update-existing-item-in-c-sharp-dictionary)
 ### How it works
 - with game running: `DataUpdate()`
-	- `SetVehiclePerGame()` based on time
+	- `SetVehicle()` based on time
 		- better done by event...
 		- calls `FetchCarData()`
 			- `async await` caused `FetchCarData()`  

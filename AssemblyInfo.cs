@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 //[assembly: Extension]
@@ -13,5 +12,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("5F884FC9-8DE6-4931-98E8-C3A038B8D260")]
 // appears on Engine page
-[assembly: AssemblyFileVersion("6.1.2.0")]
+[assembly: AssemblyFileVersion("6.1.2.1")]
 [assembly: AssemblyVersion("1.0.0.0")]

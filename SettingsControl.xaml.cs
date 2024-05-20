@@ -2,15 +2,8 @@
 // Type: sierses.SimHap.SettingsControl
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 
-using SimHub.Plugins.Styles;
-using System;
-using System.CodeDom.Compiler;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Markup;
 
 namespace sierses.SimHap
 {
@@ -24,7 +17,7 @@ namespace sierses.SimHap
 		{
 			this.Plugin = plugin;
 			this.DataContext = (object) this.Plugin;
-			this.Version.Text = SimHapticsPlugin.PluginVersion;
+			this.Version.Text = Plugin.PluginVersion;
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
