@@ -97,6 +97,7 @@ namespace sierses.SimHap
 	{
 		public Spec()
 		{
+			car = new();
 		}
 
 		private Download car { get; set; }
@@ -127,9 +128,11 @@ namespace sierses.SimHap
 
 		internal string Defaults(string game, StatusDataBase db, GameId CurrentGame)	
 		{
-			string StatusText;
+			string StatusText = "";
 
-			Game = game;
+			if (null != game)
+				Game = game;
+			else return "SimHap.Spec.Defaults():  null game";
 			Name = db.CarModel;
 			Id = db.CarId;
 			Category = db.CarClass;

@@ -243,6 +243,8 @@ namespace sierses.SimHap
 		public double SuspensionRumbleMultR3;
 		public double SuspensionRumbleMultR4;
 		public double SuspensionRumbleMultR5;
+		private long FrameTimeTicks;
+		private long FrameCountTicks;
 		private string gameAltText;
 		private string loadStatusText;
 		private string lockedText;
@@ -291,6 +293,8 @@ namespace sierses.SimHap
 			Downshift = false;
 			Upshift = false;
 			CarInitCount = 0;
+			ShiftTicks = FrameTimeTicks = DateTime.Now.Ticks;
+			FrameCountTicks = 0;
 			IdleSampleCount = 0;
 			RumbleFromPlugin = false;
 			SuspensionDistFLP = 0.0;
@@ -1390,10 +1394,11 @@ namespace sierses.SimHap
 			if (null != shp)	// null when called by FetchCarData()
 				SHP = shp;
 			string cid = db.CarId;
-			var foo = SHP.LD.Extract(db.CarId);
+			var foo = SHP.LD.Extract(db.CarId);				// dictionary from .json
 			int Index = foo.FindIndex(x => x.id == cid);
-			if (0 > Index)
-				switch (SimHapticsPlugin.CurrentGame)
+			if (0 <= Index)
+                SimHapticsPlugin.FetchStatus = APIStatus.Success;	
+			else switch (SimHapticsPlugin.CurrentGame)
 			{
 				case GameId.AC:
 					if (SimHapticsPlugin.FailedId != db.CarId)
@@ -1522,7 +1527,7 @@ namespace sierses.SimHap
 				if (SimHapticsPlugin.FetchStatus == APIStatus.Success)
 				{
 					if (0 <= Index)
-						SHP.S = SHP.S.Import(foo[Index]);
+						SHP.S.Import(foo[Index]);
 					else SimHapticsPlugin.Changed = true;
 					SHP.Settings.Vehicle = new Spec(SHP.S);
 					SimHapticsPlugin.LoadStatus = DataStatus.SimHapticsAPI;
@@ -1533,13 +1538,13 @@ namespace sierses.SimHap
 				FinalizeVehicleLoad();				// sets LoadFinish = true
 			}
 
-			SHP.LD.Add(SHP.S.Emit());
+			SHP.LD.Add(SHP.S.Car);
 			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
 			GearInterval = 1 / Gears;
 		}
 
 		// called from DataUpdate()
-		internal void Refresh(ref GameData Gdat, PluginManager pluginManager, SimHapticsPlugin shp, long FrameCountTicks)
+		internal void Refresh(ref GameData Gdat, PluginManager pluginManager, SimHapticsPlugin shp)
 		{
 			SHP = shp;
 			PM = pluginManager;
@@ -1694,6 +1699,16 @@ namespace sierses.SimHap
 				WheelLockAll += SlipYRL - 50.0;
 			if (SlipYRR > 50.0)
 				WheelLockAll += SlipYRR - 50.0;
+
+			if (DateTime.Now.Ticks < FrameTimeTicks)	// long rollover?
+				FrameCountTicks += (long.MaxValue - FrameTimeTicks) + DateTime.Now.Ticks;	// rollover
+			else FrameCountTicks += DateTime.Now.Ticks - FrameTimeTicks;
+			FrameTimeTicks = DateTime.Now.Ticks;
+			if (FrameCountTicks > 864000000000L)
+				FrameCountTicks = 0L;
+
+			if (DateTime.Now.Ticks < ShiftTicks)	// long rollover?
+				ShiftTicks = - (DateTime.Now.Ticks + (long.MaxValue - ShiftTicks));
 			if (DateTime.Now.Ticks - ShiftTicks > SHP.Settings.DownshiftDurationMs * 10000)
 				Downshift = false;
 			if (DateTime.Now.Ticks - ShiftTicks > SHP.Settings.UpshiftDurationMs * 10000)
@@ -1708,22 +1723,13 @@ namespace sierses.SimHap
 							? Convert.ToInt32(data.NewData.Gear)
 							: -1)
 						: 0;
-				if (Gear != 0)
+				if (Gear != 0 && Gear != GearPrevious)
 				{
+					now = DateTime.Now;
+					ShiftTicks = now.Ticks;
 					if (Gear < GearPrevious)
-					{
 						Downshift = true;
-						now = DateTime.Now;
-						long ticks = now.Ticks;
-						ShiftTicks = ticks;
-					}
-					else if (Gear > GearPrevious)
-					{
-						Upshift = true;
-						now = DateTime.Now;
-						long ticks = now.Ticks;
-						ShiftTicks = ticks;
-					}
+					else Upshift = true;
 				}
 			}
 			ABSPauseInterval = SlipYAll <= 0.0
@@ -1732,27 +1738,17 @@ namespace sierses.SimHap
 			ABSPulseInterval = 166666L * SHP.Settings.ABSPulseLength;
 			if (ABSActive)
 			{
-				if (ABSTicks <= 0L)
-				{
-					now = DateTime.Now;
-					long ticks = now.Ticks;
-					ABSTicks = ticks;
-				}
 				now = DateTime.Now;
+				if (ABSTicks <= 0L)
+					ABSTicks = now.Ticks;
 				if (now.Ticks - ABSTicks < ABSPulseInterval)
 					ABSPulse = 100.0;
+				else if (now.Ticks - ABSTicks < ABSPauseInterval)
+					ABSPulse = 0.0;
 				else
 				{
-					now = DateTime.Now;
-					if (now.Ticks - ABSTicks < ABSPauseInterval)
-						ABSPulse = 0.0;
-					else
-					{
-						ABSPulse = 100.0;
-						now = DateTime.Now;
-						long ticks = now.Ticks;
-						ABSTicks = ticks;
-					}
+					ABSPulse = 100.0;
+					ABSTicks = now.Ticks;
 				}
 			}
 			else
