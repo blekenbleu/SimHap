@@ -3,6 +3,7 @@
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 
 using GameReaderCommon;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -20,59 +21,22 @@ namespace sierses.SimHap
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		protected bool SetQuiet<T>(ref T field, T value, string propertyName)
+		{
+			if (EqualityComparer<T>.Default.Equals(field, value))
+				return false;
+			field = value;
+			OnPropertyChanged(propertyName);
+			return true;
+		}
+
 		protected bool SetField<T>(ref T field, T value, string propertyName)
 		{
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return false;
 			field = value;
-			SimHapticsPlugin.Changed = true;
 			OnPropertyChanged(propertyName);
-			return true;
-		}
-	}
-
-
-	public class ListDictionary : NotifyPropertyChanged
-	{
-		private Dictionary<string, List<Download>> internalDictionary;
-
-		public bool Add(Spec s)
-		{
-			int Index;
-
-			if (null == s)
-				return false;
-
-			Download car = s.Internal_Car;
-			if (null == car || null == car.game || null == car.id || 0 == car.game.Length || 0 == car.id.Length)
-				return false;
-
-			if (null == internalDictionary)
-				internalDictionary = new();
-			if (internalDictionary.ContainsKey(car.game))
-			{
-				Index = internalDictionary[car.game].FindIndex(x => x.id == car.id);
-				if (0 <= Index)
-					internalDictionary[car.game][Index] = car;
-
-				else
-					internalDictionary[car.game].Add(car);
-			}
-			else internalDictionary.Add(car.game, new List<Download> { car });
-			return true;
-		}
-
-		public Dictionary<string, List<Download>> InternalDictionary
-		{
-			get => internalDictionary;
-			set { SetField(ref internalDictionary, value, nameof(InternalDictionary)); }
-		}
-
-		public List<Download> Extract(string game)
-		{
-			if (!internalDictionary.ContainsKey(game))
-				return null;
-			return internalDictionary[game];
+			return SimHapticsPlugin.Changed = true;
 		}
 	}
 
@@ -102,20 +66,133 @@ namespace sierses.SimHap
 		public Download[] data;
 	}
 
+	public class ListDictionary : NotifyPropertyChanged
+	{
+		private Dictionary<string, List<Download>> internalDictionary;
+
+		internal bool Add(List<Download> s)
+		{
+			int Index;
+
+			if (null == s || 0 == s.Count)
+				return false;
+
+			if (null == internalDictionary)
+				internalDictionary = new();
+			if (internalDictionary.ContainsKey(s[0].game))
+				for (int i = 0; i < s.Count; i++)
+				{
+					Index = internalDictionary[s[0].game].FindIndex(x => x.id == s[i].id);
+					if (0 <= Index)
+						internalDictionary[s[0].game][Index] = s[i];
+					else internalDictionary[s[0].game].Add(s[i]);
+				}
+			else
+			{
+				List<Download> l = new();
+				for (int i = 0; i < s.Count; i++)
+					l.Add(s[i]);
+				internalDictionary.Add(s[0].game, l);
+			}
+			return true;
+		}
+/*
+		internal bool Add(Download[] s)
+		{
+			int Index;
+
+			if (null == s || 0 == s.Length)
+				return false;
+
+			if (null == internalDictionary)
+				internalDictionary = new();
+			if (internalDictionary.ContainsKey(s[0].game))
+				for (int i = 0; i < s.Length; i++)
+				{
+					Index = internalDictionary[s[0].game].FindIndex(x => x.id == s[i].id);
+					if (0 <= Index)
+						internalDictionary[s[0].game][Index] = s[i];
+					else internalDictionary[s[0].game].Add(s[i]);
+				}
+			else
+			{
+				List<Download> l = new();
+				for (int i = 0; i < s.Length; i++)
+					l.Add(s[i]);
+				internalDictionary.Add(s[0].game, l);
+			}
+			return true;
+		}
+
+		internal bool Add(Spec s)
+		{
+			int Index;
+
+			if (null == s)
+				return false;
+
+			Download car = s.Car;
+			if (null == car || null == car.game || null == car.id || 0 == car.game.Length || 0 == car.id.Length)
+				return false;
+
+			if (null == internalDictionary)
+				internalDictionary = new();
+			if (internalDictionary.ContainsKey(car.game))
+			{
+				Index = internalDictionary[car.game].FindIndex(x => x.id == car.id);
+				if (0 <= Index)
+					internalDictionary[car.game][Index] = car;
+
+				else
+					internalDictionary[car.game].Add(car);
+			}
+			else internalDictionary.Add(car.game, new List<Download> { car });
+			return true;
+		}
+ */
+		public bool Load(Dictionary<string, List<Download>> json)
+		{
+			if (null == json || 0 == json.Count)
+				return false;
+			internalDictionary = json;
+			return true;
+		}
+
+		internal string Jstring()
+		{
+			return JsonConvert.SerializeObject(internalDictionary, Formatting.Indented);
+		}
+
+		internal ushort Count
+		{
+			get { return (ushort)internalDictionary.Count; }
+		}
+
+		public List<Download> Extract(string game)
+		{
+			if (!internalDictionary.ContainsKey(game))
+				return null;
+			return internalDictionary[game];
+		}
+	}	// class ListDictionary
+
 	public class Spec : NotifyPropertyChanged
 	{
 		public Spec()
 		{
-			Internal_Car = new();
+			Private_Car = new Download();
 		}
 
-		internal Download Internal_Car { get; set; }
+		private Download Private_Car { get; set; }
+
+		internal Download Car { get => Private_Car; }
 
 		public Spec(Spec s)
 		{
-			Import(s.Internal_Car);
+			Private_Car = s.Private_Car;
 		}
 
+		// makes sense only as Spec instance.Import(download)
 		internal void Import(Download d)
 		{
 			Game = d.game;
@@ -248,95 +325,93 @@ namespace sierses.SimHap
 			return StatusText;
 		}
 
-		internal Download Car { get => Internal_Car; }
-
 		public string Game
 		{
-			get => Internal_Car.game;
-			set { SetField(ref Internal_Car.game, value, nameof(Game)); }
+			get => Private_Car.game;
+			set { SetField(ref Private_Car.game, value, nameof(Game)); }
 		}
 
 		public string Name
 		{
-			get => Internal_Car.name;
-			set { SetField(ref Internal_Car.name, value, nameof(Name)); }
+			get => Private_Car.name;
+			set { SetField(ref Private_Car.name, value, nameof(Name)); }
 		}
 
 		public string Id
 		{
-			get => Internal_Car.id;
-			set { SetField(ref Internal_Car.id, value, nameof(Id)); }
+			get => Private_Car.id;
+			set { SetField(ref Private_Car.id, value, nameof(Id)); }
 		}
 
 		public string Category
 		{
-			get => Internal_Car.category;
-			set { SetField(ref Internal_Car.category, value, nameof(Category)); }
+			get => Private_Car.category;
+			set { SetField(ref Private_Car.category, value, nameof(Category)); }
 		}
 
 		public ushort Redline
 		{
-			get => Internal_Car.redline;
-			set { SetField(ref Internal_Car.redline, value, nameof(Redline)); }
+			get => Private_Car.redline;
+			set { SetField(ref Private_Car.redline, value, nameof(Redline)); }
 		}
 	
 		public ushort MaxRPM
 		{
-			get => Internal_Car.maxrpm;
-			set { SetField(ref Internal_Car.maxrpm, value, nameof(MaxRPM)); }
+			get => Private_Car.maxrpm;
+			set { SetField(ref Private_Car.maxrpm, value, nameof(MaxRPM)); }
 		}
 		public ushort IdleRPM
 		{
-			get => Internal_Car.idlerpm;
-			set { SetField(ref Internal_Car.idlerpm, value, nameof(IdleRPM)); }
+			get => Private_Car.idlerpm;
+			set { SetField(ref Private_Car.idlerpm, value, nameof(IdleRPM)); }
 		}
 
 		public string EngineConfiguration
 		{
-			get => Internal_Car.config;
-			set { SetField(ref Internal_Car.config, value, nameof(EngineConfiguration)); }
+			get => Private_Car.config;
+			set { SetField(ref Private_Car.config, value, nameof(EngineConfiguration)); }
 		}
 	
 		public ushort EngineCylinders
 		{
-			get => Internal_Car.cyl;
-			set { SetField(ref Internal_Car.cyl, value, nameof(EngineCylinders)); }
+			get => Private_Car.cyl;
+			set { SetField(ref Private_Car.cyl, value, nameof(EngineCylinders)); }
 		}
 
 		public string EngineLocation
 		{
-			get => Internal_Car.loc;
-			set { SetField(ref Internal_Car.loc, value, nameof(EngineLocation)); }
+			get => Private_Car.loc;
+			set { SetField(ref Private_Car.loc, value, nameof(EngineLocation)); }
 		}
 
 		public string PoweredWheels
 		{
-			get => Internal_Car.drive;
-			set { SetField(ref Internal_Car.drive, value, nameof(PoweredWheels)); }
+			get => Private_Car.drive;
+			set { SetField(ref Private_Car.drive, value, nameof(PoweredWheels)); }
 		}
 
 		public ushort MaxPower
 		{
-			get => Internal_Car.hp;
-			set { SetField(ref Internal_Car.hp, value, nameof(MaxPower)); }
+			get => Private_Car.hp;
+			set { SetField(ref Private_Car.hp, value, nameof(MaxPower)); }
 		}
 	
 		public ushort ElectricMaxPower
 		{
-			get => Internal_Car.ehp;
-			set { SetField(ref Internal_Car.ehp, value, nameof(ElectricMaxPower)); }
+			get => Private_Car.ehp;
+			set { SetField(ref Private_Car.ehp, value, nameof(ElectricMaxPower)); }
 		}
 	
 		public ushort Displacement
 		{
-			get => Internal_Car.cc;
-			set { SetField(ref Internal_Car.cc, value, nameof(Displacement)); }
+			get => Private_Car.cc;
+			set { SetField(ref Private_Car.cc, value, nameof(Displacement)); }
 		}
 	
 		public ushort MaxTorque
 		{
-			get => Internal_Car.nm;
-			set { SetField(ref Internal_Car.nm, value, nameof(MaxTorque)); }
+			get => Private_Car.nm;
+			set { SetField(ref Private_Car.nm, value, nameof(MaxTorque)); }
 		}
 	}
 }
