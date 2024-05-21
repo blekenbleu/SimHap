@@ -9,7 +9,7 @@ namespace sierses.SimHap
 {
 	public class Settings : INotifyPropertyChanged
 	{
-		public Spec Vehicle;
+		public Spec Vehicle = new();
 		public Dictionary<string, double> EngineMult;
 		public Dictionary<string, double> RumbleMult;
 		public Dictionary<string, double> SuspensionMult;

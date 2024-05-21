@@ -26,7 +26,7 @@ namespace sierses.SimHap
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
 		public static bool LoadFinish;
-		public static bool Changed;
+		public static bool Save, Changed;
 		public static DataStatus LoadStatus;
 		public static APIStatus FetchStatus;
 		public static long FrameTimeTicks = 0;
@@ -36,7 +36,7 @@ namespace sierses.SimHap
 		public static string FailedId = "";
 		public static string FailedCategory = "";
 		private static readonly HttpClient client = new();
-		private string myfile = "PluginsData/blekenbleu.Download.SimHap.json";
+		private readonly string myfile = "PluginsData/blekenbleu.Download.SimHap.json";
 
 		public Spec S { get; set; }
 		public ListDictionary LD { get; set; }
@@ -107,13 +107,8 @@ namespace sierses.SimHap
 		// called by SetVehicle() in DataUpdate() when car not found
 		internal void SetDefaultVehicle(ref StatusDataBase db)
 		{
-			if (Settings.Vehicle != null && (Settings.Vehicle.Id == db.CarId || Settings.Vehicle.Id == db.CarModel))
-			{
-				S = Settings.Vehicle;
-				LoadStatus = DataStatus.SettingsFile;
-				D.LoadStatusText = "Reloaded from Settings";
+			if (LoadStatus == DataStatus.SettingsFile)
 				return;
-			}
 
 			string status = S.Defaults(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
@@ -151,15 +146,24 @@ namespace sierses.SimHap
 					D.Refresh(ref data, pluginManager, this);
 			}
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
+			{
+				if (Changed)
+					D.Add(S.Car);
 				D.SetVehicle(pluginManager, ref data.NewData, this);
+			}
 		}
 
 		public void End(PluginManager pluginManager)
 		{
-			string sjs = JsonConvert.SerializeObject(LD.InternalDictionary, Formatting.Indented);
+			if (Changed)
+				Settings.Vehicle = new Spec(S);
+			D.Add(S.Car);
+			Changed = LD.Add(D.Lcars);
+			string sjs = LD.Jstring();
 			if (0 == sjs.Length || "{}" == sjs)
 				Logging.Current.Info("SimHap.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
-			else File.WriteAllText(myfile, sjs);
+			else if (Save)
+				File.WriteAllText(myfile, sjs);
 
 			// Remove default values from Settings per-game dictionaries
 			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
@@ -491,7 +495,7 @@ namespace sierses.SimHap
 				gameMaxRPM = Convert.ToUInt16(0.5 + doubleMaxRPM);
 				FetchStatus = APIStatus.Waiting;
 				LoadFinish = false;
-				Logging.Current.Info("SimHap: Loading " + category + " " + id);
+//				Logging.Current.Info("SimHap: Loading " + category + " " + id);
 				id ??= "0";
 				category ??= "0";
 				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
@@ -507,7 +511,7 @@ namespace sierses.SimHap
 				if (null != dljc && null != dljc.data && 0 < dljc.data.Length
 					&& Set_v(v, dljc.data[0]))
 				{
-					Logging.Current.Info("SimHap: Successfully loaded " + v.Name);
+					Logging.Current.Info("SimHap.FetchCarData(): Successfully loaded " + v.Name);
 					FetchStatus = APIStatus.Success;
 					LoadFinish = false;
 					LoadFailCount = 0;
@@ -519,7 +523,7 @@ namespace sierses.SimHap
 				}
 				else
 				{
-					Logging.Current.Info("SimHap: Failed to load " + id + " : " + category);
+					Logging.Current.Info("SimHap.FetchCarData(): Failed to load " + id + " : " + category);
 					++LoadFailCount;
 					if (LoadFailCount > 3)
 					{
@@ -542,7 +546,7 @@ namespace sierses.SimHap
 		public void Init(PluginManager pluginManager)
 		{
 			LoadFailCount = 0;
-			Changed = LoadFinish = false;
+			Save = Changed = LoadFinish = false;
 			LoadStatus = DataStatus.None;
 			FetchStatus = APIStatus.None;
 			S = new Spec();
@@ -589,9 +593,12 @@ namespace sierses.SimHap
 				Settings.Motion = new Dictionary<string, double>();
 			if (File.Exists(myfile))
 			{
-				LD.InternalDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<Download>>>(File.ReadAllText(myfile));
-				if (null != LD.InternalDictionary)
-					Logging.Current.Info($"SimHap.Init():  {LD.InternalDictionary.Count} games in " + myfile);
+				 var foo = JsonConvert.DeserializeObject<Dictionary<string, List<Download>>>(File.ReadAllText(myfile));
+				if (null != foo && 0 < foo.Count && LD.Load(foo))
+				{
+					Logging.Current.Info($"SimHap.Init():  {LD.Count} games in " + myfile);
+					D.Lcars = LD.Extract(GameDBText);
+				}
 				else Logging.Current.Info("SimHap.Init(): "+myfile+" load failure");
 			}
 			else Logging.Current.Info("SimHap.Init():  "+myfile+" not found"); 
