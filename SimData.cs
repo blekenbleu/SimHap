@@ -283,8 +283,27 @@ namespace sierses.SimHap
 		private double slipYGamma;
 		private double slipYGammaAll;
 		private ushort idleRPM;
-		List<Download> Ldict;
 		int Index;
+		internal List<Download> Lcars;
+
+		internal bool Add(Download car)
+		{
+			if ((null == car) || (null == car.id) || (null == car.game) || (null == car.name) || !SimHapticsPlugin.Changed)
+				return false;
+
+			SimHapticsPlugin.Changed = false;
+			bool temp;
+			string cid = car.id;
+
+			if (null == Lcars)
+				Lcars = new();
+			int Index = Lcars.FindIndex(x => x.id == cid);
+			if (temp = 0 > Index)
+				Lcars.Add(car);
+			else Lcars[Index] = car;
+			SimHapticsPlugin.Save |= temp | SimHapticsPlugin.Changed;
+			return temp;
+		}
 
 		public SimData()
 		{
@@ -399,7 +418,7 @@ namespace sierses.SimHap
 			SimHapticsPlugin.LoadFinish = true;
 		}
 
-		SimHapticsPlugin SHP;
+		internal SimHapticsPlugin SHP;
 		private void SetRPMIntervals()
 		{
 			if (SHP.S.EngineCylinders == 1.0)
@@ -1398,14 +1417,32 @@ namespace sierses.SimHap
 		// called from DataUpdate() and recalled FetchCarData(), perhaps repeatedly
 		internal void SetVehicle(PluginManager pluginManager, ref StatusDataBase db, SimHapticsPlugin shp)
 		{
-			if (null != shp)    // null when called by FetchCarData()
+			if (null != shp)	// null when called by FetchCarData()
 			{
 				SHP = shp;
 				string cid = db.CarId;
-				Ldict = SHP.LD.Extract(cid);				// dictionary from .json
-				Index = (null == Ldict) ? -1 : Ldict.FindIndex(x => x.id == cid);
+				
+/*				// if (Settings.Vehicle != null && (Settings.Vehicle.Id == db.CarId || Settings.Vehicle.Id == db.CarModel))
+				if (db.CarId == SHP.Settings.Vehicle.Id)
+				{
+					Spec temp = new Spec(SHP.S);
+					SHP.S = SHP.Settings.Vehicle;
+					SHP.Settings.Vehicle = temp;
+
+					SimHapticsPlugin.FetchStatus = APIStatus.None;			// disable Index test and Import
+					SimHapticsPlugin.LoadStatus = DataStatus.SettingsFile;	// disable S.Defaults() in SetDefaultVehicle()
+					SimHapticsPlugin.LoadFinish = false;					// enable SetDefaultVehicle
+					Index = 0;												// disable GameId switch
+					LoadStatusText = "Reloaded from Settings";
+				}
+				else { */
+					Index = (null == Lcars) ? -1 : Lcars.FindIndex(x => x.id == cid);
 				if (0 <= Index)
-               		SimHapticsPlugin.FetchStatus = APIStatus.Success;	
+				{
+					SimHapticsPlugin.FetchStatus = APIStatus.Success;
+                    SimHapticsPlugin.LoadFinish = false;                    // enable SetDefaultVehicle
+                }
+//				}
 			}
 			if (0 > Index && SimHapticsPlugin.FailedId != db.CarId)	// FetchCarData() sets db.CarId = SimHapticsPlugin.FailedId while waiting ...
 				switch (SimHapticsPlugin.CurrentGame)
@@ -1512,21 +1549,23 @@ namespace sierses.SimHap
 			{
 				if (SimHapticsPlugin.FetchStatus == APIStatus.Success)
 				{
-					if (0 <= Index)
-						SHP.S.Import(Ldict[Index]);
+					if (0 <= Index) {
+						SHP.S.Import(Lcars[Index]);
+						SimHapticsPlugin.LoadStatus = DataStatus.JSON;
+						LoadStatusText = "JSON Load Success";
+					} else {
+						SimHapticsPlugin.LoadStatus = DataStatus.SimHapticsAPI;
+						LoadStatusText = "DB Load Success";
+					}
 					SimHapticsPlugin.Changed = true;
-					if (null == SHP.Settings.Vehicle)
-						SHP.Settings.Vehicle = new Spec(SHP.S);
-					else SHP.Settings.Vehicle.Import(SHP.S.Car);
+					SHP.Settings.Vehicle = new Spec(SHP.S);
 
-                    SimHapticsPlugin.LoadStatus = DataStatus.SimHapticsAPI;
-					LoadStatusText = "DB Load Success";
 					SimHapticsPlugin.FailedId = "";
 				}
 				else SHP.SetDefaultVehicle(ref db); // sets LoadStatusText
 				FinalizeVehicleLoad();				// sets LoadFinish = true
 				if (0 > Index)
-					SHP.LD.Add(SHP.S);
+					Add(SHP.S.Car);
 				Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
 				GearInterval = 1 / Gears;
 			}
@@ -2300,19 +2339,19 @@ namespace sierses.SimHap
 		public string GameAltText
 		{
 			get => this.gameAltText;
-			set { SetField(ref this.gameAltText, value, nameof(GameAltText)); }
+			set { SetQuiet(ref this.gameAltText, value, nameof(GameAltText)); }
 		}
 
 		public string LoadStatusText
 		{
 			get => this.loadStatusText;
-			set { SetField(ref this.loadStatusText, value, nameof(LoadStatusText)); }
+			set { SetQuiet(ref this.loadStatusText, value, nameof(LoadStatusText)); }
 		}
 
 		public string LockedText
 		{
 			get => this.lockedText;
-			set { SetField(ref this.lockedText, value, nameof(LockedText)); }
+			set { SetQuiet(ref this.lockedText, value, nameof(LockedText)); }
 		}
 
 		public double EngineMult
