@@ -10,5 +10,6 @@ namespace sierses.SimHap
     GameData,
     SettingsFile,
     SimHapticsAPI,
+	JSON
   }
 }
