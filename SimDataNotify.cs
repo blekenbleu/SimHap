@@ -48,10 +48,10 @@ namespace sierses.SimHap
 			set { SetQuiet(ref this.gameAltText, value, nameof(GameAltText)); }
 		}
 
-		public string LoadStatusText
+		public string LoadText
 		{
 			get => this.loadStatusText;
-			set { SetQuiet(ref this.loadStatusText, value, nameof(LoadStatusText)); }
+			set { SetQuiet(ref this.loadStatusText, value, nameof(LoadText)); }
 		}
 
 		public string LockedText

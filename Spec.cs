@@ -134,7 +134,8 @@ namespace sierses.SimHap
 			Private_Car = s.Private_Car;
 		}
 
-		internal bool Set(Download dl)
+		// called by SimHap.FetchCarData()
+		internal bool Set(Download dl, ushort gameRedline, ushort gameMaxRPM)
 		{
 			if (null == dl || null == dl.data || 0 == dl.data.Count)
 				return false;
@@ -186,9 +187,10 @@ namespace sierses.SimHap
 		{
 			string StatusText;
 
-			if (null != game)
-				Game = game;
-			else return "SimHap.Spec.Defaults():  null game";
+			if (null == game)
+				return "SimHap.Spec.Defaults():  null game";
+
+			Game = game;
 			Name = db.CarModel;
 			Id = db.CarId;
 			Category = db.CarClass;
@@ -204,6 +206,7 @@ namespace sierses.SimHap
 
 			switch (CurrentGame)
 			{
+				case GameId.RRRE:
 				case GameId.AC:
 				case GameId.ACC:
 				case GameId.AMS1:
@@ -214,7 +217,6 @@ namespace sierses.SimHap
 				case GameId.PC2:
 				case GameId.RBR:
 				case GameId.RF2:
-				case GameId.RRRE:
 				case GameId.BeamNG:
 					StatusText = "Not in DB: using generic car";
 					break;
@@ -292,6 +294,14 @@ namespace sierses.SimHap
 					StatusText = $"Specs unavailable for {CurrentGame}";
 					break;
 			}
+			if (0 == Redline)
+				Redline = 6000;
+			if (0 == MaxRPM)
+				MaxRPM = 6500;
+			if (string.IsNullOrEmpty(Category))
+				Category = "street";
+			if (GameId.RRRE == CurrentGame || GameId.D4 == CurrentGame || GameId.DR2 == CurrentGame)
+				Id = db.CarModel;
 			return StatusText;
 		}
 
