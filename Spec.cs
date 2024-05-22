@@ -4,6 +4,7 @@
 
 using GameReaderCommon;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -36,11 +37,11 @@ namespace sierses.SimHap
 				return false;
 			field = value;
 			OnPropertyChanged(propertyName);
-			return SimHapticsPlugin.Changed = true;
+			return SimHap.Changed = true;
 		}
 	}
 
-	public class Download
+	public class CarSpec
 	{
 		public string notes;
 		public ushort cc;
@@ -60,25 +61,25 @@ namespace sierses.SimHap
 		public string game;
 	}
 
-	// format for downloading from website
-	public class Download_array
+	// format for downloading from website; must be public
+	public class Download
 	{
-		public Download[] data;
+		public List<CarSpec> data;
 	}
 
 	public class ListDictionary : NotifyPropertyChanged
 	{
-		private Dictionary<string, List<Download>> internalDictionary;
+		private Dictionary<string, List<CarSpec>> internalDictionary;
 
-		internal bool Add(List<Download> s)
+		public ListDictionary() { internalDictionary = new(); }
+
+		internal bool Add(List<CarSpec> s)
 		{
 			int Index;
 
 			if (null == s || 0 == s.Count)
 				return false;
 
-			if (null == internalDictionary)
-				internalDictionary = new();
 			if (internalDictionary.ContainsKey(s[0].game))
 				for (int i = 0; i < s.Count; i++)
 				{
@@ -87,70 +88,11 @@ namespace sierses.SimHap
 						internalDictionary[s[0].game][Index] = s[i];
 					else internalDictionary[s[0].game].Add(s[i]);
 				}
-			else
-			{
-				List<Download> l = new();
-				for (int i = 0; i < s.Count; i++)
-					l.Add(s[i]);
-				internalDictionary.Add(s[0].game, l);
-			}
+			else internalDictionary.Add(s[0].game, s);
 			return true;
 		}
-/*
-		internal bool Add(Download[] s)
-		{
-			int Index;
-
-			if (null == s || 0 == s.Length)
-				return false;
-
-			if (null == internalDictionary)
-				internalDictionary = new();
-			if (internalDictionary.ContainsKey(s[0].game))
-				for (int i = 0; i < s.Length; i++)
-				{
-					Index = internalDictionary[s[0].game].FindIndex(x => x.id == s[i].id);
-					if (0 <= Index)
-						internalDictionary[s[0].game][Index] = s[i];
-					else internalDictionary[s[0].game].Add(s[i]);
-				}
-			else
-			{
-				List<Download> l = new();
-				for (int i = 0; i < s.Length; i++)
-					l.Add(s[i]);
-				internalDictionary.Add(s[0].game, l);
-			}
-			return true;
-		}
-
-		internal bool Add(Spec s)
-		{
-			int Index;
-
-			if (null == s)
-				return false;
-
-			Download car = s.Car;
-			if (null == car || null == car.game || null == car.id || 0 == car.game.Length || 0 == car.id.Length)
-				return false;
-
-			if (null == internalDictionary)
-				internalDictionary = new();
-			if (internalDictionary.ContainsKey(car.game))
-			{
-				Index = internalDictionary[car.game].FindIndex(x => x.id == car.id);
-				if (0 <= Index)
-					internalDictionary[car.game][Index] = car;
-
-				else
-					internalDictionary[car.game].Add(car);
-			}
-			else internalDictionary.Add(car.game, new List<Download> { car });
-			return true;
-		}
- */
-		public bool Load(Dictionary<string, List<Download>> json)
+ 
+		public bool Load(Dictionary<string, List<CarSpec>> json)
 		{
 			if (null == json || 0 == json.Count)
 				return false;
@@ -168,7 +110,7 @@ namespace sierses.SimHap
 			get { return (ushort)internalDictionary.Count; }
 		}
 
-		public List<Download> Extract(string game)
+		public List<CarSpec> Extract(string game)
 		{
 			if (!internalDictionary.ContainsKey(game))
 				return null;
@@ -180,20 +122,48 @@ namespace sierses.SimHap
 	{
 		public Spec()
 		{
-			Private_Car = new Download();
+			Private_Car = new CarSpec();
 		}
 
-		private Download Private_Car { get; set; }
+		private CarSpec Private_Car { get; set; }
 
-		internal Download Car { get => Private_Car; }
+		internal CarSpec Car { get => Private_Car; }
 
 		public Spec(Spec s)
 		{
 			Private_Car = s.Private_Car;
 		}
 
+		internal bool Set(Download dl)
+		{
+			if (null == dl || null == dl.data || 0 == dl.data.Count)
+				return false;
+
+			CarSpec data = dl.data[0];
+
+			if (null == data.name || null == data.id)
+				return false;
+
+			Game = SimHap.GameDBText;
+			Id = SimHap.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;
+			Redline  =	 0 == data.redline ? gameRedline 	: data.redline;
+			MaxRPM   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
+			MaxPower =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
+			Category = 			data.category;
+			Name = 				data.name;
+			EngineLocation = 	data.loc;
+			PoweredWheels = 	data.drive;
+			EngineConfiguration = data.config;
+			EngineCylinders = 	data.cyl;
+			ElectricMaxPower = 	data.ehp;
+			Displacement = 		data.cc;
+			MaxTorque = 		data.nm;
+
+			return true;
+		}	// Set()
+
 		// makes sense only as Spec instance.Import(download)
-		internal void Import(Download d)
+		internal void Import(CarSpec d)
 		{
 			Game = d.game;
 			Name = d.name;
