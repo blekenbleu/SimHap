@@ -9,8 +9,7 @@ using System.Collections.Generic;
 
 namespace sierses.SimHap
 {
-	// see Spec.cs for public abstract class NotifyPropertyChanged : INotifyPropertyChanged
-	public class SimData : NotifyPropertyChanged
+	public partial class SimData
 	{
 		public double FPS;
 		public double InvMaxRPM;
@@ -245,53 +244,16 @@ namespace sierses.SimHap
 		public double SuspensionRumbleMultR5;
 		private long FrameTimeTicks;
 		private long FrameCountTicks;
-		private string gameAltText;
-		private string loadStatusText;
-		private string lockedText;
-		private double engineMult;
-		private double engineMultAll;
-		private double motionPitchOffset;
-		private double motionPitchMult;
-		private double motionPitchGamma;
-		private double motionRollOffset;
-		private double motionRollMult;
-		private double motionRollGamma;
-		private double motionYawOffset;
-		private double motionYawMult;
-		private double motionYawGamma;
-		private double motionHeaveOffset;
-		private double motionHeaveMult;
-		private double motionHeaveGamma;
-		private double motionSurgeOffset;
-		private double motionSurgeMult;
-		private double motionSurgeGamma;
-		private double motionSwayOffset;
-		private double motionSwayMult;
-		private double motionSwayGamma;
-		private double rumbleMult;
-		private double rumbleMultAll;
-		private double suspensionMult;
-		private double suspensionMultAll;
-		private double suspensionGamma;
-		private double suspensionGammaAll;
-		private double slipXMult;
-		private double slipXMultAll;
-		private double slipXGamma;
-		private double slipXGammaAll;
-		private double slipYMult;
-		private double slipYMultAll;
-		private double slipYGamma;
-		private double slipYGammaAll;
 		private ushort idleRPM;
 		int Index;
-		internal List<Download> Lcars;
+		internal List<CarSpec> Lcars;
 
-		internal bool Add(Download car)
+		internal bool Add(CarSpec car)
 		{
-			if ((null == car) || (null == car.id) || (null == car.game) || (null == car.name) || !SimHapticsPlugin.Changed)
+			if ((null == car) || (null == car.id) || (null == car.game) || (null == car.name) || !SimHap.Changed)
 				return false;
 
-			SimHapticsPlugin.Changed = false;
+			SimHap.Changed = false;
 			bool temp;
 			string cid = car.id;
 
@@ -301,7 +263,7 @@ namespace sierses.SimHap
 			if (temp = 0 > Index)
 				Lcars.Add(car);
 			else Lcars[Index] = car;
-			SimHapticsPlugin.Save |= temp | SimHapticsPlugin.Changed;
+			SimHap.Save |= temp | SimHap.Changed;
 			return temp;
 		}
 
@@ -340,7 +302,7 @@ namespace sierses.SimHap
 		internal void Init(Settings Settings)
 		{
 			MySet = Settings;
-			string GDBtext = SimHapticsPlugin.GameDBText;
+			string GDBtext = SimHap.GameDBText;
 			EngineMult = Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
 			EngineMultAll = Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
 			RumbleMult = Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
@@ -379,7 +341,7 @@ namespace sierses.SimHap
 			MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
 		}
 
-		private void FinalizeVehicleLoad()
+		private void FinalizeVehicle()
 		{
 			CarInitCount = 0;
 			Index = -1;
@@ -415,10 +377,10 @@ namespace sierses.SimHap
 			RumbleRightAvg = 0.0;
 			SetRPMIntervals();
 			SetRPMMix();
-			SimHapticsPlugin.LoadFinish = true;
+			SimHap.LoadFinish = true;
 		}
 
-		internal SimHapticsPlugin SHP;
+		internal SimHap SHP;
 		private void SetRPMIntervals()
 		{
 			if (SHP.S.EngineCylinders == 1.0)
@@ -638,7 +600,7 @@ namespace sierses.SimHap
 			SlipYRR = 0.0;
 			ABSActive = data.NewData.ABSActive == 1;
 			bool flag = true;
-			switch (SimHapticsPlugin.CurrentGame)
+			switch (SimHap.CurrentGame)
 			{
 				case GameId.AC:
 					SuspensionDistFL = Physics("SuspensionTravel01");
@@ -1415,7 +1377,7 @@ namespace sierses.SimHap
 		}
 
 		// called from DataUpdate() and recalled FetchCarData(), perhaps repeatedly
-		internal void SetVehicle(PluginManager pluginManager, ref StatusDataBase db, SimHapticsPlugin shp)
+		internal void SetVehicle(PluginManager pluginManager, ref StatusDataBase db, SimHap shp)
 		{
 			if (null != shp)	// null when called by FetchCarData()
 			{
@@ -1439,58 +1401,58 @@ namespace sierses.SimHap
 					Index = (null == Lcars) ? -1 : Lcars.FindIndex(x => x.id == cid);
 				if (0 <= Index)
 				{
-					SimHapticsPlugin.FetchStatus = APIStatus.Success;
-                    SimHapticsPlugin.LoadFinish = false;                    // enable SetDefaultVehicle
+					SimHap.FetchStatus = APIStatus.Success;
+                    SimHap.LoadFinish = false;                    // enable SetDefaultVehicle
                 }
 //				}
 			}
-			if (0 > Index && SimHapticsPlugin.FailedId != db.CarId)	// FetchCarData() sets db.CarId = SimHapticsPlugin.FailedId while waiting ...
-				switch (SimHapticsPlugin.CurrentGame)
+			if (0 > Index && SimHap.FailedId != db.CarId)	// FetchCarData() sets db.CarId = SimHapticsPlugin.FailedId while waiting ...
+				switch (SimHap.CurrentGame)
 				{
 					case GameId.AC:
 					case GameId.ACC:
 					case GameId.PC2:
 					case GameId.RBR:
 					case GameId.GTR2:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.AMS1:
-						if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedCategory != db.CarClass)
-							SimHapticsPlugin.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						if (SHP.S.Category != db.CarClass && SimHap.FailedCategory != db.CarClass)
+							SimHap.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.AMS2:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						SHP.S.Name = db.CarModel;
 						SHP.S.Category = db.CarClass;
 						break;
 					case GameId.D4:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 						break;
 					case GameId.DR2:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 						break;
 					case GameId.WRC23:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
 						break;
 					case GameId.F12022:
 					case GameId.F12023:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
 						break;
 					case GameId.Forza:
-						SimHapticsPlugin.FetchCarData(this, db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
 						break;
 					case GameId.IRacing:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						GameAltText = pluginManager.GameName + (string)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 						if (0 == SHP.S.IdleRPM)
 						{
@@ -1500,15 +1462,15 @@ namespace sierses.SimHap
 						}
 						break;
 					case GameId.RF2:
-						if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedCategory != db.CarClass)
-							SimHapticsPlugin.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						if (SHP.S.Category != db.CarClass && SimHap.FailedCategory != db.CarClass)
+							SimHap.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.RRRE:
-						if (SHP.S.Id != db.CarModel && SimHapticsPlugin.FailedId != db.CarModel)
-							SimHapticsPlugin.FetchCarData(this, db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						if (SHP.S.Id != db.CarModel && SimHap.FailedId != db.CarModel)
+							SimHap.FetchCarData(this, db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.BeamNG:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S,
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S,
 								SHP.S.Redline = Convert.ToUInt16(0.5 + db.MaxRpm),
 								SHP.S.MaxRPM = Convert.ToUInt16((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
 									 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
@@ -1524,46 +1486,46 @@ namespace sierses.SimHap
 							SHP.S.Id = db.CarId;
 							SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
 							SHP.S.Redline = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
-							SimHapticsPlugin.LoadFinish = false;
-							SimHapticsPlugin.FetchStatus = APIStatus.Fail;
+							SimHap.LoadFinish = false;
+							SimHap.FetchStatus = APIStatus.Fail;
 						}
 						break;
 					case GameId.LMU:
-						if (SHP.S.Category != db.CarClass && SimHapticsPlugin.FailedCategory != db.CarClass)
-							SimHapticsPlugin.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						if (SHP.S.Category != db.CarClass && SimHap.FailedCategory != db.CarClass)
+							SimHap.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
-						SimHapticsPlugin.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						SHP.S.Redline = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM"));
 						SHP.S.MaxRPM = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM"));
 						break;
 					default:
 						SHP.S.Redline = Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM);
 						SHP.S.MaxRPM = Convert.ToUInt16(db.MaxRpm);
-						SimHapticsPlugin.FetchStatus = APIStatus.Fail;
+						SimHap.FetchStatus = APIStatus.Fail;
 						break;
 				}
 
-			if (!SimHapticsPlugin.LoadFinish && SimHapticsPlugin.FetchStatus != APIStatus.Waiting)
+			if (!SimHap.LoadFinish && SimHap.FetchStatus != APIStatus.Waiting)
 			{
-				if (SimHapticsPlugin.FetchStatus == APIStatus.Success)
+				if (SimHap.FetchStatus == APIStatus.Success)
 				{
 					if (0 <= Index) {
 						SHP.S.Import(Lcars[Index]);
-						SimHapticsPlugin.LoadStatus = DataStatus.JSON;
+						SimHap.LoadStatus = DataStatus.JSON;
 						LoadStatusText = "JSON Load Success";
 					} else {
-						SimHapticsPlugin.LoadStatus = DataStatus.SimHapticsAPI;
+						SimHap.LoadStatus = DataStatus.SimHapticsAPI;
 						LoadStatusText = "DB Load Success";
 					}
-					SimHapticsPlugin.Changed = true;
+					SimHap.Changed = true;
 					SHP.Settings.Vehicle = new Spec(SHP.S);
 
-					SimHapticsPlugin.FailedId = "";
+					SimHap.FailedId = "";
 				}
 				else SHP.SetDefaultVehicle(ref db); // sets LoadStatusText
-				FinalizeVehicleLoad();				// sets LoadFinish = true
+				FinalizeVehicle();				// sets LoadFinish = true
 				if (0 > Index)
 					Add(SHP.S.Car);
 				Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
@@ -1573,7 +1535,7 @@ namespace sierses.SimHap
 		}		// SetVehicle()
 
 		// called from DataUpdate()
-		internal void Refresh(ref GameData Gdat, PluginManager pluginManager, SimHapticsPlugin shp)
+		internal void Refresh(ref GameData Gdat, PluginManager pluginManager, SimHap shp)
 		{
 			SHP = shp;
 			PM = pluginManager;
@@ -2336,226 +2298,5 @@ namespace sierses.SimHap
 			GainPeakB2 *= EngineMult * EngineMultAll;
 		}
 
-		public string GameAltText
-		{
-			get => this.gameAltText;
-			set { SetQuiet(ref this.gameAltText, value, nameof(GameAltText)); }
-		}
-
-		public string LoadStatusText
-		{
-			get => this.loadStatusText;
-			set { SetQuiet(ref this.loadStatusText, value, nameof(LoadStatusText)); }
-		}
-
-		public string LockedText
-		{
-			get => this.lockedText;
-			set { SetQuiet(ref this.lockedText, value, nameof(LockedText)); }
-		}
-
-		public double EngineMult
-		{
-			get => this.engineMult;
-			set { SetField(ref this.engineMult, value, nameof(EngineMult)); }
-		}
-
-		public double EngineMultAll
-		{
-			get => this.engineMultAll;
-			set { SetField(ref this.engineMultAll, value, nameof(EngineMultAll)); }
-		}
-
-		public double RumbleMult
-		{
-			get => this.rumbleMult;
-			set { SetField(ref this.rumbleMult, value, nameof(RumbleMult)); }
-		}
-
-		public double RumbleMultAll
-		{
-			get => this.rumbleMultAll;
-			set { SetField(ref this.rumbleMultAll, value, nameof(RumbleMultAll)); }
-		}
-
-		public double SuspensionGamma
-		{
-			get => this.suspensionGamma;
-			set { SetField(ref this.suspensionGamma, value, nameof(SuspensionGamma)); }
-		}
-
-		public double SuspensionGammaAll
-		{
-			get => this.suspensionGammaAll;
-			set { SetField(ref this.suspensionGammaAll, value, nameof(SuspensionGammaAll)); }
-		}
-
-		public double SuspensionMult
-		{
-			get => this.suspensionMult;
-			set { SetField(ref this.suspensionMult, value, nameof(SuspensionMult)); }
-		}
-
-		public double SuspensionMultAll
-		{
-			get => this.suspensionMultAll;
-			set { SetField(ref this.suspensionMultAll, value, nameof(SuspensionMultAll)); }
-		}
-
-		public double SlipXMult
-		{
-			get => this.slipXMult;
-			set { SetField(ref this.slipXMult, value, nameof(SlipXMult)); }
-		}
-
-		public double SlipXMultAll
-		{
-			get => this.slipXMultAll;
-			set { SetField(ref this.slipXMultAll, value, nameof(SlipXMultAll)); }
-		}
-
-		public double SlipXGamma
-		{
-			get => this.slipXGamma;
-			set { SetField(ref this.slipXGamma, value, nameof(SlipXGamma)); }
-		}
-
-		public double SlipXGammaAll
-		{
-			get => this.slipXGammaAll;
-			set { SetField(ref this.slipXGammaAll, value, nameof(SlipXGammaAll)); }
-		}
-
-		public double SlipYMult
-		{
-			get => this.slipYMult;
-			set { SetField(ref this.slipYMult, value, nameof(SlipYMult)); }
-		}
-
-		public double SlipYMultAll
-		{
-			get => this.slipYMultAll;
-			set { SetField(ref this.slipYMultAll, value, nameof(SlipYMultAll)); }
-		}
-
-		public double SlipYGamma
-		{
-			get => this.slipYGamma;
-			set { SetField(ref this.slipYGamma, value, nameof(SlipYGamma)); }
-		}
-
-		public double SlipYGammaAll
-		{
-			get => this.slipYGammaAll;
-			set { SetField(ref this.slipYGammaAll, value, nameof(SlipYGammaAll)); }
-		}
-
-		public double MotionPitchOffset
-		{
-			get => this.motionPitchOffset;
-			set { SetField(ref this.motionPitchOffset, value, nameof(MotionPitchOffset)); }
-		}
-
-		public double MotionPitchMult
-		{
-			get => this.motionPitchMult;
-			set { SetField(ref this.motionPitchMult, value, nameof(MotionPitchMult)); }
-		}
-
-		public double MotionPitchGamma
-		{
-			get => this.motionPitchGamma;
-			set { SetField(ref this.motionPitchGamma, value, nameof(MotionPitchGamma)); }
-		}
-
-		public double MotionRollOffset
-		{
-			get => this.motionRollOffset;
-			set { SetField(ref this.motionRollOffset, value, nameof(MotionRollOffset)); }
-		}
-
-		public double MotionRollMult
-		{
-			get => this.motionRollMult;
-			set { SetField(ref this.motionRollMult, value, nameof(MotionRollMult)); }
-		}
-
-		public double MotionRollGamma
-		{
-			get => this.motionRollGamma;
-			set { SetField(ref this.motionRollGamma, value, nameof(MotionRollGamma)); }
-		}
-
-		public double MotionYawOffset
-		{
-			get => this.motionYawOffset;
-			set { SetField(ref this.motionYawOffset, value, nameof(MotionYawOffset)); }
-		}
-
-		public double MotionYawMult
-		{
-			get => this.motionYawMult;
-			set { SetField(ref this.motionYawMult, value, nameof(MotionYawMult)); }
-		}
-
-		public double MotionYawGamma
-		{
-			get => this.motionYawGamma;
-			set { SetField(ref this.motionYawGamma, value, nameof(MotionYawGamma)); }
-		}
-
-		public double MotionHeaveOffset
-		{
-			get => this.motionHeaveOffset;
-			set { SetField(ref this.motionHeaveOffset, value, nameof(MotionHeaveOffset)); }
-		}
-
-		public double MotionHeaveMult
-		{
-			get => this.motionHeaveMult;
-			set { SetField(ref this.motionHeaveMult, value, nameof(MotionHeaveMult)); }
-		}
-
-		public double MotionHeaveGamma
-		{
-			get => this.motionHeaveGamma;
-			set { SetField(ref this.motionHeaveGamma, value, nameof(MotionHeaveGamma)); }
-		}
-
-		public double MotionSurgeOffset
-		{
-			get => this.motionSurgeOffset;
-			set { SetField(ref this.motionSurgeOffset, value, nameof(MotionSurgeOffset)); }
-		}
-
-		public double MotionSurgeMult
-		{
-			get => this.motionSurgeMult;
-			set { SetField(ref this.motionSurgeMult, value, nameof(MotionSurgeMult)); }
-		}
-
-		public double MotionSurgeGamma
-		{
-			get => this.motionSurgeGamma;
-			set { SetField(ref this.motionSurgeGamma, value, nameof(MotionSurgeGamma)); }
-		}
-
-		public double MotionSwayOffset
-		{
-			get => this.motionSwayOffset;
-			set { SetField(ref this.motionSwayOffset, value, nameof(MotionSwayOffset)); }
-		}
-
-		public double MotionSwayMult
-		{
-			get => this.motionSwayMult;
-			set { SetField(ref this.motionSwayMult, value, nameof(MotionSwayMult)); }
-		}
-
-		public double MotionSwayGamma
-		{
-			get => this.motionSwayGamma;
-			set { SetField(ref this.motionSwayGamma, value, nameof(MotionSwayGamma)); }
-		}
 	}
 }
