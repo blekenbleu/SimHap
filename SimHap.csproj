@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="Helpers.cs" />
     <Compile Include="SimData.cs" />
+    <Compile Include="SimDataMethods.cs" />
     <Compile Include="SimDataNotify.cs" />
     <Compile Include="Spec.cs" />
     <Compile Include="SimHap.cs" />
