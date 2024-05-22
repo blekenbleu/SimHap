@@ -270,7 +270,7 @@ namespace sierses.SimHap
 		public SimData()
 		{
 			GameAltText = "";
-			LoadStatusText = "Not Loaded";
+			LoadText = "Not Loaded";
 			Gear = 0;
 			GearPrevious = 0;
 			Downshift = false;
@@ -570,9 +570,9 @@ namespace sierses.SimHap
 			return 0;
 		}
 
-		private void UpdateVehicle(PluginManager pluginManager, ref GameData Gdat)
+		private void UpdateVehicle(ref GameData Gdat)
 		{
-			PM = pluginManager;
+			PM = SHP.PM;
 			data = Gdat;
 			SuspensionDistFLP = SuspensionDistFL;
 			SuspensionDistFRP = SuspensionDistFR;
@@ -639,7 +639,7 @@ namespace sierses.SimHap
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
-					WiperStatus = (int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Graphics.WiperLV");
+					WiperStatus = (int) SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Graphics.WiperLV");
 					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
 					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
 					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
@@ -896,37 +896,37 @@ namespace sierses.SimHap
 					}
 					break;
 				case GameId.IRacing:
-					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFshockDefl") != null)
+					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFshockDefl");
 					}
-					else if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFSHshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFSHshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFSHshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFSHshockDefl");
 					}
-					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRshockDefl") != null)
+					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRshockDefl");
 					}
-					else if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRSHshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRSHshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRSHshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRSHshockDefl");
 					}
-					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CFshockDefl") != null)
+					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.CFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.CFshockDefl");
 					}
-					else if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.HFshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.HFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.HFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.HFshockDefl");
 					}
-					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CRshockDefl") != null)
+					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CRshockDefl") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
@@ -1067,22 +1067,22 @@ namespace sierses.SimHap
 					}
 					break;
 				case GameId.RRRE:
-					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.FrontLeft") != null)
+					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.FrontLeft") != null)
 					{
 						SuspensionDistFL = Raw("Player.SuspensionDeflection.FrontLeft");
 						SuspensionDistFR = Raw("Player.SuspensionDeflection.FrontRight");
 					}
-					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.RearLeft") != null)
+					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.RearLeft") != null)
 					{
 						SuspensionDistRL = Raw("Player.SuspensionDeflection.RearLeft");
 						SuspensionDistRR = Raw("Player.SuspensionDeflection.RearRight");
 					}
-					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionFront") != null)
+					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionFront") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 					}
-					if (pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionRear") != null)
+					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionRear") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Player.ThirdSpringSuspensionDeflectionRear");
@@ -1176,7 +1176,7 @@ namespace sierses.SimHap
 					SuspensionDistFR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection02");
 					SuspensionDistRL = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection03");
 					SuspensionDistRR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection04");
-					WiperStatus = (bool) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
+					WiperStatus = (bool) SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
 					break;
 				case GameId.BeamNG:
 					flag = false;
@@ -1214,8 +1214,8 @@ namespace sierses.SimHap
 					WheelSpeedRL = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					WheelSpeedRR = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					SlipFromWheelSpeed();
-					if ((int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial01") == 7
-					 || (int) pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial02") == 7)
+					if ((int) SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial01") == 7
+					 || (int) SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial02") == 7)
 					{
 						RumbleLeft = 50.0;
 						RumbleRight = 50.0;
@@ -1377,11 +1377,14 @@ namespace sierses.SimHap
 		}
 
 		// called from DataUpdate() and recalled FetchCarData(), perhaps repeatedly
-		internal void SetVehicle(PluginManager pluginManager, ref StatusDataBase db, SimHap shp)
+		internal void SetVehicle(SimHap shp)
 		{
+			StatusDataBase db;
+
 			if (null != shp)	// null when called by FetchCarData()
 			{
 				SHP = shp;
+				db = SHP.Gdat.NewData;
 				string cid = db.CarId;
 				
 /*				// if (Settings.Vehicle != null && (Settings.Vehicle.Id == db.CarId || Settings.Vehicle.Id == db.CarModel))
@@ -1395,18 +1398,19 @@ namespace sierses.SimHap
 					SimHapticsPlugin.LoadStatus = DataStatus.SettingsFile;	// disable S.Defaults() in SetDefaultVehicle()
 					SimHapticsPlugin.LoadFinish = false;					// enable SetDefaultVehicle
 					Index = 0;												// disable GameId switch
-					LoadStatusText = "Reloaded from Settings";
+					LoadText = "Reloaded from Settings";
 				}
 				else { */
 					Index = (null == Lcars) ? -1 : Lcars.FindIndex(x => x.id == cid);
 				if (0 <= Index)
 				{
-					SimHap.FetchStatus = APIStatus.Success;
-                    SimHap.LoadFinish = false;                    // enable SetDefaultVehicle
-                }
+					SimHap.FetchStatus = APIStatus.Loaded;
+					SimHap.LoadFinish = false;					// enable SetDefaultVehicle
+				}
 //				}
 			}
-			if (0 > Index && SimHap.FailedId != db.CarId)	// FetchCarData() sets db.CarId = SimHapticsPlugin.FailedId while waiting ...
+			db = SHP.Gdat.NewData;
+			if (0 > Index)
 				switch (SimHap.CurrentGame)
 				{
 					case GameId.AC:
@@ -1417,6 +1421,8 @@ namespace sierses.SimHap
 						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.AMS1:
+					case GameId.LMU:
+					case GameId.RF2:
 						if (SHP.S.Category != db.CarClass && SimHap.FailedCategory != db.CarClass)
 							SimHap.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
@@ -1428,42 +1434,38 @@ namespace sierses.SimHap
 					case GameId.D4:
 						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
-							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
+							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 						break;
 					case GameId.DR2:
 						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
-							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
+							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 						break;
 					case GameId.WRC23:
 						SimHap.FetchCarData(this, db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
-							SHP.S.IdleRPM = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
+							SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
 						break;
 					case GameId.F12022:
 					case GameId.F12023:
 						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
-							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
+							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
 						break;
 					case GameId.Forza:
 						SimHap.FetchCarData(this, db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
-							SHP.S.IdleRPM = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
+							SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
 						break;
 					case GameId.IRacing:
 						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						GameAltText = pluginManager.GameName + (string)pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
+						GameAltText = SHP.PM.GameName + (string)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 						if (0 == SHP.S.IdleRPM)
 						{
-							var rpm = pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
+							var rpm = SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
 							if (null != rpm)
 								SHP.S.IdleRPM = Convert.ToUInt16(rpm);
 						}
-						break;
-					case GameId.RF2:
-						if (SHP.S.Category != db.CarClass && SimHap.FailedCategory != db.CarClass)
-							SimHap.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.RRRE:
 						if (SHP.S.Id != db.CarModel && SimHap.FailedId != db.CarModel)
@@ -1477,7 +1479,7 @@ namespace sierses.SimHap
 									 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0)
 							);
 						if (0 == SHP.S.IdleRPM)
-							SHP.S.IdleRPM = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm"));
+							SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm"));
 						break;
 					case GameId.GPBikes:
 					case GameId.MXBikes:
@@ -1485,20 +1487,16 @@ namespace sierses.SimHap
 						{
 							SHP.S.Id = db.CarId;
 							SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
-							SHP.S.Redline = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
+							SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
 							SimHap.LoadFinish = false;
 							SimHap.FetchStatus = APIStatus.Fail;
 						}
 						break;
-					case GameId.LMU:
-						if (SHP.S.Category != db.CarClass && SimHap.FailedCategory != db.CarClass)
-							SimHap.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						break;
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
 						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						SHP.S.Redline = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM"));
-						SHP.S.MaxRPM = Convert.ToUInt16(pluginManager.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM"));
+						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM"));
+						SHP.S.MaxRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM"));
 						break;
 					default:
 						SHP.S.Redline = Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM);
@@ -1509,22 +1507,22 @@ namespace sierses.SimHap
 
 			if (!SimHap.LoadFinish && SimHap.FetchStatus != APIStatus.Waiting)
 			{
-				if (SimHap.FetchStatus == APIStatus.Success)
+				if (SimHap.FetchStatus == APIStatus.Loaded)
 				{
 					if (0 <= Index) {
 						SHP.S.Import(Lcars[Index]);
 						SimHap.LoadStatus = DataStatus.JSON;
-						LoadStatusText = "JSON Load Success";
+						LoadText = "JSON Load Success";
 					} else {
 						SimHap.LoadStatus = DataStatus.SimHapticsAPI;
-						LoadStatusText = "DB Load Success";
+						LoadText = "DB Load Success";
 					}
 					SimHap.Changed = true;
 					SHP.Settings.Vehicle = new Spec(SHP.S);
-
+					SimHap.FetchStatus = APIStatus.Success;
 					SimHap.FailedId = "";
 				}
-				else SHP.SetDefaultVehicle(ref db); // sets LoadStatusText
+				else SHP.SetDefaultVehicle(db); // sets LoadText
 				FinalizeVehicle();				// sets LoadFinish = true
 				if (0 > Index)
 					Add(SHP.S.Car);
@@ -1535,12 +1533,11 @@ namespace sierses.SimHap
 		}		// SetVehicle()
 
 		// called from DataUpdate()
-		internal void Refresh(ref GameData Gdat, PluginManager pluginManager, SimHap shp)
+		internal void Refresh(ref GameData Gdat, SimHap shp)
 		{
 			SHP = shp;
-			PM = pluginManager;
 			data = Gdat;
-			FPS = (double) pluginManager.GetPropertyValue("DataCorePlugin.DataUpdateFps");
+			FPS = (double) SHP.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			RPMPercent = data.NewData.Rpms * InvMaxRPM;
 			SpeedMs = data.NewData.SpeedKmh * 0.277778;
 			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
@@ -1635,7 +1632,7 @@ namespace sierses.SimHap
 			WheelLoadFR = ((100.0 + AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRL = ((100.0 - AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRR = ((100.0 - AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
-			UpdateVehicle(pluginManager, ref data);
+			UpdateVehicle(ref data);
 			Airborne = AccHeave2S < -2.0 || Math.Abs(data.NewData.OrientationRoll) > 60.0;
 			if (Airborne && SuspensionFL < 0.1)
 				SlipXFL = SlipYFL = 0.0;

@@ -63,7 +63,14 @@
 - reworked `IdleRPM` handling
 
 ### to do
-- writing json when values change
-- performance improvements and code simplifications
-- share `Download` class between `Spec` and `SimData`  
+- write json when values change - *20 May 2024*: coded  
+- improve performance and simplify code - *22 May 2024*: in progress  
+- share `CarSpec` class between `Spec` and `SimData` - *21 May 2024*: done  
 	 to save storage and eliminate copying
+- have UI entries affect properties
+
+### refactoring
+- when SimHub invokes `DataUpdate()` (at 60 Hz),
+	- avoid invoking either `Refresh()` or `SetVehicle()` if `FetchStatus == APIStatus.Waiting`
+- when `static async void FetchCarData()` eventually gets valid `Download dljc`,
+	- set new `FetchStatus = APIStatus.Loaded` to preclude looping

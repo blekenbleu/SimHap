@@ -105,14 +105,14 @@ namespace sierses.SimHap
 		// ----------------------------------------------------------------
 
 		// called by SetVehicle() in DataUpdate() when car not found
-		internal void SetDefaultVehicle(ref StatusDataBase db)
+		internal void SetDefaultVehicle(StatusDataBase db)
 		{
 			if (LoadStatus == DataStatus.SettingsFile)
 				return;
 
 			string status = S.Defaults(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
-				D.LoadStatusText = status;
+				D.LoadText = status;
 			if (0 == S.Redline)
 				S.Redline = 6000;
 			if (0 == S.MaxRPM)
@@ -131,23 +131,25 @@ namespace sierses.SimHap
 		/// </summary>
 		/// <param name="pluginManager"></param>
 		/// <param name="data">Current game data, including present and previous data frames.</param> 
-		static GameData Gdat;
-		static PluginManager PM;
+		internal GameData Gdat;
+		internal PluginManager PM;
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
-			if (null == data.NewData || (FetchStatus == APIStatus.Waiting && Retry()))
+			string cat = "", id = "";
+
+			if (null == data.NewData || Retry(data.NewData, ref cat, ref id))
 				return;
 
 			Gdat = data;
 			PM = pluginManager;
 
 			if (data.GameRunning && S.Id == data.NewData.CarId && null != data.OldData)
-					D.Refresh(ref data, pluginManager, this);
+					D.Refresh(ref data, this);
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 			{
 				if (Changed)
 					D.Add(S.Car);
-				D.SetVehicle(pluginManager, ref data.NewData, this);
+				D.SetVehicle(this);
 			}
 		}
 
@@ -444,31 +446,30 @@ namespace sierses.SimHap
 			D.AccSway = new double[D.AccSamples];
 		}	// SetGame()
 
-		// reuse these for json input
-		static ushort gameRedline, gameMaxRPM;
-
-		internal bool Fail(string id, string category)
+		internal bool Fail(string id, string fcat)
 		{
-			Logging.Current.Info("SimHap.FetchCarData(): Failed to load " + id + " : " + category);
+			Logging.Current.Info("SimHap.FetchCarData(): Failed to load " + id + " : " + fcat);
 			if (3 < LoadFailCount++)
 			{
-				FailedId = CurrentGame != GameId.Forza ? id : "Car_" + id;
-				FailedCategory = category;
-				FetchStatus = APIStatus.Fail;
 				LoadFailCount = 0;
+				FailedId = CurrentGame != GameId.Forza ? id : "Car_" + id;
+				FailedCategory = fcat;
+				FetchStatus = APIStatus.Fail;
 				return true;
 			}
 			FetchStatus = APIStatus.Retry;
 			return false;					// do not give up (yet)
 		}
 
-		internal bool Retry(string id, string cat)
+		internal bool Retry(StatusDataBase db, ref string cat, ref string id)
 		{
-			if (120 > D.CarInitCount++)
+			if (FetchStatus == APIStatus.Waiting && 120 > D.CarInitCount++)
 				return true;
-
 			D.CarInitCount = 0;
-			return !Fail(id, cat);
+			GameId g = CurrentGame;
+			cat = (g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1)  ? db.CarClass : "0";
+			id = g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId;
+			return !(FetchStatus == APIStatus.Waiting && Fail(id, cat));
 		}
 
 		// must be void and static;  invoked by D.SetVehicle()
@@ -480,13 +481,12 @@ namespace sierses.SimHap
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
+			if (APIStatus.Loaded == FetchStatus)
+				return;
 			try
 			{
-				gameRedline = Convert.ToUInt16(0.5 + doubleRedline);
-				gameMaxRPM = Convert.ToUInt16(0.5 + doubleMaxRPM);
 				FetchStatus = APIStatus.Waiting;
 				LoadFinish = false;
-//				Logging.Current.Info("SimHap: Loading " + category + " " + id);
 				id ??= "0";
 				category ??= "0";
 				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
@@ -499,18 +499,17 @@ namespace sierses.SimHap
 									NullValueHandling = NullValueHandling.Ignore,
 									MissingMemberHandling = MissingMemberHandling.Ignore
 								});
-				if (v.Set(dljc))
+				if (v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
 				{
 					Logging.Current.Info("SimHap.FetchCarData(): Successfully loaded " + v.Name);
-					FetchStatus = APIStatus.Success;
 					LoadFinish = false;
 					LoadFailCount = 0;
 
-					// FetchCarData() seeminly does not return to SetVehiclePerGame()
-					// before NEXT CarId change.  Consequently, call it with FailedId = id
-					FailedId = id;
-					FailedCategory = "";
-					SD.SetVehicle(PM, ref Gdat.NewData, null);
+					// FetchCarData() seeminly does not return to SetVehicle()
+					// before NEXT CarId change.
+					//  Consequently, call SetVehicle() now!
+					FetchStatus = APIStatus.Loaded;	// new status to avoid looping here
+					SD.SetVehicle(null);	// null avoids attempting JSON lookups
 				}
 				else SD.SHP.Fail(id, category);
 			}

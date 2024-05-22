@@ -11,5 +11,6 @@ namespace sierses.SimHap
     Retry,
     Fail,
     Success,
+	Loaded
   }
 }
