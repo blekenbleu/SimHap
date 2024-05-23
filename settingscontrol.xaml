@@ -54,7 +54,7 @@
           <styles:SHSection Title="Engine and Vehicle Specifications" Grid.Row="0" Grid.ColumnSpan="3"/>
           <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200" Margin="75,0,0,5" Text="{Binding D.LoadStatusText}"/>
+              <TextBlock MinWidth="200" Margin="75,0,0,5" Text="{Binding D.LoadText}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="75">Name:</TextBlock>
