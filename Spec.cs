@@ -43,22 +43,22 @@ namespace sierses.SimHap
 
 	public class CarSpec
 	{
-		public string notes;
-		public ushort cc;
-		public ushort nm;
-		public ushort ehp;
-		public ushort hp;
-		public string drive;
+		public string game;
+		public string name;
+		public string id;
 		public string config;
 		public ushort cyl;
 		public string loc;
+		public string drive;
+		public ushort hp;
+		public ushort ehp;
+		public ushort cc;
+		public ushort nm;
+		public ushort redline;
 		public ushort maxrpm;
 		public ushort idlerpm;
-		public ushort redline;
 		public string category;
-		public string name;
-		public string id;
-		public string game;
+		public string notes;
 	}
 
 	// format for downloading from website; must be public
