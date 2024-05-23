@@ -177,7 +177,7 @@ namespace sierses.SimHap
 								});
 				if (v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
 				{
-					Logging.Current.Info("SimHap.FetchCarData(): Successfully loaded " + v.Name);
+					Logging.Current.Info("SimHap.FetchCarData(): Successfully loaded " + v.CarName);
 					LoadFinish = false;
 					LoadFailCount = 0;
 
@@ -584,7 +584,7 @@ namespace sierses.SimHap
 			}
 			else Logging.Current.Info("SimHap.Init():  "+myfile+" not found"); 
 			D.Init(Settings);
-			IPluginExtensions.AttachDelegate(this, "CarName", () => S.Name);
+			IPluginExtensions.AttachDelegate(this, "CarName", () => S.CarName);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);
 			IPluginExtensions.AttachDelegate(this, "Category", () => S.Category);
 			IPluginExtensions.AttachDelegate(this, "RedlineRPM", () => S.Redline);

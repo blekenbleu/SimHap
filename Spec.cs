@@ -17,26 +17,26 @@ namespace sierses.SimHap
 	public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
-		protected virtual void OnPropertyChanged(string propertyName)
+		protected virtual void OnPropertyChanged(string Propertyname)
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Propertyname));
 		}
 
-		protected bool SetQuiet<T>(ref T field, T value, string propertyName)
+		protected bool SetQuiet<T>(ref T field, T value, string Propertyname)
 		{
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return false;
 			field = value;
-			OnPropertyChanged(propertyName);
+			OnPropertyChanged(Propertyname);
 			return true;
 		}
 
-		protected bool SetField<T>(ref T field, T value, string propertyName)
+		protected bool SetField<T>(ref T field, T value, string propertyname)
 		{
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return false;
 			field = value;
-			OnPropertyChanged(propertyName);
+			OnPropertyChanged(propertyname);
 			return SimHap.Changed = true;
 		}
 	}
@@ -151,7 +151,7 @@ namespace sierses.SimHap
 			MaxRPM   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
 			MaxPower =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
 			Category = 			data.category;
-			Name = 				data.name;
+			CarName = 				data.name;
 			EngineLocation = 	data.loc;
 			PoweredWheels = 	data.drive;
 			EngineConfiguration = data.config;
@@ -167,7 +167,7 @@ namespace sierses.SimHap
 		internal void Import(CarSpec d)
 		{
 			Game = d.game;
-			Name = d.name;
+			CarName = d.name;
 			Id = d.id;
 			Category = d.category;
 			Redline = d.redline;
@@ -191,7 +191,7 @@ namespace sierses.SimHap
 				return "SimHap.Spec.Defaults():  null game";
 
 			Game = game;
-			Name = db.CarModel;
+			CarName = db.CarModel;
 			Id = db.CarId;
 			Category = db.CarClass;
 			EngineConfiguration = "V";
@@ -311,10 +311,10 @@ namespace sierses.SimHap
 			set { SetField(ref Private_Car.game, value, nameof(Game)); }
 		}
 
-		public string Name
+		public string CarName
 		{
 			get => Private_Car.name;
-			set { SetField(ref Private_Car.name, value, nameof(Name)); }
+			set { SetField(ref Private_Car.name, value, nameof(CarName)); }
 		}
 
 		public string Id

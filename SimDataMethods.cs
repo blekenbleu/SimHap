@@ -158,7 +158,7 @@ namespace sierses.SimHap
 						break;
 					case GameId.AMS2:
 						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-						SHP.S.Name = db.CarModel;
+						SHP.S.CarName = db.CarModel;
 						SHP.S.Category = db.CarClass;
 						break;
 					case GameId.D4:

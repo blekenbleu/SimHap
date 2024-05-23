@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:styles="clr-namespace:SimHub.Plugins.Styles;assembly=SimHub.Plugins"
+			 xmlns:local="clr-namespace:sierses.SimHap"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance}">
+<UserControl.DataContext>
+   <local:SimHap/>
+</UserControl.DataContext>
   <FrameworkElement.Resources>
     <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
       <Setter Property="UIElement.Opacity" Value="0.9"/>
@@ -58,7 +62,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="75">Name:</TextBlock>
-              <TextBox Name="CarName" MinWidth="200" Text="{Binding S.Name}"/>
+              <TextBox Name="CarName" MinWidth="200" Text="{Binding S.CarName}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="75">ID:</TextBlock>

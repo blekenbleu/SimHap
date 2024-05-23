@@ -44,224 +44,224 @@ namespace sierses.SimHap
 
 		public string GameAltText
 		{
-			get => this.gameAltText;
-			set { SetQuiet(ref this.gameAltText, value, nameof(GameAltText)); }
+			get => gameAltText;
+			set { SetQuiet(ref gameAltText, value, nameof(GameAltText)); }
 		}
 
 		public string LoadText
 		{
-			get => this.loadStatusText;
-			set { SetQuiet(ref this.loadStatusText, value, nameof(LoadText)); }
+			get => loadStatusText;
+			set { SetQuiet(ref loadStatusText, value, nameof(LoadText)); }
 		}
 
 		public string LockedText
 		{
-			get => this.lockedText;
-			set { SetQuiet(ref this.lockedText, value, nameof(LockedText)); }
+			get => lockedText;
+			set { SetQuiet(ref lockedText, value, nameof(LockedText)); }
 		}
 
 		public double EngineMult
 		{
-			get => this.engineMult;
-			set { SetField(ref this.engineMult, value, nameof(EngineMult)); }
+			get => engineMult;
+			set { SetField(ref engineMult, value, nameof(EngineMult)); }
 		}
 
 		public double EngineMultAll
 		{
-			get => this.engineMultAll;
-			set { SetField(ref this.engineMultAll, value, nameof(EngineMultAll)); }
+			get => engineMultAll;
+			set { SetField(ref engineMultAll, value, nameof(EngineMultAll)); }
 		}
 
 		public double RumbleMult
 		{
-			get => this.rumbleMult;
-			set { SetField(ref this.rumbleMult, value, nameof(RumbleMult)); }
+			get => rumbleMult;
+			set { SetField(ref rumbleMult, value, nameof(RumbleMult)); }
 		}
 
 		public double RumbleMultAll
 		{
-			get => this.rumbleMultAll;
-			set { SetField(ref this.rumbleMultAll, value, nameof(RumbleMultAll)); }
+			get => rumbleMultAll;
+			set { SetField(ref rumbleMultAll, value, nameof(RumbleMultAll)); }
 		}
 
 		public double SuspensionGamma
 		{
-			get => this.suspensionGamma;
-			set { SetField(ref this.suspensionGamma, value, nameof(SuspensionGamma)); }
+			get => suspensionGamma;
+			set { SetField(ref suspensionGamma, value, nameof(SuspensionGamma)); }
 		}
 
 		public double SuspensionGammaAll
 		{
-			get => this.suspensionGammaAll;
-			set { SetField(ref this.suspensionGammaAll, value, nameof(SuspensionGammaAll)); }
+			get => suspensionGammaAll;
+			set { SetField(ref suspensionGammaAll, value, nameof(SuspensionGammaAll)); }
 		}
 
 		public double SuspensionMult
 		{
-			get => this.suspensionMult;
-			set { SetField(ref this.suspensionMult, value, nameof(SuspensionMult)); }
+			get => suspensionMult;
+			set { SetField(ref suspensionMult, value, nameof(SuspensionMult)); }
 		}
 
 		public double SuspensionMultAll
 		{
-			get => this.suspensionMultAll;
-			set { SetField(ref this.suspensionMultAll, value, nameof(SuspensionMultAll)); }
+			get => suspensionMultAll;
+			set { SetField(ref suspensionMultAll, value, nameof(SuspensionMultAll)); }
 		}
 
 		public double SlipXMult
 		{
-			get => this.slipXMult;
-			set { SetField(ref this.slipXMult, value, nameof(SlipXMult)); }
+			get => slipXMult;
+			set { SetField(ref slipXMult, value, nameof(SlipXMult)); }
 		}
 
 		public double SlipXMultAll
 		{
-			get => this.slipXMultAll;
-			set { SetField(ref this.slipXMultAll, value, nameof(SlipXMultAll)); }
+			get => slipXMultAll;
+			set { SetField(ref slipXMultAll, value, nameof(SlipXMultAll)); }
 		}
 
 		public double SlipXGamma
 		{
-			get => this.slipXGamma;
-			set { SetField(ref this.slipXGamma, value, nameof(SlipXGamma)); }
+			get => slipXGamma;
+			set { SetField(ref slipXGamma, value, nameof(SlipXGamma)); }
 		}
 
 		public double SlipXGammaAll
 		{
-			get => this.slipXGammaAll;
-			set { SetField(ref this.slipXGammaAll, value, nameof(SlipXGammaAll)); }
+			get => slipXGammaAll;
+			set { SetField(ref slipXGammaAll, value, nameof(SlipXGammaAll)); }
 		}
 
 		public double SlipYMult
 		{
-			get => this.slipYMult;
-			set { SetField(ref this.slipYMult, value, nameof(SlipYMult)); }
+			get => slipYMult;
+			set { SetField(ref slipYMult, value, nameof(SlipYMult)); }
 		}
 
 		public double SlipYMultAll
 		{
-			get => this.slipYMultAll;
-			set { SetField(ref this.slipYMultAll, value, nameof(SlipYMultAll)); }
+			get => slipYMultAll;
+			set { SetField(ref slipYMultAll, value, nameof(SlipYMultAll)); }
 		}
 
 		public double SlipYGamma
 		{
-			get => this.slipYGamma;
-			set { SetField(ref this.slipYGamma, value, nameof(SlipYGamma)); }
+			get => slipYGamma;
+			set { SetField(ref slipYGamma, value, nameof(SlipYGamma)); }
 		}
 
 		public double SlipYGammaAll
 		{
-			get => this.slipYGammaAll;
-			set { SetField(ref this.slipYGammaAll, value, nameof(SlipYGammaAll)); }
+			get => slipYGammaAll;
+			set { SetField(ref slipYGammaAll, value, nameof(SlipYGammaAll)); }
 		}
 
 		public double MotionPitchOffset
 		{
-			get => this.motionPitchOffset;
-			set { SetField(ref this.motionPitchOffset, value, nameof(MotionPitchOffset)); }
+			get => motionPitchOffset;
+			set { SetField(ref motionPitchOffset, value, nameof(MotionPitchOffset)); }
 		}
 
 		public double MotionPitchMult
 		{
-			get => this.motionPitchMult;
-			set { SetField(ref this.motionPitchMult, value, nameof(MotionPitchMult)); }
+			get => motionPitchMult;
+			set { SetField(ref motionPitchMult, value, nameof(MotionPitchMult)); }
 		}
 
 		public double MotionPitchGamma
 		{
-			get => this.motionPitchGamma;
-			set { SetField(ref this.motionPitchGamma, value, nameof(MotionPitchGamma)); }
+			get => motionPitchGamma;
+			set { SetField(ref motionPitchGamma, value, nameof(MotionPitchGamma)); }
 		}
 
 		public double MotionRollOffset
 		{
-			get => this.motionRollOffset;
-			set { SetField(ref this.motionRollOffset, value, nameof(MotionRollOffset)); }
+			get => motionRollOffset;
+			set { SetField(ref motionRollOffset, value, nameof(MotionRollOffset)); }
 		}
 
 		public double MotionRollMult
 		{
-			get => this.motionRollMult;
-			set { SetField(ref this.motionRollMult, value, nameof(MotionRollMult)); }
+			get => motionRollMult;
+			set { SetField(ref motionRollMult, value, nameof(MotionRollMult)); }
 		}
 
 		public double MotionRollGamma
 		{
-			get => this.motionRollGamma;
-			set { SetField(ref this.motionRollGamma, value, nameof(MotionRollGamma)); }
+			get => motionRollGamma;
+			set { SetField(ref motionRollGamma, value, nameof(MotionRollGamma)); }
 		}
 
 		public double MotionYawOffset
 		{
-			get => this.motionYawOffset;
-			set { SetField(ref this.motionYawOffset, value, nameof(MotionYawOffset)); }
+			get => motionYawOffset;
+			set { SetField(ref motionYawOffset, value, nameof(MotionYawOffset)); }
 		}
 
 		public double MotionYawMult
 		{
-			get => this.motionYawMult;
-			set { SetField(ref this.motionYawMult, value, nameof(MotionYawMult)); }
+			get => motionYawMult;
+			set { SetField(ref motionYawMult, value, nameof(MotionYawMult)); }
 		}
 
 		public double MotionYawGamma
 		{
-			get => this.motionYawGamma;
-			set { SetField(ref this.motionYawGamma, value, nameof(MotionYawGamma)); }
+			get => motionYawGamma;
+			set { SetField(ref motionYawGamma, value, nameof(MotionYawGamma)); }
 		}
 
 		public double MotionHeaveOffset
 		{
-			get => this.motionHeaveOffset;
-			set { SetField(ref this.motionHeaveOffset, value, nameof(MotionHeaveOffset)); }
+			get => motionHeaveOffset;
+			set { SetField(ref motionHeaveOffset, value, nameof(MotionHeaveOffset)); }
 		}
 
 		public double MotionHeaveMult
 		{
-			get => this.motionHeaveMult;
-			set { SetField(ref this.motionHeaveMult, value, nameof(MotionHeaveMult)); }
+			get => motionHeaveMult;
+			set { SetField(ref motionHeaveMult, value, nameof(MotionHeaveMult)); }
 		}
 
 		public double MotionHeaveGamma
 		{
-			get => this.motionHeaveGamma;
-			set { SetField(ref this.motionHeaveGamma, value, nameof(MotionHeaveGamma)); }
+			get => motionHeaveGamma;
+			set { SetField(ref motionHeaveGamma, value, nameof(MotionHeaveGamma)); }
 		}
 
 		public double MotionSurgeOffset
 		{
-			get => this.motionSurgeOffset;
-			set { SetField(ref this.motionSurgeOffset, value, nameof(MotionSurgeOffset)); }
+			get => motionSurgeOffset;
+			set { SetField(ref motionSurgeOffset, value, nameof(MotionSurgeOffset)); }
 		}
 
 		public double MotionSurgeMult
 		{
-			get => this.motionSurgeMult;
-			set { SetField(ref this.motionSurgeMult, value, nameof(MotionSurgeMult)); }
+			get => motionSurgeMult;
+			set { SetField(ref motionSurgeMult, value, nameof(MotionSurgeMult)); }
 		}
 
 		public double MotionSurgeGamma
 		{
-			get => this.motionSurgeGamma;
-			set { SetField(ref this.motionSurgeGamma, value, nameof(MotionSurgeGamma)); }
+			get => motionSurgeGamma;
+			set { SetField(ref motionSurgeGamma, value, nameof(MotionSurgeGamma)); }
 		}
 
 		public double MotionSwayOffset
 		{
-			get => this.motionSwayOffset;
-			set { SetField(ref this.motionSwayOffset, value, nameof(MotionSwayOffset)); }
+			get => motionSwayOffset;
+			set { SetField(ref motionSwayOffset, value, nameof(MotionSwayOffset)); }
 		}
 
 		public double MotionSwayMult
 		{
-			get => this.motionSwayMult;
-			set { SetField(ref this.motionSwayMult, value, nameof(MotionSwayMult)); }
+			get => motionSwayMult;
+			set { SetField(ref motionSwayMult, value, nameof(MotionSwayMult)); }
 		}
 
 		public double MotionSwayGamma
 		{
-			get => this.motionSwayGamma;
-			set { SetField(ref this.motionSwayGamma, value, nameof(MotionSwayGamma)); }
+			get => motionSwayGamma;
+			set { SetField(ref motionSwayGamma, value, nameof(MotionSwayGamma)); }
 		}
 	}
 }

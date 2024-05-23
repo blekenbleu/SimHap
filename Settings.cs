@@ -26,41 +26,41 @@ namespace sierses.SimHap
 
 		public bool Unlocked
 		{
-			get => this.unlocked;
-			set { SetProp(ref this.unlocked, value, nameof(Unlocked)); }
+			get => unlocked;
+			set { SetProp(ref unlocked, value, nameof(Unlocked)); }
 		}
 
 		public int ABSPulseLength
 		{
-			get => this.absPulseLength;
-			set { SetProp(ref this.absPulseLength, value, nameof(ABSPulseLength)); }
+			get => absPulseLength;
+			set { SetProp(ref absPulseLength, value, nameof(ABSPulseLength)); }
 		}
 
 		public int DownshiftDurationMs
 		{
-			get => this.downshiftDurationMs;
-			set { SetProp(ref this.downshiftDurationMs, value, nameof(DownshiftDurationMs)); }
+			get => downshiftDurationMs;
+			set { SetProp(ref downshiftDurationMs, value, nameof(DownshiftDurationMs)); }
 		}
 
 		public int UpshiftDurationMs
 		{
-			get => this.upshiftDurationMs;
-			set { SetProp(ref this.upshiftDurationMs, value, nameof(UpshiftDurationMs)); }
+			get => upshiftDurationMs;
+			set { SetProp(ref upshiftDurationMs, value, nameof(UpshiftDurationMs)); }
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected bool SetProp<T>(ref T property, T value, string propertyName)
+		protected bool SetProp<T>(ref T property, T value, string propertyname)
 		{
 			if (EqualityComparer<T>.Default.Equals(property, value))
 				return false;
 
 			property = value;
-			PropertyChangedEventHandler handle = this.PropertyChanged;
+			PropertyChangedEventHandler handle = PropertyChanged;
 			if (handle == null)
 				return false;
 
-			handle((object) this, new PropertyChangedEventArgs(propertyName));
+			handle((object) this, new PropertyChangedEventArgs(propertyname));
 			return true;
 		}
 	}
