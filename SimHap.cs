@@ -112,9 +112,11 @@ namespace sierses.SimHap
 
 			string status = S.Defaults(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
-				Logging.Current.Info("SimHap.SetDefaultVehicle():  " + (D.LoadText = status));
+				Logging.Current.Info($"SimHap.SetDefaultVehicle({CurrentGame}, {db.CarModel}) {FetchStatus} {LoadStatus}:  "
+                    + (D.LoadText = status));
 			LoadStatus = DataStatus.DefaultData;
-			if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
+            FetchStatus = APIStatus.None;
+            if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
 				S.Id = db.CarModel;
 		}
 
@@ -144,6 +146,8 @@ namespace sierses.SimHap
 			GameId g = CurrentGame;
 			cat = (g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1)  ? db.CarClass : "0";
 			id = g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId;
+			if (FetchStatus != APIStatus.None && FetchStatus != APIStatus.Success)
+				Logging.Current.Info($"SimHap.Wait({cat}, {g}.{id}):  {FetchStatus} {LoadStatus}");
 			return (FetchStatus == APIStatus.Waiting && !Fail(id, cat));
 		}
 
@@ -157,7 +161,8 @@ namespace sierses.SimHap
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
-			if (DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus)
+            Logging.Current.Info($"SimHap.FetchCarData({id}/{category}):  {FetchStatus} {LoadStatus}");
+            if (DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus)
 				return;
 			try
 			{

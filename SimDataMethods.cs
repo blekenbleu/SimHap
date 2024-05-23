@@ -111,37 +111,40 @@ namespace sierses.SimHap
 		{
 			StatusDataBase db;
 
-			if (null != shp)	// null when called by FetchCarData()
+			if (null != shp)    // null when called by FetchCarData()
 			{
+				Logging.Current.Info($"SimHap.SetVehicle({shp.Gdat.NewData.CarId}):  {SimHap.FetchStatus} {SimHap.LoadStatus}");
 				SHP = shp;
 				db = SHP.Gdat.NewData;
 				string cid = db.CarId;
-				
-/*				// if (Settings.Vehicle != null && (Settings.Vehicle.Id == db.CarId || Settings.Vehicle.Id == db.CarModel))
-				if (db.CarId == SHP.Settings.Vehicle.Id)
-				{
-					Spec temp = new Spec(SHP.S);
-					SHP.S = SHP.Settings.Vehicle;
-					SHP.Settings.Vehicle = temp;
 
-					SimHap.FetchStatus = APIStatus.None;			// disable Index test and Import
-					SimHap.LoadStatus = DataStatus.SettingsFile;	// disable S.Defaults() in SetDefaultVehicle()
-					SimHap.LoadFinish = false;						// enable SetDefaultVehicle
-					Index = 0;										// disable GameId switch
-					Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = "Reloaded from Settings"));
+				/*				// if (Settings.Vehicle != null && (Settings.Vehicle.Id == db.CarId || Settings.Vehicle.Id == db.CarModel))
+								if (db.CarId == SHP.Settings.Vehicle.Id)
+								{
+									Spec temp = new Spec(SHP.S);
+									SHP.S = SHP.Settings.Vehicle;
+									SHP.Settings.Vehicle = temp;
+
+									SimHap.FetchStatus = APIStatus.None;			// disable Index test and Import
+									SimHap.LoadStatus = DataStatus.SettingsFile;	// disable S.Defaults() in SetDefaultVehicle()
+									SimHap.LoadFinish = false;						// enable SetDefaultVehicle
+									Index = 0;										// disable GameId switch
+									Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = "Reloaded from Settings"));
+								}
+								else { */
+				Index = Lcars.FindIndex(x => x.id == cid);
+				if (0 <= Index)
+				{
+					SimHap.FetchStatus = APIStatus.Loaded;
+					SimHap.LoadFinish = false;                  // enable SetDefaultVehicle
 				}
-				else { */
-					Index = Lcars.FindIndex(x => x.id == cid);
-					if (0 <= Index)
-					{
-						SimHap.FetchStatus = APIStatus.Loaded;
-						SimHap.LoadFinish = false;					// enable SetDefaultVehicle
-					}
-//				}
+				//				}
 			}
 			db = SHP.Gdat.NewData;
 			if (0 > Index)
-				switch (SimHap.CurrentGame)
+			{
+                Logging.Current.Info($"SimHap.SetVehicle.switch({db.CarId}):  {SimHap.FetchStatus} {SimHap.LoadStatus}");
+                switch (SimHap.CurrentGame)
 				{
 					case GameId.AC:
 					case GameId.ACC:
@@ -234,6 +237,7 @@ namespace sierses.SimHap
 						SimHap.FetchStatus = APIStatus.Fail;
 						break;
 				}
+			}
 
 			if (!SimHap.LoadFinish && SimHap.FetchStatus != APIStatus.Waiting)
 			{
@@ -242,10 +246,10 @@ namespace sierses.SimHap
 					if (0 <= Index) {
 						SHP.S.Import(Lcars[Index]);
 						SimHap.LoadStatus = DataStatus.JSON;
-						Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = "JSON Load Success"));
+						Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} JSON Load Success"));
 					} else {
 						SimHap.LoadStatus = DataStatus.SimHapticsAPI;
-						Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = "DB Load Success"));
+						Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} DB Load Success"));
 					}
 					SimHap.Changed = true;
 					SHP.Settings.Vehicle = new Spec(SHP.S);
