@@ -7,9 +7,10 @@ namespace sierses.SimHap
   public enum DataStatus
   {
     None,
-    GameData,
+    DefaultData,
     SettingsFile,
     SimHapticsAPI,
-	JSON
+	JSON,
+	NotAPI
   }
 }

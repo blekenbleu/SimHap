@@ -112,17 +112,91 @@ namespace sierses.SimHap
 
 			string status = S.Defaults(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
-				D.LoadText = status;
-			if (0 == S.Redline)
-				S.Redline = 6000;
-			if (0 == S.MaxRPM)
-				S.MaxRPM = 6500;
-			if (string.IsNullOrEmpty(S.Category))
-				S.Category = "street";
-			LoadStatus = DataStatus.GameData;
+				Logging.Current.Info("SimHap.SetDefaultVehicle():  " + (D.LoadText = status));
+			LoadStatus = DataStatus.DefaultData;
 			if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
 				S.Id = db.CarModel;
 		}
+
+		// returning true forces false from Wait(),
+		// false then allows Refresh() or SetVehicle()
+		internal bool Fail(string id, string fcat)
+		{
+			Logging.Current.Info("SimHap.FetchCarData(): Failed to load " + id + " : " + fcat);
+			if (3 < LoadFailCount++)
+			{
+				LoadFailCount = 0;
+				FailedId = CurrentGame != GameId.Forza ? id : "Car_" + id;
+				FailedCategory = fcat;
+				FetchStatus = APIStatus.Fail;
+				return true;
+			}
+			FetchStatus = APIStatus.Retry;
+			return false;					// do not give up (yet)
+		}
+
+		// returning true precludes Refresh() or SetVehicle(), i.e. just wait
+		internal bool Wait(StatusDataBase db, ref string cat, ref string id)
+		{
+			if (FetchStatus == APIStatus.Waiting && 20 > D.CarInitCount++)
+				return true;
+			D.CarInitCount = 0;
+			GameId g = CurrentGame;
+			cat = (g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1)  ? db.CarClass : "0";
+			id = g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId;
+			return (FetchStatus == APIStatus.Waiting && !Fail(id, cat));
+		}
+
+		// must be void and static;  invoked by D.SetVehicle()
+		static Download dljc;
+		internal static async void FetchCarData(
+			SimData SD,
+			string id,
+			string category,
+			Spec v,
+			double doubleRedline,
+			double doubleMaxRPM)
+		{
+			if (DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus)
+				return;
+			try
+			{
+				FetchStatus = APIStatus.Waiting;
+				LoadFinish = false;
+				id ??= "0";
+				category ??= "0";
+				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
+								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
+				HttpResponseMessage async = await client.GetAsync(requestUri);
+				async.EnsureSuccessStatusCode();
+				string dls = async.Content.ReadAsStringAsync().Result;
+				dljc = JsonConvert.DeserializeObject<Download>(dls, new JsonSerializerSettings
+								{
+									NullValueHandling = NullValueHandling.Ignore,
+									MissingMemberHandling = MissingMemberHandling.Ignore
+								});
+				if (v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
+				{
+					Logging.Current.Info("SimHap.FetchCarData(): Successfully loaded " + v.Name);
+					LoadFinish = false;
+					LoadFailCount = 0;
+
+					// FetchCarData() seeminly does not return to SetVehicle()
+					// before NEXT CarId change.
+					//  Consequently, call SetVehicle() now!
+					LoadStatus = DataStatus.NotAPI;	// new status to avoid looping here
+					FetchStatus = APIStatus.Loaded;
+//					SD.SetVehicle(null);			// null avoids attempting JSON lookups
+				}
+//				else SD.SHP.Fail(id, category);
+			}
+			catch (HttpRequestException ex)
+			{
+				Logging.Current.Error("SimHap: " + ex.Message);
+				LoadFailCount = 0;
+				FetchStatus = APIStatus.Retry;
+			}
+		}		// FetchCarData()
 
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data,
@@ -137,14 +211,17 @@ namespace sierses.SimHap
 		{
 			string cat = "", id = "";
 
-			if (null == data.NewData || Retry(data.NewData, ref cat, ref id))
+			if (null == data.NewData || Wait(data.NewData, ref cat, ref id))
 				return;
 
 			Gdat = data;
 			PM = pluginManager;
 
-			if (data.GameRunning && S.Id == data.NewData.CarId && null != data.OldData)
+			if (S.Id == data.NewData.CarId)
+			{
+				if (data.GameRunning && null != data.OldData)
 					D.Refresh(ref data, this);
+			}
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 			{
 				if (Changed)
@@ -158,7 +235,7 @@ namespace sierses.SimHap
 			if (Changed)
 				Settings.Vehicle = new Spec(S);
 			D.Add(S.Car);
-			Changed = LD.Add(D.Lcars);
+			Changed = LD.Add(D.Lcars);			// update game in dictionary
 			string sjs = LD.Jstring();
 			if (0 == sjs.Length || "{}" == sjs)
 				Logging.Current.Info("SimHap.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
@@ -446,81 +523,6 @@ namespace sierses.SimHap
 			D.AccSway = new double[D.AccSamples];
 		}	// SetGame()
 
-		internal bool Fail(string id, string fcat)
-		{
-			Logging.Current.Info("SimHap.FetchCarData(): Failed to load " + id + " : " + fcat);
-			if (3 < LoadFailCount++)
-			{
-				LoadFailCount = 0;
-				FailedId = CurrentGame != GameId.Forza ? id : "Car_" + id;
-				FailedCategory = fcat;
-				FetchStatus = APIStatus.Fail;
-				return true;
-			}
-			FetchStatus = APIStatus.Retry;
-			return false;					// do not give up (yet)
-		}
-
-		internal bool Retry(StatusDataBase db, ref string cat, ref string id)
-		{
-			if (FetchStatus == APIStatus.Waiting && 120 > D.CarInitCount++)
-				return true;
-			D.CarInitCount = 0;
-			GameId g = CurrentGame;
-			cat = (g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1)  ? db.CarClass : "0";
-			id = g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId;
-			return !(FetchStatus == APIStatus.Waiting && Fail(id, cat));
-		}
-
-		// must be void and static;  invoked by D.SetVehicle()
-		internal static async void FetchCarData(
-			SimData SD,
-			string id,
-			string category,
-			Spec v,
-			double doubleRedline,
-			double doubleMaxRPM)
-		{
-			if (APIStatus.Loaded == FetchStatus)
-				return;
-			try
-			{
-				FetchStatus = APIStatus.Waiting;
-				LoadFinish = false;
-				id ??= "0";
-				category ??= "0";
-				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
-								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
-				HttpResponseMessage async = await client.GetAsync(requestUri);
-				async.EnsureSuccessStatusCode();
-				string dls = async.Content.ReadAsStringAsync().Result;
-				Download dljc = JsonConvert.DeserializeObject<Download>(dls, new JsonSerializerSettings
-								{
-									NullValueHandling = NullValueHandling.Ignore,
-									MissingMemberHandling = MissingMemberHandling.Ignore
-								});
-				if (v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
-				{
-					Logging.Current.Info("SimHap.FetchCarData(): Successfully loaded " + v.Name);
-					LoadFinish = false;
-					LoadFailCount = 0;
-
-					// FetchCarData() seeminly does not return to SetVehicle()
-					// before NEXT CarId change.
-					//  Consequently, call SetVehicle() now!
-					FetchStatus = APIStatus.Loaded;	// new status to avoid looping here
-					SD.SetVehicle(null);	// null avoids attempting JSON lookups
-				}
-				else SD.SHP.Fail(id, category);
-			}
-			catch (HttpRequestException ex)
-			{
-				Logging.Current.Error("SimHap: " + ex.Message);
-				LoadFailCount = 0;
-				FetchStatus = APIStatus.Retry;
-			}
-		}		// FetchCarData()
-
 		public void Init(PluginManager pluginManager)
 		{
 			LoadFailCount = 0;
@@ -574,8 +576,9 @@ namespace sierses.SimHap
 				 var foo = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(myfile));
 				if (null != foo && 0 < foo.Count && LD.Load(foo))
 				{
-					Logging.Current.Info($"SimHap.Init():  {LD.Count} games in " + myfile);
 					D.Lcars = LD.Extract(GameDBText);
+					Logging.Current.Info($"SimHap.Init():  {LD.Count} games in " + myfile
+									   + $", with {D.Lcars.Count} {GameDBText} cars");
 				}
 				else Logging.Current.Info("SimHap.Init(): "+myfile+" load failure");
 			}
