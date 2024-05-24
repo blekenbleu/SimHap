@@ -94,7 +94,7 @@ namespace sierses.Sim
 
 			string k = s[0].game;
 
-			if (inDict.ContainsKey(k))
+            if (inDict.ContainsKey(k))
 				for (int i = 0; i < s.Count; i++)
 				{
 					Index = inDict[k].FindIndex(x => x.id == s[i].id);
@@ -106,9 +106,10 @@ namespace sierses.Sim
 			return true;
 		}
  
+		// create inDict
 		public bool Load(Dictionary<string, List<CarSpec>> json)
 		{
-			return null != json && 0 < (inDict = json).Count;
+			return (null != json || 0 < (inDict = new()).Count) && 0 < (inDict = json).Count;
 		}
 
 		internal ushort Count

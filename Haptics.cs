@@ -110,9 +110,9 @@ namespace sierses.Sim
 			if (0 < status.Length)
 				Logging.Current.Info($"Haptics.SetDefaultVehicle({CurrentGame}, "
 					+ $"{db.CarModel}) {FetchStatus} {LoadStatus}:  "
-                    + (D.LoadText = status));
-            FetchStatus = APIStatus.None;
-            if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
+					+ (D.LoadText = status));
+			FetchStatus = APIStatus.None;
+			if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
 				S.Id = db.CarModel;
 		}
 
@@ -157,8 +157,8 @@ namespace sierses.Sim
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
-            Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  {FetchStatus} {LoadStatus}");
-            if (DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus)
+			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  {FetchStatus} {LoadStatus}");
+			if (DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus)
 				return;
 			try
 			{
@@ -236,7 +236,7 @@ namespace sierses.Sim
 		private string Null0(string j)
 		{
 			for (int i = 0; i < zero.Count; i++)
-				j = j.Replace($",\r\n      \"{zero[i]}\": 0,", ",");
+				j = j.Replace($",\r\n	  \"{zero[i]}\": 0,", ",");
 			return j;
 		}
 
@@ -585,8 +585,8 @@ namespace sierses.Sim
 				Settings.Motion = new Dictionary<string, double>();
 			if (File.Exists(myfile))
 			{
-				 var foo = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(myfile));
-				if (null != foo && 0 < foo.Count && S.LD.Load(foo))
+				var foo = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(myfile));
+				if (S.LD.Load(foo))
 				{
 					S.LD.Extract(GameDBText);	// to S.Lcars
 					Logging.Current.Info($"Haptics.Init():  {S.LD.Count} games in " + myfile
@@ -594,7 +594,10 @@ namespace sierses.Sim
 				}
 				else Logging.Current.Info("Haptics.Init(): "+myfile+" load failure");
 			}
-			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found"); 
+			else {
+				Logging.Current.Info("Haptics.Init():  "+myfile+" not found");
+				S.LD.Load(null);
+			}
 			D.Init(Settings, this);
 			IPluginExtensions.AttachDelegate(this, "CarName", () => S.CarName);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);
