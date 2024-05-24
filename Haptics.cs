@@ -4,7 +4,7 @@
 
 using GameReaderCommon;
 using Newtonsoft.Json;
-using sierses.SimHap.Properties;
+using sierses.Sim.Properties;
 using SimHub;
 using SimHub.Plugins;
 using System;
@@ -16,12 +16,12 @@ using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace sierses.SimHap
+namespace sierses.Sim
 {
 	[PluginDescription("Properties for haptic feedback and more")]
 	[PluginAuthor("sierses")]
-	[PluginName("SimHap")]
-	public class SimHap : IPlugin, IDataPlugin, IWPFSettingsV2, IWPFSettings
+	[PluginName("Haptics")]
+	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2, IWPFSettings
 	{
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
@@ -36,7 +36,7 @@ namespace sierses.SimHap
 		public static string FailedId = "";
 		public static string FailedCategory = "";
 		private static readonly HttpClient client = new();
-		private readonly string myfile = "PluginsData/blekenbleu.SimHap.json";
+		private readonly string myfile = "PluginsData/blekenbleu.Haptics.json";
 
 		public Spec S { get; set; }
 
@@ -91,7 +91,7 @@ namespace sierses.SimHap
  */
 
 		// boilerplate SimHub -------------------------------------------
-		public string LeftMenuTitle => "SimHap";
+		public string LeftMenuTitle => "Haptics";
 
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
@@ -108,7 +108,7 @@ namespace sierses.SimHap
 		{
 			string status = S.Defaults(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
-				Logging.Current.Info($"SimHap.SetDefaultVehicle({CurrentGame}, "
+				Logging.Current.Info($"Haptics.SetDefaultVehicle({CurrentGame}, "
 					+ $"{db.CarModel}) {FetchStatus} {LoadStatus}:  "
                     + (D.LoadText = status));
             FetchStatus = APIStatus.None;
@@ -120,7 +120,7 @@ namespace sierses.SimHap
 		// false then allows Refresh() or SetVehicle()
 		internal bool Fail(string id, string fcat)
 		{
-			Logging.Current.Info("SimHap.FetchCarData(): Failed to load " + id + " : " + fcat);
+			Logging.Current.Info("Haptics.FetchCarData(): Failed to load " + id + " : " + fcat);
 			if (3 < LoadFailCount++)
 			{
 				LoadFailCount = 0;
@@ -143,7 +143,7 @@ namespace sierses.SimHap
 			cat = (g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1)  ? db.CarClass : "0";
 			id = g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId;
 			if (FetchStatus != APIStatus.None && FetchStatus != APIStatus.Success)
-				Logging.Current.Info($"SimHap.Wait({cat}, {g}.{id}):  {FetchStatus} {LoadStatus}");
+				Logging.Current.Info($"Haptics.Wait({cat}, {g}.{id}):  {FetchStatus} {LoadStatus}");
 			return (FetchStatus == APIStatus.Waiting && !Fail(id, cat));
 		}
 
@@ -157,7 +157,7 @@ namespace sierses.SimHap
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
-            Logging.Current.Info($"SimHap.FetchCarData({id}/{category}):  {FetchStatus} {LoadStatus}");
+            Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  {FetchStatus} {LoadStatus}");
             if (DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus)
 				return;
 			try
@@ -178,7 +178,7 @@ namespace sierses.SimHap
 								});
 				if (v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
 				{
-					Logging.Current.Info("SimHap.FetchCarData(): Successfully loaded " + v.CarName);
+					Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + v.CarName);
 					LoadFinish = false;
 					LoadFailCount = 0;
 
@@ -193,7 +193,7 @@ namespace sierses.SimHap
 			}
 			catch (HttpRequestException ex)
 			{
-				Logging.Current.Error("SimHap: " + ex.Message);
+				Logging.Current.Error("Haptics: " + ex.Message);
 				LoadFailCount = 0;
 				FetchStatus = APIStatus.Retry;
 			}
@@ -249,7 +249,7 @@ namespace sierses.SimHap
 			}
 			string sjs = Null0(S.Jstring());			// delete 0 ushorts
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHap.End(): Download Json Serializer failure:  "
+				Logging.Current.Info("Haptics.End(): Download Json Serializer failure:  "
 									 + (Save ? "changes made.." : "(no changes)"));
 			else if (Save)
 				File.WriteAllText(myfile, sjs);
@@ -589,12 +589,12 @@ namespace sierses.SimHap
 				if (null != foo && 0 < foo.Count && S.LD.Load(foo))
 				{
 					S.LD.Extract(GameDBText);	// to S.Lcars
-					Logging.Current.Info($"SimHap.Init():  {S.LD.Count} games in " + myfile
-									   + $", with {S.Lcars.Count} {GameDBText} cars");
+					Logging.Current.Info($"Haptics.Init():  {S.LD.Count} games in " + myfile
+									   + $",\n\t\t with {S.Lcars.Count} {GameDBText} cars");
 				}
-				else Logging.Current.Info("SimHap.Init(): "+myfile+" load failure");
+				else Logging.Current.Info("Haptics.Init(): "+myfile+" load failure");
 			}
-			else Logging.Current.Info("SimHap.Init():  "+myfile+" not found"); 
+			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found"); 
 			D.Init(Settings, this);
 			IPluginExtensions.AttachDelegate(this, "CarName", () => S.CarName);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);

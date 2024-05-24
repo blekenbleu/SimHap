@@ -4,14 +4,14 @@ using SimHub;
 using System;
 using System.Collections.Generic;
 
-namespace sierses.SimHap
+namespace sierses.Sim
 {
 
 	public partial class SimData
 	{
 		private long FrameTimeTicks;
 		private long FrameCountTicks;
-		internal SimHap SHP;
+		internal Haptics SHP;
 		private ushort idleRPM;
 		int Index;
 
@@ -47,11 +47,11 @@ namespace sierses.SimHap
 			return MySet.Motion.TryGetValue(name, out double num) ? num : trouble;
 		}
 
-		internal void Init(Settings Settings, SimHap sh)
+		internal void Init(Settings Settings, Haptics sh)
 		{
 			MySet = Settings;
 			SHP = sh;
-			string GDBtext = SimHap.GameDBText;
+			string GDBtext = Haptics.GameDBText;
 			EngineMult = Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
 			EngineMultAll = Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
 			RumbleMult = Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
@@ -91,13 +91,13 @@ namespace sierses.SimHap
 		}
 
 		// called from DataUpdate() and recalled FetchCarData(), perhaps repeatedly
-		internal void SetVehicle(SimHap shp)
+		internal void SetVehicle(Haptics shp)
 		{
 			StatusDataBase db;
 
 			if (null != shp)    // null when called by FetchCarData()
 			{
-				Logging.Current.Info($"SimHap.SetVehicle({shp.Gdat.NewData.CarId}):  {SimHap.FetchStatus} {SimHap.LoadStatus}");
+				Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}):  {Haptics.FetchStatus} {Haptics.LoadStatus}");
 				SHP = shp;
 				db = SHP.Gdat.NewData;
 				string cid = db.CarId;
@@ -105,63 +105,63 @@ namespace sierses.SimHap
 				Index = SHP.S.Lcars.FindIndex(x => x.id == cid);
 				if (0 <= Index)
 				{
-					SimHap.FetchStatus = APIStatus.Loaded;
-					SimHap.LoadFinish = false;                  // enable SetDefaultVehicle
+					Haptics.FetchStatus = APIStatus.Loaded;
+					Haptics.LoadFinish = false;                  // enable SetDefaultVehicle
 				}
 			}
 
 			db = SHP.Gdat.NewData;
 			if (0 > Index)	// car not found in Lcars 
 			{
-                Logging.Current.Info($"SimHap.SetVehicle.switch({db.CarId}):  {SimHap.FetchStatus} {SimHap.LoadStatus}");
-                switch (SimHap.CurrentGame)
+                Logging.Current.Info($"Haptics.SetVehicle.switch({db.CarId}):  {Haptics.FetchStatus} {Haptics.LoadStatus}");
+                switch (Haptics.CurrentGame)
 				{
 					case GameId.AC:
 					case GameId.ACC:
 					case GameId.PC2:
 					case GameId.RBR:
 					case GameId.GTR2:
-						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.AMS1:
 					case GameId.LMU:
 					case GameId.RF2:
-						if (SHP.S.Category != db.CarClass && SimHap.FailedCategory != db.CarClass)
-							SimHap.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						if (SHP.S.Category != db.CarClass && Haptics.FailedCategory != db.CarClass)
+							Haptics.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.AMS2:
-						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						SHP.S.CarName = db.CarModel;
 						SHP.S.Category = db.CarClass;
 						break;
 					case GameId.D4:
-						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 						break;
 					case GameId.DR2:
-						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 						break;
 					case GameId.WRC23:
-						SimHap.FetchCarData(db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
+						Haptics.FetchCarData(db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
 						break;
 					case GameId.F12022:
 					case GameId.F12023:
-						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
 						break;
 					case GameId.Forza:
-						SimHap.FetchCarData(db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
 						break;
 					case GameId.IRacing:
-						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						GameAltText = SHP.PM.GameName + (string)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 						if (0 == SHP.S.IdleRPM)
 						{
@@ -171,11 +171,11 @@ namespace sierses.SimHap
 						}
 						break;
 					case GameId.RRRE:
-						if (SHP.S.Id != db.CarModel && SimHap.FailedId != db.CarModel)
-							SimHap.FetchCarData(db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						if (SHP.S.Id != db.CarModel && Haptics.FailedId != db.CarModel)
+							Haptics.FetchCarData(db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.BeamNG:
-						SimHap.FetchCarData(db.CarId, null, SHP.S,
+						Haptics.FetchCarData(db.CarId, null, SHP.S,
 								SHP.S.Redline = Convert.ToUInt16(0.5 + db.MaxRpm),
 								SHP.S.MaxRPM = Convert.ToUInt16((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
 									 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
@@ -191,40 +191,40 @@ namespace sierses.SimHap
 							SHP.S.Id = db.CarId;
 							SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
 							SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
-							SimHap.LoadFinish = false;
-							SimHap.FetchStatus = APIStatus.Fail;
+							Haptics.LoadFinish = false;
+							Haptics.FetchStatus = APIStatus.Fail;
 						}
 						break;
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
-						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM"));
 						SHP.S.MaxRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM"));
 						break;
 					default:
 						SHP.S.Redline = Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM);
 						SHP.S.MaxRPM = Convert.ToUInt16(db.MaxRpm);
-						SimHap.FetchStatus = APIStatus.Fail;
+						Haptics.FetchStatus = APIStatus.Fail;
 						break;
 				}
 			}
 
-			if (!SimHap.LoadFinish && SimHap.FetchStatus != APIStatus.Waiting)
+			if (!Haptics.LoadFinish && Haptics.FetchStatus != APIStatus.Waiting)
 			{
-				if (SimHap.FetchStatus == APIStatus.Loaded)
+				if (Haptics.FetchStatus == APIStatus.Loaded)
 				{
 					if (0 <= Index) {
 						SHP.S.Import(Index);
-						SimHap.LoadStatus = DataStatus.None;
-						Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} JSON Load Success"));
+						Haptics.LoadStatus = DataStatus.None;
+						Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} JSON Load Success"));
 					} else {
-						SimHap.LoadStatus = DataStatus.None;
-						Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} DB Load Success"));
+						Haptics.LoadStatus = DataStatus.None;
+						Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} DB Load Success"));
 					}
-					SimHap.Changed = true;
+					Haptics.Changed = true;
 					SHP.Settings.Vehicle = new Spec(SHP.S);
-					SimHap.FetchStatus = APIStatus.Success;
-					SimHap.FailedId = "";
+					Haptics.FetchStatus = APIStatus.Success;
+					Haptics.FailedId = "";
 				}
 				else SHP.SetDefaultVehicle(db); // sets LoadText
 				FinalizeVehicle();				// sets LoadFinish = true
@@ -270,7 +270,7 @@ namespace sierses.SimHap
 			RumbleRightAvg = 0.0;
 			SetRPMIntervals();
 			SetRPMMix();
-			SimHap.LoadFinish = true;
+			Haptics.LoadFinish = true;
 		}
 	}
 }

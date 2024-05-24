@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace sierses.SimHap
+namespace sierses.Sim
 {
 	/// <summary>
 	/// Abstract base class to implement INotifyPropertyChanged interface
@@ -37,7 +37,7 @@ namespace sierses.SimHap
 				return false;
 			field = value;
 			OnPropertyChanged(propertyname);
-			return SimHap.Changed = true;
+			return Haptics.Changed = true;
 		}
 	}
 
@@ -74,6 +74,7 @@ namespace sierses.SimHap
 		internal ListDictionary(Spec s)
 		{
 			PS = s;
+//			inDict = new();
 		}
 
 		internal bool Add(CarSpec s)
@@ -127,17 +128,19 @@ namespace sierses.SimHap
 		private CarSpec Private_Car { get; set; }
 		internal CarSpec Car { get => Private_Car; }
 		internal List<CarSpec> Lcars;
-		public ListDictionary LD { get; set; }      // needs to be public for JsonConvert
-		//private SimHap SHP;
+		public ListDictionary LD { get; set; }	// needs to be public for JsonConvert
+		//private Haptics SHP;
 
-		public void Init(/*SimHap sh*/)
+		public void Init()
 		{
-		//	SHP = sh;
-			Lcars = new();
+			Lcars = new();						// required 24 May 2024
 			LD = new(this); 
 		}
 
-		public Spec() {}
+		public Spec()
+		{
+			Private_Car = new();				// required 24 May 2024
+		}
 
 		public Spec(Spec s)
 		{
@@ -145,29 +148,29 @@ namespace sierses.SimHap
 		}
 
 		 internal bool Add(CarSpec car)
-        {
-            if ((null == car) || (null == car.id) || (null == car.game) || (null == car.name) || !SimHap.Changed)
-                return false;
+		{
+			if ((null == car) || (null == car.id) || (null == car.game) || (null == car.name) || !Haptics.Changed)
+				return false;
 
-            SimHap.Changed = false;
-            bool temp;
-            string cid = car.id;
+			Haptics.Changed = false;
+			bool temp;
+			string cid = car.id;
 
-            int Index = Lcars.FindIndex(x => x.id == cid);
-            if (temp = 0 > Index)
-                Lcars.Add(car);
-            else Lcars[Index] = car;
-            SimHap.Save |= temp | SimHap.Changed;
-            return temp;
-        }
+			int Index = Lcars.FindIndex(x => x.id == cid);
+			if (temp = 0 > Index)
+				Lcars.Add(car);
+			else Lcars[Index] = car;
+			Haptics.Save |= temp | Haptics.Changed;
+			return temp;
+		}
 
 		internal string Jstring()	// ignore null (string) values; indent JSON
 		{
 			return JsonConvert.SerializeObject(LD, new JsonSerializerSettings
-            { Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore });
+			{ Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore });
 		}
 
-		// called by SimHap.FetchCarData()
+		// called by Haptics.FetchCarData()
 		internal bool Set(Download dl, ushort gameRedline, ushort gameMaxRPM)
 		{
 			if (null == dl || null == dl.data || 0 == dl.data.Count)
@@ -178,8 +181,8 @@ namespace sierses.SimHap
 			if (null == data.name || null == data.id)
 				return false;
 
-			Game = SimHap.GameDBText;
-			Id = SimHap.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;
+			Game = Haptics.GameDBText;
+			Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;
 			Redline  =	 0 == data.redline ? gameRedline 	: data.redline;
 			MaxRPM   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
 			MaxPower =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
@@ -222,7 +225,7 @@ namespace sierses.SimHap
 			string StatusText;
 
 			if (null == game)
-				return "SimHap.Spec.Defaults():  null game";
+				return "Haptics.Spec.Defaults():  null game";
 
 			Game = game;
 			CarName = db.CarModel;

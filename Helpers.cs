@@ -4,7 +4,7 @@
 
 using System;
 
-namespace sierses.SimHap
+namespace sierses.Sim
 {
   internal static class Helpers
   {

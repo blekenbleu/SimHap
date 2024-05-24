@@ -1,5 +1,5 @@
 
-namespace sierses.SimHap
+namespace sierses.Sim
 {
 	// see Spec.cs for public abstract class NotifyPropertyChanged : INotifyPropertyChanged
 	public partial class SimData : NotifyPropertyChanged	// The whole class inherits NotifyPropertyChanged

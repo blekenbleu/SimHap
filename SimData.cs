@@ -6,7 +6,7 @@ using GameReaderCommon;		// for GameData
 using SimHub.Plugins;		// PluginManager
 using System;				// for Math
 
-namespace sierses.SimHap
+namespace sierses.Sim
 {
 	public partial class SimData
 	{
@@ -461,7 +461,7 @@ namespace sierses.SimHap
 			SlipYRR = 0.0;
 			ABSActive = data.NewData.ABSActive == 1;
 			bool flag = true;
-			switch (SimHap.CurrentGame)
+			switch (Haptics.CurrentGame)
 			{
 				case GameId.AC:
 					SuspensionDistFL = Physics("SuspensionTravel01");
@@ -1238,7 +1238,7 @@ namespace sierses.SimHap
 		}
 
 		// called from DataUpdate()
-		internal void Refresh(ref GameData Gdat, SimHap shp)
+		internal void Refresh(ref GameData Gdat, Haptics shp)
 		{
 			SHP = shp;
 			data = Gdat;

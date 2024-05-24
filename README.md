@@ -1,11 +1,11 @@
-# SimHap  
+# Haptics  
 - decompiled by @**dMASS** from @**sierses**' `.dll`   
-- decompiled `SimHap.csproj` hacked for SimHub plugin compatibility by @**blekelbleu**  
+- decompiled `Haptics.csproj` hacked for SimHub plugin compatibility by @**blekelbleu**  
 - [initial build errors](Doc/error1.txt)  
 - [JToken.explicit build errors](Doc/error2.txt) after others addressed
-- `namespace` renamed from `SimHaptics` to `sierses.SimHap`  
+- `namespace` renamed from `SimHaptics` to `sierses.Sim`  
 	- **Note**:  Visual Studio builds .cs files in `obj/` from `.xaml` using e.g.  
-      `<UserControl x:Class="sierses.SimHap.SettingsControl"`
+      `<UserControl x:Class="sierses.Sim.SettingsControl"`
 		- which must match (renamed) namespace...
 ### Done
 -  blank engine data;&nbsp; *was*:  
@@ -71,6 +71,9 @@
 - check XAML data bindings
 - add Log messages to sort issues
 	- `async await` sequence
+- free RAM in `Init` by discarding all but the current game dictionary after initial loading,
+  then reloading in `End()` *only* to save changes.
+- debug loading a default car after a server car or JSON car or vice-versa
 	
 ### refactoring
 - when SimHub invokes `DataUpdate()` (at 60 Hz),

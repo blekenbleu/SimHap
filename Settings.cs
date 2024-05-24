@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace sierses.SimHap
+namespace sierses.Sim
 {
 	public class Settings : INotifyPropertyChanged
 	{
