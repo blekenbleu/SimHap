@@ -1,10 +1,12 @@
 using GameReaderCommon;
+using MahApps.Metro.Controls;
 using SimHub;
 using System;
 using System.Collections.Generic;
 
 namespace sierses.SimHap
 {
+
 	public partial class SimData
 	{
 		private long FrameTimeTicks;
@@ -12,28 +14,9 @@ namespace sierses.SimHap
 		internal SimHap SHP;
 		private ushort idleRPM;
 		int Index;
-		internal List<CarSpec> Lcars;
 
-		internal bool Add(CarSpec car)
+        public SimData()
 		{
-			if ((null == car) || (null == car.id) || (null == car.game) || (null == car.name) || !SimHap.Changed)
-				return false;
-
-			SimHap.Changed = false;
-			bool temp;
-			string cid = car.id;
-
-			int Index = Lcars.FindIndex(x => x.id == cid);
-			if (temp = 0 > Index)
-				Lcars.Add(car);
-			else Lcars[Index] = car;
-			SimHap.Save |= temp | SimHap.Changed;
-			return temp;
-		}
-
-		public SimData()
-		{
-			Lcars = new();
 			GameAltText = "";
 			LoadText = "Not Loaded";
 			Gear = 0;
@@ -64,9 +47,10 @@ namespace sierses.SimHap
 			return MySet.Motion.TryGetValue(name, out double num) ? num : trouble;
 		}
 
-		internal void Init(Settings Settings)
+		internal void Init(Settings Settings, SimHap sh)
 		{
 			MySet = Settings;
+			SHP = sh;
 			string GDBtext = SimHap.GameDBText;
 			EngineMult = Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
 			EngineMultAll = Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
@@ -118,30 +102,16 @@ namespace sierses.SimHap
 				db = SHP.Gdat.NewData;
 				string cid = db.CarId;
 
-				/*				// if (Settings.Vehicle != null && (Settings.Vehicle.Id == db.CarId || Settings.Vehicle.Id == db.CarModel))
-								if (db.CarId == SHP.Settings.Vehicle.Id)
-								{
-									Spec temp = new Spec(SHP.S);
-									SHP.S = SHP.Settings.Vehicle;
-									SHP.Settings.Vehicle = temp;
-
-									SimHap.FetchStatus = APIStatus.None;			// disable Index test and Import
-									SimHap.LoadStatus = DataStatus.SettingsFile;	// disable S.Defaults() in SetDefaultVehicle()
-									SimHap.LoadFinish = false;						// enable SetDefaultVehicle
-									Index = 0;										// disable GameId switch
-									Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = "Reloaded from Settings"));
-								}
-								else { */
-				Index = Lcars.FindIndex(x => x.id == cid);
+				Index = SHP.S.Lcars.FindIndex(x => x.id == cid);
 				if (0 <= Index)
 				{
 					SimHap.FetchStatus = APIStatus.Loaded;
 					SimHap.LoadFinish = false;                  // enable SetDefaultVehicle
 				}
-				//				}
 			}
+
 			db = SHP.Gdat.NewData;
-			if (0 > Index)
+			if (0 > Index)	// car not found in Lcars 
 			{
                 Logging.Current.Info($"SimHap.SetVehicle.switch({db.CarId}):  {SimHap.FetchStatus} {SimHap.LoadStatus}");
                 switch (SimHap.CurrentGame)
@@ -244,11 +214,11 @@ namespace sierses.SimHap
 				if (SimHap.FetchStatus == APIStatus.Loaded)
 				{
 					if (0 <= Index) {
-						SHP.S.Import(Lcars[Index]);
-						SimHap.LoadStatus = DataStatus.JSON;
+						SHP.S.Import(Index);
+						SimHap.LoadStatus = DataStatus.None;
 						Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} JSON Load Success"));
 					} else {
-						SimHap.LoadStatus = DataStatus.SimHapticsAPI;
+						SimHap.LoadStatus = DataStatus.None;
 						Logging.Current.Info("SimHap.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} DB Load Success"));
 					}
 					SimHap.Changed = true;
@@ -258,8 +228,6 @@ namespace sierses.SimHap
 				}
 				else SHP.SetDefaultVehicle(db); // sets LoadText
 				FinalizeVehicle();				// sets LoadFinish = true
-				if (0 > Index)
-					Add(SHP.S.Car);
 				Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
 				GearInterval = 1 / Gears;
 			}

@@ -7,10 +7,7 @@
 			 xmlns:local="clr-namespace:sierses.SimHap"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance}">
-<UserControl.DataContext>
-   <local:SimHap/>
-</UserControl.DataContext>
-  <FrameworkElement.Resources>
+    <FrameworkElement.Resources>
     <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
       <Setter Property="UIElement.Opacity" Value="0.9"/>
       <Setter Property="Shape.Fill" Value="White"/>

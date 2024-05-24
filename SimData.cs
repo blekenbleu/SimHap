@@ -126,7 +126,7 @@ namespace sierses.SimHap
 		public double SlipYRL;
 		public double SlipYRR;
 		public double SlipYAll;
-		public double SlipXGammaBaseMult;
+		private double SlipXGammaBaseMult;
 		public double SlipYGammaBaseMult;
 		public double TireDiameterFL;
 		public double TireDiameterFR;

@@ -69,69 +69,104 @@ namespace sierses.SimHap
 
 	public class ListDictionary : NotifyPropertyChanged
 	{
-		private Dictionary<string, List<CarSpec>> internalDictionary;
+		private Dictionary<string, List<CarSpec>> inDict;
+		private Spec PS;
+		internal ListDictionary(Spec s)
+		{
+			PS = s;
+		}
 
-		public ListDictionary() { internalDictionary = new(); }
+		internal bool Add(CarSpec s)
+		{
+			PS.Add(s);
+			if (0 == PS.Lcars.Count)
+				return false;
+			return Add(PS.Lcars);
+		}
 
 		internal bool Add(List<CarSpec> s)
 		{
 			int Index;
 
-			if (null == s || 0 == s.Count)
+			if (0 == s.Count)
 				return false;
 
-			if (internalDictionary.ContainsKey(s[0].game))
+			string k = s[0].game;
+
+			if (inDict.ContainsKey(k))
 				for (int i = 0; i < s.Count; i++)
 				{
-					Index = internalDictionary[s[0].game].FindIndex(x => x.id == s[i].id);
+					Index = inDict[k].FindIndex(x => x.id == s[i].id);
 					if (0 <= Index)
-						internalDictionary[s[0].game][Index] = s[i];
-					else internalDictionary[s[0].game].Add(s[i]);
+						inDict[k][Index] = s[i];
+					else inDict[k].Add(s[i]);
 				}
-			else internalDictionary.Add(s[0].game, s);
+			else inDict.Add(k, s);
 			return true;
 		}
  
 		public bool Load(Dictionary<string, List<CarSpec>> json)
 		{
-			if (null == json || 0 == json.Count)
-				return false;
-			internalDictionary = json;
-			return true;
-		}
-
-		internal string Jstring()
-		{
-			return JsonConvert.SerializeObject(internalDictionary, Formatting.Indented);
+			return null == json ? false
+					: 0 < (inDict = json).Count;
 		}
 
 		internal ushort Count
 		{
-			get { return (ushort)internalDictionary.Count; }
+			get { return (ushort)inDict.Count; }
 		}
 
-		public List<CarSpec> Extract(string game)
+		public bool Extract(string game)
 		{
-			if (!internalDictionary.ContainsKey(game))
-				return null;
-			return internalDictionary[game];
+			return (inDict.ContainsKey(game)) ?
+					0 < (PS.Lcars = inDict[game]).Count : false;
 		}
+
 	}	// class ListDictionary
 
 	public class Spec : NotifyPropertyChanged
 	{
-		public Spec()
+		private CarSpec Private_Car { get; set; }
+		internal CarSpec Car { get => Private_Car; }
+		internal List<CarSpec> Lcars;
+		public ListDictionary LD { get; set; }      // needs to be public for JsonConvert
+		private SimHap SHP;
+
+		public void Init(SimHap sh)
 		{
-			Private_Car = new CarSpec();
+			SHP = sh;
+			Lcars = new();
+			LD = new(this); 
 		}
 
-		private CarSpec Private_Car { get; set; }
-
-		internal CarSpec Car { get => Private_Car; }
+		public Spec() {}
 
 		public Spec(Spec s)
 		{
 			Private_Car = s.Private_Car;
+		}
+
+		 internal bool Add(CarSpec car)
+        {
+            if ((null == car) || (null == car.id) || (null == car.game) || (null == car.name) || !SimHap.Changed)
+                return false;
+
+            SimHap.Changed = false;
+            bool temp;
+            string cid = car.id;
+
+            int Index = Lcars.FindIndex(x => x.id == cid);
+            if (temp = 0 > Index)
+                Lcars.Add(car);
+            else Lcars[Index] = car;
+            SimHap.Save |= temp | SimHap.Changed;
+            return temp;
+        }
+
+		internal string Jstring()	// ignore null (string) values; indent JSON
+		{
+			return JsonConvert.SerializeObject(LD, new JsonSerializerSettings
+            { Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore });
 		}
 
 		// called by SimHap.FetchCarData()
@@ -164,8 +199,9 @@ namespace sierses.SimHap
 		}	// Set()
 
 		// makes sense only as Spec instance.Import(download)
-		internal void Import(CarSpec d)
+		internal void Import(int i)
 		{
+			CarSpec d = Lcars[i];
 			Game = d.game;
 			CarName = d.name;
 			Id = d.id;
@@ -280,7 +316,7 @@ namespace sierses.SimHap
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
-					StatusText = "Not in DB: redline loaded from game";
+					StatusText = "Not in DB: assume 500HP 4 Liter V6";
 					EngineConfiguration = "V";
 					EngineCylinders = 6;
 					EngineLocation = "RM";

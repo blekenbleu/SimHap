@@ -39,7 +39,6 @@ namespace sierses.SimHap
 		private readonly string myfile = "PluginsData/blekenbleu.SimHap.json";
 
 		public Spec S { get; set; }
-		public ListDictionary LD { get; set; }
 
 		public SimData D { get; set; }
 
@@ -107,14 +106,11 @@ namespace sierses.SimHap
 		// called by SetVehicle() in DataUpdate() when car not found
 		internal void SetDefaultVehicle(StatusDataBase db)
 		{
-			if (LoadStatus == DataStatus.SettingsFile)
-				return;
-
 			string status = S.Defaults(GameDBText, db, CurrentGame);
 			if (0 < status.Length)
-				Logging.Current.Info($"SimHap.SetDefaultVehicle({CurrentGame}, {db.CarModel}) {FetchStatus} {LoadStatus}:  "
+				Logging.Current.Info($"SimHap.SetDefaultVehicle({CurrentGame}, "
+					+ $"{db.CarModel}) {FetchStatus} {LoadStatus}:  "
                     + (D.LoadText = status));
-			LoadStatus = DataStatus.DefaultData;
             FetchStatus = APIStatus.None;
             if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
 				S.Id = db.CarModel;
@@ -222,28 +218,35 @@ namespace sierses.SimHap
 			Gdat = data;
 			PM = pluginManager;
 
-			if (S.Id == data.NewData.CarId)
+			if (S.Id == data.NewData.CarId && LoadStatus != DataStatus.NotAPI)
 			{
 				if (data.GameRunning && null != data.OldData)
 					D.Refresh(ref data, this);
 			}
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 			{
-				if (Changed)
-					D.Add(S.Car);
+				if (Changed && APIStatus.Success == FetchStatus)	// don't save for APIStatus.None
+					S.Add(S.Car);
 				D.SetVehicle(this);
 			}
 		}
 
+		private string Null0(string j)	// remove 0 value ushorts
+		{
+			return j.Replace(",\r\n      \"ehp\": 0,", ",").Replace(",\r\n      \"idlerpm\": 0,", ",");
+		}
+
 		public void End(PluginManager pluginManager)
 		{
-			if (Changed)
+			if (FetchStatus == APIStatus.Success)
+			{
 				Settings.Vehicle = new Spec(S);
-			D.Add(S.Car);
-			Changed = LD.Add(D.Lcars);			// update game in dictionary
-			string sjs = LD.Jstring();
+				Save = S.LD.Add(S.Car) || Save;			// update game in dictionary
+			}
+			string sjs = Null0(S.Jstring());			// delete 0 ushorts
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("SimHap.End(): Download Json Serializer failure:  " + (Changed ? "changes made.." : "(no changes)"));
+				Logging.Current.Info("SimHap.End(): Download Json Serializer failure:  "
+									 + (Save ? "changes made.." : "(no changes)"));
 			else if (Save)
 				File.WriteAllText(myfile, sjs);
 
@@ -536,7 +539,7 @@ namespace sierses.SimHap
 			FetchStatus = APIStatus.None;
 			S = new Spec();
 			D = new SimData();
-			LD = new ListDictionary();
+			S.Init(this);
 			SetGame(pluginManager);
 			Settings = IPluginExtensions.ReadCommonSettings(this, "Settings", () => new Settings());
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;
@@ -579,16 +582,16 @@ namespace sierses.SimHap
 			if (File.Exists(myfile))
 			{
 				 var foo = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(myfile));
-				if (null != foo && 0 < foo.Count && LD.Load(foo))
+				if (null != foo && 0 < foo.Count && S.LD.Load(foo))
 				{
-					D.Lcars = LD.Extract(GameDBText);
-					Logging.Current.Info($"SimHap.Init():  {LD.Count} games in " + myfile
-									   + $", with {D.Lcars.Count} {GameDBText} cars");
+					S.LD.Extract(GameDBText);	// to S.Lcars
+					Logging.Current.Info($"SimHap.Init():  {S.LD.Count} games in " + myfile
+									   + $", with {S.Lcars.Count} {GameDBText} cars");
 				}
 				else Logging.Current.Info("SimHap.Init(): "+myfile+" load failure");
 			}
 			else Logging.Current.Info("SimHap.Init():  "+myfile+" not found"); 
-			D.Init(Settings);
+			D.Init(Settings, this);
 			IPluginExtensions.AttachDelegate(this, "CarName", () => S.CarName);
 			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);
 			IPluginExtensions.AttachDelegate(this, "Category", () => S.Category);
