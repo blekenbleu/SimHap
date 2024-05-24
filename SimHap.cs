@@ -150,7 +150,7 @@ namespace sierses.SimHap
 		// must be void and static;  invoked by D.SetVehicle()
 		static Download dljc;
 		internal static async void FetchCarData(
-			SimData SD,
+//			SimData SD,
 			string id,
 			string category,
 			Spec v,
@@ -231,9 +231,13 @@ namespace sierses.SimHap
 			}
 		}
 
-		private string Null0(string j)	// remove 0 value ushorts
+		// remove 0 value ushorts
+		private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" };
+		private string Null0(string j)
 		{
-			return j.Replace(",\r\n      \"ehp\": 0,", ",").Replace(",\r\n      \"idlerpm\": 0,", ",");
+			for (int i = 0; i < zero.Count; i++)
+				j = j.Replace($",\r\n      \"{zero[i]}\": 0,", ",");
+			return j;
 		}
 
 		public void End(PluginManager pluginManager)
@@ -539,7 +543,7 @@ namespace sierses.SimHap
 			FetchStatus = APIStatus.None;
 			S = new Spec();
 			D = new SimData();
-			S.Init(this);
+			S.Init(/*this*/);
 			SetGame(pluginManager);
 			Settings = IPluginExtensions.ReadCommonSettings(this, "Settings", () => new Settings());
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;

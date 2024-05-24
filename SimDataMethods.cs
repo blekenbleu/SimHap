@@ -121,47 +121,47 @@ namespace sierses.SimHap
 					case GameId.PC2:
 					case GameId.RBR:
 					case GameId.GTR2:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.AMS1:
 					case GameId.LMU:
 					case GameId.RF2:
 						if (SHP.S.Category != db.CarClass && SimHap.FailedCategory != db.CarClass)
-							SimHap.FetchCarData(this, db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+							SimHap.FetchCarData(db.CarId, db.CarClass, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.AMS2:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						SHP.S.CarName = db.CarModel;
 						SHP.S.Category = db.CarClass;
 						break;
 					case GameId.D4:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 						break;
 					case GameId.DR2:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
 						break;
 					case GameId.WRC23:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
+						SimHap.FetchCarData(db.CarId, null, SHP.S, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
 						break;
 					case GameId.F12022:
 					case GameId.F12023:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
 						break;
 					case GameId.Forza:
-						SimHap.FetchCarData(this, db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(db.CarId.Substring(4), null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						if (0 == SHP.S.IdleRPM)
 							SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
 						break;
 					case GameId.IRacing:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						GameAltText = SHP.PM.GameName + (string)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
 						if (0 == SHP.S.IdleRPM)
 						{
@@ -172,10 +172,10 @@ namespace sierses.SimHap
 						break;
 					case GameId.RRRE:
 						if (SHP.S.Id != db.CarModel && SimHap.FailedId != db.CarModel)
-							SimHap.FetchCarData(this, db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+							SimHap.FetchCarData(db.CarModel, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						break;
 					case GameId.BeamNG:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S,
+						SimHap.FetchCarData(db.CarId, null, SHP.S,
 								SHP.S.Redline = Convert.ToUInt16(0.5 + db.MaxRpm),
 								SHP.S.MaxRPM = Convert.ToUInt16((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
 									 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
@@ -197,7 +197,7 @@ namespace sierses.SimHap
 						break;
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
-						SimHap.FetchCarData(this, db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						SimHap.FetchCarData(db.CarId, null, SHP.S, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM"));
 						SHP.S.MaxRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM"));
 						break;

@@ -70,7 +70,7 @@ namespace sierses.SimHap
 	public class ListDictionary : NotifyPropertyChanged
 	{
 		private Dictionary<string, List<CarSpec>> inDict;
-		private Spec PS;
+		private readonly Spec PS;
 		internal ListDictionary(Spec s)
 		{
 			PS = s;
@@ -107,8 +107,7 @@ namespace sierses.SimHap
  
 		public bool Load(Dictionary<string, List<CarSpec>> json)
 		{
-			return null == json ? false
-					: 0 < (inDict = json).Count;
+			return null != json && 0 < (inDict = json).Count;
 		}
 
 		internal ushort Count
@@ -118,8 +117,7 @@ namespace sierses.SimHap
 
 		public bool Extract(string game)
 		{
-			return (inDict.ContainsKey(game)) ?
-					0 < (PS.Lcars = inDict[game]).Count : false;
+			return inDict.ContainsKey(game) && 0 < (PS.Lcars = inDict[game]).Count;
 		}
 
 	}	// class ListDictionary
@@ -130,11 +128,11 @@ namespace sierses.SimHap
 		internal CarSpec Car { get => Private_Car; }
 		internal List<CarSpec> Lcars;
 		public ListDictionary LD { get; set; }      // needs to be public for JsonConvert
-		private SimHap SHP;
+		//private SimHap SHP;
 
-		public void Init(SimHap sh)
+		public void Init(/*SimHap sh*/)
 		{
-			SHP = sh;
+		//	SHP = sh;
 			Lcars = new();
 			LD = new(this); 
 		}
