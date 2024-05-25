@@ -4,6 +4,7 @@
 
 using GameReaderCommon;
 using Newtonsoft.Json;
+using SimHub;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,22 +23,12 @@ namespace sierses.Sim
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(Propertyname));
 		}
 
-		protected bool SetQuiet<T>(ref T field, T value, string Propertyname)
+		protected void SetField<T>(ref T field, T value, string propertyname)
 		{
 			if (EqualityComparer<T>.Default.Equals(field, value))
-				return false;
-			field = value;
-			OnPropertyChanged(Propertyname);
-			return true;
-		}
-
-		protected bool SetField<T>(ref T field, T value, string propertyname)
-		{
-			if (EqualityComparer<T>.Default.Equals(field, value))
-				return false;
+				return;
 			field = value;
 			OnPropertyChanged(propertyname);
-			return Haptics.Changed = true;
 		}
 	}
 
@@ -77,20 +68,14 @@ namespace sierses.Sim
 //			inDict = new();
 		}
 
-		internal bool Add(CarSpec s)
+		internal bool Add()
 		{
-			PS.Add(s);
-			if (0 == PS.Lcars.Count)
-				return false;
-			return Add(PS.Lcars);
-		}
-
-		internal bool Add(List<CarSpec> s)
-		{
-			int Index;
-
+			PS.Add();
+			List<CarSpec> s = PS.Lcars;
 			if (0 == s.Count)
 				return false;
+
+			int Index;
 
 			string k = s[0].game;
 
@@ -122,6 +107,11 @@ namespace sierses.Sim
 			return inDict.ContainsKey(game) && 0 < (PS.Lcars = inDict[game]).Count;
 		}
 
+		internal string Jstring()	// ignore null (string) values; indent JSON
+		{
+			return JsonConvert.SerializeObject(PS.LD.inDict, new JsonSerializerSettings
+			{ Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore });
+		}
 	}	// class ListDictionary
 
 	public class Spec : NotifyPropertyChanged
@@ -148,27 +138,105 @@ namespace sierses.Sim
 			Private_Car = s.Private_Car;
 		}
 
-		 internal bool Add(CarSpec car)
+		private void Changed(int i, CarSpec s)
 		{
-			if ((null == car) || (null == car.id) || (null == car.game) || (null == car.name) || !Haptics.Changed)
-				return false;
-
-			Haptics.Changed = false;
-			bool temp;
-			string cid = car.id;
-
-			int Index = Lcars.FindIndex(x => x.id == cid);
-			if (temp = 0 > Index)
-				Lcars.Add(car);
-			else Lcars[Index] = car;
-			Haptics.Save |= temp | Haptics.Changed;
-			return temp;
+			if (Lcars[i].id != s.id)
+			{
+				Haptics.Save = true;
+				Lcars[i].id = s.id;
+			}
+			if (Lcars[i].game != s.game)
+			{
+				Haptics.Save = true;
+				Lcars[i].game = s.game;
+			}
+			if (Lcars[i].name != s.name)
+			{
+				Haptics.Save = true;
+				Lcars[i].name = s.name;
+			}
+			if (Lcars[i].config != s.config)
+			{
+				Haptics.Save = true;
+				Lcars[i].config = s.config;
+			}
+			if (Lcars[i].cyl != s.cyl)
+			{
+				Haptics.Save = true;
+				Lcars[i].cyl = s.cyl;
+			}
+			if (Lcars[i].loc != s.loc)
+			{
+				Haptics.Save = true;
+				Lcars[i].loc = s.loc;
+			}
+			if (Lcars[i].drive != s.drive)
+			{
+				Haptics.Save = true;
+				Lcars[i].drive = s.drive;
+			}
+			if (Lcars[i].hp != s.hp)
+			{
+				Haptics.Save = true;
+				Lcars[i].hp = s.hp;
+			}
+			if (Lcars[i].ehp != s.ehp)
+			{
+				Haptics.Save = true;
+				Lcars[i].ehp = s.ehp;
+			}
+			if (Lcars[i].cc != s.cc)
+			{
+				Haptics.Save = true;
+				Lcars[i].cc = s.cc;
+			}
+			if (Lcars[i].nm != s.nm)
+			{
+				Haptics.Save = true;
+				Lcars[i].nm = s.nm;
+			}
+			if (Lcars[i].redline != s.redline)
+			{
+				Haptics.Save = true;
+				Lcars[i].redline = s.redline;
+			}
+			if (Lcars[i].maxrpm != s.maxrpm)
+			{
+				Haptics.Save = true;
+				Lcars[i].maxrpm = s.maxrpm;
+			}
+			if (Lcars[i].idlerpm != s.idlerpm)
+			{
+				Haptics.Save = true;
+				Lcars[i].idlerpm = s.idlerpm;
+			}
+			if (Lcars[i].category != s.category)
+			{
+				Haptics.Save = true;
+				Lcars[i].category = s.category;
+			}
+			if (Lcars[i].notes != s.notes)
+			{
+				Haptics.Save = true;
+				Lcars[i].notes = s.notes;
+			}
 		}
 
-		internal string Jstring()	// ignore null (string) values; indent JSON
+		internal void Add()			// add or update Private_Car in Lcars
 		{
-			return JsonConvert.SerializeObject(LD, new JsonSerializerSettings
-			{ Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore });
+			if ((null == Private_Car) || (null == Private_Car.id) || (null == Private_Car.game)
+			 || (null == Private_Car.name))
+				return;
+
+			string cid = Private_Car.id;
+
+			int Index = Lcars.FindIndex(x => x.id == cid);
+			if (0 > Index)
+			{
+				Lcars.Add(Private_Car);
+				Haptics.Save = true;
+			}
+			else Changed(Index, Private_Car);
 		}
 
 		// called by Haptics.FetchCarData()
@@ -200,25 +268,10 @@ namespace sierses.Sim
 			return true;
 		}	// Set()
 
-		// makes sense only as Spec instance.Import(download)
-		internal void Import(int i)
+		// makes sense only as Spec instance from  JSON
+		internal void SelectCar(int i)
 		{
-			CarSpec d = Lcars[i];
-			Game = d.game;
-			CarName = d.name;
-			Id = d.id;
-			Category = d.category;
-			Redline = d.redline;
-			MaxRPM = d.maxrpm;
-			IdleRPM = d.idlerpm;
-			EngineConfiguration = d.config;
-			EngineCylinders = d.cyl;
-			EngineLocation = d.loc;
-			PoweredWheels = d.drive;
-			MaxPower = d.hp;
-			ElectricMaxPower = d.ehp;
-			Displacement = d.cc;
-			MaxTorque = d.nm;
+			Private_Car = Lcars[i];	// no need to Save
 		}
 
 		internal string Defaults(string game, StatusDataBase db, GameId CurrentGame)	
@@ -228,6 +281,8 @@ namespace sierses.Sim
 			if (null == game)
 				return "Haptics.Spec.Defaults():  null game";
 
+			Logging.Current.Info($"Haptics.Defaults({db.CarId}):"
+								+ "  {Haptics.FetchStatus} {Haptics.LoadStatus}");
 			Game = game;
 			CarName = db.CarModel;
 			Id = db.CarId;
@@ -340,6 +395,7 @@ namespace sierses.Sim
 				Category = "street";
 			if (GameId.RRRE == CurrentGame || GameId.D4 == CurrentGame || GameId.DR2 == CurrentGame)
 				Id = db.CarModel;
+			Haptics.FetchStatus = APIStatus.Loaded;	// for adding to JSON
 			return StatusText;
 		}
 

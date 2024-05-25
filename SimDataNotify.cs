@@ -45,19 +45,19 @@ namespace sierses.Sim
 		public string GameAltText
 		{
 			get => gameAltText;
-			set { SetQuiet(ref gameAltText, value, nameof(GameAltText)); }
+			set { SetField(ref gameAltText, value, nameof(GameAltText)); }
 		}
 
 		public string LoadText
 		{
 			get => loadStatusText;
-			set { SetQuiet(ref loadStatusText, value, nameof(LoadText)); }
+			set { SetField(ref loadStatusText, value, nameof(LoadText)); }
 		}
 
 		public string LockedText
 		{
 			get => lockedText;
-			set { SetQuiet(ref lockedText, value, nameof(LockedText)); }
+			set { SetField(ref lockedText, value, nameof(LockedText)); }
 		}
 
 		public double EngineMult

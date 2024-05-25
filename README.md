@@ -74,6 +74,13 @@
 - free RAM in `Init` by discarding all but the current game dictionary after initial loading,
   then reloading in `End()` *only* to save changes.
 - debug loading a default car after a server car or JSON car or vice-versa
+- add a reference catalog lookup, for `PluginsData/Catalog.Haptics.json`,
+	for cars *not* in personal JSON..
+	That catalog would NOT get overwritten, preventing new cars from contaminating it.
+- add another Spec entry, indicating cars from `Defaults()`, preserving that heritage.
+- for loads, just reset `Changed` after updating `Save`
+- `FetchCarData()` or Defaults(), these `Car`s will not exist in `Lcars`,
+  so will set `Changed` automatically in `Add()`.
 	
 ### refactoring
 - when SimHub invokes `DataUpdate()` (at 60 Hz),

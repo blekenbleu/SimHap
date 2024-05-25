@@ -26,7 +26,7 @@ namespace sierses.Sim
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
 		public static bool LoadFinish;
-		public static bool Save, Changed;
+		public static bool Save;
 		public static DataStatus LoadStatus;
 		public static APIStatus FetchStatus;
 		public static long FrameTimeTicks = 0;
@@ -36,7 +36,7 @@ namespace sierses.Sim
 		public static string FailedId = "";
 		public static string FailedCategory = "";
 		private static readonly HttpClient client = new();
-		private readonly string myfile = "PluginsData/blekenbleu.Haptics.json";
+		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
 
 		public Spec S { get; set; }
 
@@ -138,28 +138,29 @@ namespace sierses.Sim
 		{
 			if (FetchStatus == APIStatus.Waiting && 20 > D.CarInitCount++)
 				return true;
+
 			D.CarInitCount = 0;
 			GameId g = CurrentGame;
 			cat = (g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1)  ? db.CarClass : "0";
 			id = g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId;
-			if (FetchStatus != APIStatus.None && FetchStatus != APIStatus.Success)
-				Logging.Current.Info($"Haptics.Wait({cat}, {g}.{id}):  {FetchStatus} {LoadStatus}");
+//			if (FetchStatus != APIStatus.None && FetchStatus != APIStatus.Success)
+//				Logging.Current.Info($"Haptics.Wait({cat}, {g}.{id}):  {FetchStatus} {LoadStatus}");
 			return (FetchStatus == APIStatus.Waiting && !Fail(id, cat));
 		}
 
 		// must be void and static;  invoked by D.SetVehicle()
 		static Download dljc;
 		internal static async void FetchCarData(
-//			SimData SD,
 			string id,
 			string category,
 			Spec v,
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
-			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  {FetchStatus} {LoadStatus}");
 			if (DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus)
 				return;
+
+			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  {FetchStatus} {LoadStatus}");
 			try
 			{
 				FetchStatus = APIStatus.Waiting;
@@ -183,13 +184,9 @@ namespace sierses.Sim
 					LoadFailCount = 0;
 
 					// FetchCarData() seeminly does not return to SetVehicle()
-					// before NEXT CarId change.
-					//  Consequently, call SetVehicle() now!
 					LoadStatus = DataStatus.NotAPI;	// new status to avoid looping here
 					FetchStatus = APIStatus.Loaded;
-//					SD.SetVehicle(null);			// null avoids attempting JSON lookups
 				}
-//				else SD.SHP.Fail(id, category);
 			}
 			catch (HttpRequestException ex)
 			{
@@ -225,8 +222,9 @@ namespace sierses.Sim
 			}
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 			{
-				if (Changed && APIStatus.Success == FetchStatus)	// don't save for APIStatus.None
-					S.Add(S.Car);
+				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  {FetchStatus} {LoadStatus}");
+				if (0 < S.Id.Length)						// save before change completes
+					S.Add();								// add or update S.Car to Lcars list
 				D.SetVehicle(this);
 			}
 		}
@@ -242,14 +240,12 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
-			if (FetchStatus == APIStatus.Success)
-			{
-				Settings.Vehicle = new Spec(S);
-				Save = S.LD.Add(S.Car) || Save;			// update game in dictionary
-			}
-			string sjs = Null0(S.Jstring());			// delete 0 ushorts
+			if (FetchStatus == APIStatus.Success || FetchStatus == APIStatus.Loaded)
+				S.LD.Add();						// update S.Car in Lcars, then Lcars in S.LD
+
+			string sjs = Null0(S.LD.Jstring());	// delete 0 ushorts
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info("Haptics.End(): Download Json Serializer failure:  "
+				Logging.Current.Info($"Haptics.End(): Download Json Serializer failure: {S.LD.Count} games, {S.Lcars.Count} {S.Car.game}  cars;  "
 									 + (Save ? "changes made.." : "(no changes)"));
 			else if (Save)
 				File.WriteAllText(myfile, sjs);
@@ -538,7 +534,7 @@ namespace sierses.Sim
 		public void Init(PluginManager pluginManager)
 		{
 			LoadFailCount = 0;
-			Save = Changed = LoadFinish = false;
+			Save = LoadFinish = false;
 			LoadStatus = DataStatus.None;
 			FetchStatus = APIStatus.None;
 			S = new Spec();

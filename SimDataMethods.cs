@@ -15,7 +15,7 @@ namespace sierses.Sim
 		private ushort idleRPM;
 		int Index;
 
-        public SimData()
+		public SimData()
 		{
 			GameAltText = "";
 			LoadText = "Not Loaded";
@@ -95,26 +95,24 @@ namespace sierses.Sim
 		{
 			StatusDataBase db;
 
-			if (null != shp)    // null when called by FetchCarData()
-			{
-				Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}):  {Haptics.FetchStatus} {Haptics.LoadStatus}");
-				SHP = shp;
-				db = SHP.Gdat.NewData;
-				string cid = db.CarId;
+			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}):  {Haptics.FetchStatus} {Haptics.LoadStatus}");
+			SHP = shp;
+			db = SHP.Gdat.NewData;
+			string cid = db.CarId;
 
-				Index = SHP.S.Lcars.FindIndex(x => x.id == cid);
-				if (0 <= Index)
-				{
-					Haptics.FetchStatus = APIStatus.Loaded;
-					Haptics.LoadFinish = false;                  // enable SetDefaultVehicle
-				}
+			Index = SHP.S.Lcars.FindIndex(x => x.id == cid);
+			if (0 <= Index)
+			{
+				Haptics.FetchStatus = APIStatus.Loaded;
+				Haptics.LoadFinish = false;				  // enable SetDefaultVehicle
 			}
 
 			db = SHP.Gdat.NewData;
 			if (0 > Index)	// car not found in Lcars 
 			{
-                Logging.Current.Info($"Haptics.SetVehicle.switch({db.CarId}):  {Haptics.FetchStatus} {Haptics.LoadStatus}");
-                switch (Haptics.CurrentGame)
+//				Logging.Current.Info($"Haptics.SetVehicle.switch({db.CarId}):"
+//									+ "  {Haptics.FetchStatus} {Haptics.LoadStatus}");
+				switch (Haptics.CurrentGame)
 				{
 					case GameId.AC:
 					case GameId.ACC:
@@ -209,30 +207,26 @@ namespace sierses.Sim
 				}
 			}
 
-			if (!Haptics.LoadFinish && Haptics.FetchStatus != APIStatus.Waiting)
-			{
-				if (Haptics.FetchStatus == APIStatus.Loaded)
-				{
-					if (0 <= Index) {
-						SHP.S.Import(Index);
-						Haptics.LoadStatus = DataStatus.None;
-						Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} JSON Load Success"));
-					} else {
-						Haptics.LoadStatus = DataStatus.None;
-						Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} DB Load Success"));
-					}
-					Haptics.Changed = true;
-					SHP.Settings.Vehicle = new Spec(SHP.S);
-					Haptics.FetchStatus = APIStatus.Success;
-					Haptics.FailedId = "";
-				}
-				else SHP.SetDefaultVehicle(db); // sets LoadText
-				FinalizeVehicle();				// sets LoadFinish = true
-				Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
-				GearInterval = 1 / Gears;
-			}
+			if (Haptics.LoadFinish || Haptics.FetchStatus == APIStatus.Waiting)
+				return;
 
-		}		// SetVehicle()
+			if (Haptics.FetchStatus == APIStatus.Loaded)
+			{
+				if (0 <= Index) {
+					SHP.S.SelectCar(Index);
+					Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} JSON Load Success"));
+				} else {
+					Haptics.LoadStatus = DataStatus.None;
+					Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} DB Load Success"));
+				}
+				Haptics.FetchStatus = APIStatus.Success;
+				Haptics.FailedId = "";
+			}
+			else SHP.SetDefaultVehicle(db); // sets LoadText
+			FinalizeVehicle();				// sets LoadFinish = true
+			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
+			GearInterval = 1 / Gears;
+		}	// SetVehicle()
 
 		private void FinalizeVehicle()
 		{
