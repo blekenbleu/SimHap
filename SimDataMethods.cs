@@ -47,7 +47,7 @@ namespace sierses.Sim
 			return MySet.Motion.TryGetValue(name, out double num) ? num : trouble;
 		}
 
-		int Index;
+		internal int Index;
 		internal void Init(Settings Settings, Haptics sh)
 		{
 			Index = -2;
@@ -97,27 +97,33 @@ namespace sierses.Sim
 		{
 			StatusDataBase db;
 
-			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}): "
-							   + (Haptics.Loaded ? " Loaded " : "") + (Haptics.Waiting ? " Waiting" : ""));
+			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}): " +
+								(Haptics.Save ? " Haptics.Save " : "") + (Haptics.Loaded ? " Loaded " : "") + (Haptics.Waiting ? " Waiting" : "")
+								+ $";  Index = {Index}");
 			SHP = shp;
 			db = SHP.Gdat.NewData;
 			string cid = db.CarId;
 
-			if (Index < -1)
-				Index = SHP.S.Lcars.FindIndex(x => x.id == cid);
+			if (Index == -2 && null != SHP.S.Cars)
+				Index = SHP.S.Cars.FindIndex(x => x.id == cid);
 			if (0 <= Index)
 			{
 				Haptics.dljc = new();	// lock out FetchCarData()
-				SHP.S.SelectCar(Index);
+                Haptics.Waiting = false;
 				Haptics.Loaded = false;
-				Haptics.Waiting = false;
+				SHP.S.SelectCar(Index);
+				SHP.S.Default = "JSON";
 			} else if ((Haptics.Waiting && 3 <= Haptics.LoadFailCount) || (null != Haptics.dls && 11 == Haptics.dls.Length)) {
+				Haptics.dljc = new();	// lock out FetchCarData()
 				string status = SHP.S.Defaults(db);
                 if (0 < status.Length)
                     LoadText = status;
-                Haptics.LoadFailCount = 0;
+				Haptics.Loaded = true;		// Add this car to DB
                 Haptics.Waiting = false;
+                Haptics.LoadFailCount = 0;
+				Index = -3;
 			}
+			else SHP.S.Default = "DB";
 
 			db = SHP.Gdat.NewData;
 			switch (Haptics.CurrentGame)
@@ -143,9 +149,9 @@ namespace sierses.Sim
 				case GameId.DR2:
 					Haptics.FetchCarData(db.CarId, null, V, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == SHP.S.IdleRPM)
-						SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
+						SHP.S.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm")));
 					if (0 == V.IdleRPM)
-						V.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"));
+						V.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm")));
 					break;
 				case GameId.WRC23:
 					Haptics.FetchCarData(db.CarId, null, V, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
@@ -158,9 +164,9 @@ namespace sierses.Sim
 				case GameId.F12023:
 					Haptics.FetchCarData(db.CarId, null, V, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == SHP.S.IdleRPM)
-						SHP.S.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
+						SHP.S.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM")));
 					if (0 == V.IdleRPM)
-						V.IdleRPM = Convert.ToUInt16(10 * (int)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"));
+						V.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM")));
 					break;
 				case GameId.Forza:
 					Haptics.FetchCarData(db.CarId.Substring(4), null, V, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
@@ -221,25 +227,19 @@ namespace sierses.Sim
 					break;
 			}
 
-			if (Haptics.Waiting)
-			{
+			if (Haptics.Waiting)	// still hoping for online match?
 				return;
-			}
 
 			if (0 <= Index)
 			{
 				Haptics.LoadFailCount = 0;
 				Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.Id} JSON Load Success"));
-				Haptics.dljc = null;
-				Haptics.dls = "";
 			}
-			else if (Haptics.Loaded)
+			else if (Index != -3)	// Defaults() ?
 			{
-				SHP.S = V;  // deferred setting SHP.S, to simplify 
+				SHP.S.Set(V);  // deferred setting SHP.S, to simplify 
 				Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.Id} DB Load Success"));
 				V = new();
-				Haptics.dljc = null;
-				Haptics.dls = "";
 				Haptics.Loaded = false;
 			}
 			Index = -2;	// for next time
@@ -280,6 +280,8 @@ namespace sierses.Sim
 			RumbleRightAvg = 0.0;
 			SetRPMIntervals();
 			SetRPMMix();
+			Haptics.dljc = null;
+			Haptics.dls = "";
 		}
 	}
 }
