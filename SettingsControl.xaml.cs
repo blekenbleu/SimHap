@@ -22,7 +22,7 @@ namespace sierses.Sim
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
-			Plugin.S.Id = "";				// force a mismatch
+			Plugin.S.Id = "";			// Refresh_Click() force a mismatch
 			Haptics.LoadFailCount = 0;
 		}
 

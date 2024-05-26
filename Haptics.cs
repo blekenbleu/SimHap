@@ -21,7 +21,7 @@ namespace sierses.Sim
 	[PluginDescription("Properties for haptic feedback and more")]
 	[PluginAuthor("sierses")]
 	[PluginName("Haptics")]
-	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2, IWPFSettings
+	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
@@ -99,30 +99,6 @@ namespace sierses.Sim
 		public PluginManager PluginManager { get; set; }
 		// ----------------------------------------------------------------
 
-		// returning true precludes Refresh() or SetVehicle(), i.e. just wait
-		internal bool Wait(StatusDataBase db)
-		{
-			if (null != dljc || !Waiting || 20 < D.CarInitCount++ || (null != dls && 11 == dls.Length))
-				return false;	// do NOT wait
-
-			D.CarInitCount = 0;
-			if (3 < LoadFailCount++)
-			{
-				GameId g = CurrentGame;
-				dljc = new();	// lock out FetchCarData()
-				Logging.Current.Info("Haptics.Wait(): Failed to load "
-								 +  (g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId)
-								 + ((g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1) ? " : " + db.CarClass : "" ));
-
-				string status = S.Defaults(db);
-                if (0 < status.Length)
-                    D.LoadText = status;
-				return Waiting = false;		// give up
-			}
-
-			return true;					// do not give up (yet)
-		}
-
 		// must be void and static;  invoked by D.SetVehicle()
 		internal static string dls;
 
@@ -133,7 +109,7 @@ namespace sierses.Sim
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
-			if (null != dljc)
+			if (Waiting || null != dljc)
 				return;
 
 			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}): "
@@ -178,6 +154,28 @@ namespace sierses.Sim
 			}
 		}		// FetchCarData()
 
+		// returning true precludes Refresh() or SetVehicle(), i.e. just wait
+		internal bool Wait(StatusDataBase db)
+		{
+			if (S.Id == db.CarId)					// Wait():  current == requested?
+				return false;
+
+			if (Waiting && 20 > D.CarInitCount)
+				return true;
+
+			if (null != dljc || (null != dls && 11 == dls.Length))
+				return false;	// FetchCarData() responded; do NOT wait
+
+			D.CarInitCount = 0;
+			if (3 > LoadFailCount++)
+            	return true;					// do not give up (yet)
+
+			dljc = new();	// lock out FetchCarData()
+			Logging.Current.Info($"Haptics.Wait({db.CarId}/{S.Id}):  {LoadFailCount}  Load timeout "
+								 + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
+			return false;		// give up
+		}
+
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data,
 		/// raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
@@ -195,7 +193,7 @@ namespace sierses.Sim
 			Gdat = data;
 			PM = pluginManager;
 
-			if (S.Id == data.NewData.CarId)
+			if (S.Id == data.NewData.CarId)				// DataUpdate()
 			{
 				if (data.GameRunning && null != data.OldData)
 					D.Refresh(ref data, this);
@@ -205,8 +203,8 @@ namespace sierses.Sim
 				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}): "
 									+ (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
 
-				if (null != S.Id && 0 < S.Id.Length)		// save before change completes
-					S.Add();		// add or update S.Car to Lcars list
+				if (Loaded && null != S.Id && 0 < S.Id.Length)	// save before SetVehicle()
+					S.Add();								// add or update S.Car in Lcars list
 				D.SetVehicle(this);
 			}
 		}
@@ -325,7 +323,7 @@ namespace sierses.Sim
 			Settings.Motion["MotionSwayOffset"] = D.MotionSwayOffset;
 			Settings.Motion["MotionSwayMult"] = D.MotionSwayMult;
 			Settings.Motion["MotionSwayGamma"] = D.MotionSwayGamma;
-			IPluginExtensions.SaveCommonSettings(this, "Settings", Settings);
+			this.SaveCommonSettings("Settings", Settings);
 		}
 
 		// Init() methods -----------------------------
@@ -523,7 +521,7 @@ namespace sierses.Sim
 			D = new SimData();
 			S.Init(/*this*/);
 			SetGame(pluginManager);
-			Settings = IPluginExtensions.ReadCommonSettings(this, "Settings", () => new Settings());
+			Settings = this.ReadCommonSettings("Settings", () => new Settings());
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;
 			Settings.DownshiftDurationMs = Settings.DownshiftDurationMs > 0 ? Settings.DownshiftDurationMs : 400;
 			Settings.UpshiftDurationMs = Settings.UpshiftDurationMs > 0 ? Settings.UpshiftDurationMs : 400;
@@ -577,143 +575,143 @@ namespace sierses.Sim
 				S.LD.Load(null);
 			}
 			D.Init(Settings, this);
-			IPluginExtensions.AttachDelegate(this, "CarName", () => S.CarName);
-			IPluginExtensions.AttachDelegate(this, "CarId", () => S.Id);
-			IPluginExtensions.AttachDelegate(this, "Category", () => S.Category);
-			IPluginExtensions.AttachDelegate(this, "RedlineRPM", () => S.Redline);
-			IPluginExtensions.AttachDelegate(this, "MaxRPM", () => S.MaxRPM);
-			IPluginExtensions.AttachDelegate(this, "EngineConfig", () => S.EngineConfiguration);
-			IPluginExtensions.AttachDelegate(this, "EngineCylinders", () => S.EngineCylinders);
-			IPluginExtensions.AttachDelegate(this, "EngineLocation", () => S.EngineLocation);
-			IPluginExtensions.AttachDelegate(this, "PoweredWheels", () => S.PoweredWheels);
-			IPluginExtensions.AttachDelegate(this, "DisplacementCC", () => S.Displacement);
-			IPluginExtensions.AttachDelegate(this, "PowerTotalHP", () => S.MaxPower);
-			IPluginExtensions.AttachDelegate(this, "PowerEngineHP", () => S.MaxPower - S.ElectricMaxPower);
-			IPluginExtensions.AttachDelegate(this, "PowerMotorHP", () => S.ElectricMaxPower);
-			IPluginExtensions.AttachDelegate(this, "MaxTorqueNm", () => S.MaxTorque);
-			IPluginExtensions.AttachDelegate(this, "EngineLoad", () => D.EngineLoad);
-			IPluginExtensions.AttachDelegate(this, "IdleRPM", () => S.IdleRPM);
-			IPluginExtensions.AttachDelegate(this, "FreqHarmonic", () => D.FreqHarmonic);
-			IPluginExtensions.AttachDelegate(this, "FreqOctave", () => D.FreqOctave);
-			IPluginExtensions.AttachDelegate(this, "FreqIntervalA1", () => D.FreqIntervalA1);
-			IPluginExtensions.AttachDelegate(this, "FreqIntervalA2", () => D.FreqIntervalA2);
-			IPluginExtensions.AttachDelegate(this, "FreqLFEAdaptive", () => D.FreqLFEAdaptive);
-			IPluginExtensions.AttachDelegate(this, "FreqPeakA1", () => D.FreqPeakA1);
-			IPluginExtensions.AttachDelegate(this, "FreqPeakB1", () => D.FreqPeakB1);
-			IPluginExtensions.AttachDelegate(this, "FreqPeakA2", () => D.FreqPeakA2);
-			IPluginExtensions.AttachDelegate(this, "FreqPeakB2", () => D.FreqPeakB2);
-			IPluginExtensions.AttachDelegate(this, "Gain1H", () => D.Gain1H);
-			IPluginExtensions.AttachDelegate(this, "Gain1H2", () => D.Gain1H2);
-			IPluginExtensions.AttachDelegate(this, "Gain2H", () => D.Gain2H);
-			IPluginExtensions.AttachDelegate(this, "Gain4H", () => D.Gain4H);
-			IPluginExtensions.AttachDelegate(this, "GainOctave", () => D.GainOctave);
-			IPluginExtensions.AttachDelegate(this, "GainIntervalA1", () => D.GainIntervalA1);
-			IPluginExtensions.AttachDelegate(this, "GainIntervalA2", () => D.GainIntervalA2);
-			IPluginExtensions.AttachDelegate(this, "GainPeakA1Front", () => D.GainPeakA1Front);
-			IPluginExtensions.AttachDelegate(this, "GainPeakA1Middle", () => D.GainPeakA1);
-			IPluginExtensions.AttachDelegate(this, "GainPeakA1Rear", () => D.GainPeakA1Rear);
-			IPluginExtensions.AttachDelegate(this, "GainPeakA2Front", () => D.GainPeakA2Front);
-			IPluginExtensions.AttachDelegate(this, "GainPeakA2Middle", () => D.GainPeakA2);
-			IPluginExtensions.AttachDelegate(this, "GainPeakA2Rear", () => D.GainPeakA2Rear);
-			IPluginExtensions.AttachDelegate(this, "GainPeakB1Front", () => D.GainPeakB1Front);
-			IPluginExtensions.AttachDelegate(this, "GainPeakB1Middle", () => D.GainPeakB1);
-			IPluginExtensions.AttachDelegate(this, "GainPeakB1Rear", () => D.GainPeakB1Rear);
-			IPluginExtensions.AttachDelegate(this, "GainPeakB2Front", () => D.GainPeakB2Front);
-			IPluginExtensions.AttachDelegate(this, "GainPeakB2Middle", () => D.GainPeakB2);
-			IPluginExtensions.AttachDelegate(this, "GainPeakB2Rear", () => D.GainPeakB2Rear);
-			IPluginExtensions.AttachDelegate(this, "SlipXFL", () => D.SlipXFL);
-			IPluginExtensions.AttachDelegate(this, "SlipXFR", () => D.SlipXFR);
-			IPluginExtensions.AttachDelegate(this, "SlipXRL", () => D.SlipXRL);
-			IPluginExtensions.AttachDelegate(this, "SlipXRR", () => D.SlipXRR);
-			IPluginExtensions.AttachDelegate(this, "SlipXAll", () => D.SlipXAll);
-			IPluginExtensions.AttachDelegate(this, "SlipYFL", () => D.SlipYFL);
-			IPluginExtensions.AttachDelegate(this, "SlipYFR", () => D.SlipYFR);
-			IPluginExtensions.AttachDelegate(this, "SlipYRL", () => D.SlipYRL);
-			IPluginExtensions.AttachDelegate(this, "SlipYRR", () => D.SlipYRR);
-			IPluginExtensions.AttachDelegate(this, "SlipYAll", () => D.SlipYAll);
-			IPluginExtensions.AttachDelegate(this, "WheelLockAll", () => D.WheelLockAll);
-			IPluginExtensions.AttachDelegate(this, "WheelSpinAll", () => D.WheelSpinAll);
-			IPluginExtensions.AttachDelegate(this, "TireDiameterFL", () => D.TireDiameterFL);
-			IPluginExtensions.AttachDelegate(this, "TireDiameterFR", () => D.TireDiameterFR);
-			IPluginExtensions.AttachDelegate(this, "TireDiameterRL", () => D.TireDiameterRL);
-			IPluginExtensions.AttachDelegate(this, "TireDiameterRR", () => D.TireDiameterRR);
-			IPluginExtensions.AttachDelegate(this, "TireSpeedFL", () => D.WheelSpeedFL);
-			IPluginExtensions.AttachDelegate(this, "TireSpeedFR", () => D.WheelSpeedFR);
-			IPluginExtensions.AttachDelegate(this, "TireSpeedRL", () => D.WheelSpeedRL);
-			IPluginExtensions.AttachDelegate(this, "TireSpeedRR", () => D.WheelSpeedRR);
-			IPluginExtensions.AttachDelegate(this, "SpeedMs", () => D.SpeedMs);
-			IPluginExtensions.AttachDelegate(this, "TireLoadFL", () => D.WheelLoadFL);
-			IPluginExtensions.AttachDelegate(this, "TireLoadFR", () => D.WheelLoadFR);
-			IPluginExtensions.AttachDelegate(this, "TireLoadRL", () => D.WheelLoadRL);
-			IPluginExtensions.AttachDelegate(this, "TireLoadRR", () => D.WheelLoadRR);
-			IPluginExtensions.AttachDelegate(this, "YawRate", () => D.YawRate);
-			IPluginExtensions.AttachDelegate(this, "YawRateAvg", () => D.YawRateAvg);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreq", () => D.SuspensionFreq);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreqR0a", () => D.SuspensionFreqRa);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreqR0b", () => D.SuspensionFreqRb);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreqR0c", () => D.SuspensionFreqRc);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreqR1", () => D.SuspensionFreqR1);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreqR2", () => D.SuspensionFreqR2);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreqR3", () => D.SuspensionFreqR3);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreqR4", () => D.SuspensionFreqR4);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFreqR5", () => D.SuspensionFreqR5);
-			IPluginExtensions.AttachDelegate(this, "SuspensionMultR0a", () => D.SuspensionMultRa);
-			IPluginExtensions.AttachDelegate(this, "SuspensionMultR0b", () => D.SuspensionMultRb);
-			IPluginExtensions.AttachDelegate(this, "SuspensionMultR0c", () => D.SuspensionMultRc);
-			IPluginExtensions.AttachDelegate(this, "SuspensionMultR1", () => D.SuspensionMultR1);
-			IPluginExtensions.AttachDelegate(this, "SuspensionMultR2", () => D.SuspensionMultR2);
-			IPluginExtensions.AttachDelegate(this, "SuspensionMultR3", () => D.SuspensionMultR3);
-			IPluginExtensions.AttachDelegate(this, "SuspensionMultR4", () => D.SuspensionMultR4);
-			IPluginExtensions.AttachDelegate(this, "SuspensionMultR5", () => D.SuspensionMultR5);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRumbleMultR0b", () => D.SuspensionRumbleMultRb);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRumbleMultR0c", () => D.SuspensionRumbleMultRc);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFL", () => D.SuspensionFL);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFR", () => D.SuspensionFR);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRL", () => D.SuspensionRL);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRR", () => D.SuspensionRR);
-			IPluginExtensions.AttachDelegate(this, "SuspensionFront", () => D.SuspensionFront);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRear", () => D.SuspensionRear);
-			IPluginExtensions.AttachDelegate(this, "SuspensionLeft", () => D.SuspensionLeft);
-			IPluginExtensions.AttachDelegate(this, "SuspensionRight", () => D.SuspensionRight);
-			IPluginExtensions.AttachDelegate(this, "SuspensionAll", () => D.SuspensionAll);
-			IPluginExtensions.AttachDelegate(this, "SuspensionAccAll", () => D.SuspensionAccAll);
-			IPluginExtensions.AttachDelegate(this, "RumbleFromPlugin", () => D.RumbleFromPlugin);
-			IPluginExtensions.AttachDelegate(this, "RumbleMult", () => D.RumbleMult);
-			IPluginExtensions.AttachDelegate(this, "RumbleLeft", () => D.RumbleLeft);
-			IPluginExtensions.AttachDelegate(this, "RumbleRight", () => D.RumbleRight);
-			IPluginExtensions.AttachDelegate(this, "ABSPulse", () => D.ABSPulse);
-			IPluginExtensions.AttachDelegate(this, "Airborne", () => D.Airborne);
-			IPluginExtensions.AttachDelegate(this, "Gear", () => D.Gear);
-			IPluginExtensions.AttachDelegate(this, "Gears", () => D.Gears);
-			IPluginExtensions.AttachDelegate(this, "ShiftDown", () => D.Downshift);
-			IPluginExtensions.AttachDelegate(this, "ShiftUp", () => D.Upshift);
-			IPluginExtensions.AttachDelegate(this, "WiperStatus", () => D.WiperStatus);
-			IPluginExtensions.AttachDelegate(this, "AccHeave", () => D.AccHeave[D.Acc0]);
-			IPluginExtensions.AttachDelegate(this, "AccSurge", () => D.AccSurge[D.Acc0]);
-			IPluginExtensions.AttachDelegate(this, "AccSway", () => D.AccSway[D.Acc0]);
-			IPluginExtensions.AttachDelegate(this, "AccHeave2", () => D.AccHeave2S);
-			IPluginExtensions.AttachDelegate(this, "AccSurge2", () => D.AccSurge2S);
-			IPluginExtensions.AttachDelegate(this, "AccSway2", () => D.AccSway2S);
-			IPluginExtensions.AttachDelegate(this, "AccHeaveAvg", () => D.AccHeaveAvg);
-			IPluginExtensions.AttachDelegate(this, "AccSurgeAvg", () => D.AccSurgeAvg);
-			IPluginExtensions.AttachDelegate(this, "AccSwayAvg", () => D.AccSwayAvg);
-			IPluginExtensions.AttachDelegate(this, "JerkZ", () => D.JerkZ);
-			IPluginExtensions.AttachDelegate(this, "JerkY", () => D.JerkY);
-			IPluginExtensions.AttachDelegate(this, "JerkX", () => D.JerkX);
-			IPluginExtensions.AttachDelegate(this, "JerkYAvg", () => D.JerkYAvg);
-			IPluginExtensions.AttachDelegate(this, "MPitch", () => D.MotionPitch);
-			IPluginExtensions.AttachDelegate(this, "MRoll", () => D.MotionRoll);
-			IPluginExtensions.AttachDelegate(this, "MYaw", () => D.MotionYaw);
-			IPluginExtensions.AttachDelegate(this, "MHeave", () => D.MotionHeave);
-			IPluginExtensions.AttachDelegate(this, "MSurge", () => D.MotionSurge);
-			IPluginExtensions.AttachDelegate(this, "MSway", () => D.MotionSway);
-			IPluginExtensions.AttachDelegate(this, "TireSamples", () => D.TireDiameterSampleCount);
-			IPluginExtensions.AttachDelegate(this, "VelocityX", () => D.VelocityX);
+			this.AttachDelegate("CarName", () => S.CarName);
+			this.AttachDelegate("CarId", () => S.Id);
+			this.AttachDelegate("Category", () => S.Category);
+			this.AttachDelegate("RedlineRPM", () => S.Redline);
+			this.AttachDelegate("MaxRPM", () => S.MaxRPM);
+			this.AttachDelegate("EngineConfig", () => S.EngineConfiguration);
+			this.AttachDelegate("EngineCylinders", () => S.EngineCylinders);
+			this.AttachDelegate("EngineLocation", () => S.EngineLocation);
+			this.AttachDelegate("PoweredWheels", () => S.PoweredWheels);
+			this.AttachDelegate("DisplacementCC", () => S.Displacement);
+			this.AttachDelegate("PowerTotalHP", () => S.MaxPower);
+			this.AttachDelegate("PowerEngineHP", () => S.MaxPower - S.ElectricMaxPower);
+			this.AttachDelegate("PowerMotorHP", () => S.ElectricMaxPower);
+			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
+			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
+			this.AttachDelegate("IdleRPM", () => S.IdleRPM);
+			this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
+			this.AttachDelegate("FreqOctave", () => D.FreqOctave);
+			this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
+			this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
+			this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
+			this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
+			this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
+			this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
+			this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
+			this.AttachDelegate("Gain1H", () => D.Gain1H);
+			this.AttachDelegate("Gain1H2", () => D.Gain1H2);
+			this.AttachDelegate("Gain2H", () => D.Gain2H);
+			this.AttachDelegate("Gain4H", () => D.Gain4H);
+			this.AttachDelegate("GainOctave", () => D.GainOctave);
+			this.AttachDelegate("GainIntervalA1", () => D.GainIntervalA1);
+			this.AttachDelegate("GainIntervalA2", () => D.GainIntervalA2);
+			this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
+			this.AttachDelegate("GainPeakA1Middle", () => D.GainPeakA1);
+			this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
+			this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
+			this.AttachDelegate("GainPeakA2Middle", () => D.GainPeakA2);
+			this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
+			this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
+			this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
+			this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
+			this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
+			this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
+			this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
+			this.AttachDelegate("SlipXFL", () => D.SlipXFL);
+			this.AttachDelegate("SlipXFR", () => D.SlipXFR);
+			this.AttachDelegate("SlipXRL", () => D.SlipXRL);
+			this.AttachDelegate("SlipXRR", () => D.SlipXRR);
+			this.AttachDelegate("SlipXAll", () => D.SlipXAll);
+			this.AttachDelegate("SlipYFL", () => D.SlipYFL);
+			this.AttachDelegate("SlipYFR", () => D.SlipYFR);
+			this.AttachDelegate("SlipYRL", () => D.SlipYRL);
+			this.AttachDelegate("SlipYRR", () => D.SlipYRR);
+			this.AttachDelegate("SlipYAll", () => D.SlipYAll);
+			this.AttachDelegate("WheelLockAll", () => D.WheelLockAll);
+			this.AttachDelegate("WheelSpinAll", () => D.WheelSpinAll);
+			this.AttachDelegate("TireDiameterFL", () => D.TireDiameterFL);
+			this.AttachDelegate("TireDiameterFR", () => D.TireDiameterFR);
+			this.AttachDelegate("TireDiameterRL", () => D.TireDiameterRL);
+			this.AttachDelegate("TireDiameterRR", () => D.TireDiameterRR);
+			this.AttachDelegate("TireSpeedFL", () => D.WheelSpeedFL);
+			this.AttachDelegate("TireSpeedFR", () => D.WheelSpeedFR);
+			this.AttachDelegate("TireSpeedRL", () => D.WheelSpeedRL);
+			this.AttachDelegate("TireSpeedRR", () => D.WheelSpeedRR);
+			this.AttachDelegate("SpeedMs", () => D.SpeedMs);
+			this.AttachDelegate("TireLoadFL", () => D.WheelLoadFL);
+			this.AttachDelegate("TireLoadFR", () => D.WheelLoadFR);
+			this.AttachDelegate("TireLoadRL", () => D.WheelLoadRL);
+			this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
+			this.AttachDelegate("YawRate", () => D.YawRate);
+			this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
+			this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
+			this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
+			this.AttachDelegate("SuspensionFreqR0b", () => D.SuspensionFreqRb);
+			this.AttachDelegate("SuspensionFreqR0c", () => D.SuspensionFreqRc);
+			this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
+			this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
+			this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
+			this.AttachDelegate("SuspensionFreqR4", () => D.SuspensionFreqR4);
+			this.AttachDelegate("SuspensionFreqR5", () => D.SuspensionFreqR5);
+			this.AttachDelegate("SuspensionMultR0a", () => D.SuspensionMultRa);
+			this.AttachDelegate("SuspensionMultR0b", () => D.SuspensionMultRb);
+			this.AttachDelegate("SuspensionMultR0c", () => D.SuspensionMultRc);
+			this.AttachDelegate("SuspensionMultR1", () => D.SuspensionMultR1);
+			this.AttachDelegate("SuspensionMultR2", () => D.SuspensionMultR2);
+			this.AttachDelegate("SuspensionMultR3", () => D.SuspensionMultR3);
+			this.AttachDelegate("SuspensionMultR4", () => D.SuspensionMultR4);
+			this.AttachDelegate("SuspensionMultR5", () => D.SuspensionMultR5);
+			this.AttachDelegate("SuspensionRumbleMultR0b", () => D.SuspensionRumbleMultRb);
+			this.AttachDelegate("SuspensionRumbleMultR0c", () => D.SuspensionRumbleMultRc);
+			this.AttachDelegate("SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
+			this.AttachDelegate("SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
+			this.AttachDelegate("SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
+			this.AttachDelegate("SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
+			this.AttachDelegate("SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
+			this.AttachDelegate("SuspensionFL", () => D.SuspensionFL);
+			this.AttachDelegate("SuspensionFR", () => D.SuspensionFR);
+			this.AttachDelegate("SuspensionRL", () => D.SuspensionRL);
+			this.AttachDelegate("SuspensionRR", () => D.SuspensionRR);
+			this.AttachDelegate("SuspensionFront", () => D.SuspensionFront);
+			this.AttachDelegate("SuspensionRear", () => D.SuspensionRear);
+			this.AttachDelegate("SuspensionLeft", () => D.SuspensionLeft);
+			this.AttachDelegate("SuspensionRight", () => D.SuspensionRight);
+			this.AttachDelegate("SuspensionAll", () => D.SuspensionAll);
+			this.AttachDelegate("SuspensionAccAll", () => D.SuspensionAccAll);
+			this.AttachDelegate("RumbleFromPlugin", () => D.RumbleFromPlugin);
+			this.AttachDelegate("RumbleMult", () => D.RumbleMult);
+			this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
+			this.AttachDelegate("RumbleRight", () => D.RumbleRight);
+			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
+			this.AttachDelegate("Airborne", () => D.Airborne);
+			this.AttachDelegate("Gear", () => D.Gear);
+			this.AttachDelegate("Gears", () => D.Gears);
+			this.AttachDelegate("ShiftDown", () => D.Downshift);
+			this.AttachDelegate("ShiftUp", () => D.Upshift);
+			this.AttachDelegate("WiperStatus", () => D.WiperStatus);
+			this.AttachDelegate("AccHeave", () => D.AccHeave[D.Acc0]);
+			this.AttachDelegate("AccSurge", () => D.AccSurge[D.Acc0]);
+			this.AttachDelegate("AccSway", () => D.AccSway[D.Acc0]);
+			this.AttachDelegate("AccHeave2", () => D.AccHeave2S);
+			this.AttachDelegate("AccSurge2", () => D.AccSurge2S);
+			this.AttachDelegate("AccSway2", () => D.AccSway2S);
+			this.AttachDelegate("AccHeaveAvg", () => D.AccHeaveAvg);
+			this.AttachDelegate("AccSurgeAvg", () => D.AccSurgeAvg);
+			this.AttachDelegate("AccSwayAvg", () => D.AccSwayAvg);
+			this.AttachDelegate("JerkZ", () => D.JerkZ);
+			this.AttachDelegate("JerkY", () => D.JerkY);
+			this.AttachDelegate("JerkX", () => D.JerkX);
+			this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
+			this.AttachDelegate("MPitch", () => D.MotionPitch);
+			this.AttachDelegate("MRoll", () => D.MotionRoll);
+			this.AttachDelegate("MYaw", () => D.MotionYaw);
+			this.AttachDelegate("MHeave", () => D.MotionHeave);
+			this.AttachDelegate("MSurge", () => D.MotionSurge);
+			this.AttachDelegate("MSway", () => D.MotionSway);
+			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
+			this.AttachDelegate("VelocityX", () => D.VelocityX);
 			FrameTimeTicks = DateTime.Now.Ticks;
 		}
 	}

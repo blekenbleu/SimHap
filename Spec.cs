@@ -248,7 +248,7 @@ namespace sierses.Sim
 				return false;
 
 			Game = Haptics.GameDBText;
-			Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;
+			Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;	// Set()
 			Redline  =	 0 == data.redline ? gameRedline 	: data.redline;
 			MaxRPM   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
 			MaxPower =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
@@ -281,8 +281,7 @@ namespace sierses.Sim
 			Logging.Current.Info($"Haptics.Defaults({db.CarId}): "
 								+(Haptics.Loaded ? " Loaded " : "") + (Haptics.Waiting ? " Waiting" : ""));
 			Game = Haptics.GameDBText;
-			CarName = db.CarModel;		// Defaults()
-			Id = db.CarId;
+			CarName = db.CarModel;				// Defaults()
 			Category = db.CarClass;
 			EngineConfiguration = "V";
 			EngineCylinders = 6;
@@ -390,12 +389,14 @@ namespace sierses.Sim
 				MaxRPM = 6500;
 			if (string.IsNullOrEmpty(Category))
 				Category = "street";
-			if (GameId.RRRE == Haptics.CurrentGame || GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) Id = db.CarModel;
+			Id =									// Defaults()
+				(GameId.RRRE == Haptics.CurrentGame || GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) ?
+					db.CarModel : db.CarId;
 			if (0 < StatusText.Length)
 				Logging.Current.Info($"Haptics.Defaults({Haptics.CurrentGame}, {db.CarModel}): "
 								   + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "") + ":  " + StatusText);
 			return StatusText;
-		}
+		}	// Defaults()
 
 		public string Game
 		{

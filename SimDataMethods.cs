@@ -107,11 +107,17 @@ namespace sierses.Sim
 				Index = SHP.S.Lcars.FindIndex(x => x.id == cid);
 			if (0 <= Index)
 			{
-				Haptics.Waiting = false;
 				Haptics.dljc = new();	// lock out FetchCarData()
 				SHP.S.SelectCar(Index);
 				Haptics.Loaded = false;
-			}	
+				Haptics.Waiting = false;
+			} else if ((Haptics.Waiting && 3 <= Haptics.LoadFailCount) || (null != Haptics.dls && 11 == Haptics.dls.Length)) {
+				string status = SHP.S.Defaults(db);
+                if (0 < status.Length)
+                    LoadText = status;
+                Haptics.LoadFailCount = 0;
+                Haptics.Waiting = false;
+			}
 
 			db = SHP.Gdat.NewData;
 			switch (Haptics.CurrentGame)
@@ -195,9 +201,9 @@ namespace sierses.Sim
 					break;
 				case GameId.GPBikes:
 				case GameId.MXBikes:
-					if (SHP.S.Id != db.CarId)
+					if (SHP.S.Id != db.CarId)	// SetVehicle() Switch case: Bikes
 					{
-						SHP.S.Id = db.CarId;
+						SHP.S.Id = db.CarId;	// SetVehicle() Switch: Bikes not in database
 						SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
 						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
 					}
@@ -222,14 +228,15 @@ namespace sierses.Sim
 
 			if (0 <= Index)
 			{
-				Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} JSON Load Success"));
+				Haptics.LoadFailCount = 0;
+				Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.Id} JSON Load Success"));
 				Haptics.dljc = null;
 				Haptics.dls = "";
 			}
 			else if (Haptics.Loaded)
 			{
 				SHP.S = V;  // deferred setting SHP.S, to simplify 
-				Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.CarName} DB Load Success"));
+				Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.Id} DB Load Success"));
 				V = new();
 				Haptics.dljc = null;
 				Haptics.dls = "";
