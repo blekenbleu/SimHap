@@ -61,17 +61,18 @@ namespace sierses.Sim
 	public class ListDictionary : NotifyPropertyChanged
 	{
 		private Dictionary<string, List<CarSpec>> inDict;
-		private readonly Spec PS;
+		private readonly Spec S;
 		internal ListDictionary(Spec s)
 		{
-			PS = s;
+			S = s;
 //			inDict = new();
 		}
 
-		internal bool Add()
+		internal bool Add()				// S.LD.Add
 		{
-			PS.Add();
-			List<CarSpec> s = PS.Lcars;
+			// handle Loaded and Save
+			S.Add();				// S.Lcars.Add for S.LD.Add()
+			List<CarSpec> s = S.Lcars;
 			if (0 == s.Count)
 				return false;
 
@@ -79,7 +80,7 @@ namespace sierses.Sim
 
 			string k = s[0].game;
 
-            if (inDict.ContainsKey(k))
+			if (inDict.ContainsKey(k))
 				for (int i = 0; i < s.Count; i++)
 				{
 					Index = inDict[k].FindIndex(x => x.id == s[i].id);
@@ -104,12 +105,12 @@ namespace sierses.Sim
 
 		public bool Extract(string game)
 		{
-			return inDict.ContainsKey(game) && 0 < (PS.Lcars = inDict[game]).Count;
+			return inDict.ContainsKey(game) && 0 < (S.Lcars = inDict[game]).Count;
 		}
 
 		internal string Jstring()	// ignore null (string) values; indent JSON
 		{
-			return JsonConvert.SerializeObject(PS.LD.inDict, new JsonSerializerSettings
+			return JsonConvert.SerializeObject(S.LD.inDict, new JsonSerializerSettings
 			{ Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore });
 		}
 	}	// class ListDictionary
@@ -138,94 +139,10 @@ namespace sierses.Sim
 			Private_Car = s.Private_Car;
 		}
 
-		private void Changed(int i, CarSpec s)
+		internal void Add()				// S.Add():  add or update Private_Car in Lcars
 		{
-			if (Lcars[i].id != s.id)
-			{
-				Haptics.Save = true;
-				Lcars[i].id = s.id;
-			}
-			if (Lcars[i].game != s.game)
-			{
-				Haptics.Save = true;
-				Lcars[i].game = s.game;
-			}
-			if (Lcars[i].name != s.name)
-			{
-				Haptics.Save = true;
-				Lcars[i].name = s.name;
-			}
-			if (Lcars[i].config != s.config)
-			{
-				Haptics.Save = true;
-				Lcars[i].config = s.config;
-			}
-			if (Lcars[i].cyl != s.cyl)
-			{
-				Haptics.Save = true;
-				Lcars[i].cyl = s.cyl;
-			}
-			if (Lcars[i].loc != s.loc)
-			{
-				Haptics.Save = true;
-				Lcars[i].loc = s.loc;
-			}
-			if (Lcars[i].drive != s.drive)
-			{
-				Haptics.Save = true;
-				Lcars[i].drive = s.drive;
-			}
-			if (Lcars[i].hp != s.hp)
-			{
-				Haptics.Save = true;
-				Lcars[i].hp = s.hp;
-			}
-			if (Lcars[i].ehp != s.ehp)
-			{
-				Haptics.Save = true;
-				Lcars[i].ehp = s.ehp;
-			}
-			if (Lcars[i].cc != s.cc)
-			{
-				Haptics.Save = true;
-				Lcars[i].cc = s.cc;
-			}
-			if (Lcars[i].nm != s.nm)
-			{
-				Haptics.Save = true;
-				Lcars[i].nm = s.nm;
-			}
-			if (Lcars[i].redline != s.redline)
-			{
-				Haptics.Save = true;
-				Lcars[i].redline = s.redline;
-			}
-			if (Lcars[i].maxrpm != s.maxrpm)
-			{
-				Haptics.Save = true;
-				Lcars[i].maxrpm = s.maxrpm;
-			}
-			if (Lcars[i].idlerpm != s.idlerpm)
-			{
-				Haptics.Save = true;
-				Lcars[i].idlerpm = s.idlerpm;
-			}
-			if (Lcars[i].category != s.category)
-			{
-				Haptics.Save = true;
-				Lcars[i].category = s.category;
-			}
-			if (Lcars[i].notes != s.notes)
-			{
-				Haptics.Save = true;
-				Lcars[i].notes = s.notes;
-			}
-		}
-
-		internal void Add()			// add or update Private_Car in Lcars
-		{
-			if ((null == Private_Car) || (null == Private_Car.id) || (null == Private_Car.game)
-			 || (null == Private_Car.name))
+			Haptics.Loaded = false;		// done with this car;  update Save
+			if ((null == Private_Car.id) || (null == Private_Car.game) || (null == Private_Car.name))
 				return;
 
 			string cid = Private_Car.id;
@@ -233,14 +150,94 @@ namespace sierses.Sim
 			int Index = Lcars.FindIndex(x => x.id == cid);
 			if (0 > Index)
 			{
-				Lcars.Add(Private_Car);
+				Lcars.Add(Private_Car);		// generic List<CarSpec>.Add()
 				Haptics.Save = true;
+				return;
 			}
-			else Changed(Index, Private_Car);
+		
+			if (Lcars[Index].id != Private_Car.id)
+			{
+				Haptics.Save = true;
+				Lcars[Index].id = Private_Car.id;
+			}
+			if (Lcars[Index].game != Private_Car.game)
+			{
+				Haptics.Save = true;
+				Lcars[Index].game = Private_Car.game;
+			}
+			if (Lcars[Index].name != Private_Car.name)
+			{
+				Haptics.Save = true;
+				Lcars[Index].name = Private_Car.name;
+			}
+			if (Lcars[Index].config != Private_Car.config)
+			{
+				Haptics.Save = true;
+				Lcars[Index].config = Private_Car.config;
+			}
+			if (Lcars[Index].cyl != Private_Car.cyl)
+			{
+				Haptics.Save = true;
+				Lcars[Index].cyl = Private_Car.cyl;
+			}
+			if (Lcars[Index].loc != Private_Car.loc)
+			{
+				Haptics.Save = true;
+				Lcars[Index].loc = Private_Car.loc;
+			}
+			if (Lcars[Index].drive != Private_Car.drive)
+			{
+				Haptics.Save = true;
+				Lcars[Index].drive = Private_Car.drive;
+			}
+			if (Lcars[Index].hp != Private_Car.hp)
+			{
+				Haptics.Save = true;
+				Lcars[Index].hp = Private_Car.hp;
+			}
+			if (Lcars[Index].ehp != Private_Car.ehp)
+			{
+				Haptics.Save = true;
+				Lcars[Index].ehp = Private_Car.ehp;
+			}
+			if (Lcars[Index].cc != Private_Car.cc)
+			{
+				Haptics.Save = true;
+				Lcars[Index].cc = Private_Car.cc;
+			}
+			if (Lcars[Index].nm != Private_Car.nm)
+			{
+				Haptics.Save = true;
+				Lcars[Index].nm = Private_Car.nm;
+			}
+			if (Lcars[Index].redline != Private_Car.redline)
+			{
+				Haptics.Save = true;
+				Lcars[Index].redline = Private_Car.redline;
+			}
+			if (Lcars[Index].maxrpm != Private_Car.maxrpm)
+			{
+				Haptics.Save = true;
+				Lcars[Index].maxrpm = Private_Car.maxrpm;
+			}
+			if (Lcars[Index].idlerpm != Private_Car.idlerpm)
+			{
+				Haptics.Save = true;
+				Lcars[Index].idlerpm = Private_Car.idlerpm;
+			}
+			if (Lcars[Index].category != Private_Car.category)
+			{
+				Haptics.Save = true;
+				Lcars[Index].category = Private_Car.category;
+			}
+			if (Lcars[Index].notes != Private_Car.notes)
+			{
+				Haptics.Save = true;
+				Lcars[Index].notes = Private_Car.notes;
+			}
 		}
 
-		// called by Haptics.FetchCarData()
-		internal bool Set(Download dl, ushort gameRedline, ushort gameMaxRPM)
+		internal bool Set(Download dl, ushort gameRedline, ushort gameMaxRPM) // called by FetchCarData()
 		{
 			if (null == dl || null == dl.data || 0 == dl.data.Count)
 				return false;
@@ -271,20 +268,20 @@ namespace sierses.Sim
 		// makes sense only as Spec instance from  JSON
 		internal void SelectCar(int i)
 		{
-			Private_Car = Lcars[i];	// no need to Save
+			Private_Car = Lcars[i];
 		}
 
-		internal string Defaults(string game, StatusDataBase db, GameId CurrentGame)	
+		internal string Defaults(StatusDataBase db)	
 		{
 			string StatusText;
 
-			if (null == game)
-				return "Haptics.Spec.Defaults():  null game";
+			if (null == Haptics.GameDBText)
+				return "Haptics.Spec.Defaults():  null GameDBText";
 
-			Logging.Current.Info($"Haptics.Defaults({db.CarId}):"
-								+ "  {Haptics.FetchStatus} {Haptics.LoadStatus}");
-			Game = game;
-			CarName = db.CarModel;
+			Logging.Current.Info($"Haptics.Defaults({db.CarId}): "
+								+(Haptics.Loaded ? " Loaded " : "") + (Haptics.Waiting ? " Waiting" : ""));
+			Game = Haptics.GameDBText;
+			CarName = db.CarModel;		// Defaults()
 			Id = db.CarId;
 			Category = db.CarClass;
 			EngineConfiguration = "V";
@@ -297,7 +294,7 @@ namespace sierses.Sim
 			MaxTorque = 250;
 			IdleRPM = 0;
 
-			switch (CurrentGame)
+			switch (Haptics.CurrentGame)
 			{
 				case GameId.RRRE:
 				case GameId.AC:
@@ -311,12 +308,12 @@ namespace sierses.Sim
 				case GameId.RBR:
 				case GameId.RF2:
 				case GameId.BeamNG:
-					StatusText = "Not in DB: using generic car";
+					StatusText = "Unavailable: using generic car";
 					break;
 				case GameId.D4:
 				case GameId.DR2:
 				case GameId.WRC23:
-					StatusText = "Not in DB: using generic Rally2";
+					StatusText = "Unavailable: using generic Rally2";
 					EngineConfiguration = "I";
 					EngineCylinders = 4;
 					EngineLocation = "F";
@@ -328,7 +325,7 @@ namespace sierses.Sim
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
-					StatusText = "Not in DB: using generic F1";
+					StatusText = "Unavailable: using generic F1";
 					EngineConfiguration = "V";
 					EngineCylinders = 6;
 					EngineLocation = "RM";
@@ -339,7 +336,7 @@ namespace sierses.Sim
 					MaxTorque = 650;
 					break;
 				case GameId.KK:
-					StatusText = "Not in DB: using generic Kart";
+					StatusText = "Unavailable: using generic Kart";
 					EngineConfiguration = "I";
 					EngineCylinders = 1;
 					EngineLocation = "RM";
@@ -350,7 +347,7 @@ namespace sierses.Sim
 					MaxTorque = 24;
 					break;
 				case GameId.GPBikes:
-					StatusText = "Not in DB: using generic Superbike";
+					StatusText = "Unavailable: using generic Superbike";
 					EngineConfiguration = "I";
 					EngineCylinders = 4;
 					EngineLocation = "M";
@@ -361,7 +358,7 @@ namespace sierses.Sim
 					MaxTorque = 100;
 					break;
 				case GameId.MXBikes:
-					StatusText = "Not in DB: using generic MX Bike";
+					StatusText = "Unavailable: using generic MX Bike";
 					EngineConfiguration = "I";
 					EngineCylinders = 1;
 					EngineLocation = "M";
@@ -373,7 +370,7 @@ namespace sierses.Sim
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
-					StatusText = "Not in DB: assume 500HP 4 Liter V6";
+					StatusText = "Unavailable: assume 500HP 4 Liter V6";
 					EngineConfiguration = "V";
 					EngineCylinders = 6;
 					EngineLocation = "RM";
@@ -384,7 +381,7 @@ namespace sierses.Sim
 					MaxTorque = 400;
 					break;
 				default:
-					StatusText = $"Specs unavailable for {CurrentGame}";
+					StatusText = $"Specs unavailable for {Haptics.CurrentGame}";
 					break;
 			}
 			if (0 == Redline)
@@ -393,9 +390,10 @@ namespace sierses.Sim
 				MaxRPM = 6500;
 			if (string.IsNullOrEmpty(Category))
 				Category = "street";
-			if (GameId.RRRE == CurrentGame || GameId.D4 == CurrentGame || GameId.DR2 == CurrentGame)
-				Id = db.CarModel;
-			Haptics.FetchStatus = APIStatus.Loaded;	// for adding to JSON
+			if (GameId.RRRE == Haptics.CurrentGame || GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) Id = db.CarModel;
+			if (0 < StatusText.Length)
+				Logging.Current.Info($"Haptics.Defaults({Haptics.CurrentGame}, {db.CarModel}): "
+								   + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "") + ":  " + StatusText);
 			return StatusText;
 		}
 

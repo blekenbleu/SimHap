@@ -22,11 +22,8 @@ namespace sierses.Sim
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
-			Plugin.S.Id = "";
+			Plugin.S.Id = "";				// force a mismatch
 			Haptics.LoadFailCount = 0;
-			Haptics.FetchStatus = APIStatus.Retry;
-			Haptics.LoadStatus = DataStatus.None;
-			Haptics.LoadFinish = !Haptics.LoadFinish;
 		}
 
 		private void Lock_Click(object sender, RoutedEventArgs e)

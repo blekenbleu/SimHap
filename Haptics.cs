@@ -25,16 +25,12 @@ namespace sierses.Sim
 	{
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
-		public static bool LoadFinish;
-		public static bool Save;
-		public static DataStatus LoadStatus;
-		public static APIStatus FetchStatus;
 		public static long FrameTimeTicks = 0;
 		public static long FrameCountTicks = 0;
 		public static GameId CurrentGame = GameId.Other;
 		public static string GameDBText;
-		public static string FailedId = "";
-		public static string FailedCategory = "";
+		internal static Download dljc;
+		internal static bool Loaded, Waiting, Save;
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
 
@@ -103,53 +99,33 @@ namespace sierses.Sim
 		public PluginManager PluginManager { get; set; }
 		// ----------------------------------------------------------------
 
-		// called by SetVehicle() in DataUpdate() when car not found
-		internal void SetDefaultVehicle(StatusDataBase db)
-		{
-			string status = S.Defaults(GameDBText, db, CurrentGame);
-			if (0 < status.Length)
-				Logging.Current.Info($"Haptics.SetDefaultVehicle({CurrentGame}, "
-					+ $"{db.CarModel}) {FetchStatus} {LoadStatus}:  "
-					+ (D.LoadText = status));
-			FetchStatus = APIStatus.None;
-			if (CurrentGame == GameId.RRRE || CurrentGame == GameId.D4 || CurrentGame == GameId.DR2)
-				S.Id = db.CarModel;
-		}
-
-		// returning true forces false from Wait(),
-		// false then allows Refresh() or SetVehicle()
-		internal bool Fail(string id, string fcat)
-		{
-			Logging.Current.Info("Haptics.FetchCarData(): Failed to load " + id + " : " + fcat);
-			if (3 < LoadFailCount++)
-			{
-				LoadFailCount = 0;
-				FailedId = CurrentGame != GameId.Forza ? id : "Car_" + id;
-				FailedCategory = fcat;
-				FetchStatus = APIStatus.Fail;
-				return true;
-			}
-			FetchStatus = APIStatus.Retry;
-			return false;					// do not give up (yet)
-		}
-
 		// returning true precludes Refresh() or SetVehicle(), i.e. just wait
-		internal bool Wait(StatusDataBase db, ref string cat, ref string id)
+		internal bool Wait(StatusDataBase db)
 		{
-			if (FetchStatus == APIStatus.Waiting && 20 > D.CarInitCount++)
-				return true;
+			if (null != dljc || !Waiting || 20 < D.CarInitCount++ || (null != dls && 11 == dls.Length))
+				return false;	// do NOT wait
 
 			D.CarInitCount = 0;
-			GameId g = CurrentGame;
-			cat = (g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1)  ? db.CarClass : "0";
-			id = g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId;
-//			if (FetchStatus != APIStatus.None && FetchStatus != APIStatus.Success)
-//				Logging.Current.Info($"Haptics.Wait({cat}, {g}.{id}):  {FetchStatus} {LoadStatus}");
-			return (FetchStatus == APIStatus.Waiting && !Fail(id, cat));
+			if (3 < LoadFailCount++)
+			{
+				GameId g = CurrentGame;
+				dljc = new();	// lock out FetchCarData()
+				Logging.Current.Info("Haptics.Wait(): Failed to load "
+								 +  (g == GameId.RRRE ? db.CarModel : g == GameId.Forza ? db.CarId.Substring(4) : db.CarId)
+								 + ((g == GameId.RF2 || g == GameId.LMU || g == GameId.AMS1) ? " : " + db.CarClass : "" ));
+
+				string status = S.Defaults(db);
+                if (0 < status.Length)
+                    D.LoadText = status;
+				return Waiting = false;		// give up
+			}
+
+			return true;					// do not give up (yet)
 		}
 
 		// must be void and static;  invoked by D.SetVehicle()
-		static Download dljc;
+		internal static string dls;
+
 		internal static async void FetchCarData(
 			string id,
 			string category,
@@ -157,42 +133,48 @@ namespace sierses.Sim
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
-			if (DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus)
+			if (null != dljc)
 				return;
 
-			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  {FetchStatus} {LoadStatus}");
+			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}): "
+							   + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
+
 			try
 			{
-				FetchStatus = APIStatus.Waiting;
-				LoadFinish = false;
+				Waiting = true;
 				id ??= "0";
 				category ??= "0";
 				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
 								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
-				string dls = async.Content.ReadAsStringAsync().Result;
-				dljc = JsonConvert.DeserializeObject<Download>(dls, new JsonSerializerSettings
-								{
+				dls = async.Content.ReadAsStringAsync().Result;
+				dljc = JsonConvert.DeserializeObject<Download>(dls,
+							new JsonSerializerSettings
+							{
 									NullValueHandling = NullValueHandling.Ignore,
 									MissingMemberHandling = MissingMemberHandling.Ignore
-								});
-				if (v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
+							});
+				if (Loaded = v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
 				{
 					Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + v.CarName);
-					LoadFinish = false;
 					LoadFailCount = 0;
-
-					// FetchCarData() seeminly does not return to SetVehicle()
-					LoadStatus = DataStatus.NotAPI;	// new status to avoid looping here
-					FetchStatus = APIStatus.Loaded;
+					Waiting = false;	// FetchCarData success
+				} else if (null != dls && 11 == dls.Length) {
+					dljc = null;
+					Waiting = false;	// FetchCarData not in DB
+					Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
+				} else {
+					Waiting = false;	// FetchCarData fail
+					dljc = null;
+					Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  result length {dls.Length}: "
+										 + dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
 				}
 			}
 			catch (HttpRequestException ex)
 			{
-				Logging.Current.Error("Haptics: " + ex.Message);
+				Logging.Current.Error("Haptics.FetchCarData() Error: " + ex.Message);
 				LoadFailCount = 0;
-				FetchStatus = APIStatus.Retry;
 			}
 		}		// FetchCarData()
 
@@ -207,24 +189,24 @@ namespace sierses.Sim
 		internal PluginManager PM;
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
-			string cat = "", id = "";
-
-			if (null == data.NewData || Wait(data.NewData, ref cat, ref id))
+			if (null == data.NewData || Wait(data.NewData))
 				return;
 
 			Gdat = data;
 			PM = pluginManager;
 
-			if (S.Id == data.NewData.CarId && LoadStatus != DataStatus.NotAPI)
+			if (S.Id == data.NewData.CarId)
 			{
 				if (data.GameRunning && null != data.OldData)
 					D.Refresh(ref data, this);
 			}
 			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 			{
-				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  {FetchStatus} {LoadStatus}");
-				if (0 < S.Id.Length)						// save before change completes
-					S.Add();								// add or update S.Car to Lcars list
+				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}): "
+									+ (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
+
+				if (null != S.Id && 0 < S.Id.Length)		// save before change completes
+					S.Add();		// add or update S.Car to Lcars list
 				D.SetVehicle(this);
 			}
 		}
@@ -240,13 +222,14 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
-			if (FetchStatus == APIStatus.Success || FetchStatus == APIStatus.Loaded)
-				S.LD.Add();						// update S.Car in Lcars, then Lcars in S.LD
+			if (Save || Loaded)		// END()
+				S.LD.Add();			// update S.Car in Lcars, then Lcars in S.LD
 
 			string sjs = Null0(S.LD.Jstring());	// delete 0 ushorts
 			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info($"Haptics.End(): Download Json Serializer failure: {S.LD.Count} games, {S.Lcars.Count} {S.Car.game}  cars;  "
-									 + (Save ? "changes made.." : "(no changes)"));
+				Logging.Current.Info( $"Haptics.End(): Download Json Serializer failure: "
+									+ $"{S.LD.Count} games, {S.Lcars.Count} {S.Car.game} cars;  "
+									+ (Save ? "changes made.." : "(no changes)"));
 			else if (Save)
 				File.WriteAllText(myfile, sjs);
 
@@ -533,10 +516,9 @@ namespace sierses.Sim
 
 		public void Init(PluginManager pluginManager)
 		{
+			dljc = null;
 			LoadFailCount = 0;
-			Save = LoadFinish = false;
-			LoadStatus = DataStatus.None;
-			FetchStatus = APIStatus.None;
+			Save = Loaded = Waiting = false;
 			S = new Spec();
 			D = new SimData();
 			S.Init(/*this*/);
@@ -609,7 +591,6 @@ namespace sierses.Sim
 			IPluginExtensions.AttachDelegate(this, "PowerEngineHP", () => S.MaxPower - S.ElectricMaxPower);
 			IPluginExtensions.AttachDelegate(this, "PowerMotorHP", () => S.ElectricMaxPower);
 			IPluginExtensions.AttachDelegate(this, "MaxTorqueNm", () => S.MaxTorque);
-			IPluginExtensions.AttachDelegate(this, "LoadStatus", () => (int)LoadStatus);
 			IPluginExtensions.AttachDelegate(this, "EngineLoad", () => D.EngineLoad);
 			IPluginExtensions.AttachDelegate(this, "IdleRPM", () => S.IdleRPM);
 			IPluginExtensions.AttachDelegate(this, "FreqHarmonic", () => D.FreqHarmonic);

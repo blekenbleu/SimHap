@@ -93,8 +93,6 @@
     <Compile Include="Spec.cs" />
     <Compile Include="Haptics.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="DataStatus.cs" />
-    <Compile Include="APIStatus.cs" />
     <Compile Include="GameId.cs" />
     <Compile Include="Properties\Resources.cs" />
     <Compile Include="SettingsControl.xaml.cs">
