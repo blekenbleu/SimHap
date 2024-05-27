@@ -93,33 +93,21 @@ namespace sierses.Sim
 		// called from DataUpdate()
 		internal void SetVehicle(Haptics shp)
 		{
-			StatusDataBase db;
+			SHP = shp;
+			StatusDataBase db = SHP.Gdat.NewData;
+			string B4 = SHP.S.Id, source = "DB Load Success";
 
 			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}): " +
 								(Haptics.Save ? " Haptics.Save " : "") + (Haptics.Loaded ? " Loaded " : "") + (Haptics.Waiting ? " Waiting" : "")
-								+ $";  Index = {Index}");
-			SHP = shp;
-			db = SHP.Gdat.NewData;
-			string cId = db.CarId;
+								+ $" Index = {Index}");
 
-			if (Index == -2 && null != SHP.S.Cars)
-				Index = SHP.S.Cars.FindIndex(x => x.id == cId);
+			if (Index == -2)
+				Index = SHP.S.SelectCar(db.CarId);
 			if (0 <= Index)
-			{
-				Haptics.Waiting = false;
-				Haptics.Loaded = false;		// SetVehicle(): do not save JSON Car
-				SHP.S.SelectCar(Index);
-				SHP.S.Default = "JSON";
-			} else if (-3 == Index) { // not from DB ?
-				string status = SHP.S.Defaults(db);
-				if (0 < status.Length)
-					LoadText = status;
-				Haptics.Loaded = true;		// SetVehicle(): Add Default car to json
-				Haptics.LoadFailCount = 0;
-			}
-			else SHP.S.Default = "DB";
+				Haptics.Waiting = false;							// Car from JSOM
+			else if (-3 == Index)
+				source = SHP.S.Defaults(db);						// not from DB
 
-			db = SHP.Gdat.NewData;
 			switch (Haptics.CurrentGame)
 			{
 				case GameId.AC:
@@ -192,7 +180,7 @@ namespace sierses.Sim
 						SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
 						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
 					}
-					Haptics.Loaded = false;		// Bikes are not saved
+//					Haptics.Loaded = false;		// Bikes are not saved
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
@@ -210,16 +198,15 @@ namespace sierses.Sim
 				return;
 
 			if (0 <= Index)
-			{
-				Haptics.LoadFailCount = 0;
-				Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.Id} JSON Load Success"));
-			}
-			else if (Index != -3)	// Defaults() ?
-			{
-				SHP.S.SetId(cId);  // deferred setting SHP.S.i in FetchCarData(), to avoid race conditions on id match 
-				Logging.Current.Info("Haptics.SetVehicle():  " + (LoadText = $"{SHP.S.Game} {SHP.S.Id} DB Load Success"));
-			}
+				source = "JSON Load Success";
+			else if (Index != -3)	// Not Defaults() ?
+				SHP.S.SetId(db.CarId);  // deferred setting SHP.S.i in FetchCarData(), to avoid race conditions on id match 
 			Index = -2;	// for next time
+
+			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}/{B4}) "
+								+ (Haptics.Save ? " Haptics.Save " : "") + (Haptics.Loaded ? "Loaded " : "")
+								+ $"{Haptics.CurrentGame}, {db.CarModel}:  "
+								+ (LoadText = $"{SHP.S.Game} {SHP.S.Id} " + source));
 
 			// finalize vehicle
 			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
