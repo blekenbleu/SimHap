@@ -33,8 +33,7 @@ namespace sierses.Sim
 		internal static bool Loaded, Waiting, Save;
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
-
-		public Spec S { get; set; }
+		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
 
@@ -117,7 +116,7 @@ namespace sierses.Sim
 
 			try
 			{
-				CarSpec v = This.S.Car;
+				CarSpec v = new() { };
 				Waiting = true;
 				id ??= "0";
 				category ??= "0";
@@ -137,6 +136,12 @@ namespace sierses.Sim
 							);
 					if (Loaded = v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
 					{
+						if (null == v.id)
+						{
+							This.D.Index = -3;          // disable self until other code decides otherwise
+							Logging.Current.Info($"Haptics.FetchCarData({id}): empty Car");
+							return;
+						}
 						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + v.name);
 						LoadFailCount = This.D.CarInitCount = 0;
 						return;
@@ -216,8 +221,8 @@ namespace sierses.Sim
 									(Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
 									+ $";  Index = {D.Index}");
 
-				if (Loaded && 0 < S.Id.Length)	// save before SetVehicle()
-					S.Add();					// DataUpdate():  add or update S.Car in Lcars list
+				if (Loaded && null != S.Id && 0 < S.Id.Length)	// save before SetVehicle()
+					S.Add(S.Id);				// DataUpdate():  add or update S.Car in Cars list
 				D.SetVehicle(this);
 			}
 		}
@@ -234,7 +239,7 @@ namespace sierses.Sim
 		public void End(PluginManager pluginManager)
 		{
 			if (Save || Loaded)		// End()
-				S.LD.Add();			// End():  update S.Car in Lcars, then Lcars in S.LD
+				S.LD.Add();			// End():  update S.Car in Cars, then Cars in S.LD
 
 			string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
 			if (0 == sjs.Length || "{}" == sjs)
@@ -532,7 +537,6 @@ namespace sierses.Sim
 			LoadFailCount = 0;
 			Save = Loaded = Waiting = false;
 			D = new SimData();
-			S = new Spec();
 			SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;
