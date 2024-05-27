@@ -13,7 +13,7 @@ namespace sierses.Sim
 		private long FrameCountTicks;
 		internal Haptics SHP;
 		private ushort idleRPM;
-		Spec V;
+		CarSpec V;
 
 		public SimData()
 		{
@@ -142,51 +142,51 @@ namespace sierses.Sim
 					break;
 				case GameId.AMS2:
 					Haptics.FetchCarData(db.CarId, null, V, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-					SHP.S.CarName = V.CarName = db.CarModel;
-					SHP.S.Category = V.Category = db.CarClass;
+					SHP.S.CarName = V.name = db.CarModel;
+					SHP.S.Category = V.category = db.CarClass;
 					break;
 				case GameId.D4:
 				case GameId.DR2:
 					Haptics.FetchCarData(db.CarId, null, V, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == SHP.S.IdleRPM)
 						SHP.S.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm")));
-					if (0 == V.IdleRPM)
-						V.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm")));
+					if (0 == V.idlerpm)
+						V.idlerpm = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm")));
 					break;
 				case GameId.WRC23:
 					Haptics.FetchCarData(db.CarId, null, V, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
 					if (0 == SHP.S.IdleRPM)
 						SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
-					if (0 == V.IdleRPM)
-						V.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
+					if (0 == V.idlerpm)
+						V.idlerpm = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
 					Haptics.FetchCarData(db.CarId, null, V, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == SHP.S.IdleRPM)
 						SHP.S.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM")));
-					if (0 == V.IdleRPM)
-						V.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM")));
+					if (0 == V.idlerpm)
+						V.idlerpm = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM")));
 					break;
 				case GameId.Forza:
 					Haptics.FetchCarData(db.CarId.Substring(4), null, V, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					if (0 == SHP.S.IdleRPM)
 						SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
-					if (0 == V.IdleRPM)
-						V.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
+					if (0 == V.idlerpm)
+						V.idlerpm = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
 					break;
 				case GameId.IRacing:
 					Haptics.FetchCarData(db.CarId, null, V, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
 					GameAltText = SHP.PM.GameName + (string)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
-					if (0 == V.IdleRPM || 0 == SHP.S.IdleRPM)
+					if (0 == V.idlerpm || 0 == SHP.S.IdleRPM)
 					{
 						var rpm = SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
 						if (null != rpm)
 						{
 							if (0 == SHP.S.IdleRPM)
 								SHP.S.IdleRPM = Convert.ToUInt16(rpm);
-							if (0 == V.IdleRPM)
-								V.IdleRPM = Convert.ToUInt16(rpm);
+							if (0 == V.idlerpm)
+								V.idlerpm = Convert.ToUInt16(rpm);
 						}
 					}
 					break;
@@ -202,8 +202,8 @@ namespace sierses.Sim
 						);
 					if (0 == SHP.S.IdleRPM)
 						SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm"));
-					if (0 == V.IdleRPM)
-						V.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm"));
+					if (0 == V.idlerpm)
+						V.idlerpm = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm"));
 					break;
 				case GameId.GPBikes:
 				case GameId.MXBikes:

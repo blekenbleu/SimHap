@@ -106,7 +106,7 @@ namespace sierses.Sim
 		internal static async void FetchCarData(
 			string id,
 			string category,
-			Spec v,
+			CarSpec v,
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
@@ -136,7 +136,7 @@ namespace sierses.Sim
 							});
 					if (Loaded = v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
 					{
-						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + v.CarName);
+						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + v.name);
 						LoadFailCount = 0;
 					} else if (11 == dls.Length) {
 						Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");

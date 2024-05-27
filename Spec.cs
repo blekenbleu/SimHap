@@ -51,7 +51,44 @@ namespace sierses.Sim
 		public string category;
 		public string notes;
 		public string defaults;
-	}
+		public string properties;
+
+		internal bool Set(Download dl, ushort gameRedline, ushort gameMaxRPM) // called >>only<< by FetchCarData()
+		{
+			if (null == dl || null == dl.data || 0 == dl.data.Count)
+			{
+//				Logging.Current.Info("Spec.Set(Download):  empty");	// 
+				return false;
+			}
+
+			CarSpec data = dl.data[0];
+
+			if (null == data.name || null == data.id)
+			{
+				Logging.Current.Info("CarSpec.Set(Download):  empty CarSpec");
+				return false;
+			}
+
+			game = Haptics.GameDBText;
+			id = Haptics.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;	// Set()
+			redline  =	 0 == data.redline ? gameRedline 	: data.redline;
+			maxrpm   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
+			hp       =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
+			category = 			data.category;
+			name = 			data.name;
+			loc = 	data.loc;
+			drive = 	data.drive;
+			config = data.config;
+			cyl = 	data.cyl;
+			ehp = 	data.ehp;
+			cc = 		data.cc;
+			nm = 		data.nm;
+			properties =	data.properties;
+			notes =				data.notes;
+
+			return true;
+		}	// Set()
+	}	// class CarSpec
 
 	// format for downloading from website; must be public
 	public class Download
@@ -107,7 +144,7 @@ namespace sierses.Sim
 
 		public bool Extract(string game)
 		{
-			return 0 < inDict.Count && inDict.ContainsKey(game) && 0 < Sp.Set(inDict[game]);
+			return 0 < inDict.Count && inDict.ContainsKey(game) && 0 < Sp.Set(inDict[game]);	// Extract()
 		}
 
 		internal ushort Count
@@ -139,24 +176,42 @@ namespace sierses.Sim
 
 		internal int Lcount { get => Lcars.Count; }
 
-        internal bool Set(Spec s)
+        internal bool Set(CarSpec data)				// Spec.Set
 		{
-			if (null == s.Private_Car)
+			if (null == data)
 			{
 				Logging.Current.Info("Haptics.Spec.Set(Spec s):  null Car");
 				return false;
 			}
-			Private_Car = s.Private_Car;
+			Game = data.game;
+			Id = data.id;		// SelectCar
+			Redline  =	 		data.redline;
+			MaxRPM   =	 		data.maxrpm;
+			MaxPower =	 		data.hp;
+			Category = 			data.category;
+			CarName = 			data.name;
+			EngineLocation = 	data.loc;
+			PoweredWheels = 	data.drive;
+			EngineConfiguration = data.config;
+			EngineCylinders = 	data.cyl;
+			ElectricMaxPower = 	data.ehp;
+			Displacement = 		data.cc;
+			MaxTorque = 		data.nm;
+			Property =			data.properties;
+			Notes =				data.notes;
 			return true;
 		}
 
-		internal int Set(List<CarSpec> l)
+        internal void SelectCar(int i) => Set(Lcars[i]);
+
+        internal int Set(List<CarSpec> l)		// Spec.Set
 		{
 			if (null == l || 1 > l.Count)
 			{
 				Logging.Current.Info("Haptics.Spec.Set(List<CarSpec>):  empty List");
 				return -1;
 			}
+
 			return (Lcars = l).Count;
 		}
 
@@ -264,46 +319,6 @@ namespace sierses.Sim
 				Haptics.Save = true;
 				Lcars[Index].notes = Private_Car.notes;
 			}
-		}
-
-		internal bool Set(Download dl, ushort gameRedline, ushort gameMaxRPM) // called >>only<< by FetchCarData()
-		{
-			if (null == dl || null == dl.data || 0 == dl.data.Count)
-			{
-//				Logging.Current.Info("Spec.Set(Download):  empty");	// 
-				return false;
-			}
-
-			CarSpec data = dl.data[0];
-
-			if (null == data.name || null == data.id)
-			{
-				Logging.Current.Info("Spec.Set(Download):  empty CarSpec");
-				return false;
-			}
-
-			Game = Haptics.GameDBText;
-			Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;	// Set()
-			Redline  =	 0 == data.redline ? gameRedline 	: data.redline;
-			MaxRPM   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
-			MaxPower =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
-			Category = 			data.category;
-			CarName = 				data.name;
-			EngineLocation = 	data.loc;
-			PoweredWheels = 	data.drive;
-			EngineConfiguration = data.config;
-			EngineCylinders = 	data.cyl;
-			ElectricMaxPower = 	data.ehp;
-			Displacement = 		data.cc;
-			MaxTorque = 		data.nm;
-
-			return true;
-		}	// Set()
-
-		// makes sense only as Spec instance from  JSON
-		internal void SelectCar(int i)
-		{
-			Private_Car = Lcars[i];
 		}
 
 		internal string Defaults(StatusDataBase db)	
@@ -444,6 +459,12 @@ namespace sierses.Sim
 			set { SetField(ref Private_Car.name, value, nameof(CarName)); }
 		}
 
+		public string Notes
+		{
+			get => Private_Car.notes;
+			set { SetField(ref Private_Car.notes, value, nameof(Notes)); }
+		}
+
 		public string Id
 		{
 			get => Private_Car.id;
@@ -454,6 +475,12 @@ namespace sierses.Sim
 		{
 			get => Private_Car.defaults;
 			set { SetField(ref Private_Car.defaults, value, nameof(Default)); }
+		}
+
+		public string Property
+		{
+			get => Private_Car.properties;
+			set { SetField(ref Private_Car.properties, value, nameof(Property)); }
 		}
 
 		public string Category
