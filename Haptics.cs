@@ -109,7 +109,7 @@ namespace sierses.Sim
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
-			if (-1 != Index || Waiting || null != dljc)	// FetchCarData()
+			if (-1 != This.D.Index || Waiting || null != dljc)	// FetchCarData()
 				return;
 
 			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}): " +
@@ -138,11 +138,11 @@ namespace sierses.Sim
 					if (Loaded = v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
 					{
 						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + v.name);
-						LoadFailCount = D.CarInitCount = 0;
+						LoadFailCount = This.D.CarInitCount = 0;
 						return;
 					}
 
-					D.Index = -3;			// disable self until other code decides otherwise
+					This.D.Index = -3;			// disable self until other code decides otherwise
 					if (11 == dls.Length)
 						Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
 					else if (0 < dls.Length)
@@ -154,7 +154,7 @@ namespace sierses.Sim
 			catch (HttpRequestException ex)	//  treat it like not in DB
 			{
 				Logging.Current.Error("Haptics.FetchCarData() Error: " + ex.Message);
-				D.Index = -3;			// disable self until other code decides otherwise
+				This.D.Index = -3;			// disable self until other code decides otherwise
 				Waiting = false;
 			}
 		}		// FetchCarData()
@@ -168,7 +168,7 @@ namespace sierses.Sim
 			if (Waiting && 20 > D.CarInitCount)
 				return true;
 
-			if (null != dljc || -3 == Index)	// Wait(): CarInitCount timeout
+			if (null != dljc || -3 == D.Index)	// Wait(): CarInitCount timeout
 				return false;	// FetchCarData() responded; do NOT wait
 
 			D.CarInitCount = 0;

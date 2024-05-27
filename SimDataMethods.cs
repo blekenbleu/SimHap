@@ -107,14 +107,14 @@ namespace sierses.Sim
 			if (0 <= Index)
 			{
 				Haptics.Waiting = false;
-				Haptics.Loaded = false;
+				Haptics.Loaded = false;		// SetVehicle(): do not save JSON Car
 				SHP.S.SelectCar(Index);
 				SHP.S.Default = "JSON";
 			} else if (-3 == Index) { // not from DB ?
 				string status = SHP.S.Defaults(db);
 				if (0 < status.Length)
 					LoadText = status;
-				Haptics.Loaded = true;		// Add this car to json
+				Haptics.Loaded = true;		// SetVehicle(): Add Default car to json
 				Haptics.LoadFailCount = 0;
 			}
 			else SHP.S.Default = "DB";

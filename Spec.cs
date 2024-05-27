@@ -86,7 +86,7 @@ namespace sierses.Sim
 			properties =	data.properties;
 			notes =				data.notes;
 
-			return Haptics.Load = true;			// CarSpec.Set(): always for FetchCarData() success
+			return Haptics.Loaded = true;			// CarSpec.Set(): always for FetchCarData() success
 		}	// Set()
 	}	// class CarSpec
 
