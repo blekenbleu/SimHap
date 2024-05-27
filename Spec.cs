@@ -70,10 +70,10 @@ namespace sierses.Sim
 			}
 
 			game = Haptics.GameDBText;
-			id = Haptics.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;	// Set()
+//			id = Haptics.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;	// Set()
 			redline  =	 0 == data.redline ? gameRedline 	: data.redline;
 			maxrpm   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
-			hp       =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
+			hp	   =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
 			category = 			data.category;
 			name = 			data.name;
 			loc = 	data.loc;
@@ -86,7 +86,7 @@ namespace sierses.Sim
 			properties =	data.properties;
 			notes =				data.notes;
 
-			return true;
+			return Haptics.Load = true;			// CarSpec.Set(): always for FetchCarData() success
 		}	// Set()
 	}	// class CarSpec
 
@@ -100,30 +100,23 @@ namespace sierses.Sim
 	{
 		private Dictionary<string, List<CarSpec>> inDict;
 		private readonly Spec Sp;
-		internal ListDictionary(Spec s)
-		{
-			Sp = s;
-			inDict = new();
-		}
+		internal ListDictionary(Spec s) { Sp = s; inDict = new(); }
 
-		internal bool Add()				// ListDictionary: S.LD.Add
+		internal bool Add()				// ListDictionary: S.LD.Add; update Save
 		{
-			// handle Loaded and Save
 			Sp.Add();					// ListDictionary:  S.Add() Private_Car to Lcars
 			List<CarSpec> s = Sp.Cars;
 			if (0 == s.Count)
 				return false;
-
-			int Index;
 
 			string k = s[0].game;
 
 			if (inDict.ContainsKey(k))
 				for (int i = 0; i < s.Count; i++)
 				{
-					Index = inDict[k].FindIndex(x => x.id == s[i].id);
-					if (0 <= Index)
-						inDict[k][Index] = s[i];
+					int idx = inDict[k].FindIndex(x => x.id == s[i].id);
+					if (0 <= idx)
+						inDict[k][idx] = s[i];
 					else {
 						inDict[k].Add(s[i]);		// ListDictionary:  add Sp.Cars[i] to current dictionary
 						Haptics.Save = true;
@@ -137,20 +130,11 @@ namespace sierses.Sim
 		}
  
 		// create inDict
-		public bool Load(Dictionary<string, List<CarSpec>> json)
-		{
-			return (null != json || 0 < (inDict = new()).Count) && 0 < (inDict = json).Count;
-		}
+		public bool Load(Dictionary<string, List<CarSpec>> json) { return (null != json || 0 < (inDict = new()).Count) && 0 < (inDict = json).Count; }
 
-		public bool Extract(string game)
-		{
-			return 0 < inDict.Count && inDict.ContainsKey(game) && 0 < Sp.Set(inDict[game]);	// Extract()
-		}
+		public bool Extract(string game) { return 0 < inDict.Count && inDict.ContainsKey(game) && 0 < Sp.Set(inDict[game]); }
 
-		internal ushort Count
-		{
-			get { return (ushort)inDict.Count; }
-		}
+		internal ushort Count { get { return (ushort)inDict.Count; } }
 
 		internal string Jstring()	// ignore null (string) values; indent JSON
 		{
@@ -169,14 +153,17 @@ namespace sierses.Sim
 
 		public Spec()
 		{
-			Private_Car = new();                // required 24 May 2024
-			Lcars = new();                      // required 24 May 2024
+			Private_Car = new();				// required 24 May 2024
+			Lcars = new();					  // required 24 May 2024
 			LD = new(this);
 		}
 
+		// called after FetchCarData() retrievals
+		internal void SetId(string id) { Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + id : id; }
+
 		internal int Lcount { get => Lcars.Count; }
 
-        internal bool Set(CarSpec data)				// Spec.Set
+		internal bool Set(CarSpec data)				// Spec.Set
 		{
 			if (null == data)
 			{
@@ -184,7 +171,7 @@ namespace sierses.Sim
 				return false;
 			}
 			Game = data.game;
-			Id = data.id;		// SelectCar
+			Id = data.id;				// Spec.Set()
 			Redline  =	 		data.redline;
 			MaxRPM   =	 		data.maxrpm;
 			MaxPower =	 		data.hp;
@@ -202,9 +189,9 @@ namespace sierses.Sim
 			return true;
 		}
 
-        internal void SelectCar(int i) => Set(Lcars[i]);
+		internal void SelectCar(int i) => Set(Lcars[i]);
 
-        internal int Set(List<CarSpec> l)		// Spec.Set
+		internal int Set(List<CarSpec> l)		// Spec.Set
 		{
 			if (null == l || 1 > l.Count)
 			{
@@ -224,9 +211,9 @@ namespace sierses.Sim
 				return;
 			}
 
-			string cid = Private_Car.id;
+			string cId = Private_Car.id;
 
-			int Index = Lcars.FindIndex(x => x.id == cid);
+			int Index = Lcars.FindIndex(x => x.id == cId);
 			if (0 > Index)
 			{
 				Lcars.Add(Private_Car);		// generic List<CarSpec>.Add()
@@ -406,8 +393,7 @@ namespace sierses.Sim
 					MaxTorque = 100;
 					break;
 				case GameId.MXBikes:
-					StatusText = "unavailable: using generic MX Bike";
-					EngineConfiguration = "I";
+					StatusText = "unavailable: using generic MX Bike"; EngineConfiguration = "I";
 					EngineCylinders = 1;
 					EngineLocation = "M";
 					PoweredWheels = "R";
@@ -438,7 +424,7 @@ namespace sierses.Sim
 				MaxRPM = 6500;
 			if (string.IsNullOrEmpty(Category))
 				Category = "street";
-			Id =									// Defaults()
+			Id =					// Defaults()
 				(GameId.RRRE == Haptics.CurrentGame || GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) ?
 					db.CarModel : db.CarId;
 			Logging.Current.Info($"Haptics.Defaults({db.CarId}/{Id}): " +
@@ -553,5 +539,5 @@ namespace sierses.Sim
 			get => Private_Car.nm;
 			set { SetField(ref Private_Car.nm, value, nameof(MaxTorque)); }
 		}
-	}
+	}	// class Spec
 }

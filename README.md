@@ -16,9 +16,9 @@
 	- *14 May 2024*:&nbsp;  eliminated `SettingsControl.xaml.cs` stripping for missing engine data
 		- `Untoken()` replaced disallowed `JToken.op_Explicit(jtoken[(object) "name"])` 
 ### To Do (or at least consider)
-- lookup in .json for Internet fails
-	- For unknown id, plugin presents users with list of known names not already mapped.  
-	When users select a name, the new carID gets added to JSON for that name with old carID.
+- first lookup in .json, then Internet for fails, then defaults
+	- For unknown id, present users with list of known similar Car names.  
+	- When users select a name, the new carID replaces that in JSON.
 ### New to me
 - [async](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/async-scenarios)
 - [Dictionary](https://stackoverflow.com/questions/4245064/method-to-add-new-or-update-existing-item-in-c-sharp-dictionary)
@@ -78,41 +78,60 @@
 	for cars *not* in personal JSON..
 	That catalog would NOT get overwritten, preventing new cars from contaminating it.
 - add another Spec entry, indicating cars from `Defaults()`, preserving that heritage.
-- for loads, just reset `Changed` after updating `Save`
-- `FetchCarData()` or Defaults(), these `Car`s will not exist in `Lcars`,
-  so will set `Changed` automatically in `Add()`.
-	
+- for loads other than .json, just set `Save`
+	- `FetchCarData()` or `Defaults()` `Car` did not exist in .json,  
+	   set `Save` automatically in `Add()`.
+- for `FetchCarData()`	 &nbsp; - &nbsp; *Done 27 May*
+	- remove `S.Car` as an argument; it is always used
+	- set `Found = true` when `CarId` is matched
+	- delay setting `S.Id` until `false == Waiting` 
 ### refactoring
 - when SimHub invokes `DataUpdate()` (at 60 Hz),
 	- avoid invoking either `Refresh()` or `SetVehicle()` if `FetchStatus == APIStatus.Waiting`
 - when `static async void FetchCarData()` eventually gets valid `Download dljc`,
 	- set new `FetchStatus = APIStatus.Loaded` to preclude looping
 
-### asynchronous event states *23 May 2024*
+### asynchronous `FetchCarData()` events and `DataUpdate()` states - *27 May 2024*
 - sorting xaml Bindings got boring
 - adding lots of log messages helps understand car Spec load events
-- events are identified by: &nbsp;  enums `FetchStatus` and `LoadStatus`,  
-	 booleans `Changed` and `LoadFinish`, and integer `Index`  
+- `FetchCarData()` events are identified by: &nbsp; booleans `Waiting`, `Loaded`,  
+	variables `djlc`, `dls`, 
+- `DataUpdate()` states are defined by
+	- booleans `Waiting` and `Loaded`, and integer `Index`  
+	- variables `data.NewData`, `data.NewData.CarId`, `S.Id`, `LoadFailCount`, `CarInitCount`
 - in theory, a *very large* event state space, then...  
 	- incrementally, *conditionally disable* log messages for *expected events*
 
-- to prevent being recalled while waiting for server response,   
-	`async FetchCarData()` immediately returns if called    
-	when `DataStatus.NotAPI == LoadStatus || APIStatus.Fail == FetchStatus`  
-- consequently, server car Specs are associated with  
-	`DataStatus.NotAPI == LoadStatus && APIStatus.Loaded == FetchStatus`  
-- but code *first* tries getting car Spec from JSON, identified by `Index >= 0`  
-- if neither of those succeed,  `Defaults()` attempts to generate game-specific car `Spec`...  
-	 but since `FetchCarData()` is indeed async, code is more *event driven* than *procedural*.  
-- For example,  looking for new car `Spec`s depends on noting that `current_car != requested_car`  
+`Init()` sets `Index = 2`, giving priority to .json for car changes  
+When SimHub calls `DataUpdate()`:  
+if (`null == data.NewData`), then return  
+else if (`data.NewData.CarId == S.Id`), then try to `Refresh()` before returning  
+else if (`-1 != D.Index`), then proceed to `Add()` and `SetVehicle()`  
+else if (`Waiting && 20 > D.CarInitCount`), then return  
+else if (`null != dljc || -3 == Index)`), then proceed to `Add()` and `SetVehicle()`  
+else set `D.CarInitCount = 0`, and if (`3 > LoadFailCount++`), then return  
+else lock out `FetchCarData()` by `Index = -3` and continue to `Add()` and `SetVehicle()`
+
+- to prevent being recalled while waiting for server response,  
+    `async FetchCarData()` immediately returns if called when `null != dljc || -1 != Index`  
+		else sets `Waiting = true` and invokes `async = await client.GetAsync(requestUri);`
+	- on receipt of server response, `FetchCarData()` set `Waiting = false` 
+    	- if a valid `Download`, set `Loaded = true`
+		- else set `Index = -3`, preventing further attempts
+- if (`-2 == Index)`,  `SetVehicle()` *first* tries getting car Spec from JSON, based on `Index >= 0`  
+- failed JSON sets `Index = -1`, enabling `FetchCarData()`,   
+    which typically sets `Waiting = true` and goes async.  
+- *subsequent* `SetVehicle()` again checks for `null != dljc || -3 == Index`
+	else eventually setting `Index = -3` and `Waiting = false` for `3 <= Haptics.LoadFailCount`  
+- if (`-3 == Index` ), then `Defaults()`  
+- consequently, server car Specs are associated with `-1 == Index && !Waiting` 
+- `Defaults()` attempts to generate game-specific car `Spec`...  
+- `SetVehicle` depends on noting that `current_car != requested_car`  
 - however, SimHub's 60Hz `DataUpdate()` can (and does) make calls  
-  when `FetchCarData()` has matched `requested_car`,  
-	`(DataStatus.NotAPI == LoadStatus && APIStatus.Loaded == FetchStatus)`  
-     ...but car `Spec` code has not completed dotting I's and crossing T's....  
-- when all I's are dotted and Ts are crossed,  `APIStatus.Success == FetchStatus`  
-- if `Changed`, then `Add()` current car `Spec` to current game list
+  when `FetchCarData()` eventually matches `requested_car`,  
+     car `Spec` code has not completed dotting I's and crossing T's....  
+	 consequently, setting current Id to requested is *the final instruction* in `SetVehicle()`  
+	- *after* all I's are dotted and Ts are crossed.  
+- if `Loaded`, then `Add()` current car `Spec` to current game list
 	- *just before* looking for *another* car
-	- during `Exit()`
-- while rarely logged, `APIStatus.Fail`, `APIStatus.Waiting`,  and `APIStatus.Retry` are *essential*  
-- After further refactoring, `LoadFinish` may eventually turn out to be redundant to `APIStatus.Loaded`.  
-- while 6 `LoadStatus` enums are defined, code currently tests for only 2..  
+	- or during `Exit()` if `Loaded || Save`

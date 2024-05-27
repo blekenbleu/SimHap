@@ -101,16 +101,15 @@ namespace sierses.Sim
 		// ----------------------------------------------------------------
 
 		// must be void and static;  invoked by D.SetVehicle()
-		internal static string dls;
+		private static Haptics This;
 
 		internal static async void FetchCarData(
 			string id,
 			string category,
-			CarSpec v,
 			double doubleRedline,
 			double doubleMaxRPM)
 		{
-			if (Waiting || null != dljc)
+			if (-1 != Index || Waiting || null != dljc)	// FetchCarData()
 				return;
 
 			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}): " +
@@ -118,6 +117,7 @@ namespace sierses.Sim
 
 			try
 			{
+				CarSpec v = This.S.Car;
 				Waiting = true;
 				id ??= "0";
 				category ??= "0";
@@ -125,36 +125,36 @@ namespace sierses.Sim
 								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
-				dls = async.Content.ReadAsStringAsync().Result;
+				string dls = async.Content.ReadAsStringAsync().Result;
 				if (null != dls)
 				{
 					Waiting = false;	// ReadAsStringAsync() success
-					dljc = JsonConvert.DeserializeObject<Download>(dls,
-							new JsonSerializerSettings {
+					dljc =	JsonConvert.DeserializeObject<Download>(dls,
+								new JsonSerializerSettings {
 									NullValueHandling = NullValueHandling.Ignore,
 									MissingMemberHandling = MissingMemberHandling.Ignore
-							});
+								}
+							);
 					if (Loaded = v.Set(dljc, Convert.ToUInt16(0.5 + doubleRedline), Convert.ToUInt16(0.5 + doubleMaxRPM)))
 					{
 						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + v.name);
-						LoadFailCount = 0;
-					} else if (11 == dls.Length) {
-						Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
-						if (null == dljc)
-							dljc = new();
-					} else if (0 < dls.Length) {
-						Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  result length {dls.Length}: "
-										 + dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
-						dljc = null;
+						LoadFailCount = D.CarInitCount = 0;
+						return;
 					}
+
+					D.Index = -3;			// disable self until other code decides otherwise
+					if (11 == dls.Length)
+						Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
+					else if (0 < dls.Length)
+						Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  result length {dls.Length}: "
+											+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
 				}
 				// else Waiting
 			}
 			catch (HttpRequestException ex)	//  treat it like not in DB
 			{
 				Logging.Current.Error("Haptics.FetchCarData() Error: " + ex.Message);
-				if (null == dljc)
-                	dljc = new();
+				D.Index = -3;			// disable self until other code decides otherwise
 				Waiting = false;
 			}
 		}		// FetchCarData()
@@ -162,23 +162,25 @@ namespace sierses.Sim
 		// returning true immediately exits DataUpdate(), i.e. just wait
 		internal bool Wait(StatusDataBase db)
 		{
-			if (S.Id == db.CarId || -1 != D.Index)			// Wait():  current == requested?
+			if (-1 != D.Index)			// Wait():  first test for car in JSON
 				return false;
 
 			if (Waiting && 20 > D.CarInitCount)
 				return true;
 
-			if (null != dljc || (null != dls && 11 == dls.Length))
+			if (null != dljc || -3 == Index)	// Wait(): CarInitCount timeout
 				return false;	// FetchCarData() responded; do NOT wait
 
 			D.CarInitCount = 0;
-			if (3 > LoadFailCount++)
-            	return true;					// do not give up (yet)
+			if (3 > LoadFailCount++) {
+				dljc = null;			// Wait(): enable FetchCarData() retry
+				return true;			// do not give up (yet)
+			}
 
-			dljc = new();	// lock out FetchCarData()
+			D.Index = -3;	// lock out FetchCarData(); enable Defaults()
 			Logging.Current.Info($"Haptics.Wait({db.CarId}/{S.Id}):  {LoadFailCount}  Load timeout " +
 								 (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
-			return false;		// give up
+			return Waiting = false;		// give up
 		}
 
 		/// <summary>
@@ -192,7 +194,7 @@ namespace sierses.Sim
 		internal PluginManager PM;
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
-			if (null == data.NewData || Wait(data.NewData))
+			if (null == data.NewData)
 				return;
 
 			Gdat = data;
@@ -202,15 +204,20 @@ namespace sierses.Sim
 			{
 				if (data.GameRunning && null != data.OldData)
 					D.Refresh(ref data, this);
+				return;
 			}
-			else if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
+			
+			if (Wait(data.NewData))
+				return;
+
+			if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
 			{
 				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}): " +
 									(Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
 									+ $";  Index = {D.Index}");
 
-				if (Loaded && null != S.Id && 0 < S.Id.Length)	// save before SetVehicle()
-					S.Add();								// add or update S.Car in Lcars list
+				if (Loaded && 0 < S.Id.Length)	// save before SetVehicle()
+					S.Add();					// DataUpdate():  add or update S.Car in Lcars list
 				D.SetVehicle(this);
 			}
 		}
@@ -226,8 +233,8 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
-			if (Save || Loaded)		// END()
-				S.LD.Add();			// update S.Car in Lcars, then Lcars in S.LD
+			if (Save || Loaded)		// End()
+				S.LD.Add();			// End():  update S.Car in Lcars, then Lcars in S.LD
 
 			string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
 			if (0 == sjs.Length || "{}" == sjs)
@@ -520,7 +527,8 @@ namespace sierses.Sim
 
 		public void Init(PluginManager pluginManager)
 		{
-			dljc = null;
+			This = this;
+			dljc = null;				// Init()
 			LoadFailCount = 0;
 			Save = Loaded = Waiting = false;
 			D = new SimData();
