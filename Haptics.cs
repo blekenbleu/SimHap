@@ -34,7 +34,7 @@ namespace sierses.Sim
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
 
-		public readonly Spec S = new();
+		public Spec S { get; set; }
 
 		public SimData D { get; set; }
 
@@ -524,6 +524,7 @@ namespace sierses.Sim
 			LoadFailCount = 0;
 			Save = Loaded = Waiting = false;
 			D = new SimData();
+			S = new Spec();
 			SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;
