@@ -104,7 +104,7 @@ namespace sierses.Sim
 
 		internal bool Add()				// ListDictionary: S.LD.Add; update Save
 		{
-			Sp.Add();					// ListDictionary:  S.Add() Private_Car to Lcars
+			Sp.Add(Sp.Car.id);					// ListDictionary:  S.Add() Private_Car to Lcars
 			List<CarSpec> s = Sp.Cars;
 			if (0 == s.Count)
 				return false;
@@ -153,9 +153,9 @@ namespace sierses.Sim
 
 		public Spec()
 		{
-			Private_Car = new();				// required 24 May 2024
-			Lcars = new();					  // required 24 May 2024
-			LD = new(this);
+			Private_Car = new() { };				// required 24 May 2024
+			Lcars = new() { };					  // required 24 May 2024
+			LD = new(this) { };
 		}
 
 		// called after FetchCarData() retrievals
@@ -189,7 +189,13 @@ namespace sierses.Sim
 			return true;
 		}
 
-		internal void SelectCar(int i) => Set(Lcars[i]);
+		internal int SelectCar(string along)
+		{
+			int i = Lcars.FindIndex(x => x.id == along);
+			if (0 <= i)
+				Private_Car = Lcars[i];
+			return i;
+		}
 
 		internal int Set(List<CarSpec> l)		// Spec.Set
 		{
@@ -202,24 +208,26 @@ namespace sierses.Sim
 			return (Lcars = l).Count;
 		}
 
-		internal void Add()				// S.Add():  add or update Private_Car in Lcars
+		internal void Add(string cId)				// S.Add():  add or update Car in Cars
 		{
 			Haptics.Loaded = false;		// done with this car;  update Save
-			if ((null == Private_Car.id) || (null == Private_Car.game) || (null == Private_Car.name))
+			if ((null == Car.game) || (null == Car.name))
 			{
-				Logging.Current.Info("Haptics.Spec.Add(Car) : missing essential elements");
+				Logging.Current.Info($"Haptics.Spec.Add({cId}) : missing essential elements");
 				return;
 			}
 
-			string cId = Private_Car.id;
-
-			int Index = Lcars.FindIndex(x => x.id == cId);
+			int Index = Cars.FindIndex(x => x.id == cId);
 			if (0 > Index)
 			{
 				Lcars.Add(Private_Car);		// generic List<CarSpec>.Add()
+				Logging.Current.Info($"\tHaptics.Spec.Add({cId}) : {Cars.Count} {Car.game} cars");
 				Haptics.Save = true;
+				Private_Car = new() {};
 				return;
 			}
+
+			Logging.Current.Info($"\tHaptics.Spec.Add({cId}) : {Car.id} Index = {Index}/{Cars.Count}");
 		
 			if (Lcars[Index].id != Private_Car.id)
 			{
@@ -306,14 +314,15 @@ namespace sierses.Sim
 				Haptics.Save = true;
 				Lcars[Index].notes = Private_Car.notes;
 			}
-		}
+		}	// S.Add()
 
-		internal string Defaults(StatusDataBase db)	
+		internal string Defaults(StatusDataBase db)
 		{
 			if (null == Haptics.GameDBText)
-				return $"Haptics.Spec.Defaults({db.CarId}):  null GameDBText";
+				return $"Haptics.Defaults({db.CarId}):  null GameDBText";
 
-			string StatusText;
+			Haptics.Loaded = true;	// Defaults(): add to JSON
+			string StatusText = "Haptics.Defaults:  ";
 
 			Default = "Defaults";
 			Game = Haptics.GameDBText;
@@ -343,12 +352,12 @@ namespace sierses.Sim
 				case GameId.RBR:
 				case GameId.RF2:
 				case GameId.BeamNG:
-					StatusText = "unavailable: using generic car";
+					StatusText += "unavailable: using generic car";
 					break;
 				case GameId.D4:
 				case GameId.DR2:
 				case GameId.WRC23:
-					StatusText = "unavailable: using generic Rally2";
+					StatusText += "unavailable: using generic Rally2";
 					EngineConfiguration = "I";
 					EngineCylinders = 4;
 					EngineLocation = "F";
@@ -360,7 +369,7 @@ namespace sierses.Sim
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
-					StatusText = "unavailable: using generic F1";
+					StatusText += "unavailable: using generic F1";
 					EngineConfiguration = "V";
 					EngineCylinders = 6;
 					EngineLocation = "RM";
@@ -371,7 +380,7 @@ namespace sierses.Sim
 					MaxTorque = 650;
 					break;
 				case GameId.KK:
-					StatusText = "unavailable: using generic Kart";
+					StatusText += "unavailable: using generic Kart";
 					EngineConfiguration = "I";
 					EngineCylinders = 1;
 					EngineLocation = "RM";
@@ -382,7 +391,7 @@ namespace sierses.Sim
 					MaxTorque = 24;
 					break;
 				case GameId.GPBikes:
-					StatusText = "unavailable: using generic Superbike";
+					StatusText += "unavailable: using generic Superbike";
 					EngineConfiguration = "I";
 					EngineCylinders = 4;
 					EngineLocation = "M";
@@ -393,7 +402,7 @@ namespace sierses.Sim
 					MaxTorque = 100;
 					break;
 				case GameId.MXBikes:
-					StatusText = "unavailable: using generic MX Bike"; EngineConfiguration = "I";
+					StatusText += "unavailable: using generic MX Bike"; EngineConfiguration = "I";
 					EngineCylinders = 1;
 					EngineLocation = "M";
 					PoweredWheels = "R";
@@ -404,7 +413,7 @@ namespace sierses.Sim
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
-					StatusText = "unavailable: assume 500HP 4 Liter V6";
+					StatusText += "unavailable: assume 500HP 4 Liter V6";
 					EngineConfiguration = "V";
 					EngineCylinders = 6;
 					EngineLocation = "RM";
@@ -415,7 +424,7 @@ namespace sierses.Sim
 					MaxTorque = 400;
 					break;
 				default:
-					StatusText = $"specs unavailable for {Haptics.CurrentGame}";
+					StatusText += $"specs unavailable for {Haptics.CurrentGame}";
 					break;
 			}
 			if (0 == Redline)
@@ -427,9 +436,6 @@ namespace sierses.Sim
 			Id =					// Defaults()
 				(GameId.RRRE == Haptics.CurrentGame || GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) ?
 					db.CarModel : db.CarId;
-			Logging.Current.Info($"Haptics.Defaults({db.CarId}/{Id}): " +
-								(Haptics.Save ? " Haptics.Save " : "") + (Haptics.Loaded ? " Loaded " : "") + (Haptics.Waiting ? " Waiting" : "")
-								 + $":  {Haptics.CurrentGame}, {db.CarModel}" + " " + (0 < StatusText.Length ? StatusText : ""));
 			return StatusText;
 		}	// Defaults()
 
