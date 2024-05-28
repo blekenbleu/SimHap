@@ -69,7 +69,7 @@ namespace sierses.Sim
 			SlipYGamma = Settings.SlipYGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipYGammaAll = Settings.SlipYGamma.TryGetValue("AllGames", out num) ? num : 1.0;
 
-			LockedText = Settings.Unlocked ? "Lock" : "Unlock";
+			LockedText = Unlocked ? "Lock" : "Unlock";
 			MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
 			MotionPitchMult = GetSetting("MotionPitchMult", 1.6);
 			MotionPitchGamma = GetSetting("MotionPitchGamma", 1.5);
@@ -195,11 +195,14 @@ namespace sierses.Sim
 			}
 
 			if (Haptics.Waiting)	// still hoping for online match?
-				return;
+			{
+				Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) Waiting return");
+				return;				// FetchCarData() DB accesses run SetVehicle() twice.
+			}
 
 			if (0 <= Index)
 				source = "JSON Load Success";
-			else if (Index != -3)	// Not Defaults() ?
+			else if (Index != -3)		// Not Defaults() ?
 				SHP.S.SetId(db.CarId);  // deferred setting SHP.S.i in FetchCarData(), to avoid race conditions on id match 
 			Index = -2;	// for next time
 
@@ -212,8 +215,6 @@ namespace sierses.Sim
 			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
 			GearInterval = 1 / Gears;
 			CarInitCount = 0;
-			IdleSampleCount = 0;
-			idleRPM = 2500;
 			Gear = 0;
 			SuspensionFL = 0.0;
 			SuspensionFR = 0.0;
@@ -242,6 +243,8 @@ namespace sierses.Sim
 			TireDiameterRR = 0.0;
 			RumbleLeftAvg = 0.0;
 			RumbleRightAvg = 0.0;
+			IdleSampleCount = 0;
+			idleRPM = 2500;
 			SetRPMIntervals();
 			SetRPMMix();
 			Haptics.dljc = null;		// SetVehicle(): for next car change

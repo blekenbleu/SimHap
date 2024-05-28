@@ -28,8 +28,8 @@ namespace sierses.Sim
 
 		private void Lock_Click(object sender, RoutedEventArgs e)
 		{
-			Plugin.Settings.Unlocked = !Plugin.Settings.Unlocked;
-			Plugin.D.LockedText = Plugin.Settings.Unlocked ? "Lock" : "Unlock";
+			Plugin.D.Unlocked = !Plugin.D.Unlocked;
+			Plugin.D.LockedText = Plugin.D.Unlocked ? "Lock" : "Unlock";
 		}
 	}
 }

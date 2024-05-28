@@ -41,6 +41,12 @@ namespace sierses.Sim
 		private double motionSwayOffset;
 		private double motionSwayMult;
 		private double motionSwayGamma;
+		private bool unlocked = true;
+		public bool Unlocked
+		{
+			get => unlocked;
+			set { SetField(ref unlocked, value, nameof(Unlocked)); }
+		}
 
 		public string GameAltText
 		{

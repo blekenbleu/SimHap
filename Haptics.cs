@@ -183,7 +183,7 @@ namespace sierses.Sim
 				return true;			// do not give up (yet)
 			}
 
-			D.Index = -3;	// lock out FetchCarData(); enable Defaults()
+			D.Index = -3;	// disable FetchCarData(); enable Defaults()
 			Logging.Current.Info($"Haptics.Wait({db.CarId}/{S.Id}):  {LoadFailCount}  Load timeout " +
 								 (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
 			return Waiting = false;		// give up
@@ -206,7 +206,7 @@ namespace sierses.Sim
 			Gdat = data;
 			PM = pluginManager;
 
-			if (S.Id == data.NewData.CarId)				// DataUpdate()
+			if (S.Id == data.NewData.CarId || !D.Unlocked)				// DataUpdate()
 			{
 				if (data.GameRunning && null != data.OldData)
 					D.Refresh(ref data, this);
@@ -216,7 +216,7 @@ namespace sierses.Sim
 			if (Wait(data.NewData))
 				return;
 
-			if (Settings.Unlocked && (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu))
+			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
 				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}): " +
 									(Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
