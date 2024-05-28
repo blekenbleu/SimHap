@@ -146,8 +146,8 @@ namespace sierses.Sim
 					break;
 				case GameId.Forza:
 					Haptics.FetchCarData(db.CarId.Substring(4), null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-					if (0 == SHP.S.IdleRPM)
-						SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
+//					if (0 == SHP.S.IdleRPM)
+					SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
 					break;
 				case GameId.IRacing:
 					Haptics.FetchCarData(db.CarId, null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
