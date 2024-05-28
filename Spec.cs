@@ -52,42 +52,6 @@ namespace sierses.Sim
 		public string notes;
 		public string defaults;
 		public string properties;
-
-		internal bool Set(Download dl, ushort gameRedline, ushort gameMaxRPM) // called >>only<< by FetchCarData()
-		{
-			if (null == dl || null == dl.data || 0 == dl.data.Count)
-			{
-//				Logging.Current.Info("Spec.Set(Download):  empty");	// 
-				return false;
-			}
-
-			CarSpec data = dl.data[0];
-
-			if (null == data.name || null == data.id)
-			{
-				Logging.Current.Info("CarSpec.Set(Download):  empty CarSpec");
-				return false;
-			}
-
-			game = Haptics.GameDBText;
-//			id = Haptics.CurrentGame == GameId.Forza ? "Car_" + data.id : data.id;	// Set()
-			redline  =	 0 == data.redline ? gameRedline 	: data.redline;
-			maxrpm   =	 0 == data.maxrpm  ? gameMaxRPM		: data.maxrpm;
-			hp	   =	 0 == data.hp 	   ? Convert.ToUInt16(333) : data.hp;
-			category = 			data.category;
-			name = 			data.name;
-			loc = 	data.loc;
-			drive = 	data.drive;
-			config = data.config;
-			cyl = 	data.cyl;
-			ehp = 	data.ehp;
-			cc = 		data.cc;
-			nm = 		data.nm;
-			properties =	data.properties;
-			notes =				data.notes;
-
-			return Haptics.Loaded = true;			// CarSpec.Set(): always for FetchCarData() success
-		}	// Set()
 	}	// class CarSpec
 
 	// format for downloading from website; must be public
@@ -161,7 +125,20 @@ namespace sierses.Sim
 		// called after FetchCarData() retrievals
 		internal void SetId(string id) { Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + id : id; }
 
-		internal int Lcount { get => Lcars.Count; }
+		internal bool Set(CarSpec data, ushort gameRedline, ushort gameMaxRPM) // called >>only<< by Wait()
+		{
+			// if (Haptics.CurrentGame == GameId.Forza)
+			//	 data.id = "Car_" + data.id;		// Spec.Set() for FetchCarData()
+			data.id = "";
+			data.game = Haptics.GameDBText;
+			if (0 == data.redline)
+				data.redline = gameRedline;
+			if (0 == data.maxrpm)
+				data.maxrpm	= gameMaxRPM;
+			if (0 ==data.hp)
+	  			data.hp = Convert.ToUInt16(333);
+			return Set(data);
+		}	// Set(CarSpec, ushort, ushort)
 
 		internal bool Set(CarSpec data)				// Spec.Set
 		{
@@ -170,8 +147,8 @@ namespace sierses.Sim
 				Logging.Current.Info("Haptics.Spec.Set(Spec s):  null Car");
 				return false;
 			}
-			Game = data.game;
 			Id = data.id;				// Spec.Set()
+			Game = data.game;
 			Redline  =	 		data.redline;
 			MaxRPM   =	 		data.maxrpm;
 			MaxPower =	 		data.hp;
@@ -193,19 +170,19 @@ namespace sierses.Sim
 		{
 			int i = Lcars.FindIndex(x => x.id == along);
 			if (0 <= i)
-				Private_Car = Lcars[i];
+				Set(Lcars[i]);
 			return i;
 		}
 
-		internal int Set(List<CarSpec> l)		// Spec.Set
+		internal int Set(List<CarSpec> list)		// Spec.Set
 		{
-			if (null == l || 1 > l.Count)
+			if (null == list || 1 > list.Count)
 			{
 				Logging.Current.Info("Haptics.Spec.Set(List<CarSpec>):  empty List");
 				return -1;
 			}
 
-			return (Lcars = l).Count;
+			return (Lcars = list).Count;
 		}
 
 		internal void Add(string cId)				// S.Add():  add or update Car in Cars
