@@ -101,13 +101,14 @@ namespace sierses.Sim
 
 		// must be void and static;  invoked by D.SetVehicle()
 		private static Haptics This;
-		private static ushort rl, mrpm;
+		internal static ushort rl, mrpm, irpm;
 
 		internal static async void FetchCarData(
 			string id,
 			string category,
-			double doubleRedline,
-			double doubleMaxRPM)
+			ushort ushortRedline,
+			ushort ushortMaxRPM,
+			ushort ushortIdleRPM)
 		{
 			if (-1 != This.D.Index || Waiting || null != dljc)	// FetchCarData()
 				return;
@@ -137,8 +138,9 @@ namespace sierses.Sim
 					if (Loaded = null != dljc && null != dljc.data && 0 < dljc.data.Count
 					 && null != dljc.data[0].id && null != dljc.data[0].game && null != dljc.data[0].name)
 					{
-						rl = Convert.ToUInt16(0.5 + doubleRedline);
-						mrpm = Convert.ToUInt16(0.5 + doubleMaxRPM);
+						rl = ushortRedline;
+						mrpm = ushortMaxRPM;
+						irpm = ushortIdleRPM;
 						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + dljc.data[0].name);
 						LoadFailCount = This.D.CarInitCount = 0;
 						return;
@@ -170,12 +172,9 @@ namespace sierses.Sim
 			if (Waiting && 20 > D.CarInitCount)
 				return true;
 
-			if (null != dljc || -3 == D.Index)	// Wait(): CarInitCount timeout
-			{
-				if (Loaded)
-					S.Set(dljc.data[0], rl, mrpm);
-				return false;					// FetchCarData() responded; do NOT wait
-			}
+			if ((null != dljc || -3 == D.Index)	// Wait(): CarInitCount timeout
+				&& Loaded)
+				return S.Set(dljc);		// FetchCarData() responded; do NOT wait
 
 			D.CarInitCount = 0;
 			if (3 > LoadFailCount++) {
@@ -239,16 +238,22 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
+			Waiting = true;
 			if (Save || Loaded)		// End()
+			{
 				S.LD.Add();			// End():  update S.Car in Cars, then Cars in S.LD
-
-			string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
-			if (0 == sjs.Length || "{}" == sjs)
-				Logging.Current.Info( $"Haptics.End(): Download Json Serializer failure: "
+				string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
+				if (0 == sjs.Length || "{}" == sjs)
+					Logging.Current.Info( $"Haptics.End(): JSON Serializer failure: "
 									+ $"{S.LD.Count} games, {S.Cars.Count} {S.Car.game} cars;  "
 									+ (Save ? "changes made.." : "(no changes)"));
-			else if (Save)
-				File.WriteAllText(myfile, sjs);
+				else if (Save) { 
+					File.WriteAllText(myfile, sjs);
+					Logging.Current.Info( $"Haptics.End(): {S.LD.Count} games, including {S.Cars.Count} {S.Car.game} cars, written to " + myfile);
+				}
+			}
+			if (!Save)
+				Logging.Current.Info("Haptics.End():  JSON not saved");
 
 			// Remove default values from Settings per-game dictionaries
 			if (Settings.EngineMult.TryGetValue("AllGames", out double _))

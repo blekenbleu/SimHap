@@ -2,6 +2,7 @@
 // Type: sierses.Haptics.SettingsControl
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 
+using SimHub;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -23,6 +24,7 @@ namespace sierses.Sim
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
 			Plugin.S.Id = "";			// Refresh_Click() force a mismatch
+			Logging.Current.Info($"Haptics.Refresh_Click()");
 			Haptics.LoadFailCount = 0;
 		}
 

@@ -125,19 +125,22 @@ namespace sierses.Sim
 		// called after FetchCarData() retrievals
 		internal void SetId(string id) { Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + id : id; }
 
-		internal bool Set(CarSpec data, ushort gameRedline, ushort gameMaxRPM) // called >>only<< by Wait()
+		internal bool Set(Download dbdl) // called >>only<< by Wait()
 		{
+			CarSpec data = dbdl.data[0];
 			// if (Haptics.CurrentGame == GameId.Forza)
 			//	 data.id = "Car_" + data.id;		// Spec.Set() for FetchCarData()
 			data.id = "";
 			data.game = Haptics.GameDBText;
 			if (0 == data.redline)
-				data.redline = gameRedline;
+				data.redline = Haptics.rl;
 			if (0 == data.maxrpm)
-				data.maxrpm	= gameMaxRPM;
+				data.maxrpm	= Haptics.mrpm;
 			if (0 ==data.hp)
 	  			data.hp = Convert.ToUInt16(333);
-			return Set(data);
+			if (0 == data.idlerpm && 0 < Haptics.irpm)
+				data.idlerpm = Haptics.irpm;
+			return Set(data) && false;				// force Set(), then always return false
 		}	// Set(CarSpec, ushort, ushort)
 
 		internal bool Set(CarSpec data)				// Spec.Set

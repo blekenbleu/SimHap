@@ -115,62 +115,52 @@ namespace sierses.Sim
 				case GameId.PC2:
 				case GameId.RBR:
 				case GameId.GTR2:
-					Haptics.FetchCarData(db.CarId, null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
 					break;
 				case GameId.AMS1:
 				case GameId.LMU:
 				case GameId.RF2:
-					Haptics.FetchCarData(db.CarId, db.CarClass, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+					Haptics.FetchCarData(db.CarId, db.CarClass, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
 					break;
 				case GameId.AMS2:
-					Haptics.FetchCarData(db.CarId, null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
 					SHP.S.CarName = db.CarModel;
 					SHP.S.Category = db.CarClass;
 					break;
 				case GameId.D4:
 				case GameId.DR2:
-					Haptics.FetchCarData(db.CarId, null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-					if (0 == SHP.S.IdleRPM)
-						SHP.S.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm")));
+					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
+										 Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"))));
 					break;
 				case GameId.WRC23:
-					Haptics.FetchCarData(db.CarId, null, Math.Floor(db.CarSettings_CurrentGearRedLineRPM), db.MaxRpm);
-					if (0 == SHP.S.IdleRPM)
-						SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle"));
+					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(Math.Floor(db.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(db.MaxRpm),
+										 Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle")));
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
-					Haptics.FetchCarData(db.CarId, null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-					if (0 == SHP.S.IdleRPM)
-						SHP.S.IdleRPM = Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM")));
+					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
+										 Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"))));
 					break;
 				case GameId.Forza:
-					Haptics.FetchCarData(db.CarId.Substring(4), null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-//					if (0 == SHP.S.IdleRPM)
-					SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm"));
+					Haptics.FetchCarData(db.CarId.Substring(4), null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
+										 Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm")));
 					break;
 				case GameId.IRacing:
-					Haptics.FetchCarData(db.CarId, null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+					var rpm = SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
+					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM),
+										 Convert.ToUInt16(db.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 					GameAltText = SHP.PM.GameName + (string)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
-					if (0 == SHP.S.IdleRPM)
-					{
-						var rpm = SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");
-						if (null != rpm)
-								SHP.S.IdleRPM = Convert.ToUInt16(rpm);
-					}
 					break;
 				case GameId.RRRE:
-						Haptics.FetchCarData(db.CarModel, null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
+						Haptics.FetchCarData(db.CarModel, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
 					break;
 				case GameId.BeamNG:
-					Haptics.FetchCarData(db.CarId, null,
-							SHP.S.Redline = Convert.ToUInt16(0.5 + db.MaxRpm),
-							SHP.S.MaxRPM = Convert.ToUInt16((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
+					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(0.5 + db.MaxRpm),
+							Convert.ToUInt16((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
 								 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
-								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0)
+								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0),
+							Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm"))
 						);
-					if (0 == SHP.S.IdleRPM)
-						SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm"));
 					break;
 				case GameId.GPBikes:
 				case GameId.MXBikes:
@@ -180,17 +170,18 @@ namespace sierses.Sim
 						SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
 						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
 					}
-//					Haptics.Loaded = false;		// Bikes are not saved
+					Haptics.Loaded = false;		// Bikes are not saved
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
-					Haptics.FetchCarData(db.CarId, null, db.CarSettings_CurrentGearRedLineRPM, db.MaxRpm);
-					SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM"));
-					SHP.S.MaxRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM"));
+					Haptics.FetchCarData(db.CarId, null,
+										 Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM")),
+										 Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM")), 0);
 					break;
 				default:
 					SHP.S.Redline = Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM);
-					SHP.S.MaxRPM = Convert.ToUInt16(db.MaxRpm);
+					SHP.S.MaxRPM  = Convert.ToUInt16(db.MaxRpm);
+					SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.IdleRPM"));
 					break;
 			}
 
