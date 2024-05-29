@@ -1,6 +1,6 @@
 # Haptics  
 - decompiled by @**dMASS** from @**sierses**' `.dll`   
-- decompiled `Haptics.csproj` hacked for SimHub plugin compatibility by @**blekelbleu**  
+- decompiled `Haptics.csproj` hacked for SimHub plugin compatibility by @**blekenbleu**  
 - [initial build errors](Doc/error1.txt)  
 - [JToken.explicit build errors](Doc/error2.txt) after others addressed
 - `namespace` renamed from `SimHaptics` to `sierses.Sim`  
@@ -16,7 +16,7 @@
 	- *14 May 2024*:&nbsp;  eliminated `SettingsControl.xaml.cs` stripping for missing engine data
 		- `Untoken()` replaced disallowed `JToken.op_Explicit(jtoken[(object) "name"])` 
 ### To Do (or at least consider)
-- first lookup in .json, then Internet for fails, then defaults
+- first lookup in .json, then Internet for fails, then defaults - *Done 27 May 2024*
 	- For unknown id, present users with list of known similar Car names.  
 	- When users select a name, the new carID replaces that in JSON.
 ### New to me
@@ -24,20 +24,22 @@
 - [Dictionary](https://stackoverflow.com/questions/4245064/method-to-add-new-or-update-existing-item-in-c-sharp-dictionary)
 ### How it works
 - with game running: `DataUpdate()`
-	- `SetVehicle()` based on time
-		- better done by event...
-		- calls `FetchCarData()`
-			- `async await` caused `FetchCarData()`  
-				to *not return* during the same invocation,   
-				so modified it to *recall its invoking method*  
-				for completion in that invocation.   
-		- may call SetDefaultVehicle(), which calls Spec Init()
-	- update physics:
+	- update physics:	// provide that loaded id == requested
 		- Yaw, YawRate, YawRateAvg
 		- AccHeave, AccSurge, AccSway, Jerk[XYZ]
 		- MotionPitch, MotionRoll, MotionYaw, MotionHeave
 		- WheelLoads, Slips, Gear, ABS
 		- Suspension, EngineLoad
+		- Haptics based on engine RPM
+	- `SetVehicle()`, when loaded id `!=` requested
+		- check local JSON dictionary
+		- call `FetchCarData()` for dictionary misses
+			- `async await` caused `FetchCarData()`  
+				to *not complete* during initial invocation, sets `Waiting`,   
+				- successful completion when valid Download object received.   
+		- call SetDefaultVehicle() *after* `FetchCarData()` fails
+			- e.g. by timeout or invalid Download object`
+			- UI has a Refresh button to try again
 - End()
 	- remove some defaults from Settings Dictionaries
 	- update Settings.Motion from D.Motion
@@ -53,43 +55,43 @@
 	- Motion, Suspension and Traction settings are saved in Settings Dictionaries
 		- Only one set of Motion properties, all in a single Dictionary
 		- Suspension and Traction have per-game dictionaries
-	- Engine specs are downloaded
+	- Engine specs are loaded or defaulted
 
 ### changes
 - consolidate `SimData` methods in that source file
 - likewise for `Spec`
 - created a `ListDictionary` class for download server compatibility
-- began writing (and eventually reading) local json to preserve changed values
-- reworked `IdleRPM` handling
+- began writing reading local json e.g. to preserve changed values
+- reworked `IdleRPM` handling, perhaps not for the better.. 
 
 ### to do
 - write json when values change - *20 May 2024*: coded  
 - improve performance and simplify code - *22 May 2024*: in progress  
 - share `CarSpec` class between `Spec` and `SimData` - *21 May 2024*: done  
 	 to save storage and eliminate copying
+- for `FetchCarData()`	 &nbsp; - &nbsp; *Done 27 May*
+	- remove `S.Car` as an argument; it is always used
+	- delay setting `S.Id` until `false == Waiting` 
+- add another Spec entry, indicating cars from `Defaults()`, preserving that heritage. - *done 28 May 2024*
+- sort IdleRPM issues - e.g. not matching JSON value  
 - have UI entries affect properties
 - check XAML data bindings
 - add Log messages to sort issues
-	- `async await` sequence
+	- track `async await` sequence
 - free RAM in `Init` by discarding all but the current game dictionary after initial loading,
   then reloading in `End()` *only* to save changes.
 - debug loading a default car after a server car or JSON car or vice-versa
 - add a reference catalog lookup, for `PluginsData/Catalog.Haptics.json`,
-	for cars *not* in personal JSON..
+	for cars *not* in personal JSON..  
 	That catalog would NOT get overwritten, preventing new cars from contaminating it.
-- add another Spec entry, indicating cars from `Defaults()`, preserving that heritage.
 - for loads other than .json, just set `Save`
 	- `FetchCarData()` or `Defaults()` `Car` did not exist in .json,  
 	   set `Save` automatically in `Add()`.
-- for `FetchCarData()`	 &nbsp; - &nbsp; *Done 27 May*
-	- remove `S.Car` as an argument; it is always used
-	- set `Found = true` when `CarId` is matched
-	- delay setting `S.Id` until `false == Waiting` 
 ### refactoring
 - when SimHub invokes `DataUpdate()` (at 60 Hz),
-	- avoid invoking either `Refresh()` or `SetVehicle()` if `FetchStatus == APIStatus.Waiting`
+	- avoid invoking either `Refresh()` or `SetVehicle()` if `Waiting`
 - when `static async void FetchCarData()` eventually gets valid `Download dljc`,
-	- set new `FetchStatus = APIStatus.Loaded` to preclude looping
+	- set `Loaded`, unset `Waiting` then immediately return if/when recalled with `null != dljc`, to preclude looping
 
 ### asynchronous `FetchCarData()` events and `DataUpdate()` states - *27 May 2024*
 - sorting xaml Bindings got boring
