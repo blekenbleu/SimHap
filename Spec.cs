@@ -154,6 +154,7 @@ namespace sierses.Sim
 			Game = data.game;
 			Redline  =	 		data.redline;
 			MaxRPM   =	 		data.maxrpm;
+			IdleRPM =			data.idlerpm;
 			MaxPower =	 		data.hp;
 			Category = 			data.category;
 			CarName = 			data.name;
