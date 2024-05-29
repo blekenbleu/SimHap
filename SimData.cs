@@ -42,7 +42,7 @@ namespace sierses.Sim
 		public double EngineLoad;
 		public int WiperStatus;
 		public int CarInitCount;
-		public int IdleSampleCount;
+		public int IdleSampleCount;			// used in Refresh()
 		public double IdlePercent;
 		public double RedlinePercent;
 		public double RPMPercent;
@@ -1824,22 +1824,20 @@ namespace sierses.Sim
 			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
 			EngineLoad *= data.NewData.Throttle * 0.01 * 0.01;
 
-			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/
-				if (data.NewData.Rpms > 300)
-					if (data.NewData.Rpms <= idleRPM * 1.1)
+			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh()sniff: ignore FrameCountTicks .. for now
+				if (data.NewData.Rpms > 300 && data.NewData.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
 			{
 				double num19 = Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS;
 
 				if (num19 < 40.0)
 				{
-					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1);
-					++IdleSampleCount;
-					double num20 = idleRPM * 0.008333333;
+					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1); // Refresh(): averaging with previous average
+					++IdleSampleCount;								// Refresh(): increment if difference < 40
+					double num20 = idleRPM * 0.008333333;		// Refresh(): some FrequencyMultiplier magic
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
-				if (20 == IdleSampleCount)
-					if (0 == SHP.S.IdleRPM)
-						SHP.S.IdleRPM = idleRPM;
+				if (20 == IdleSampleCount && 0 == SHP.S.IdleRPM)	// Refresh(): change SHP.S.IdleRPM?
+						SHP.S.IdleRPM = idleRPM;		// Refresh() sniff: only if it was 0
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)

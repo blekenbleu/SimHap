@@ -47,7 +47,7 @@ namespace sierses.Sim
 		public ushort nm;
 		public ushort redline;
 		public ushort maxrpm;
-		public ushort idlerpm;
+		public ushort idlerpm;								// CarSpec element
 		public string category;
 		public string notes;
 		public string defaults;
@@ -138,9 +138,9 @@ namespace sierses.Sim
 				data.maxrpm	= Haptics.mrpm;
 			if (0 ==data.hp)
 	  			data.hp = Convert.ToUInt16(333);
-			if (0 == data.idlerpm && 0 < Haptics.irpm)
-				data.idlerpm = Haptics.irpm;
-			return Set(data) && false;				// force Set(), then always return false
+			if (0 == data.idlerpm && 0 < Haptics.irpm)				// Set(Download dbdl), called by Wait()
+				data.idlerpm = Haptics.irpm;					// Set(Download dbdl) only if it was 0
+			return Set(data) && false;					// force Set(), then always return false
 		}	// Set(CarSpec, ushort, ushort)
 
 		internal bool Set(CarSpec data)				// Spec.Set
@@ -274,10 +274,10 @@ namespace sierses.Sim
 				Haptics.Save = true;
 				Lcars[Index].maxrpm = Private_Car.maxrpm;
 			}
-			if (Lcars[Index].idlerpm != Private_Car.idlerpm)
+			if (Lcars[Index].idlerpm != Private_Car.idlerpm)			// Add(): changing value in Cars?
 			{
 				Haptics.Save = true;
-				Lcars[Index].idlerpm = Private_Car.idlerpm;
+				Lcars[Index].idlerpm = Private_Car.idlerpm;			// Add(): Yes, value has changed
 			}
 			if (Lcars[Index].defaults != Private_Car.defaults)
 			{
@@ -316,7 +316,7 @@ namespace sierses.Sim
 			MaxPower = 300;
 			ElectricMaxPower = 0;
 			MaxTorque = 250;
-			IdleRPM = 0;
+			IdleRPM = 0;								// Defaults(): open to sniffing
 
 			switch (Haptics.CurrentGame)
 			{
@@ -472,10 +472,10 @@ namespace sierses.Sim
 			get => Private_Car.maxrpm;
 			set { SetField(ref Private_Car.maxrpm, value, nameof(MaxRPM)); }
 		}
-		public ushort IdleRPM
+		public ushort IdleRPM								// public for Private_Car.idlerpm
 		{
-			get => Private_Car.idlerpm;
-			set { SetField(ref Private_Car.idlerpm, value, nameof(IdleRPM)); }
+			get => Private_Car.idlerpm;						// IdleRPM
+			set { SetField(ref Private_Car.idlerpm, value, nameof(IdleRPM)); }	// IdleRPM
 		}
 
 		public string EngineConfiguration

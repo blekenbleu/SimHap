@@ -108,7 +108,7 @@ namespace sierses.Sim
 			string category,
 			ushort ushortRedline,
 			ushort ushortMaxRPM,
-			ushort ushortIdleRPM)
+			ushort ushortIdleRPM)							// FetchCarData() argument
 		{
 			if (-1 != This.D.Index || Waiting || null != dljc)	// FetchCarData()
 				return;
@@ -140,7 +140,7 @@ namespace sierses.Sim
 					{
 						rl = ushortRedline;
 						mrpm = ushortMaxRPM;
-						irpm = ushortIdleRPM;
+						irpm = ushortIdleRPM;				// FetchCarData() S.Set() will use this
 						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + dljc.data[0].name);
 						LoadFailCount = This.D.CarInitCount = 0;
 						return;
@@ -228,7 +228,7 @@ namespace sierses.Sim
 		}
 
 		// remove 0 value ushorts
-		private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" };
+		private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" }; // Null0() remove these if 0 value before saving JSON
 		private string Null0(string j)
 		{
 			for (int i = 0; i < zero.Count; i++)
@@ -614,7 +614,7 @@ namespace sierses.Sim
 			this.AttachDelegate("PowerMotorHP", () => S.ElectricMaxPower);
 			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
 			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
-			this.AttachDelegate("IdleRPM", () => S.IdleRPM);
+			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
 			this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
 			this.AttachDelegate("FreqOctave", () => D.FreqOctave);
 			this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
