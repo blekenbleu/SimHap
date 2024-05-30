@@ -61,7 +61,7 @@
 - consolidate `SimData` methods in that source file
 - likewise for `Spec`
 - created a `ListDictionary` class for download server compatibility
-- began writing reading local json e.g. to preserve changed values
+- read, write local json e.g. to preserve changed values
 - reworked `IdleRPM` handling, perhaps not for the better.. 
 
 ### to do
@@ -74,7 +74,7 @@
 	- delay setting `S.Id` until `false == Waiting` 
 - add another Spec entry, indicating cars from `Defaults()`, preserving that heritage. - *done 28 May 2024*
 - sort IdleRPM issues - e.g. not matching JSON value - *fixed 29 May*  
-- paradigm shift for `Loaded`:  
+- paradigm shift for `Loaded`:  *done 29 May*
 	- originally intended for `FetchCarData()` success, extended for saving to JSON
 	- extended to include `Defaults()`...   
       // but no reason to save easily-regenerated `Defaults()` to JSON...  
@@ -82,19 +82,19 @@
           until `DataUpdate()` invokes `S.Add(S.Id)`  
 			- save current `S.Car` *only if changed* from `Defaults()`  
 			- ignore `idlerpm` change (from 0 by sniffing)
+- read-only Atlas of cars.	*done 30 May*
 - have UI entries affect properties
 - check XAML data bindings
-- add Log messages to sort issues
+- add Log messages to sort issues	*23 May*
 	- track `async await` sequence
-- free RAM in `Init` by discarding all but the current game dictionary after initial loading,
+- free RAM in `Init` by discarding all but the current game dictionary after initial loading,  
   then reloading in `End()` *only* to save changes.
-- debug loading a default car after a server car or JSON car or vice-versa
-- add a reference catalog lookup, for `PluginsData/Catalog.Haptics.json`,
+- debug loading a default car after a server car or JSON car or vice-versa *30 May*
+- add a reference catalog lookup, for `PluginsData/Catalog.Haptics.json`,  *30 May*
 	for cars *not* in personal JSON..  
 	That catalog would NOT get overwritten, preventing new cars from contaminating it.
-- for loads other than .json, just set `Save`
-	- `FetchCarData()` or `Defaults()` `Car` did not exist in .json,  
-	   set `Save` automatically in `Add()`.
+- save `FetchCarData()` or modified `Defaults()`  *29 May*
+- `Refresh()` only if `EngineIgnitionOn` *30 May*
 ### refactoring
 - when SimHub invokes `DataUpdate()` (at 60 Hz),
 	- avoid invoking either `Refresh()` or `SetVehicle()` if `Waiting`
