@@ -101,9 +101,13 @@ namespace sierses.Sim
 		}
  
 		// create inDict
-		public bool Load(Dictionary<string, List<CarSpec>> json) { return (null != json || 0 < (inDict = new()).Count) && 0 < (inDict = json).Count; }
-
-		public bool Extract(string game) { return 0 < inDict.Count && inDict.ContainsKey(game) && 0 < Sp.Set(inDict[game]); }
+		public int Extract(Dictionary<string, List<CarSpec>> json, string game)
+		{
+			if (-1 == Haptics.AtlasCt)
+				return Haptics.AtlasCt = (null != json && json.ContainsKey(game)) ? (Haptics.Atlas = json[game]).Count : 0;
+			
+			return (null != (inDict = json) && inDict.ContainsKey(game)) ? Sp.Set(inDict[game]) : 0;
+		}
 
 		internal ushort Count { get { return (ushort)inDict.Count; } }
 
@@ -181,7 +185,13 @@ namespace sierses.Sim
 		{
 			int i = Lcars.FindIndex(x => x.id == along);
 			if (0 <= i)
-				Set(Lcars[i]);
+				return Set(Lcars[i]) ? i : -1;
+
+			if (0 <= (i = 0 < Haptics.AtlasCt ? Haptics.Atlas.FindIndex(x => x.id == along) : -1))
+			{
+				Default = "Atlas";
+				Set(Haptics.Atlas[i]);
+			}
 			return i;
 		}
 
@@ -192,7 +202,6 @@ namespace sierses.Sim
 				Logging.Current.Info("Haptics.Spec.Set(List<CarSpec>):  empty List");
 				return -1;
 			}
-
 			return (Lcars = list).Count;
 		}
 

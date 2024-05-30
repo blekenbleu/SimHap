@@ -192,7 +192,7 @@ namespace sierses.Sim
 			}
 
 			if (0 <= Index)
-				source = "JSON Load Success";
+				source = "Atlas" == SHP.S.Default ? "Atlas DB Success" : "JSON Load Success";
 			else if (Index != -3)					// Not Defaults() ?
 				SHP.S.SetId(db.CarId);  // deferred setting SHP.S.i in FetchCarData(), to avoid race conditions on id match 
 			Index = -2;	// for next time

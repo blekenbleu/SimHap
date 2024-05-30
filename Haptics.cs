@@ -33,6 +33,9 @@ namespace sierses.Sim
 		internal static bool Loaded, Waiting, Save;
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
+		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
+		internal static List<CarSpec> Atlas;
+		internal static int AtlasCt;		// use this to force Atlas
 		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
@@ -540,7 +543,8 @@ namespace sierses.Sim
 		public void Init(PluginManager pluginManager)
 		{
 			This = this;
-			dljc = null;				// Init()
+			dljc = null;                // Init()
+			AtlasCt = -1;
 			LoadFailCount = 0;
 			Save = Loaded = Waiting = false;
 			D = new SimData();
@@ -583,21 +587,30 @@ namespace sierses.Sim
 				Settings.SlipYGamma.Add("AllGames", 1.0);
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
+
+			string Atlasst = "";
+			if (File.Exists(Atlasfile))
+			{
+				var foo = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(Atlasfile));
+				S.LD.Extract(foo, GameDBText);  // to Atlas
+//				Logging.Current.Info($"Haptics.Init():  {S.LD.Count} games in " + Atlasfile
+//								   + $", with {Atlas.Count} {GameDBText} cars");
+				if (0 < AtlasCt)
+					Atlasst = $" and {AtlasCt} cars in Atlas";
+				else
+					Logging.Current.Info($"Haptics.Init(): {Atlasfile} load failure");
+				Loaded = Save = false;
+			}
+			else AtlasCt = 0;
 			if (File.Exists(myfile))
 			{
 				var foo = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(myfile));
-				if (S.LD.Load(foo))
-				{
-					S.LD.Extract(GameDBText);	// to S.Cars
-					Logging.Current.Info($"Haptics.Init():  {S.LD.Count} games in " + myfile
-									   + $", with {S.Cars.Count} {GameDBText} cars");
-				}
-				else Logging.Current.Info("Haptics.Init(): "+myfile+" load failure");
+				S.LD.Extract(foo, GameDBText);	// to S.Cars
+				Logging.Current.Info($"Haptics.Init():  {S.LD.Count} games in " + myfile
+									   + $", with {S.Cars.Count} {GameDBText} cars" + Atlasst);
 			}
-			else {
-				Logging.Current.Info("Haptics.Init():  "+myfile+" not found");
-				S.LD.Load(null);
-			}
+			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found");
+
 			D.Init(Settings, this);
 			this.AttachDelegate("CarName", () => S.CarName);
 			this.AttachDelegate("CarId", () => S.Id);
