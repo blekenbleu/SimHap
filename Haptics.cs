@@ -207,8 +207,9 @@ namespace sierses.Sim
 
 			if (S.Id == data.NewData.CarId || !D.Unlocked)				// DataUpdate()
 			{
-				if (data.GameRunning && null != data.OldData)
-					D.Refresh(ref data, this);
+				if ((data.GameRunning && null != data.OldData)
+					&& 1 == (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn"))
+                    D.Refresh(ref data, this);
 				return;
 			}
 			
