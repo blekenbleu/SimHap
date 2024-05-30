@@ -102,7 +102,7 @@ namespace sierses.Sim
 								+ $" Index = {Index}");
 
 			if (Index == -2)
-				Index = SHP.S.SelectCar(db.CarId);
+				Index = SHP.S.SelectCar((GameId.Forza == Haptics.CurrentGame && "Car_" == db.CarId.Substring(0,4)) ? db.CarId.Substring(4) : db.CarId);
 			if (0 <= Index)
 				Haptics.Waiting = false;							// Car from JSOM
 			else if (-3 == Index)
