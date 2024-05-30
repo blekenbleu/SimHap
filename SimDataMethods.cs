@@ -106,7 +106,7 @@ namespace sierses.Sim
 			if (0 <= Index)
 				Haptics.Waiting = false;							// Car from JSOM
 			else if (-3 == Index)
-				source = SHP.S.Defaults(db);						// not from DB
+				source = SHP.S.Defaults(db);			// not from DB
 
 			switch (Haptics.CurrentGame)
 			{
@@ -193,7 +193,7 @@ namespace sierses.Sim
 
 			if (0 <= Index)
 				source = "JSON Load Success";
-			else if (Index != -3)		// Not Defaults() ?
+			else if (Index != -3)					// Not Defaults() ?
 				SHP.S.SetId(db.CarId);  // deferred setting SHP.S.i in FetchCarData(), to avoid race conditions on id match 
 			Index = -2;	// for next time
 

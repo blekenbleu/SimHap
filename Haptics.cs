@@ -182,7 +182,7 @@ namespace sierses.Sim
 				return true;			// do not give up (yet)
 			}
 
-			D.Index = -3;	// disable FetchCarData(); enable Defaults()
+			D.Index = -3;						// disable FetchCarData(); enable Defaults()
 			Logging.Current.Info($"Haptics.Wait({db.CarId}/{S.Id}):  {LoadFailCount}  Load timeout " +
 								 (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
 			return Waiting = false;		// give up

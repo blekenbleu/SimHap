@@ -6,6 +6,7 @@ using GameReaderCommon;
 using Newtonsoft.Json;
 using SimHub;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -28,11 +29,12 @@ namespace sierses.Sim
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return;
 			field = value;
+			Haptics.Loaded = true;
 			OnPropertyChanged(propertyname);
 		}
 	}
 
-	public class CarSpec
+	public class CarSpec : ICloneable
 	{
 		public string game;
 		public string name;
@@ -47,12 +49,17 @@ namespace sierses.Sim
 		public ushort nm;
 		public ushort redline;
 		public ushort maxrpm;
-		public ushort idlerpm;								// CarSpec element
+		public ushort idlerpm;							  // CarSpec element
 		public string category;
 		public string notes;
 		public string defaults;
 		public string properties;
-	}	// class CarSpec
+
+		public object Clone()
+		{
+			return this.MemberwiseClone(); // Shallow copy
+		}
+	}   // class CarSpec
 
 	// format for downloading from website; must be public
 	public class Download
@@ -198,6 +205,13 @@ namespace sierses.Sim
 				return;
 			}
 
+			if ("Defaults" == Private_Car.defaults && null != DfltCar && DfltCar.name == Private_Car.name
+				&& DfltCar.category == Private_Car.category && DfltCar.config == Private_Car.config
+				&& DfltCar.cyl == Private_Car.cyl && DfltCar.loc == Private_Car.loc
+				&& DfltCar.drive == Private_Car.drive && DfltCar.cc == Private_Car.cc
+				&& DfltCar.hp == Private_Car.hp && DfltCar.ehp == Private_Car.ehp && DfltCar.nm == Private_Car.nm)
+					return;	// do not save Car with all default values
+
 			int Index = Cars.FindIndex(x => x.id == cId);
 			if (0 > Index)
 			{
@@ -297,17 +311,29 @@ namespace sierses.Sim
 			}
 		}	// S.Add()
 
+		private CarSpec DfltCar;
 		internal string Defaults(StatusDataBase db)
 		{
 			if (null == Haptics.GameDBText)
 				return $"Haptics.Defaults({db.CarId}):  null GameDBText";
 
-			Haptics.Loaded = true;	// Defaults(): add to JSON
 			string StatusText = "Haptics.Defaults:  ";
 
-			Default = "Defaults";
+			bool temp = Haptics.Loaded;
+
+			if (null != DfltCar)
+			{
+				Private_Car = (CarSpec)DfltCar.Clone(); // Private_Car elements will NOT be linked to DfltCar's
+				Private_Car.name = db.CarModel;
+				Private_Car.id = (GameId.RRRE == Haptics.CurrentGame	// Defaults()
+								|| GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) ?
+					db.CarModel : db.CarId;
+				Private_Car.category = string.IsNullOrEmpty(db.CarClass) ? "street" : db.CarClass;
+				return DfltCar.notes;
+			}
+
 			Game = Haptics.GameDBText;
-			CarName = db.CarModel;				// Defaults()
+			CarName = db.CarModel;						// Defaults()
 			Category = db.CarClass;
 			EngineConfiguration = "V";
 			EngineCylinders = 6;
@@ -317,7 +343,7 @@ namespace sierses.Sim
 			MaxPower = 300;
 			ElectricMaxPower = 0;
 			MaxTorque = 250;
-			IdleRPM = 0;								// Defaults(): open to sniffing
+			IdleRPM = 0;							// Defaults(): open to sniffing
 
 			switch (Haptics.CurrentGame)
 			{
@@ -414,11 +440,27 @@ namespace sierses.Sim
 				MaxRPM = 6500;
 			if (string.IsNullOrEmpty(Category))
 				Category = "street";
-			Id =					// Defaults()
-				(GameId.RRRE == Haptics.CurrentGame || GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) ?
+			Id = (GameId.RRRE == Haptics.CurrentGame			// Defaults()
+				 || GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) ?
 					db.CarModel : db.CarId;
+			if (null == DfltCar || null == DfltCar.defaults)
+				DfltCar = new() {							 		// game-specific Defaults
+					defaults = "Defaults",
+					name = CarName,
+					category = Category,
+					config = EngineConfiguration,
+					cyl = EngineCylinders,
+					loc = EngineLocation,
+					drive = PoweredWheels,
+					cc = Displacement,
+					hp = MaxPower,
+					ehp = ElectricMaxPower,
+					nm = MaxTorque,
+					notes = StatusText
+				};
+			Haptics.Loaded =  temp;						// ignore changes made in Defaults()
 			return StatusText;
-		}	// Defaults()
+		}									// Defaults()
 
 		public string Game
 		{
