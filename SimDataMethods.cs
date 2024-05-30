@@ -200,7 +200,7 @@ namespace sierses.Sim
 			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}/{B4}) "
 								+ (Haptics.Save ? " Haptics.Save " : "") + (Haptics.Loaded ? "Loaded " : "")
 								+ $"{Haptics.CurrentGame}, {db.CarModel}:  "
-								+ (LoadText = $"{SHP.S.Game} {SHP.S.Id} " + source));
+								+ (LoadText = $"{SHP.S.Game} " + source));
 
 			// finalize vehicle
 			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
