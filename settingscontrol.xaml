@@ -53,46 +53,64 @@
             <RowDefinition Height="35"/>
           </Grid.RowDefinitions>
           <styles:SHSection Title="Engine and Vehicle Specifications" Grid.Row="0" Grid.ColumnSpan="3"/>
+            
           <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200" Margin="75,0,0,5" Text="{Binding D.LoadText}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
+            
+           
+   
+              <!--CarName-->
+             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="75">Name:</TextBlock>
               <TextBox Name="CarName" MinWidth="200" Text="{Binding S.CarName}"/>
             </StackPanel>
+              
+              <!--ID-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="75">ID:</TextBlock>
               <TextBox Name="CarId" MinWidth="200" Text="{Binding S.Id}"/>
             </StackPanel>
+              
+              <!--Category-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="75">Category:</TextBlock>
               <TextBox Name="CarClass" MinWidth="200" Text="{Binding S.Category}"/>
             </StackPanel>
+             
+              <!--Redline-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="100">Redline:</TextBlock>
               <TextBox Name="Redline" MinWidth="175" Text="{Binding S.Redline}"/>
             </StackPanel>
+
+              <!--MaxRPM-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="100">Max RPM:</TextBlock>
               <TextBox Name="MaxRPM" MinWidth="175" Text="{Binding S.MaxRPM}"/>
             </StackPanel>
+ 
+              <!--IdleRPM-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="100">Idle RPM:</TextBlock>
               <TextBox Name="IdleRPM" MinWidth="175" Text="{Binding S.IdleRPM}"/>
             </StackPanel>
+              
+              <!--Downshift duration-->
             <StackPanel Orientation="Horizontal" Margin="0,24,0,0">
               <TextBlock MinWidth="200">
                 Downshift Hold Duration (ms):
               </TextBlock>
               <TextBox Name="DownshiftDurationMs" MinWidth="75" Text="{Binding Settings.DownshiftDurationMs}"/>
             </StackPanel>
+              
+              <!--Upshift duration-->
             <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
               <TextBlock MinWidth="200">
                 Upshift Hold Duration (ms):
               </TextBlock>
               <TextBox Name="UpshiftDurationMs" MinWidth="75" Text="{Binding Settings.DownshiftDurationMs}"/>
             </StackPanel>
+              
+              
             <TextBlock MinWidth="150" Margin="0,8,0,4">
               Engine Intensity Multiplier (all cars in game) [0.5-1.5]:
             </TextBlock>
@@ -101,53 +119,82 @@
               <TextBox Name="EngineMult" MinWidth="75" Margin="10,0,0,0" Text="{Binding D.EngineMult}"/>
             </StackPanel>
           </StackPanel>
+            
+            <!--2nd Column-->
           <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2">
+              
+              <!--Engine Configuration-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="150">
                 Engine Configuration:
               </TextBlock>
               <TextBox Name="EngineConfig" MinWidth="150" Text="{Binding S.EngineConfiguration}"/>
             </StackPanel>
+              
+              <!--Cylinders-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="150">Engine Cylinders:</TextBlock>
               <TextBox Name="CylinderCount" MinWidth="150" Text="{Binding S.EngineCylinders}"/>
             </StackPanel>
+              
+              <!--Engine location-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="150">Engine Location:</TextBlock>
               <TextBox Name="EngineLocation" MinWidth="150" Text="{Binding S.EngineLocation}"/>
             </StackPanel>
+              
+              <!--Drivetrain-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="150">Powered Wheels:</TextBlock>
               <TextBox Name="PoweredWheels" MinWidth="150" Text="{Binding S.PoweredWheels}"/>
             </StackPanel>
+              
+              <!--HP-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="150">Total Power (HP):</TextBlock>
               <TextBox Name="MaxPowerHP" MinWidth="150" Text="{Binding S.MaxPower}"/>
             </StackPanel>
+              
+              <!--EHP-->
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="150">
                 Electric Power (HP):
               </TextBlock>
               <TextBox Name="EMaxPowerHP" MinWidth="150" Text="{Binding S.ElectricMaxPower}"/>
             </StackPanel>
+              
+             <!--cc--> 
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="150">Displacement (cc):</TextBlock>
               <TextBox Name="DisplacementCC" MinWidth="150" Text="{Binding S.Displacement}"/>
             </StackPanel>
+              
+             <!--Nm--> 
             <StackPanel Orientation="Horizontal" Margin="0,2">
               <TextBlock MinWidth="150">Max Torque (Nm):</TextBlock>
               <TextBox Name="MaxTorqueNm" MinWidth="150" Text="{Binding S.MaxTorque}"/>
             </StackPanel>
+              
+              
           </StackPanel>
-          <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+          
+            <!--Version number & status-->
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                       VerticalAlignment="Center">
             <TextBlock>SimHap</TextBlock>
-            <TextBlock Name="Version" MinWidth="50" Margin="5,0,0,0"/>
-          </StackPanel>
+                        <!--Status-->
+                        <TextBlock Name="Version" MinWidth="50" Margin="5,0,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0">
+                            <TextBlock MinWidth="200" FontWeight="Bold" Text="{Binding D.LoadText}"/>
+                        </StackPanel>
+                    </StackPanel>
+            
+            <!--Refresh & Lock-->
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2">
             <styles:SHButtonSecondary Click="Lock_Click" FrameworkElement.Name="Lock" ContentControl.Content="{Binding D.LockedText}"/>
             <styles:SHButtonSecondary Click="Refresh_Click" FrameworkElement.Name="Refresh">Refresh</styles:SHButtonSecondary>
           </StackPanel>
+            
         </Grid>
       </TabItem>
       <TabItem Padding="10,0,10,0">
