@@ -15,10 +15,6 @@
 	- caused by wrong fix for [build errors](Doc/message.txt)  
 	- *14 May 2024*:&nbsp;  eliminated `SettingsControl.xaml.cs` stripping for missing engine data
 		- `Untoken()` replaced disallowed `JToken.op_Explicit(jtoken[(object) "name"])` 
-### To Do (or at least consider)
-- first lookup in .json, then Internet for fails, then defaults - *Done 27 May 2024*
-	- For unknown id, present users with list of known similar Car names.  
-	- When users select a name, the new carID replaces that in JSON.
 ### New to me
 - [async](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/async-scenarios)
 - [Dictionary](https://stackoverflow.com/questions/4245064/method-to-add-new-or-update-existing-item-in-c-sharp-dictionary)
@@ -32,7 +28,9 @@
 		- Suspension, EngineLoad
 		- Haptics based on engine RPM
 	- `SetVehicle()`, when loaded id `!=` requested
-		- check local JSON dictionary
+		- check local JSON dictionaries
+			- read/write personal
+			- optional read/only atlas
 		- call `FetchCarData()` for dictionary misses
 			- `async await` caused `FetchCarData()`  
 				to *not complete* during initial invocation, sets `Waiting`,   
@@ -62,9 +60,8 @@
 - likewise for `Spec`
 - created a `ListDictionary` class for download server compatibility
 - read, write local json e.g. to preserve changed values
+- first lookup in .json, then Internet for fails, then defaults - *Done 27 May 2024*
 - reworked `IdleRPM` handling, perhaps not for the better.. 
-
-### to do
 - write json when values change - *20 May 2024*: coded  
 - improve performance and simplify code - *22 May 2024*: in progress  
 - share `CarSpec` class between `Spec` and `SimData` - *21 May 2024*: done  
@@ -83,23 +80,32 @@
 			- save current `S.Car` *only if changed* from `Defaults()`  
 			- ignore `idlerpm` change (from 0 by sniffing)
 - read-only Atlas of cars.	*done 30 May*
-- have UI entries affect properties
-- check XAML data bindings
 - add Log messages to sort issues	*23 May*
 	- track `async await` sequence
+- debug loading a default car after a server car or JSON car or vice-versa *30 May*
+- add a reference catalog lookup, for `PluginsData/Catalog.Haptics.json`,  *30 May*  
+	for cars *not* in personal JSON..  
+	That catalog would NOT get overwritten,  
+    preventing user cars from contaminating it.
+- save `FetchCarData()` or modified `Defaults()`  *29 May*
+- `Refresh()` only if `EngineIgnitionOn` *30 May*  
+- **refactoring**
+	- when SimHub invokes `DataUpdate()` (at 60 Hz),
+		- avoid invoking either `Refresh()` or `SetVehicle()` if `Waiting`
+	- when `static async void FetchCarData()` eventually gets valid `Download dljc`,
+		- to preclude looping, set `Loaded`, unset `Waiting`  
+		then immediately return if/when recalled with `null != dljc`
+
+### to do
+- generate haptics harmonics and fundamental  
+	- export as properties for ShakeIt plugin
+- UI support for harmonics settings
+- For unknown CarId, present users with list of known similar Car names.  
+	- When users select an existing name, apply that car's Spec entries.
+- have UI entries affect properties
+- check XAML data bindings
 - free RAM in `Init` by discarding all but the current game dictionary after initial loading,  
   then reloading in `End()` *only* to save changes.
-- debug loading a default car after a server car or JSON car or vice-versa *30 May*
-- add a reference catalog lookup, for `PluginsData/Catalog.Haptics.json`,  *30 May*
-	for cars *not* in personal JSON..  
-	That catalog would NOT get overwritten, preventing new cars from contaminating it.
-- save `FetchCarData()` or modified `Defaults()`  *29 May*
-- `Refresh()` only if `EngineIgnitionOn` *30 May*
-### refactoring
-- when SimHub invokes `DataUpdate()` (at 60 Hz),
-	- avoid invoking either `Refresh()` or `SetVehicle()` if `Waiting`
-- when `static async void FetchCarData()` eventually gets valid `Download dljc`,
-	- set `Loaded`, unset `Waiting` then immediately return if/when recalled with `null != dljc`, to preclude looping
 
 ### asynchronous `FetchCarData()` events and `DataUpdate()` states - *27 May 2024*
 - sorting xaml Bindings got boring
