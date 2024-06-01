@@ -101,13 +101,6 @@ namespace sierses.Sim
 								(Haptics.Save ? " Haptics.Save " : "") + (Haptics.Loaded ? " Loaded " : "") + (Haptics.Waiting ? " Waiting" : "")
 								+ $" Index = {Index}");
 
-			if (Index == -2)	// this will attempt Private_Car = Lcars[i]; or Private_Car = Haptics.Atlas[i];
-				Index = SHP.S.SelectCar((GameId.Forza == Haptics.CurrentGame && "Car_" == db.CarId.Substring(0,4)) ? db.CarId.Substring(4) : db.CarId);
-			if (0 <= Index)
-				Haptics.Waiting = false;							// Car from JSOM
-			else if (-3 == Index)
-				source = SHP.S.Defaults(db);			// not from DB
-
 			switch (Haptics.CurrentGame)
 			{
 				case GameId.AC:
@@ -188,18 +181,12 @@ namespace sierses.Sim
 			if (Haptics.Waiting)	// still hoping for online match?
 			{
 				Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) Waiting return");
-				return;				// FetchCarData() DB accesses run SetVehicle() twice.
+				return;				// FetchCarData() DB accesses run SetVehicle() at least twice.
 			}
 
-			if (0 <= Index)
-			{
-				// now that game defaults are set, set the car found by SelectCar();
-				SHP.S.Set(SHP.S.Car);
-				source = "Atlas" == SHP.S.Default ? "Atlas DB Success" : "JSON Load Success";
-			}
-			else if (Haptics.Loaded = Index != -3)					// Not Defaults() ?
+			if (Haptics.Loaded = Index == -1)					// Neither JSON nor Defaults() ?
 				SHP.S.Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + db.CarId : db.CarId;  // not set in FetchCarData(), to avoid race conditions on id match 
-			else SHP.S.Set(SHP.S.Car);	// set per-game default RPMs
+			else SHP.S.Defaults(db);	// SetVehicle()
 			Index = -2;	// for next time
 
 			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}/{B4}) "
@@ -243,7 +230,6 @@ namespace sierses.Sim
 			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
 			SetRPMIntervals();
 			SetRPMMix();
-			Haptics.dljc = null;		// SetVehicle(): for next car change
 		}	// SetVehicle()
 	}
 }

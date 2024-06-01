@@ -29,7 +29,6 @@ namespace sierses.Sim
 		public static long FrameCountTicks = 0;
 		public static GameId CurrentGame = GameId.Other;
 		public static string GameDBText;
-		internal static Download dljc;
 		internal static bool Loaded, Waiting, Save;
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
@@ -112,14 +111,20 @@ namespace sierses.Sim
 			ushort maxRPMFromGame,
 			ushort ushortIdleRPM)							// FetchCarData() argument
 		{
-			if (-1 != This.D.Index || Waiting || null != dljc)	// FetchCarData()
-			{
-				This.S.DSet(null, redlineFromGame, maxRPMFromGame, ushortIdleRPM); // JSON and Defaults() need these...
-				return;
-			}
-
-			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}): " +
+			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  Index = {This.D.Index}," +
 							   (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
+
+			if (-2 == This.D.Index)	// first time for this CarId change?
+			{
+				StatusDataBase db = This.Gdat.NewData;
+				This.D.Index = This.S.SelectCar((GameId.Forza == CurrentGame && "Car_" == db.CarId.Substring(0,4)) ? db.CarId.Substring(4) : db.CarId,
+										 // set game RPM defaults
+										 redlineFromGame, maxRPMFromGame, ushortIdleRPM);
+				if (0 <= This.D.Index)
+					return;
+			}
+			if (Waiting || -1 != This.D.Index)	// async FetchCarData()
+				return;
 
 			try
 			{
@@ -134,25 +139,24 @@ namespace sierses.Sim
 				if (null != dls)
 				{
 					Waiting = false;	// ReadAsStringAsync() success
-					dljc =	JsonConvert.DeserializeObject<Download>(dls,
-								new JsonSerializerSettings {
-									NullValueHandling = NullValueHandling.Ignore,
-									MissingMemberHandling = MissingMemberHandling.Ignore
-								}
-							);
+					Download dljc =	JsonConvert.DeserializeObject<Download>(dls,
+										new JsonSerializerSettings {
+											NullValueHandling = NullValueHandling.Ignore,
+											MissingMemberHandling = MissingMemberHandling.Ignore
+										}
+									);
 					if (null != dljc && null != dljc.data && 0 < dljc.data.Count
 					 && null != dljc.data[0].id && null != dljc.data[0].game && null != dljc.data[0].name)
 					{
-						CarSpec c = dljc.data[0];
-						c.id = "";									// FetchCarData(): set Id at end of SetVehicle()
-						This.S.DSet(c, redlineFromGame, maxRPMFromGame, ushortIdleRPM);
+						CarSpec car = dljc.data[0];
+						car.id = "";									// FetchCarData(): set Id at end of SetVehicle()
+						This.S.Set(car);
 						LoadFailCount = This.D.CarInitCount = 0;
-						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + c.name);
+						Logging.Current.Info("Haptics.FetchCarData(): Successfully loaded " + car.name);
 						return;
 					}
 
 					This.D.Index = -3;			// disable self until other code decides otherwise
-					This.S.DSet(null, redlineFromGame, maxRPMFromGame, ushortIdleRPM); // JSON and Defaults() need these...
 					if (11 == dls.Length)
 						Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
 					else if (0 < dls.Length)
@@ -168,29 +172,6 @@ namespace sierses.Sim
 				Waiting = false;
 			}
 		}		// FetchCarData()
-
-		// returning true immediately exits DataUpdate(), i.e. just wait
-		internal bool Wait(StatusDataBase db)
-		{
-			if (-1 != D.Index)			// Wait():  first test for car in JSON
-				return false;
-
-			if (Waiting && 20 > D.CarInitCount)
-				return true;
-
-			if (!Waiting)
-				return false;			// FetchCarData() responded; Wait() no more
-
-			D.CarInitCount = 0;
-			dljc = null;			// Wait(): enable FetchCarData() retry
-			if (3 > LoadFailCount++)
-				return true;			// do not give up (yet)
-
-			D.Index = -3;						// disable FetchCarData(); enable Defaults()
-			Logging.Current.Info($"Haptics.Wait({db.CarId}/{S.Id}):  {LoadFailCount}  Load timeout " +
-								 (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : ""));
-			return Waiting = false;		// give up
-		}
 
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data,
@@ -217,17 +198,29 @@ namespace sierses.Sim
 				return;
 			}
 			
-			if (Wait(data.NewData))
-				return;
+			if (Loaded)						// save before SetVehicle()
+				S.Add(S.Id);				// DataUpdate():  add or update S.Car in Cars list
+
+			if (Waiting)
+			{
+				if (20 > ++D.CarInitCount)
+					return;
+
+				D.CarInitCount = 0;
+				Waiting = false;			// CarInitCount timeout
+            	if (3 > LoadFailCount++)
+                	return;					// do not give up (yet)
+
+				D.Index = -3;                       // disable FetchCarData(); enable Defaults()
+	            Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
+    	                             (Save ? " Save " : "") + (Loaded ? " Loaded " : ""));
+			}
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
 				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}): " +
 									(Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
 									+ $";  Index = {D.Index}");
-
-				if (Loaded && null != S.Id && 0 < S.Id.Length)	// save before SetVehicle()
-					S.Add(S.Id);				// DataUpdate():  add or update S.Car in Cars list
 				D.SetVehicle(this);
 			}
 		}
@@ -243,7 +236,6 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
-			Waiting = true;
 			if (Save || Loaded)		// End()
 			{
 				S.LD.Add();			// End():  update S.Car in Cars, then Cars in S.LD
@@ -544,10 +536,9 @@ namespace sierses.Sim
 		public void Init(PluginManager pluginManager)
 		{
 			This = this;
-			dljc = null;				// Init()
 			AtlasCt = -1;
 			LoadFailCount = 0;
-			Save = Loaded = Waiting = false;
+			Save = Loaded = Waiting = false;		// Init()
 			D = new SimData();
 			SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
@@ -592,25 +583,24 @@ namespace sierses.Sim
 			string Atlasst = "";
 			if (File.Exists(Atlasfile))
 			{
-				var foo = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(Atlasfile));
-				S.LD.Extract(foo, GameDBText);  // to Atlas
+				S.LD.Extract(JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(Atlasfile)),
+							 GameDBText);  // to Atlas
 //				Logging.Current.Info($"Haptics.Init():  {S.LD.Count} games in " + Atlasfile
 //								   + $", with {Atlas.Count} {GameDBText} cars");
 				if (0 < AtlasCt)
 					Atlasst = $" and {AtlasCt} cars in Atlas";
 				else
 					Logging.Current.Info($"Haptics.Init(): {Atlasfile} load failure");
-				Loaded = Save = false;
 			}
 			else AtlasCt = 0;
 			if (File.Exists(myfile))
 			{
-				var foo = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(myfile));
-				S.LD.Extract(foo, GameDBText);	// to S.Cars
+				S.LD.Extract(JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(myfile)),
+							 GameDBText);	// to S.Cars
 				Logging.Current.Info($"Haptics.Init():  {S.LD.Count} games in " + myfile
 									   + $", with {S.Cars.Count} {GameDBText} cars" + Atlasst);
 			}
-			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found");
+			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found" + Atlasst);
 
 			D.Init(Settings, this);
 			this.AttachDelegate("CarName", () => S.CarName);

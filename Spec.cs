@@ -29,12 +29,12 @@ namespace sierses.Sim
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return;
 			field = value;
-			Haptics.Loaded = true;
+			Haptics.Loaded = true;				// SetField()
 			OnPropertyChanged(propertyname);
 		}
 	}
 
-	public class CarSpec : ICloneable
+	public class CarSpec
 	{
 		public string game;
 		public string name;
@@ -54,11 +54,6 @@ namespace sierses.Sim
 		public string notes;
 		public string defaults;
 		public string properties;
-
-		public object Clone()
-		{
-			return this.MemberwiseClone(); // Shallow copy
-		}
 	}   // class CarSpec
 
 	// format for downloading from website; must be public
@@ -125,6 +120,7 @@ namespace sierses.Sim
 		private List<CarSpec> Lcars;
 		internal List<CarSpec> Cars { get => Lcars; }
 		public ListDictionary LD { get; set; }  // needs to be public for JsonConvert
+		internal string source;
 
 		public Spec()
 		{
@@ -136,12 +132,6 @@ namespace sierses.Sim
 		private static ushort redlineFromGame;
 		private static ushort maxRPMFromGame;
 		private static ushort ushortIdleRPM;
-		internal void DSet(CarSpec car, ushort r, ushort m, ushort i)
-		{
-			redlineFromGame = r;  maxRPMFromGame = m;  ushortIdleRPM = i;
-			if (null != car)
-				Set(car);
-		}
 
 		internal bool Set(CarSpec c)				// S.Set
 		{
@@ -170,18 +160,21 @@ namespace sierses.Sim
 			return true;
 		}
 
-		internal int SelectCar(string along)
+		internal int SelectCar(string along, ushort r, ushort m, ushort I)
 		{
+			redlineFromGame = r;  maxRPMFromGame = m;  ushortIdleRPM = I;
 			int i = Lcars.FindIndex(x => x.id == along);
 			if (0 <= i)
 			{
-				Private_Car = Lcars[i];
+				source = "JSON Load Success";	
+				Set(Lcars[i]);						// SelectCar()
 				return i;
 			}
 
 			if (0 <= (i = 0 < Haptics.AtlasCt ? Haptics.Atlas.FindIndex(x => x.id == along) : -1))
 			{
-				Private_Car = Haptics.Atlas[i];
+				source = "Atlas DB Success";
+				Set(Haptics.Atlas[i]);						// SelectCar()
 				Private_Car.defaults = "Atlas";
 			}
 			return i;
@@ -415,7 +408,7 @@ namespace sierses.Sim
 						|| GameId.D4   == Haptics.CurrentGame
 						|| GameId.DR2  == Haptics.CurrentGame )
 						 ? db.CarModel : db.CarId;
-			Private_Car = (CarSpec)DfltCar.Clone();
+			Set(DfltCar);
 			Haptics.Loaded =  temp;						// ignore changes made in Defaults()
 			return StatusText;
 		}												// Defaults()
