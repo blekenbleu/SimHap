@@ -100,13 +100,13 @@ namespace sierses.Sim
 			return true;
 		}
  
-		// create inDict
+		// create inDict or Haptics.Atlas
 		public int Extract(Dictionary<string, List<CarSpec>> json, string game)
 		{
 			if (-1 == Haptics.AtlasCt)
 				return Haptics.AtlasCt = (null != json && json.ContainsKey(game)) ? (Haptics.Atlas = json[game]).Count : 0;
 			
-			return (null != (inDict = json) && inDict.ContainsKey(game)) ? Sp.Set(inDict[game]) : 0;
+			return (null != (inDict = json) && inDict.ContainsKey(game)) ? Sp.SelectCars(inDict[game]) : 0;	// Extract()
 		}
 
 		internal ushort Count { get { return (ushort)inDict.Count; } }
@@ -120,7 +120,7 @@ namespace sierses.Sim
 
 	public class Spec : NotifyPropertyChanged
 	{
-		private CarSpec Private_Car { get; set; }
+		private CarSpec Private_Car;
 		internal CarSpec Car { get => Private_Car; }
 		private List<CarSpec> Lcars;
 		internal List<CarSpec> Cars { get => Lcars; }
@@ -133,51 +133,40 @@ namespace sierses.Sim
 			LD = new(this) { };
 		}
 
-		// called after FetchCarData() retrievals
-		internal void SetId(string id) { Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + id : id; }
-
-		internal bool Set(Download dbdl) // called >>only<< by Wait()
+		private static ushort redlineFromGame;
+		private static ushort maxRPMFromGame;
+		private static ushort ushortIdleRPM;
+		internal void DSet(CarSpec car, ushort r, ushort m, ushort i)
 		{
-			CarSpec data = dbdl.data[0];
-			// if (Haptics.CurrentGame == GameId.Forza)
-			//	 data.id = "Car_" + data.id;		// Spec.Set() for FetchCarData()
-			data.id = "";
-			data.game = Haptics.GameDBText;
-			if (0 == data.redline)
-				data.redline = Haptics.rl;
-			if (0 == data.maxrpm)
-				data.maxrpm	= Haptics.mrpm;
-			if (0 ==data.hp)
-	  			data.hp = Convert.ToUInt16(333);
-			if (0 == data.idlerpm && 0 < Haptics.irpm)				// Set(Download dbdl), called by Wait()
-				data.idlerpm = Haptics.irpm;					// Set(Download dbdl) only if it was 0
-			return Set(data) && false;					// force Set(), then always return false
-		}	// Set(CarSpec, ushort, ushort)
+			redlineFromGame = r;  maxRPMFromGame = m;  ushortIdleRPM = i;
+			if (null != car)
+				Set(car);
+		}
 
-		internal bool Set(CarSpec data)				// Spec.Set
+		internal bool Set(CarSpec c)				// S.Set
 		{
-			if (null == data)
+			if (null == c)
 			{
 				Logging.Current.Info("Haptics.Spec.Set(Spec s):  null Car");
 				return false;
 			}
-			Id = data.id;				// Spec.Set()
-			Game = data.game;
-			Redline  =	 		data.redline;
-			MaxRPM   =	 		data.maxrpm;
-			IdleRPM =			data.idlerpm;
-			MaxPower =	 		data.hp;
-			Category = 			data.category;
-			CarName = 			data.name;
-			EngineLocation = 	data.loc;
-			PoweredWheels = 	data.drive;
-			EngineConfiguration = data.config;
-			EngineCylinders = 	data.cyl;
-			ElectricMaxPower = 	data.ehp;
-			Displacement = 		data.cc;
-			MaxTorque = 		data.nm;
-			Property =			data.properties;
-			Notes =				data.notes;
+			Id = c.id;				// S.Set()
+			Game = Haptics.GameDBText;
+			Redline  =	 		0 < c.redline ? c.redline : redlineFromGame;
+			MaxRPM   =	 		0 < c.maxrpm ? c.maxrpm : maxRPMFromGame;
+			IdleRPM =			0 < c.idlerpm ? c.idlerpm : ushortIdleRPM;
+			Displacement = 		0 < c.cc ? c.cc : (ushort)3333;
+			MaxTorque = 		0 < c.nm ? c.nm : MaxPower;
+			MaxPower =	 		0 < c.hp ? c.hp : (ushort)333;
+			ElectricMaxPower = 	c.ehp;
+			Category = 			string.IsNullOrEmpty(c.category) ? "street" : c.category;
+			CarName = 			c.name;
+			EngineLocation = 	c.loc;
+			PoweredWheels = 	c.drive;
+			EngineConfiguration = c.config;
+			EngineCylinders = 	c.cyl;
+			Property =			c.properties;
+			Notes =				c.notes;
 			return true;
 		}
 
@@ -185,21 +174,24 @@ namespace sierses.Sim
 		{
 			int i = Lcars.FindIndex(x => x.id == along);
 			if (0 <= i)
-				return Set(Lcars[i]) ? i : -1;
+			{
+				Private_Car = Lcars[i];
+				return i;
+			}
 
 			if (0 <= (i = 0 < Haptics.AtlasCt ? Haptics.Atlas.FindIndex(x => x.id == along) : -1))
 			{
-				Default = "Atlas";
-				Set(Haptics.Atlas[i]);
+				Private_Car = Haptics.Atlas[i];
+				Private_Car.defaults = "Atlas";
 			}
 			return i;
 		}
 
-		internal int Set(List<CarSpec> list)		// Spec.Set
+		internal int SelectCars(List<CarSpec> list)		// Spec
 		{
 			if (null == list || 1 > list.Count)
 			{
-				Logging.Current.Info("Haptics.Spec.Set(List<CarSpec>):  empty List");
+				Logging.Current.Info("Haptics.S.SelectCars(List<CarSpec>):  empty List");
 				return -1;
 			}
 			return (Lcars = list).Count;
@@ -330,146 +322,103 @@ namespace sierses.Sim
 
 			bool temp = Haptics.Loaded;
 
-			if (null != DfltCar)
+			if (null == DfltCar)
 			{
-				Private_Car = (CarSpec)DfltCar.Clone(); // Private_Car elements will NOT be linked to DfltCar's
-				Private_Car.name = db.CarModel;
-				Private_Car.id = (GameId.RRRE == Haptics.CurrentGame	// Defaults()
-								|| GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) ?
-					db.CarModel : db.CarId;
-				Private_Car.category = string.IsNullOrEmpty(db.CarClass) ? "street" : db.CarClass;
-				return DfltCar.notes;
-			}
-
-			Game = Haptics.GameDBText;
-			CarName = db.CarModel;						// Defaults()
-			Category = db.CarClass;
-			EngineConfiguration = "V";
-			EngineCylinders = 6;
-			EngineLocation = "RM";
-			PoweredWheels = "A";
-			Displacement = 3000;
-			MaxPower = 300;
-			ElectricMaxPower = 0;
-			MaxTorque = 250;
-			IdleRPM = 0;							// Defaults(): open to sniffing
-
-			switch (Haptics.CurrentGame)
-			{
-				case GameId.RRRE:
-				case GameId.AC:
-				case GameId.ACC:
-				case GameId.AMS1:
-				case GameId.AMS2:
-				case GameId.Forza:
-				case GameId.GTR2:
-				case GameId.IRacing:
-				case GameId.PC2:
-				case GameId.RBR:
-				case GameId.RF2:
-				case GameId.BeamNG:
-					StatusText += "unavailable: using generic car";
-					break;
-				case GameId.D4:
-				case GameId.DR2:
-				case GameId.WRC23:
-					StatusText += "unavailable: using generic Rally2";
-					EngineConfiguration = "I";
-					EngineCylinders = 4;
-					EngineLocation = "F";
-					PoweredWheels = "A";
-					Displacement = 1600;
-					MaxPower = 300;
-					ElectricMaxPower = 0;
-					MaxTorque = 400;
-					break;
-				case GameId.F12022:
-				case GameId.F12023:
-					StatusText += "unavailable: using generic F1";
-					EngineConfiguration = "V";
-					EngineCylinders = 6;
-					EngineLocation = "RM";
-					PoweredWheels = "R";
-					Displacement = 1600;
-					MaxPower = 1000;
-					ElectricMaxPower = 0;
-					MaxTorque = 650;
-					break;
-				case GameId.KK:
-					StatusText += "unavailable: using generic Kart";
-					EngineConfiguration = "I";
-					EngineCylinders = 1;
-					EngineLocation = "RM";
-					PoweredWheels = "R";
-					Displacement = 130;
-					MaxPower = 34;
-					ElectricMaxPower = 0;
-					MaxTorque = 24;
-					break;
-				case GameId.GPBikes:
-					StatusText += "unavailable: using generic Superbike";
-					EngineConfiguration = "I";
-					EngineCylinders = 4;
-					EngineLocation = "M";
-					PoweredWheels = "R";
-					Displacement = 998;
-					MaxPower = 200;
-					ElectricMaxPower = 0;
-					MaxTorque = 100;
-					break;
-				case GameId.MXBikes:
-					StatusText += "unavailable: using generic MX Bike"; EngineConfiguration = "I";
-					EngineCylinders = 1;
-					EngineLocation = "M";
-					PoweredWheels = "R";
-					Displacement = 450;
-					MaxPower = 50;
-					ElectricMaxPower = 0;
-					MaxTorque = 45;
-					break;
-				case GameId.GranTurismo7:
-				case GameId.GranTurismoSport:
-					StatusText += "unavailable: assume 500HP 4 Liter V6";
-					EngineConfiguration = "V";
-					EngineCylinders = 6;
-					EngineLocation = "RM";
-					PoweredWheels = "R";
-					Displacement = 4000;
-					MaxPower = 500;
-					ElectricMaxPower = 0;
-					MaxTorque = 400;
-					break;
-				default:
-					StatusText += $"specs unavailable for {Haptics.CurrentGame}";
-					break;
-			}
-			if (0 == Redline)
-				Redline = 6000;
-			if (0 == MaxRPM)
-				MaxRPM = 6500;
-			if (string.IsNullOrEmpty(Category))
-				Category = "street";
-			Id = (GameId.RRRE == Haptics.CurrentGame			// Defaults()
-				 || GameId.D4 == Haptics.CurrentGame || GameId.DR2 == Haptics.CurrentGame) ?
-					db.CarModel : db.CarId;
-			if (null == DfltCar || null == DfltCar.defaults)
-				DfltCar = new() {							 		// game-specific Defaults
-					defaults = "Defaults",
-					name = CarName,
-					category = Category,
-					config = EngineConfiguration,
-					cyl = EngineCylinders,
-					loc = EngineLocation,
-					drive = PoweredWheels,
-					cc = Displacement,
-					hp = MaxPower,
-					ehp = ElectricMaxPower,
-					nm = MaxTorque,
-					notes = StatusText
+				DfltCar = new()
+				{
+					config = "V",
+					cyl = 6,
+					loc = "RM",
+					drive = "R",
+					cc = 1600,
+					hp = 300,
+					ehp = 0,
+					nm = 250
 				};
+
+				switch (Haptics.CurrentGame)
+				{
+					case GameId.RRRE:
+					case GameId.AC:
+					case GameId.ACC:
+					case GameId.AMS1:
+					case GameId.AMS2:
+					case GameId.Forza:
+					case GameId.GTR2:
+					case GameId.IRacing:
+					case GameId.PC2:
+					case GameId.RBR:
+					case GameId.RF2:
+					case GameId.BeamNG:
+						DfltCar.cc = 3000;
+						DfltCar.drive = "A";
+						StatusText += "unavailable: using generic car";
+						break;
+					case GameId.D4:
+					case GameId.DR2:
+					case GameId.WRC23:
+						StatusText += "unavailable: using generic Rally2";
+						DfltCar.config = "I";
+						DfltCar.cyl = 4;
+						DfltCar.loc = "F";
+						DfltCar.drive = "A";
+						DfltCar.nm = 400;
+						break;
+					case GameId.F12022:
+					case GameId.F12023:
+						StatusText += "unavailable: using generic F1";
+						DfltCar.hp = 1000;
+						DfltCar.nm = 650;
+						break;
+					case GameId.KK:
+						StatusText += "unavailable: using generic Kart";
+						DfltCar.config = "I";
+						DfltCar.cyl = 1;
+						DfltCar.cc = 130;
+						DfltCar.hp = 34;
+						DfltCar.nm = 24;
+						break;
+					case GameId.GPBikes:
+						StatusText += "unavailable: using generic Superbike";
+						DfltCar.config = "I";
+						DfltCar.cyl = 4;
+						DfltCar.loc = "M";
+						DfltCar.cc = 998;
+						DfltCar.hp = 200;
+						DfltCar.nm = 100;
+						break;
+					case GameId.MXBikes:
+						StatusText += "unavailable: using generic MX Bike"; EngineConfiguration = "I";
+						DfltCar.cyl = 1;
+						DfltCar.loc = "M";
+						DfltCar.cc = 450;
+						DfltCar.hp = 50;
+						DfltCar.nm = 45;
+						break;
+					case GameId.GranTurismo7:
+					case GameId.GranTurismoSport:
+						StatusText += "unavailable: assume 500HP 4 Liter V6";
+						DfltCar.cc = 4000;
+						DfltCar.hp = 500;
+						DfltCar.nm = 400;
+						break;
+					default:
+						StatusText += $"specs unavailable for {Haptics.CurrentGame}";
+						break;
+				}
+				DfltCar.notes = StatusText;
+			}
+			else StatusText = DfltCar.notes;
+			DfltCar.name = db.CarModel;
+			DfltCar.category = string.IsNullOrEmpty(db.CarClass) ? "street" : db.CarClass;
+			DfltCar.id = ( GameId.RRRE == Haptics.CurrentGame			// Defaults()
+						|| GameId.D4   == Haptics.CurrentGame
+						|| GameId.DR2  == Haptics.CurrentGame )
+						 ? db.CarModel : db.CarId;
+			Private_Car = (CarSpec)DfltCar.Clone();
 			Haptics.Loaded =  temp;						// ignore changes made in Defaults()
 			return StatusText;
-		}									// Defaults()
+		}												// Defaults()
 
 		public string Game
 		{
