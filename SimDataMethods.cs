@@ -95,13 +95,13 @@ namespace sierses.Sim
 		{
 			SHP = shp;
 			StatusDataBase db = SHP.Gdat.NewData;
-			string B4 = SHP.S.Id, source = "DB Load Success";
-
+			SHP.S.Src = "DB Load Success";
+/*
 			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}): " +
-								(Haptics.Save ? " Haptics.Save " : "") + (Haptics.Loaded ? " Loaded " : "") + (Haptics.Waiting ? " Waiting" : "")
-								+ $" Index = {Index}");
-
-			switch (Haptics.CurrentGame)
+								(Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "")
+								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
+ */
+			if (-2 == Index || -1 == Index) switch (Haptics.CurrentGame)
 			{
 				case GameId.AC:
 				case GameId.ACC:
@@ -163,7 +163,6 @@ namespace sierses.Sim
 						SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
 						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
 					}
-					Haptics.Loaded = false;		// Bikes are not saved
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
@@ -180,19 +179,22 @@ namespace sierses.Sim
 
 			if (Haptics.Waiting)	// still hoping for online match?
 			{
-				Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) Waiting return");
+				Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) Waiting return: "
+									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
+                                	+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? " Changed" : "") + $" Index = {Index}");
 				return;				// FetchCarData() DB accesses run SetVehicle() at least twice.
 			}
 
-			if (Haptics.Loaded = Index == -1)					// Neither JSON nor Defaults() ?
+			if (Haptics.Loaded = Index == -4)					// Neither JSON nor Defaults() ?
 				SHP.S.Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + db.CarId : db.CarId;  // not set in FetchCarData(), to avoid race conditions on id match 
-			else SHP.S.Defaults(db);	// SetVehicle()
-			Index = -2;	// for next time
+			else if(0 > Index)
+                SHP.S.Defaults(db);	// SetVehicle()
 
-			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}/{B4}) "
-								+ (Haptics.Save ? " Haptics.Save " : "") + (Haptics.Loaded ? "Loaded " : "")
-								+ $"{Haptics.CurrentGame}, {db.CarModel}:  "
-								+ (LoadText = $"{SHP.S.Game} " + source));
+			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}/{SHP.S.Id}): "
+								+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
+								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "")
+								+ $" {db.CarModel}; "
+								+ (LoadText = $" {SHP.S.Game} " + SHP.S.Src));
 
 			// finalize vehicle
 			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
@@ -230,6 +232,10 @@ namespace sierses.Sim
 			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
 			SetRPMIntervals();
 			SetRPMMix();
+			Index = -2;	// for next time
+			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) ending: "
+									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
+                                	+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
 		}	// SetVehicle()
 	}
 }
