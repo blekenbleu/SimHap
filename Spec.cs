@@ -29,7 +29,15 @@ namespace sierses.Sim
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return;
 			field = value;
-			Haptics.Loaded = true;				// SetField()
+			OnPropertyChanged(propertyname);
+		}
+
+		protected void SetCarSpec<T>(ref T field, T value, string propertyname)
+		{
+			if (EqualityComparer<T>.Default.Equals(field, value))
+				return;
+			field = value;
+			Haptics.Changed = Haptics.Set;				// SetCarSpec()
 			OnPropertyChanged(propertyname);
 		}
 	}
@@ -65,50 +73,51 @@ namespace sierses.Sim
 	public class ListDictionary : NotifyPropertyChanged
 	{
 		private Dictionary<string, List<CarSpec>> inDict;
-		private readonly Spec Sp;
-		internal ListDictionary(Spec s) { Sp = s; inDict = new(); }
+		internal ListDictionary() { inDict = new(); }
 
-		internal bool Add()				// ListDictionary: S.LD.Add; update Save
+		// create inDict, return List<CarSpec>
+		internal void Set(Dictionary<string, List<CarSpec>> json)
 		{
-			Sp.Add(Sp.Car.id);					// ListDictionary:  S.Add() Private_Car to Lcars
-			List<CarSpec> s = Sp.Cars;
-			if (0 == s.Count)
-				return false;
+			inDict = json;
+		}
 
-			string k = s[0].game;
+		internal void Add(CarSpec car)			// ListDictionary: S.LD.Add; update Save
+		{
+			if (null == car || null == car.id)
+				return;
 
-			if (inDict.ContainsKey(k))
-				for (int i = 0; i < s.Count; i++)
-				{
-					int idx = inDict[k].FindIndex(x => x.id == s[i].id);
-					if (0 <= idx)
-						inDict[k][idx] = s[i];
-					else {
-						inDict[k].Add(s[i]);		// ListDictionary:  add Sp.Cars[i] to current dictionary
-						Haptics.Save = true;
-					}
-				}
-			else {
-				inDict.Add(k, s);					// ListDictionary:  add Lcars to dictionary
-				Haptics.Save = true;
+			string g = Haptics.GameDBText;
+
+            if (inDict.ContainsKey(g))
+			{
+				int idx = inDict[g].FindIndex(x => x.id == car.id);
+
+                if (0 <= idx)
+					inDict[g][idx] = car;				// ListDictionary:  replace car in dictionary
+				else inDict[g].Add(car);				// ListDictionary:  add car to current dictionary
 			}
-			return true;
+			else inDict.Add(g, new() { car } );			// ListDictionary:  add new dictionary with car
+			Haptics.Save = true;
+			return;
 		}
- 
-		// create inDict or Haptics.Atlas
-		public int Extract(Dictionary<string, List<CarSpec>> json, string game)
+
+		internal CarSpec FindCar(string cn)
 		{
-			if (-1 == Haptics.AtlasCt)
-				return Haptics.AtlasCt = (null != json && json.ContainsKey(game)) ? (Haptics.Atlas = json[game]).Count : 0;
-			
-			return (null != (inDict = json) && inDict.ContainsKey(game)) ? Sp.SelectCars(inDict[game]) : 0;	// Extract()
+			string g = Haptics.GameDBText;
+			int i;
+
+			if (inDict.ContainsKey(g) && 0 < (i = inDict[g].FindIndex(x => x.id == cn)))
+				return inDict[g][i];
+			else return null;
 		}
+
+		internal int CarCount(string g) { return inDict.ContainsKey(g) ? inDict[g].Count : 0; }
 
 		internal ushort Count { get { return (ushort)inDict.Count; } }
 
 		internal string Jstring()	// ignore null (string) values; indent JSON
 		{
-			return JsonConvert.SerializeObject(Sp.LD.inDict, new JsonSerializerSettings
+			return JsonConvert.SerializeObject(inDict, new JsonSerializerSettings
 			{ Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore });
 		}
 	}   // class ListDictionary
@@ -120,13 +129,13 @@ namespace sierses.Sim
 		private List<CarSpec> Lcars;
 		internal List<CarSpec> Cars { get => Lcars; }
 		public ListDictionary LD { get; set; }  // needs to be public for JsonConvert
-		internal string source;
+		internal string Src;
 
 		public Spec()
 		{
 			Private_Car = new() { };				// required 24 May 2024
 			Lcars = new() { };					  // required 24 May 2024
-			LD = new(this) { };
+			LD = new() { };
 		}
 
 		private static ushort redlineFromGame;
@@ -140,6 +149,7 @@ namespace sierses.Sim
 				Logging.Current.Info("Haptics.Spec.Set(Spec s):  null Car");
 				return false;
 			}
+			Private_Car = new();
 			Id = c.id;				// S.Set()
 			Game = Haptics.GameDBText;
 			Redline  =	 		0 < c.redline ? c.redline : redlineFromGame;
@@ -157,6 +167,8 @@ namespace sierses.Sim
 			EngineCylinders = 	c.cyl;
 			Property =			c.properties;
 			Notes =				c.notes;
+			Haptics.Set = true;			// subsequent value changes set Changed = true
+			Haptics.Changed = false;
 			return true;
 		}
 
@@ -166,154 +178,151 @@ namespace sierses.Sim
 			int i = Lcars.FindIndex(x => x.id == along);
 			if (0 <= i)
 			{
-				source = "JSON Load Success";	
+				Src = "Cache match";	
 				Set(Lcars[i]);						// SelectCar()
 				return i;
 			}
 
+			CarSpec car = LD.FindCar(along);
+            if (null != car)
+			{
+				Src = "JSON match";
+				Set(car);
+				return 0;
+			}
+
 			if (0 <= (i = 0 < Haptics.AtlasCt ? Haptics.Atlas.FindIndex(x => x.id == along) : -1))
 			{
-				source = "Atlas DB Success";
+				Src = "Atlas match";
+				Default = "Atlas";
 				Set(Haptics.Atlas[i]);						// SelectCar()
-				Private_Car.defaults = "Atlas";
 			}
 			return i;
 		}
 
-		internal int SelectCars(List<CarSpec> list)		// Spec
+		// create inDict or Haptics.Atlas
+		public int Extract(Dictionary<string, List<CarSpec>> json, string game)
 		{
-			if (null == list || 1 > list.Count)
-			{
-				Logging.Current.Info("Haptics.S.SelectCars(List<CarSpec>):  empty List");
-				return -1;
-			}
-			return (Lcars = list).Count;
+			return Haptics.AtlasCt = (null != json && json.ContainsKey(game)) ? (Haptics.Atlas = json[game]).Count : 0;
 		}
 
-		internal void Add(string cId)				// S.Add():  add or update Car in Cars
+		internal bool Add(string cId)				// S.Add():  add or update Car in Cars
 		{
-			Haptics.Loaded = false;		// done with this car;  update Save
-			if ((null == Car.game) || (null == Car.name))
-			{
-				Logging.Current.Info($"Haptics.Spec.Add({cId}) : missing essential elements");
-				return;
-			}
-
 			if ("Defaults" == Private_Car.defaults && null != DfltCar && DfltCar.name == Private_Car.name
 				&& DfltCar.category == Private_Car.category && DfltCar.config == Private_Car.config
 				&& DfltCar.cyl == Private_Car.cyl && DfltCar.loc == Private_Car.loc
 				&& DfltCar.drive == Private_Car.drive && DfltCar.cc == Private_Car.cc
 				&& DfltCar.hp == Private_Car.hp && DfltCar.ehp == Private_Car.ehp && DfltCar.nm == Private_Car.nm)
-					return;	// do not save Car with all default values
+					return false;	// do not save Car with all default values
 
 			int Index = Cars.FindIndex(x => x.id == cId);
 			if (0 > Index)
 			{
 				Lcars.Add(Private_Car);		// generic List<CarSpec>.Add()
-				Logging.Current.Info($"\tHaptics.Spec.Add({cId}) : {Cars.Count} {Car.game} cars");
-				Haptics.Save = true;
-				Private_Car = new() {};
-				return;
+				Logging.Current.Info($"\tHaptics.S.Add({cId}) : {Cars.Count} {Car.game} cars");
+				return true;
 			}
 
-			Logging.Current.Info($"\tHaptics.Spec.Add({cId}) : {Car.id} Index = {Index}/{Cars.Count}");
-		
+			Logging.Current.Info($"\tHaptics.S.Add({cId}) : {Car.id} Index = {Index}/{Cars.Count}");
+			bool tf = false;
 			if (Lcars[Index].id != Private_Car.id)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].id = Private_Car.id;
 			}
 			if (Lcars[Index].game != Private_Car.game)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].game = Private_Car.game;
 			}
 			if (Lcars[Index].name != Private_Car.name)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].name = Private_Car.name;
 			}
 			if (Lcars[Index].config != Private_Car.config)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].config = Private_Car.config;
 			}
 			if (Lcars[Index].cyl != Private_Car.cyl)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].cyl = Private_Car.cyl;
 			}
 			if (Lcars[Index].loc != Private_Car.loc)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].loc = Private_Car.loc;
 			}
 			if (Lcars[Index].drive != Private_Car.drive)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].drive = Private_Car.drive;
 			}
 			if (Lcars[Index].hp != Private_Car.hp)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].hp = Private_Car.hp;
 			}
 			if (Lcars[Index].ehp != Private_Car.ehp)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].ehp = Private_Car.ehp;
 			}
 			if (Lcars[Index].cc != Private_Car.cc)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].cc = Private_Car.cc;
 			}
 			if (Lcars[Index].nm != Private_Car.nm)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].nm = Private_Car.nm;
 			}
 			if (Lcars[Index].redline != Private_Car.redline)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].redline = Private_Car.redline;
 			}
 			if (Lcars[Index].maxrpm != Private_Car.maxrpm)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].maxrpm = Private_Car.maxrpm;
 			}
 			if (Lcars[Index].idlerpm != Private_Car.idlerpm)			// Add(): changing value in Cars?
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].idlerpm = Private_Car.idlerpm;			// Add(): Yes, value has changed
 			}
 			if (Lcars[Index].defaults != Private_Car.defaults)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].defaults = Private_Car.defaults;
 			}
 			if (Lcars[Index].category != Private_Car.category)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].category = Private_Car.category;
 			}
 			if (Lcars[Index].notes != Private_Car.notes)
 			{
-				Haptics.Save = true;
+				tf = true;
 				Lcars[Index].notes = Private_Car.notes;
 			}
+			return tf;
 		}	// S.Add()
 
 		private CarSpec DfltCar;
-		internal string Defaults(StatusDataBase db)
+		internal void Defaults(StatusDataBase db)
 		{
 			if (null == Haptics.GameDBText)
-				return $"Haptics.Defaults({db.CarId}):  null GameDBText";
+			{
+				Src = $"Haptics.Defaults({db.CarId}):  null GameDBText";
+				return;
+			}
 
 			string StatusText = "Haptics.Defaults:  ";
-
-			bool temp = Haptics.Loaded;
 
 			if (null == DfltCar)
 			{
@@ -409,8 +418,7 @@ namespace sierses.Sim
 						|| GameId.DR2  == Haptics.CurrentGame )
 						 ? db.CarModel : db.CarId;
 			Set(DfltCar);
-			Haptics.Loaded =  temp;						// ignore changes made in Defaults()
-			return StatusText;
+			Src = StatusText;
 		}												// Defaults()
 
 		public string Game
@@ -428,7 +436,7 @@ namespace sierses.Sim
 		public string Notes
 		{
 			get => Private_Car.notes;
-			set { SetField(ref Private_Car.notes, value, nameof(Notes)); }
+			set { SetCarSpec(ref Private_Car.notes, value, nameof(Notes)); }
 		}
 
 		public string Id
@@ -440,84 +448,84 @@ namespace sierses.Sim
 		public string Default
 		{
 			get => Private_Car.defaults;
-			set { SetField(ref Private_Car.defaults, value, nameof(Default)); }
+			set { SetCarSpec(ref Private_Car.defaults, value, nameof(Default)); }
 		}
 
 		public string Property
 		{
 			get => Private_Car.properties;
-			set { SetField(ref Private_Car.properties, value, nameof(Property)); }
+			set { SetCarSpec(ref Private_Car.properties, value, nameof(Property)); }
 		}
 
 		public string Category
 		{
 			get => Private_Car.category;
-			set { SetField(ref Private_Car.category, value, nameof(Category)); }
+			set { SetCarSpec(ref Private_Car.category, value, nameof(Category)); }
 		}
 
 		public ushort Redline
 		{
 			get => Private_Car.redline;
-			set { SetField(ref Private_Car.redline, value, nameof(Redline)); }
+			set { SetCarSpec(ref Private_Car.redline, value, nameof(Redline)); }
 		}
 	
 		public ushort MaxRPM
 		{
 			get => Private_Car.maxrpm;
-			set { SetField(ref Private_Car.maxrpm, value, nameof(MaxRPM)); }
+			set { SetCarSpec(ref Private_Car.maxrpm, value, nameof(MaxRPM)); }
 		}
 		public ushort IdleRPM								// public for Private_Car.idlerpm
 		{
 			get => Private_Car.idlerpm;						// IdleRPM
-			set { SetField(ref Private_Car.idlerpm, value, nameof(IdleRPM)); }	// IdleRPM
+			set { SetCarSpec(ref Private_Car.idlerpm, value, nameof(IdleRPM)); }	// IdleRPM
 		}
 
 		public string EngineConfiguration
 		{
 			get => Private_Car.config;
-			set { SetField(ref Private_Car.config, value, nameof(EngineConfiguration)); }
+			set { SetCarSpec(ref Private_Car.config, value, nameof(EngineConfiguration)); }
 		}
 	
 		public ushort EngineCylinders
 		{
 			get => Private_Car.cyl;
-			set { SetField(ref Private_Car.cyl, value, nameof(EngineCylinders)); }
+			set { SetCarSpec(ref Private_Car.cyl, value, nameof(EngineCylinders)); }
 		}
 
 		public string EngineLocation
 		{
 			get => Private_Car.loc;
-			set { SetField(ref Private_Car.loc, value, nameof(EngineLocation)); }
+			set { SetCarSpec(ref Private_Car.loc, value, nameof(EngineLocation)); }
 		}
 
 		public string PoweredWheels
 		{
 			get => Private_Car.drive;
-			set { SetField(ref Private_Car.drive, value, nameof(PoweredWheels)); }
+			set { SetCarSpec(ref Private_Car.drive, value, nameof(PoweredWheels)); }
 		}
 
 		public ushort MaxPower
 		{
 			get => Private_Car.hp;
-			set { SetField(ref Private_Car.hp, value, nameof(MaxPower)); }
+			set { SetCarSpec(ref Private_Car.hp, value, nameof(MaxPower)); }
 		}
 	
 		public ushort ElectricMaxPower
 		{
 			get => Private_Car.ehp;
-			set { SetField(ref Private_Car.ehp, value, nameof(ElectricMaxPower)); }
+			set { SetCarSpec(ref Private_Car.ehp, value, nameof(ElectricMaxPower)); }
 		}
 	
 		public ushort Displacement
 		{
 			get => Private_Car.cc;
-			set { SetField(ref Private_Car.cc, value, nameof(Displacement)); }
+			set { SetCarSpec(ref Private_Car.cc, value, nameof(Displacement)); }
 		}
 	
 		public ushort MaxTorque
 		{
 			get => Private_Car.nm;
-			set { SetField(ref Private_Car.nm, value, nameof(MaxTorque)); }
+			set { SetCarSpec(ref Private_Car.nm, value, nameof(MaxTorque)); }
 		}
 	}	// class Spec
 }
