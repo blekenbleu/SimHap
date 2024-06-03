@@ -1837,7 +1837,12 @@ namespace sierses.Sim
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
 				if (20 == IdleSampleCount && 0 == SHP.S.IdleRPM)	// Refresh(): change SHP.S.IdleRPM?
-						SHP.S.IdleRPM = idleRPM;		// Refresh() sniff: only if it was 0
+				{
+					bool temp = Haptics.Set;
+					Haptics.Set = false;			// do not save sniffed idle
+					SHP.S.IdleRPM = idleRPM;		// Refresh() sniff: only if it was 0
+					Haptics.Set = temp;
+				}
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)
