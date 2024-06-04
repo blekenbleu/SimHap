@@ -1,458 +1,873 @@
-<UserControl x:Class="sierses.Sim.SettingsControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:styles="clr-namespace:SimHub.Plugins.Styles;assembly=SimHub.Plugins"
-			 xmlns:local="clr-namespace:sierses.Sim"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance}">
+<UserControl
+    x:Class="sierses.Sim.SettingsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:sierses.Sim"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:styles="clr-namespace:SimHub.Plugins.Styles;assembly=SimHub.Plugins"
+    d:DataContext="{d:DesignInstance}"
+    mc:Ignorable="d">
     <FrameworkElement.Resources>
-    <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
-      <Setter Property="UIElement.Opacity" Value="0.9"/>
-      <Setter Property="Shape.Fill" Value="White"/>
-      <Setter Property="FrameworkElement.Height" Value="50"/>
-      <Setter Property="FrameworkElement.Width" Value="50"/>
-    </Style>
-    <Style x:Key="StatusCircle" TargetType="{x:Type Rectangle}">
-      <Setter Property="UIElement.Opacity" Value="0.9"/>
-      <Setter Property="Shape.Fill" Value="White"/>
-      <Setter Property="FrameworkElement.Height" Value="10"/>
-      <Setter Property="FrameworkElement.Width" Value="10"/>
-    </Style>
-    <Style x:Key="TabVis" TargetType="{x:Type StackPanel}">
-      <Style.Triggers>
-        <Trigger Property="UIElement.IsMouseOver" Value="true">
-          <Setter Property="UIElement.Opacity" Value="0.6"/>
-        </Trigger>
-      </Style.Triggers>
-    </Style>
-  </FrameworkElement.Resources>
-  <Grid>
-    <TabControl>
-      <TabItem Padding="20,0">
-        <HeaderedContentControl.Header>
-          <StackPanel Orientation="Horizontal" Margin="0,0" Style="{StaticResource TabVis}">
-            <Rectangle Style="{StaticResource IconRectangle}">
-              <UIElement.OpacityMask>
-                <ImageBrush Stretch="Uniform" ImageSource="{Binding RPMIcon}"/>
-              </UIElement.OpacityMask>
-            </Rectangle>
-            <TextBlock Text="Engine" FontSize="20" Opacity="0.9" VerticalAlignment="Center" Margin="9,0,0,0"/>
-          </StackPanel>
-        </HeaderedContentControl.Header>
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="141*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="149*"/>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="35"/>
-          </Grid.RowDefinitions>
-          <styles:SHSection Title="Engine and Vehicle Specifications" Grid.Row="0" Grid.ColumnSpan="3"/>
-            
-          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2">
-            
-           
-   
-              <!--CarName-->
-             <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="75">Name:</TextBlock>
-              <TextBox Name="CarName" MinWidth="200" Text="{Binding S.CarName}"/>
-            </StackPanel>
-              
-              <!--ID-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="75">ID:</TextBlock>
-              <TextBox Name="CarId" MinWidth="200" Text="{Binding S.Id}"/>
-            </StackPanel>
-              
-              <!--Category-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="75">Category:</TextBlock>
-              <TextBox Name="CarClass" MinWidth="200" Text="{Binding S.Category}"/>
-            </StackPanel>
-             
-              <!--Redline-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="100">Redline:</TextBlock>
-              <TextBox Name="Redline" MinWidth="175" Text="{Binding S.Redline}"/>
-            </StackPanel>
+        <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
+            <Setter Property="UIElement.Opacity" Value="0.9" />
+            <Setter Property="Shape.Fill" Value="White" />
+            <Setter Property="FrameworkElement.Height" Value="50" />
+            <Setter Property="FrameworkElement.Width" Value="50" />
+        </Style>
+        <Style x:Key="StatusCircle" TargetType="{x:Type Rectangle}">
+            <Setter Property="UIElement.Opacity" Value="0.9" />
+            <Setter Property="Shape.Fill" Value="White" />
+            <Setter Property="FrameworkElement.Height" Value="10" />
+            <Setter Property="FrameworkElement.Width" Value="10" />
+        </Style>
+        <Style x:Key="TabVis" TargetType="{x:Type StackPanel}">
+            <Style.Triggers>
+                <Trigger Property="UIElement.IsMouseOver" Value="true">
+                    <Setter Property="UIElement.Opacity" Value="0.6" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </FrameworkElement.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Padding="20,0">
+                <HeaderedContentControl.Header>
+                    <StackPanel
+                        Margin="0,0"
+                        Orientation="Horizontal"
+                        Style="{StaticResource TabVis}">
+                        <Rectangle Style="{StaticResource IconRectangle}">
+                            <UIElement.OpacityMask>
+                                <ImageBrush ImageSource="{Binding RPMIcon}" Stretch="Uniform" />
+                            </UIElement.OpacityMask>
+                        </Rectangle>
+                        <TextBlock
+                            Margin="9,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            Opacity="0.9"
+                            Text="Engine" />
+                    </StackPanel>
+                </HeaderedContentControl.Header>
 
-              <!--MaxRPM-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="100">Max RPM:</TextBlock>
-              <TextBox Name="MaxRPM" MinWidth="175" Text="{Binding S.MaxRPM}"/>
-            </StackPanel>
- 
-              <!--IdleRPM-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="100">Idle RPM:</TextBlock>
-              <TextBox Name="IdleRPM" MinWidth="175" Text="{Binding S.IdleRPM}"/>
-            </StackPanel>
-              
-              <!--Downshift duration-->
-            <StackPanel Orientation="Horizontal" Margin="0,24,0,0">
-              <TextBlock MinWidth="200">
-                Downshift Hold Duration (ms):
-              </TextBlock>
-              <TextBox Name="DownshiftDurationMs" MinWidth="75" Text="{Binding Settings.DownshiftDurationMs}"/>
-            </StackPanel>
-              
-              <!--Upshift duration-->
-            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-              <TextBlock MinWidth="200">
-                Upshift Hold Duration (ms):
-              </TextBlock>
-              <TextBox Name="UpshiftDurationMs" MinWidth="75" Text="{Binding Settings.DownshiftDurationMs}"/>
-            </StackPanel>
-              
-              
-            <TextBlock MinWidth="150" Margin="0,8,0,4">
-              Engine Intensity Multiplier (all cars in game) [0.5-1.5]:
-            </TextBlock>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock MinWidth="190" Text="{Binding D.GameAltText}"/>
-              <TextBox Name="EngineMult" MinWidth="75" Margin="10,0,0,0" Text="{Binding D.EngineMult}"/>
-            </StackPanel>
-          </StackPanel>
-            
-            <!--2nd Column-->
-          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2">
-              
-              <!--Engine Configuration-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="150">
-                Engine Configuration:
-              </TextBlock>
-              <TextBox Name="EngineConfig" MinWidth="150" Text="{Binding S.EngineConfiguration}"/>
-            </StackPanel>
-              
-              <!--Cylinders-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="150">Engine Cylinders:</TextBlock>
-              <TextBox Name="CylinderCount" MinWidth="150" Text="{Binding S.EngineCylinders}"/>
-            </StackPanel>
-              
-              <!--Engine location-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="150">Engine Location:</TextBlock>
-              <TextBox Name="EngineLocation" MinWidth="150" Text="{Binding S.EngineLocation}"/>
-            </StackPanel>
-              
-              <!--Drivetrain-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="150">Powered Wheels:</TextBlock>
-              <TextBox Name="PoweredWheels" MinWidth="150" Text="{Binding S.PoweredWheels}"/>
-            </StackPanel>
-              
-              <!--HP-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="150">Total Power (HP):</TextBlock>
-              <TextBox Name="MaxPowerHP" MinWidth="150" Text="{Binding S.MaxPower}"/>
-            </StackPanel>
-              
-              <!--EHP-->
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="150">
-                Electric Power (HP):
-              </TextBlock>
-              <TextBox Name="EMaxPowerHP" MinWidth="150" Text="{Binding S.ElectricMaxPower}"/>
-            </StackPanel>
-              
-             <!--cc--> 
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="150">Displacement (cc):</TextBlock>
-              <TextBox Name="DisplacementCC" MinWidth="150" Text="{Binding S.Displacement}"/>
-            </StackPanel>
-              
-             <!--Nm--> 
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="150">Max Torque (Nm):</TextBlock>
-              <TextBox Name="MaxTorqueNm" MinWidth="150" Text="{Binding S.MaxTorque}"/>
-            </StackPanel>
-              
-              
-          </StackPanel>
-          
-            <!--Version number & status-->
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                      VerticalAlignment="Center">
-            <TextBlock>SimHap</TextBlock>
-                        <!--Status-->
-                        <TextBlock Name="Version" MinWidth="50" Margin="5,0,0,0"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,0">
-                            <TextBlock MinWidth="200" FontWeight="Bold" Text="{Binding D.LoadText}"/>
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <StackPanel
+                        Margin="0,15,0,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Orientation="vertical">
+                        <Expander
+                            BorderThickness="2"
+                            FontFamily="Segoe UI"
+                            FontSize="16"
+                            Header="Engine RPM Properties"
+                            IsExpanded="True">
+                            <StackPanel>
+
+                                <!--  CarName  -->
+                                <StackPanel
+                                    Margin="0,15,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="75"
+                                        Margin="0,0,8,0"
+                                        FontWeight="SemiBold"
+                                        TextAlignment="Right"><Run Text="Name" /></TextBlock>
+                                    <TextBox
+                                        x:Name="CarName"
+                                        MinWidth="300"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontSize="16"
+                                        Text="{Binding S.CarName}" />
+                                </StackPanel>
+
+                                <!--  ID  -->
+                                <StackPanel
+                                    Margin="0,15,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="75"
+                                        Margin="0,0,8,0"
+                                        FontWeight="SemiBold"
+                                        TextAlignment="Right"><Run Text="ID" /></TextBlock>
+                                    <TextBox
+                                        x:Name="CarID"
+                                        MinWidth="300"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontFamily="Segoe UI"
+                                        FontSize="16"
+                                        Text="{Binding S.Id}" />
+                                </StackPanel>
+
+                                <!--  Category  -->
+                                <StackPanel
+                                    Margin="2,15,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="75"
+                                        Margin="0,0,8,0"
+                                        FontWeight="SemiBold"
+                                        TextAlignment="Right"><Run Text="Category" /></TextBlock>
+                                    <TextBox
+                                        x:Name="CarClass"
+                                        MinWidth="176"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontFamily="Segoe UI"
+                                        FontSize="16"
+                                        Text="{Binding S.Category}" />
+                                    <!--  Idle  -->
+                                    <StackPanel
+                                        Margin="0,0,2,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="10"
+                                            Margin="9,0,8,0"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="Idle" /></TextBlock>
+                                        <TextBox
+                                            x:Name="IdleRPM"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.IdleRPM}" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  Redline  -->
+                                <StackPanel
+                                    Margin="0,15,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="75"
+                                        Margin="0,0,8,0"
+                                        FontWeight="SemiBold"
+                                        TextAlignment="Right"><Run Text="Redline" /></TextBlock>
+                                    <TextBox
+                                        x:Name="Redline"
+                                        MinWidth="80"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontFamily="Segoe UI"
+                                        FontSize="16"
+                                        Text="{Binding S.Redline}" />
+                                    <!--  MaxRPM  -->
+                                    <StackPanel
+                                        Margin="57,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="0,0,8,0"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="Max RPM" /></TextBlock>
+                                        <TextBox
+                                            x:Name="MaxRPM"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.MaxRPM}" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  Engine configuration  -->
+                                <StackPanel
+                                    Margin="0,15,6,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="75"
+                                        Margin="0,0,8,0"
+                                        FontWeight="SemiBold"
+                                        TextAlignment="Right"><Run Text="Eng Config" /></TextBlock>
+                                    <ComboBox
+                                        Name="EngineConfig"
+                                        Width="80"
+                                        Height="30"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontFamily="Segoe UI"
+                                        FontSize="16"
+                                        Text="{Binding S.EngineConfiguration}">
+                                        <ComboBoxItem Content="V" />
+                                        <ComboBoxItem Content="I" />
+                                        <ComboBoxItem Content="F" />
+                                        <ComboBoxItem Content="E" />
+                                        <ComboBoxItem Content="W" />
+                                        <ComboBoxItem Content="R" />
+                                    </ComboBox>
+                                    <!--  Cylinders  -->
+                                    <StackPanel
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="57,0,8,0"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="Cylinders" /></TextBlock>
+                                        <ComboBox
+                                            Name="EngineCylinders"
+                                            Width="80"
+                                            Height="30"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.EngineCylinders}">
+                                            <ComboBoxItem Content="1" />
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="16" />
+                                        </ComboBox>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  Engine location  -->
+                                <StackPanel
+                                    Margin="0,15,19,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="75"
+                                        Margin="0,0,8,0"
+                                        FontWeight="SemiBold"
+                                        TextAlignment="Right"><Run Text="Eng Location" /></TextBlock>
+                                    <ComboBox
+                                        Name="Englocation"
+                                        Width="80"
+                                        Height="30"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontFamily="Segoe UI"
+                                        FontSize="16"
+                                        Text="{Binding S.EngineLocation}">
+                                        <ComboBoxItem Content="F" />
+                                        <ComboBoxItem Content="FM" />
+                                        <ComboBoxItem Content="M" />
+                                        <ComboBoxItem Content="RM" />
+                                        <ComboBoxItem Content="R" />
+                                    </ComboBox>
+
+                                    <!--  Drivetrain  -->
+                                    <StackPanel
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="57,0,8,0"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="Drivetrain" /></TextBlock>
+                                        <ComboBox
+                                            Name="Drivetrain"
+                                            Width="80"
+                                            Height="30"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.PoweredWheels}">
+                                            <ComboBoxItem Content="F" />
+                                            <ComboBoxItem Content="R" />
+                                            <ComboBoxItem Content="A" />
+                                        </ComboBox>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  HP  -->
+                                <StackPanel
+                                    Margin="0,15,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="75"
+                                        Margin="0,0,8,0"
+                                        FontWeight="SemiBold"
+                                        TextAlignment="Right"><Run Text="HP" /></TextBlock>
+                                    <TextBox
+                                        x:Name="MaxPowerHP"
+                                        MinWidth="80"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontFamily="Segoe UI"
+                                        FontSize="16"
+                                        Text="{Binding S.MaxPower}" />
+                                    <!--  NM  -->
+                                    <StackPanel
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="57,0,8,0"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="NM" /></TextBlock>
+                                        <TextBox
+                                            x:Name="MaxTorqueNM"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.MaxTorque}" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!--  EHP  -->
+                                <StackPanel
+                                    Margin="0,15,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="75"
+                                        Margin="0,0,8,0"
+                                        FontWeight="SemiBold"
+                                        TextAlignment="Right"><Run Text="EHP" /></TextBlock>
+                                    <TextBox
+                                        x:Name="EMaxPowerHP"
+                                        MinWidth="80"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontFamily="Segoe UI"
+                                        FontSize="16"
+                                        Text="{Binding S.ElectricMaxPower}" />
+                                    <!--  CC  -->
+                                    <StackPanel
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="57,0,8,0"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="CC" /></TextBlock>
+                                        <TextBox
+                                            x:Name="Displacement"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.Displacement}" />
+                                    </StackPanel>
+                                </StackPanel>
+                                <!--  Refresh & Lock  -->
+                                <StackPanel
+                                    Margin="0,25,4,4"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                                    <styles:SHButtonSecondary
+                                        Width="150"
+                                        Height="35"
+                                        VerticalContentAlignment="Center"
+                                        Click="Lock_Click"
+                                        ContentControl.Content="{Binding D.LockedText}"
+                                        FontSize="16"
+                                        FontWeight="SemiBold"
+                                        FrameworkElement.Name="Lock" />
+                                    <styles:SHButtonSecondary
+                                        Width="150"
+                                        Height="35"
+                                        Margin="5,0,0,0"
+                                        VerticalContentAlignment="Center"
+                                        Click="Refresh_Click"
+                                        FontSize="16"
+                                        FontWeight="SemiBold"
+                                        FrameworkElement.Name="Refresh">
+                                        Refresh
+                                    </styles:SHButtonSecondary>
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+
+                    <!--  status bar  -->
+                    <StatusBar Grid.Row="1" FontSize="16">
+                        <!--  version number  -->
+                        <StatusBarItem>
+                            <TextBlock x:Name="Version" />
+                        </StatusBarItem>
+                        <!--  status message  -->
+                        <StatusBarItem>
+                            <TextBlock Text="{Binding D.LoadText}" />
+                        </StatusBarItem>
+                    </StatusBar>
+                </Grid>
+            </TabItem>
+
+
+            <!--  NEXT TAB 2 - G-Force  -->
+            <TabItem Padding="10,0,10,0">
+                <HeaderedContentControl.Header>
+                    <StackPanel
+                        Margin="0,0"
+                        Orientation="Horizontal"
+                        Style="{StaticResource TabVis}">
+                        <Rectangle Style="{StaticResource IconRectangle}">
+                            <UIElement.OpacityMask>
+                                <ImageBrush ImageSource="{Binding ImpactsIcon}" Stretch="Uniform" />
+                            </UIElement.OpacityMask>
+                        </Rectangle>
+                        <TextBlock
+                            Margin="7,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            Opacity="0.9"
+                            Text="G-Forces" />
+                    </StackPanel>
+                </HeaderedContentControl.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="141*" />
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="149*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <styles:SHSection
+                        Title="Motion, Tension, and G-Seat Settings"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="3" />
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0,0,0"
+                        Orientation="Vertical">
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Pitch Offset:</TextBlock>
+                            <TextBox
+                                Name="MotionPitchOffset"
+                                MinWidth="100"
+                                Text="{Binding D.MotionPitchOffset}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Pitch Multiplier:</TextBlock>
+                            <TextBox
+                                Name="MotionPitchMult"
+                                MinWidth="100"
+                                Text="{Binding D.MotionPitchMult, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Pitch Gamma:</TextBlock>
+                            <TextBox
+                                Name="MotionPitchGamma"
+                                MinWidth="100"
+                                Text="{Binding D.MotionPitchGamma, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,8,0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Roll Offset:</TextBlock>
+                            <TextBox
+                                Name="MotionRollOffset"
+                                MinWidth="100"
+                                Text="{Binding D.MotionRollOffset}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Roll Multiplier:</TextBlock>
+                            <TextBox
+                                Name="MotionRollMult"
+                                MinWidth="100"
+                                Text="{Binding D.MotionRollMult}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Roll Gamma:</TextBlock>
+                            <TextBox
+                                Name="MotionRollGamma"
+                                MinWidth="100"
+                                Text="{Binding D.MotionRollGamma}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,8,0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Yaw Offset:</TextBlock>
+                            <TextBox
+                                Name="MotionYawOffset"
+                                MinWidth="100"
+                                Text="{Binding D.MotionYawOffset}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Yaw Multiplier:</TextBlock>
+                            <TextBox
+                                Name="MotionYawMult"
+                                MinWidth="100"
+                                Text="{Binding D.MotionYawMult}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Yaw Gamma:</TextBlock>
+                            <TextBox
+                                Name="MotionYawGamma"
+                                MinWidth="100"
+                                Text="{Binding D.MotionYawGamma}" />
                         </StackPanel>
                     </StackPanel>
-            
-            <!--Refresh & Lock-->
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2">
-            <styles:SHButtonSecondary Click="Lock_Click" FrameworkElement.Name="Lock" ContentControl.Content="{Binding D.LockedText}"/>
-            <styles:SHButtonSecondary Click="Refresh_Click" FrameworkElement.Name="Refresh">Refresh</styles:SHButtonSecondary>
-          </StackPanel>
-            
-        </Grid>
-      </TabItem>
-      <TabItem Padding="10,0,10,0">
-        <HeaderedContentControl.Header>
-          <StackPanel Orientation="Horizontal" Margin="0,0" Style="{StaticResource TabVis}">
-            <Rectangle Style="{StaticResource IconRectangle}">
-              <UIElement.OpacityMask>
-                <ImageBrush Stretch="Uniform" ImageSource="{Binding ImpactsIcon}"/>
-              </UIElement.OpacityMask>
-            </Rectangle>
-            <TextBlock Text="G-Forces" FontSize="20" Opacity="0.9" VerticalAlignment="Center" Margin="7,0,0,0"/>
-          </StackPanel>
-        </HeaderedContentControl.Header>
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="141*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="149*"/>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="1*"/>
-          </Grid.RowDefinitions>
-          <styles:SHSection Title="Motion, Tension, and G-Seat Settings" Grid.Row="0" Grid.ColumnSpan="3"/>
-          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Pitch Offset:</TextBlock>
-              <TextBox Name="MotionPitchOffset" MinWidth="100" Text="{Binding D.MotionPitchOffset}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Pitch Multiplier:</TextBlock>
-                            <TextBox Name="MotionPitchMult" MinWidth="100" Text="{Binding D.MotionPitchMult,Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Pitch Gamma:</TextBlock>
-                            <TextBox Name="MotionPitchGamma" MinWidth="100" Text="{Binding D.MotionPitchGamma,Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,2">
-              <TextBlock MinWidth="200">Roll Offset:</TextBlock>
-              <TextBox Name="MotionRollOffset" MinWidth="100" Text="{Binding D.MotionRollOffset}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Roll Multiplier:</TextBlock>
-              <TextBox Name="MotionRollMult" MinWidth="100" Text="{Binding D.MotionRollMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Roll Gamma:</TextBlock>
-              <TextBox Name="MotionRollGamma" MinWidth="100" Text="{Binding D.MotionRollGamma}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,2">
-              <TextBlock MinWidth="200">Yaw Offset:</TextBlock>
-              <TextBox Name="MotionYawOffset" MinWidth="100" Text="{Binding D.MotionYawOffset}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Yaw Multiplier:</TextBlock>
-              <TextBox Name="MotionYawMult" MinWidth="100" Text="{Binding D.MotionYawMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Yaw Gamma:</TextBlock>
-              <TextBox Name="MotionYawGamma" MinWidth="100" Text="{Binding D.MotionYawGamma}"/>
-            </StackPanel>
-          </StackPanel>
-          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2">
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Heave Offset:</TextBlock>
-              <TextBox Name="MotionHeaveOffset" MinWidth="100" Text="{Binding D.MotionHeaveOffset}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Heave Multiplier:</TextBlock>
-              <TextBox Name="MotionHeaveMult" MinWidth="100" Text="{Binding D.MotionHeaveMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Heave Gamma:</TextBlock>
-              <TextBox Name="MotionHeaveGamma" MinWidth="100" Text="{Binding D.MotionHeaveGamma}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,2">
-              <TextBlock MinWidth="200">Surge Offset:</TextBlock>
-              <TextBox Name="MotionSurgeOffset" MinWidth="100" Text="{Binding D.MotionSurgeOffset}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Surge Multiplier:</TextBlock>
-              <TextBox Name="MotionSurgeMult" MinWidth="100" Text="{Binding D.MotionSurgeMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Surge Gamma:</TextBlock>
-              <TextBox Name="MotionSurgeGamma" MinWidth="100" Text="{Binding D.MotionSurgeGamma}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,2">
-              <TextBlock MinWidth="200">Sway Offset:</TextBlock>
-              <TextBox Name="MotionSwayOffset" MinWidth="100" Text="{Binding D.MotionSwayOffset}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Sway Multiplier:</TextBlock>
-              <TextBox Name="MotionSwayMult" MinWidth="100" Text="{Binding D.MotionSwayMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,2">
-              <TextBlock MinWidth="200">Sway Gamma:</TextBlock>
-              <TextBox Name="MotionSwayGamma" MinWidth="100" Text="{Binding D.MotionSwayGamma}"/>
-            </StackPanel>
-          </StackPanel>
-        </Grid>
-      </TabItem>
-      <TabItem Padding="10,0,10,0">
-        <HeaderedContentControl.Header>
-          <StackPanel Orientation="Horizontal" Margin="0,0" Style="{StaticResource TabVis}">
-            <Rectangle Style="{StaticResource IconRectangle}">
-              <UIElement.OpacityMask>
-                <ImageBrush Stretch="Uniform" ImageSource="{Binding SuspensionIcon}"/>
-              </UIElement.OpacityMask>
-            </Rectangle>
-            <TextBlock Text="Suspension" FontSize="20" Opacity="0.9" VerticalAlignment="Center" Margin="0,0,0,0"/>
-          </StackPanel>
-        </HeaderedContentControl.Header>
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="141*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="149*"/>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="1*"/>
-          </Grid.RowDefinitions>
-          <styles:SHSection Title="Suspension Settings" Grid.Row="0" Grid.ColumnSpan="3"/>
-          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-              <TextBlock MinWidth="240">
-                Rumble Base Multiplier (All Games) [0.0-5.0-10.0]:
-              </TextBlock>
-              <TextBox Name="RumbleMultAll" MinWidth="50" Text="{Binding D.RumbleMultAll}"/>
-            </StackPanel>
-            <TextBlock MinWidth="150" Margin="0,6,0,4">
-              Rumble Multiplier [0.0-2.0]:
-            </TextBlock>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock MinWidth="140" Text="{Binding D.GameAltText}"/>
-              <TextBox Name="RumbleMult" MinWidth="50" Margin="10,0,0,0" Text="{Binding D.RumbleMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-              <TextBlock MinWidth="240">
-                Suspension Base Multiplier (All Games) [0.0-1.5-5.0]:
-              </TextBlock>
-              <TextBox Name="SuspensionMultAll" MinWidth="50" Text="{Binding D.SuspensionMultAll}"/>
-            </StackPanel>
-            <TextBlock MinWidth="150" Margin="0,6,0,4">
-              Suspension Multiplier [0.0-2.0]:
-            </TextBlock>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock MinWidth="140" Text="{Binding D.GameAltText}"/>
-              <TextBox Name="SuspensionMult" MinWidth="50" Margin="10,0,0,0" Text="{Binding D.SuspensionMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-              <TextBlock MinWidth="240">
-                Suspension Gamma Base Multiplier (All Games) [0.0-1.75-5.0]:
-              </TextBlock>
-              <TextBox Name="SuspensionGammaAll" MinWidth="50" Text="{Binding D.SuspensionGammaAll}"/>
-            </StackPanel>
-            <TextBlock MinWidth="150" Margin="0,6,0,4">
-              Suspension Gamma Multiplier [0.0-2.0]:
-            </TextBlock>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock MinWidth="140" Text="{Binding D.GameAltText}"/>
-              <TextBox Name="SuspensionGamma" MinWidth="50" Margin="10,0,0,0" Text="{Binding D.SuspensionGamma}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-              <TextBlock MinWidth="240">
-                Multipliers can be increased beyond recommended ranges if needed
-              </TextBlock>
-            </StackPanel>
-          </StackPanel>
-        </Grid>
-      </TabItem>
-      <TabItem Padding="10,0,10,0">
-        <HeaderedContentControl.Header>
-          <StackPanel Orientation="Horizontal" Margin="0,0" Style="{StaticResource TabVis}">
-            <Rectangle Style="{StaticResource IconRectangle}">
-              <UIElement.OpacityMask>
-                <ImageBrush Stretch="Uniform" ImageSource="{Binding TractionIcon}"/>
-              </UIElement.OpacityMask>
-            </Rectangle>
-            <TextBlock Text="Traction" FontSize="20" Opacity="0.9" VerticalAlignment="Center" Margin="0,0,0,0"/>
-          </StackPanel>
-        </HeaderedContentControl.Header>
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="141*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="149*"/>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="1*"/>
-          </Grid.RowDefinitions>
-          <styles:SHSection Title="Traction and Slip Settings" Grid.Row="0" Grid.ColumnSpan="3"/>
-          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Margin="20,0,0,0" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-              <TextBlock MinWidth="300">
-                Lateral Slip (X) Base Multiplier (All Games) [0.0-2.0]:
-              </TextBlock>
-              <TextBox Name="SlipXMultAll" MinWidth="50" Text="{Binding D.SlipXMultAll}"/>
-            </StackPanel>
-            <TextBlock MinWidth="150" Margin="0,8,0,4">
-              Lateral Slip (X) Multiplier [0.0-2.0]:
-            </TextBlock>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock MinWidth="170" Text="{Binding D.GameAltText}"/>
-              <TextBox Name="SlipXMult" MinWidth="50" Margin="10,0,0,0" Text="{Binding D.SlipXMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-              <TextBlock MinWidth="300">
-                Lateral Slip (X) Gamma (All Games) [0.0-2.0]:
-              </TextBlock>
-              <TextBox Name="SlipXGammaAll" MinWidth="50" Text="{Binding D.SlipXGammaAll}"/>
-            </StackPanel>
-            <TextBlock MinWidth="150" Margin="0,8,0,4">
-              Lateral Slip (X) Gamma [0.0-2.0]:
-            </TextBlock>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock MinWidth="170" Text="{Binding D.GameAltText}"/>
-              <TextBox Name="SlipXGamma" MinWidth="50" Margin="10,0,0,0" Text="{Binding D.SlipXGamma}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,40,0,0">
-              <TextBlock MinWidth="150">
-                ABS Pulse Length (n/60)s:
-              </TextBlock>
-              <TextBox Name="ABSPulseLength" MinWidth="50" Text="{Binding Settings.ABSPulseLength}"/>
-            </StackPanel>
-          </StackPanel>
-          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2">
-            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-              <TextBlock MinWidth="300">
-                Longitudinal Slip (Y) Base Multiplier (All Games) [0.0-2.0]:
-              </TextBlock>
-              <TextBox Name="SlipYMultAll" MinWidth="50" Text="{Binding D.SlipYMultAll}"/>
-            </StackPanel>
-            <TextBlock MinWidth="150" Margin="0,8,0,4">
-              Longitudinal Slip (Y) Multiplier [0.0-2.0]:
-            </TextBlock>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock MinWidth="170" Text="{Binding D.GameAltText}"/>
-              <TextBox Name="SlipYMult" MinWidth="50" Margin="10,0,0,0" Text="{Binding D.SlipYMult}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-              <TextBlock MinWidth="300">
-                Longitudinal Slip (Y) Gamma (All Games) [0.0-2.0]:
-              </TextBlock>
-              <TextBox Name="SlipYGammaAll" MinWidth="50" Text="{Binding D.SlipYGammaAll}"/>
-            </StackPanel>
-            <TextBlock MinWidth="150" Margin="0,8,0,4">
-              Longitudinal Slip (Y) Gamma [0.0-2.0]:
-            </TextBlock>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock MinWidth="170" Text="{Binding D.GameAltText}"/>
-              <TextBox Name="SlipYGamma" MinWidth="50" Margin="10,0,0,0" Text="{Binding D.SlipYGamma}"/>
-            </StackPanel>
-          </StackPanel>
-        </Grid>
-      </TabItem>
-    </TabControl>
-  </Grid>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Orientation="Vertical">
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Heave Offset:</TextBlock>
+                            <TextBox
+                                Name="MotionHeaveOffset"
+                                MinWidth="100"
+                                Text="{Binding D.MotionHeaveOffset}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Heave Multiplier:</TextBlock>
+                            <TextBox
+                                Name="MotionHeaveMult"
+                                MinWidth="100"
+                                Text="{Binding D.MotionHeaveMult}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Heave Gamma:</TextBlock>
+                            <TextBox
+                                Name="MotionHeaveGamma"
+                                MinWidth="100"
+                                Text="{Binding D.MotionHeaveGamma}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,8,0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Surge Offset:</TextBlock>
+                            <TextBox
+                                Name="MotionSurgeOffset"
+                                MinWidth="100"
+                                Text="{Binding D.MotionSurgeOffset}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Surge Multiplier:</TextBlock>
+                            <TextBox
+                                Name="MotionSurgeMult"
+                                MinWidth="100"
+                                Text="{Binding D.MotionSurgeMult}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Surge Gamma:</TextBlock>
+                            <TextBox
+                                Name="MotionSurgeGamma"
+                                MinWidth="100"
+                                Text="{Binding D.MotionSurgeGamma}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,8,0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Sway Offset:</TextBlock>
+                            <TextBox
+                                Name="MotionSwayOffset"
+                                MinWidth="100"
+                                Text="{Binding D.MotionSwayOffset}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Sway Multiplier:</TextBlock>
+                            <TextBox
+                                Name="MotionSwayMult"
+                                MinWidth="100"
+                                Text="{Binding D.MotionSwayMult}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <TextBlock MinWidth="200">Sway Gamma:</TextBlock>
+                            <TextBox
+                                Name="MotionSwayGamma"
+                                MinWidth="100"
+                                Text="{Binding D.MotionSwayGamma}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+
+            <!--  NEXT TAB 3 - Suspension  -->
+            <TabItem Padding="10,0,10,0">
+                <HeaderedContentControl.Header>
+                    <StackPanel
+                        Margin="0,0"
+                        Orientation="Horizontal"
+                        Style="{StaticResource TabVis}">
+                        <Rectangle Style="{StaticResource IconRectangle}">
+                            <UIElement.OpacityMask>
+                                <ImageBrush ImageSource="{Binding SuspensionIcon}" Stretch="Uniform" />
+                            </UIElement.OpacityMask>
+                        </Rectangle>
+                        <TextBlock
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            Opacity="0.9"
+                            Text="Suspension" />
+                    </StackPanel>
+                </HeaderedContentControl.Header>
+
+                <Grid>
+
+                    <StackPanel
+                        Margin="0,15,0,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Orientation="vertical">
+                        <StackPanel>
+                            <Expander
+                                BorderThickness="2"
+                                FontFamily="Segoe UI"
+                                FontSize="14"
+                                Header="Suspension Multipliers"
+                                IsExpanded="True">
+                                <StackPanel>
+
+                                    <!--  Suspension all game multi  -->
+                                    <StackPanel
+                                        Margin="0,15,0,8"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock FontWeight="SemiBold">
+                                            All Games - Multiplier [0.0- (1.5) -5.0]
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBox
+                                            Name="SuspensionMultAll"
+                                            Width="80"
+                                            Margin="20,0,0,0"
+                                            HorizontalContentAlignment="Center"
+                                            FontSize="16"
+                                            Text="{Binding D.SuspensionMultAll}" />
+                                    </StackPanel>
+
+                                    <!--  Suspension per game multi  -->
+                                    <StackPanel
+                                        Margin="0,15,0,8"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding D.GameAltText}" />
+                                        <TextBlock Margin="3,0,0,0" FontWeight="SemiBold">
+                                            - Multiplier [0.0-2.0]
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBox
+                                            Name="SuspensionMult"
+                                            Width="80"
+                                            Margin="20,0,0,0"
+                                            HorizontalContentAlignment="Center"
+                                            FontSize="16"
+                                            Text="{Binding D.SuspensionMult}" />
+                                    </StackPanel>
+
+                                    <!--  suspension all game gamma multi  -->
+                                    <StackPanel
+                                        Margin="0,15,0,8"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock FontWeight="SemiBold">
+                                            All Games - Gamma [0.0- (1.75) -5.0]
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBox
+                                            Name="SuspensionGammaAll"
+                                            Width="80"
+                                            Margin="20,0,0,0"
+                                            HorizontalContentAlignment="Center"
+                                            FontSize="16"
+                                            Text="{Binding D.SuspensionGammaAll}" />
+                                    </StackPanel>
+
+                                    <!--  suspension per game gamma multi  -->
+                                    <StackPanel
+                                        Margin="0,15,0,8"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding D.GameAltText}" />
+                                        <TextBlock Margin="3,0,0,0" FontWeight="SemiBold">
+                                            - Gamma [0.0-2.0]
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBox
+                                            Name="SuspensionGamma"
+                                            Width="80"
+                                            Margin="20,0,0,15"
+                                            HorizontalContentAlignment="Center"
+                                            FontSize="16"
+                                            Text="{Binding D.SuspensionGamma}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+
+
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Padding="10,0,10,0">
+                <HeaderedContentControl.Header>
+                    <StackPanel
+                        Margin="0,0"
+                        Orientation="Horizontal"
+                        Style="{StaticResource TabVis}">
+                        <Rectangle Style="{StaticResource IconRectangle}">
+                            <UIElement.OpacityMask>
+                                <ImageBrush ImageSource="{Binding TractionIcon}" Stretch="Uniform" />
+                            </UIElement.OpacityMask>
+                        </Rectangle>
+                        <TextBlock
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            Opacity="0.9"
+                            Text="Traction" />
+                    </StackPanel>
+                </HeaderedContentControl.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="141*" />
+                        <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="149*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <styles:SHSection
+                        Title="Traction and Slip Settings"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="3" />
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0,0,0"
+                        Orientation="Vertical">
+                        <StackPanel Margin="0,4,0,0" Orientation="Horizontal">
+                            <TextBlock MinWidth="300">
+                                Lateral Slip (X) Base Multiplier (All Games) [0.0-2.0]:
+                            </TextBlock>
+                            <TextBox
+                                Name="SlipXMultAll"
+                                MinWidth="50"
+                                Text="{Binding D.SlipXMultAll}" />
+                        </StackPanel>
+                        <TextBlock MinWidth="150" Margin="0,8,0,4">
+                            Lateral Slip (X) Multiplier [0.0-2.0]:
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock MinWidth="170" Text="{Binding D.GameAltText}" />
+                            <TextBox
+                                Name="SlipXMult"
+                                MinWidth="50"
+                                Margin="10,0,0,0"
+                                Text="{Binding D.SlipXMult}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                            <TextBlock MinWidth="300">
+                                Lateral Slip (X) Gamma (All Games) [0.0-2.0]:
+                            </TextBlock>
+                            <TextBox
+                                Name="SlipXGammaAll"
+                                MinWidth="50"
+                                Text="{Binding D.SlipXGammaAll}" />
+                        </StackPanel>
+                        <TextBlock MinWidth="150" Margin="0,8,0,4">
+                            Lateral Slip (X) Gamma [0.0-2.0]:
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock MinWidth="170" Text="{Binding D.GameAltText}" />
+                            <TextBox
+                                Name="SlipXGamma"
+                                MinWidth="50"
+                                Margin="10,0,0,0"
+                                Text="{Binding D.SlipXGamma}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,40,0,0" Orientation="Horizontal">
+                            <TextBlock MinWidth="150">
+                                ABS Pulse Length (n/60)s:
+                            </TextBlock>
+                            <TextBox
+                                Name="ABSPulseLength"
+                                MinWidth="50"
+                                Text="{Binding Settings.ABSPulseLength}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Orientation="Vertical">
+                        <StackPanel Margin="0,4,0,0" Orientation="Horizontal">
+                            <TextBlock MinWidth="300">
+                                Longitudinal Slip (Y) Base Multiplier (All Games) [0.0-2.0]:
+                            </TextBlock>
+                            <TextBox
+                                Name="SlipYMultAll"
+                                MinWidth="50"
+                                Text="{Binding D.SlipYMultAll}" />
+                        </StackPanel>
+                        <TextBlock MinWidth="150" Margin="0,8,0,4">
+                            Longitudinal Slip (Y) Multiplier [0.0-2.0]:
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock MinWidth="170" Text="{Binding D.GameAltText}" />
+                            <TextBox
+                                Name="SlipYMult"
+                                MinWidth="50"
+                                Margin="10,0,0,0"
+                                Text="{Binding D.SlipYMult}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                            <TextBlock MinWidth="300">
+                                Longitudinal Slip (Y) Gamma (All Games) [0.0-2.0]:
+                            </TextBlock>
+                            <TextBox
+                                Name="SlipYGammaAll"
+                                MinWidth="50"
+                                Text="{Binding D.SlipYGammaAll}" />
+                        </StackPanel>
+                        <TextBlock MinWidth="150" Margin="0,8,0,4">
+                            Longitudinal Slip (Y) Gamma [0.0-2.0]:
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock MinWidth="170" Text="{Binding D.GameAltText}" />
+                            <TextBox
+                                Name="SlipYGamma"
+                                MinWidth="50"
+                                Margin="10,0,0,0"
+                                Text="{Binding D.SlipYGamma}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>
