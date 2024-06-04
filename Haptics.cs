@@ -166,7 +166,8 @@ namespace sierses.Sim
 				}
 				else if (null != dls)
 				{
-					This.D.Index = -3;			// disable self until other code decides otherwise
+					if (-1 == This.D.Index)			// delayed dls? things may have moved on...
+						This.D.Index = -3;			// disable self until other code decides otherwise
 					if (11 == dls.Length)
 						Waiting = false;
 /*
