@@ -409,7 +409,7 @@ namespace sierses.Sim
 		static GameData data;
 		private float Data(string prop)
 		{
-			var foo = PM.GetPropertyValue("DataCorePlugin.GameRawData.Data."+prop);
+			var foo = PM.GetPropertyValue(raw+"Data."+prop);
 			if (foo != null)
 				return Convert.ToSingle(foo);
 			return 0;
@@ -417,7 +417,7 @@ namespace sierses.Sim
 
 		private float Physics(string prop)
 		{
-			var foo = PM.GetPropertyValue("DataCorePlugin.GameRawData.Physics."+prop);
+			var foo = PM.GetPropertyValue(raw+"Physics."+prop);
 			if (foo != null)
 				return Convert.ToSingle(foo);
 			return 0;
@@ -425,7 +425,7 @@ namespace sierses.Sim
 
 		private float Raw(string prop)
 		{
-			var foo = PM.GetPropertyValue("DataCorePlugin.GameRawData."+prop);
+			var foo = PM.GetPropertyValue(raw+""+prop);
 			if (foo != null)
 				return Convert.ToSingle(foo);
 			return 0;
@@ -500,7 +500,7 @@ namespace sierses.Sim
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
-					WiperStatus = (int) SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Graphics.WiperLV");
+					WiperStatus = (int) SHP.PM.GetPropertyValue(raw+"Graphics.WiperLV");
 					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
 					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
 					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
@@ -757,37 +757,37 @@ namespace sierses.Sim
 					}
 					break;
 				case GameId.IRacing:
-					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFshockDefl") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LFSHshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFSHshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFSHshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRshockDefl") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.LRSHshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRSHshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRSHshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CFshockDefl") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.CFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.CFshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.HFshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.HFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.HFshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Telemetry.CRshockDefl") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
@@ -928,22 +928,22 @@ namespace sierses.Sim
 					}
 					break;
 				case GameId.RRRE:
-					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.FrontLeft") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.FrontLeft") != null)
 					{
 						SuspensionDistFL = Raw("Player.SuspensionDeflection.FrontLeft");
 						SuspensionDistFR = Raw("Player.SuspensionDeflection.FrontRight");
 					}
-					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Player.SuspensionDeflection.RearLeft") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.RearLeft") != null)
 					{
 						SuspensionDistRL = Raw("Player.SuspensionDeflection.RearLeft");
 						SuspensionDistRR = Raw("Player.SuspensionDeflection.RearRight");
 					}
-					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionFront") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionFront") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 					}
-					if (SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.Player.ThirdSpringSuspensionDeflectionRear") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionRear") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Player.ThirdSpringSuspensionDeflectionRear");
@@ -1037,7 +1037,7 @@ namespace sierses.Sim
 					SuspensionDistFR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection02");
 					SuspensionDistRL = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection03");
 					SuspensionDistRR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection04");
-					WiperStatus = (bool) SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
+					WiperStatus = (bool) SHP.PM.GetPropertyValue(raw+"TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
 					break;
 				case GameId.BeamNG:
 					flag = false;
@@ -1075,8 +1075,8 @@ namespace sierses.Sim
 					WheelSpeedRL = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					WheelSpeedRR = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					SlipFromWheelSpeed();
-					if ((int) SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial01") == 7
-					 || (int) SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sData.m_aiWheelMaterial02") == 7)
+					if ((int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
+					 || (int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
 					{
 						RumbleLeft = 50.0;
 						RumbleRight = 50.0;
@@ -1837,12 +1837,7 @@ namespace sierses.Sim
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
 				if (20 == IdleSampleCount && 0 == SHP.S.IdleRPM)	// Refresh(): change SHP.S.IdleRPM?
-				{
-					bool temp = Haptics.Set;
-					Haptics.Set = false;			// do not save sniffed idle
-					SHP.S.IdleRPM = idleRPM;		// Refresh() sniff: only if it was 0
-					Haptics.Set = temp;
-				}
+					SHP.S.Idle(idleRPM);			// Refresh() sniff: only if it was 0
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)

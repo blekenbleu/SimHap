@@ -12,7 +12,8 @@ namespace sierses.Sim
 		private long FrameTimeTicks;
 		private long FrameCountTicks;
 		internal Haptics SHP;
-		private ushort idleRPM;							// for sniffing in Refresh()
+		private ushort idleRPM;						 // for sniffing in Refresh()
+		internal string raw = "DataCorePlugin.GameRawData.";
 
 		public SimData()
 		{
@@ -95,7 +96,6 @@ namespace sierses.Sim
 		{
 			SHP = shp;
 			StatusDataBase db = SHP.Gdat.NewData;
-			SHP.S.Src = "DB Load Success";
 /*
 			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}): " +
 								(Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "")
@@ -123,26 +123,26 @@ namespace sierses.Sim
 				case GameId.D4:
 				case GameId.DR2:
 					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
-										 Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.IdleRpm"))));	// SetVehicle(DR2)
+										 Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue(raw+"IdleRpm"))));	// SetVehicle(DR2)
 					break;
 				case GameId.WRC23:
 					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(Math.Floor(db.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(db.MaxRpm),
-										 Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionUpdate.vehicle_engine_rpm_idle")));
+										 Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
 					break;
 				case GameId.F12022:
 				case GameId.F12023:
 					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
-										 Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.PlayerCarStatusData.m_idleRPM"))));	// SetVehicle(F12023): to FetchCarData()
+										 Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetVehicle(F12023): to FetchCarData()
 					break;
 				case GameId.Forza:
 					Haptics.FetchCarData(db.CarId.Substring(4), null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
-										 Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.EngineIdleRpm")));		// SetVehicle(Forza)
+										 Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetVehicle(Forza)
 					break;
 				case GameId.IRacing:
-					var rpm = SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.DriverInfo.DriverCarIdleRPM");	// SetVehicle(IRacing)
+					var rpm = SHP.PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetVehicle(IRacing)
 					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM),
 										 Convert.ToUInt16(db.MaxRpm), Convert.ToUInt16(rpm ?? 0));
-					GameAltText = SHP.PM.GameName + (string)SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.SessionData.WeekendInfo.Category");
+					GameAltText = SHP.PM.GameName + (string)SHP.PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 					break;
 				case GameId.RRRE:
 						Haptics.FetchCarData(db.CarModel, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
@@ -152,7 +152,7 @@ namespace sierses.Sim
 							Convert.ToUInt16((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
 								 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
 								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0),
-							Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.idle_rpm"))
+							Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"idle_rpm"))
 						);
 					break;
 				case GameId.GPBikes:
@@ -161,14 +161,14 @@ namespace sierses.Sim
 					{
 						SHP.S.Id = db.CarId;	// SetVehicle() Switch: Bikes not in database
 						SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
-						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.m_sEvent.m_iShiftRPM"));
+						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"m_sEvent.m_iShiftRPM"));
 					}
 					break;
 				case GameId.GranTurismo7:
 				case GameId.GranTurismoSport:
 					Haptics.FetchCarData(db.CarId, null,
-										 Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MinAlertRPM")),
-										 Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.GameRawData.MaxAlertRPM")), 0);
+										 Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"MinAlertRPM")),
+										 Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"MaxAlertRPM")), 0);
 					break;
 				default:
 					SHP.S.Redline = Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM);
@@ -181,14 +181,14 @@ namespace sierses.Sim
 			{
 				Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) Waiting return: "
 									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
-                                	+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? " Changed" : "") + $" Index = {Index}");
+									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? " Changed" : "") + $" Index = {Index}");
 				return;				// FetchCarData() DB accesses run SetVehicle() at least twice.
 			}
 
 			if (Haptics.Loaded = Index == -4)					// Neither JSON nor Defaults() ?
-				SHP.S.Id = Haptics.CurrentGame == GameId.Forza ? "Car_" + db.CarId : db.CarId;  // not set in FetchCarData(), to avoid race conditions on id match 
+				SHP.S.Src = "DB Load Success";
 			else if(0 > Index)
-                SHP.S.Defaults(db);	// SetVehicle()
+				SHP.S.Defaults(db);	// SetVehicle()
 
 			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}/{SHP.S.Id}): "
 								+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
@@ -199,7 +199,6 @@ namespace sierses.Sim
 			// finalize vehicle
 			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
 			GearInterval = 1 / Gears;
-			CarInitCount = 0;
 			Gear = 0;
 			SuspensionFL = 0.0;
 			SuspensionFR = 0.0;
@@ -232,10 +231,12 @@ namespace sierses.Sim
 			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
 			SetRPMIntervals();
 			SetRPMMix();
+			SHP.S.Set(db.CarId);						// set from Cache() AKA Lcars
+			CarInitCount = 0;
 			Index = -2;	// for next time
 			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) ending: "
 									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
-                                	+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
+									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
 		}	// SetVehicle()
 	}
 }

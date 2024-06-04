@@ -25,7 +25,7 @@ namespace sierses.Sim
 		{
 			Plugin.S.Id = "";			// Refresh_Click() force a mismatch
 			Logging.Current.Info($"Haptics.Refresh_Click()");
-			Haptics.LoadFailCount = 0;
+			Haptics.LoadFailCount = 1;
 		}
 
 		private void Lock_Click(object sender, RoutedEventArgs e)
