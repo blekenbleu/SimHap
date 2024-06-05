@@ -1846,6 +1846,8 @@ namespace sierses.Sim
 				SetRPMMix();
 			}
 			FreqHarmonic = data.NewData.Rpms * 0.008333333;
+			SHP.Fr.Freq[0] = (ushort)((30 + data.NewData.Rpms) / 60);	// Revs/minute to cycles/second
+			SHP.Fr.Freq[1] = (ushort)((60 + data.NewData.Rpms * SHP.S.EngineCylinders)/ 120); // cylinders fire every other rev
 			FreqOctave = FreqHarmonic * (1.0 + IntervalOctave * 0.08333333);
 			FreqLFEAdaptive = FreqHarmonic * FrequencyMultiplier;
 			FreqIntervalA1 = FreqHarmonic * (1.0 + IntervalA * 0.08333333);
