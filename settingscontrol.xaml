@@ -549,6 +549,8 @@
                                         </styles:SHButtonSecondary>
                                     </StackPanel>
                                 </StackPanel>
+
+
                             </Expander>
                             <!--  eq container fundamental  -->
                             <StackPanel>
@@ -675,513 +677,500 @@
 
                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
                         <StackPanel
-                        Margin="0,15,0,0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top"
-                        Orientation="vertical">
-                        <StackPanel>
-                            <!--  EXPANDER Suspension  -->
-                            <Expander
-                                Margin="0,6"
-                                BorderThickness="2"
-                                FontFamily="Segoe UI"
-                                FontSize="14"
-                                Header="Suspension Multipliers"
-                                IsExpanded="True">
-                                <StackPanel>
-
-                                    <!--  Suspension all game multi  -->
-                                    <StackPanel
-                                        Margin="0,15,0,8"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock FontWeight="SemiBold">
-                                            All Games - Multiplier [0.0- (1.5) -5.0]
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBox
-                                            Name="SuspensionMultAll"
-                                            Width="80"
-                                            Margin="20,0,0,0"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontSize="16"
-                                            Text="{Binding D.SuspensionMultAll}" />
-                                    </StackPanel>
-
-                                    <!--  Suspension per game multi  -->
-                                    <StackPanel
-                                        Margin="0,15,0,8"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock FontWeight="SemiBold" Text="{Binding D.GameAltText}" />
-                                        <TextBlock Margin="3,0,0,0" FontWeight="SemiBold">
-                                            - Multiplier [0.0-2.0]
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBox
-                                            Name="SuspensionMult"
-                                            Width="80"
-                                            Margin="20,0,0,0"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontSize="16"
-                                            Text="{Binding D.SuspensionMult}" />
-                                    </StackPanel>
-
-                                    <!--  suspension all game gamma multi  -->
-                                    <StackPanel
-                                        Margin="0,15,0,8"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock FontWeight="SemiBold">
-                                            All Games - Gamma [0.0- (1.75) -5.0]
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBox
-                                            Name="SuspensionGammaAll"
-                                            Width="80"
-                                            Margin="20,0,0,0"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontSize="16"
-                                            Text="{Binding D.SuspensionGammaAll}" />
-                                    </StackPanel>
-
-                                    <!--  suspension per game gamma multi  -->
-                                    <StackPanel
-                                        Margin="0,15,0,8"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock FontWeight="SemiBold" Text="{Binding D.GameAltText}" />
-                                        <TextBlock Margin="3,0,0,0" FontWeight="SemiBold">
-                                            - Gamma [0.0-2.0]
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBox
-                                            Name="SuspensionGamma"
-                                            Width="80"
-                                            Margin="20,0,0,15"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontSize="16"
-                                            Text="{Binding D.SuspensionGamma}" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </Expander>
-                        </StackPanel>
-
-
-                        <Grid>
-
+                            Margin="0,15,0,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            Orientation="vertical">
                             <StackPanel>
-
-                                <!--  EXPANDER Gforce  -->
+                                <!--  EXPANDER Suspension  -->
                                 <Expander
-                                    HorizontalAlignment="Stretch"
+                                    Margin="0,6"
                                     BorderThickness="2"
                                     FontFamily="Segoe UI"
                                     FontSize="14"
-                                    Header="G-Force"
+                                    Header="Suspension Multipliers"
                                     IsExpanded="True">
-
                                     <StackPanel>
 
-
-                                        <!--  GForce Settings  -->
+                                        <!--  Suspension all/cuurent game multi headers  -->
                                         <StackPanel
-                                            Margin="0,20"
+                                            Margin="0,15,0,8"
                                             HorizontalAlignment="Center"
-                                            Orientation="Vertical">
-
-                                            <!--  ROW1 Pitch  -->
-                                            <!--  Pitch Offset/Multi/Gamma Headers  -->
-                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="50,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Pitch Offset
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Pitch Multiplier
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Pitch Gamma
-                                                </TextBlock>
-                                            </StackPanel>
-                                            <!--  Pitch Offset/Multi/Gamma TextBoxes  -->
-                                            <StackPanel
-                                                Margin="0,8,0,20"
-                                                HorizontalAlignment="Center"
-                                                Orientation="Horizontal">
-                                                <TextBox
-                                                    Name="MotionPitchOffset"
-                                                    Width="80"
-                                                    Margin="120,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionPitchOffset}" />
-                                                <TextBox
-                                                    Name="MotionPitchMult"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionPitchMult, Mode=TwoWay}" />
-                                                <TextBox
-                                                    Name="MotionPitchGamma"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionPitchGamma, Mode=TwoWay}" />
-                                            </StackPanel>
-
-
-
-                                            <!--  ROW2 Roll  -->
-                                            <!--  Roll Offset/Multi/Gamma Headers  -->
-                                            <StackPanel
-                                                Margin="0,8,0,0"
-                                                HorizontalAlignment="Center"
-                                                Orientation="Horizontal">
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="50,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Roll Offset
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Roll Multiplier
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Roll Gamma
-                                                </TextBlock>
-                                            </StackPanel>
-                                            <!--  Roll Offset/Multi/Gamma TextBoxes  -->
-                                            <StackPanel
-                                                Margin="0,8,0,20"
-                                                HorizontalAlignment="Center"
-                                                Orientation="Horizontal">
-                                                <TextBox
-                                                    Name="MotionRollOffset"
-                                                    Width="80"
-                                                    Margin="120,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionRollOffset}" />
-                                                <TextBox
-                                                    Name="MotionRollMult"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionRollMult}" />
-                                                <TextBox
-                                                    Name="MotionRollGamma"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionRollGamma}" />
-                                            </StackPanel>
-
-                                            <!--  ROW3 Yaw  -->
-                                            <!--  Yaw Offset/Multi/Gamma Headers  -->
-                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="50,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Yaw Offset
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Yaw Multiplier
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Yaw Gamma
-                                                </TextBlock>
-                                            </StackPanel>
-
-                                            <!--  Yaw Offset/Multi/Gamma TextBoxes  -->
-                                            <StackPanel
-                                                Margin="0,8,0,20"
-                                                HorizontalAlignment="Center"
-                                                Orientation="Horizontal">
-                                                <TextBox
-                                                    Name="MotionYawOffset"
-                                                    Width="80"
-                                                    Margin="120,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionYawOffset}" />
-                                                <TextBox
-                                                    Name="MotionYawMult"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionYawMult}" />
-                                                <TextBox
-                                                    Name="MotionYawGamma"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionYawGamma}" />
-                                            </StackPanel>
-
-                                            <!--  ROW4 Heave  -->
-                                            <!--  Heave Offset/Multi/Gamma Headers  -->
-                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="50,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Heave Offset
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Heave Multiplier
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Heave Gamma
-                                                </TextBlock>
-                                            </StackPanel>
-                                            <!--  Heave Offset/Multi/Gamma TextBoxes  -->
-                                            <StackPanel
-                                                Margin="0,8,0,20"
-                                                HorizontalAlignment="Center"
-                                                Orientation="Horizontal">
-                                                <TextBox
-                                                    Name="MotionHeaveOffset"
-                                                    Width="80"
-                                                    Margin="120,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionHeaveOffset}" />
-                                                <TextBox
-                                                    Name="MotionHeaveMult"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionHeaveMult}" />
-                                                <TextBox
-                                                    Name="MotionHeaveGamma"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionHeaveGamma}" />
-                                            </StackPanel>
-
-                                            <!--  ROW5 Surge  -->
-                                            <!--  Surge Offset/Multi/Gamma Headers  -->
-                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="50,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Surge Offset
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Surge Multiplier
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Surge Gamma
-                                                </TextBlock>
-                                            </StackPanel>
-                                            <!--  Surge Offset/Multi/Gamma TextBoxes  -->
-                                            <StackPanel
-                                                Margin="0,8,0,20"
-                                                HorizontalAlignment="Center"
-                                                Orientation="Horizontal">
-                                                <TextBox
-                                                    Name="MotionSurgeOffset"
-                                                    Width="80"
-                                                    Margin="120,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionSurgeOffset}" />
-                                                <TextBox
-                                                    Name="MotionSurgeMult"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionSurgeMult}" />
-                                                <TextBox
-                                                    Name="MotionSurgeGamma"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionSurgeGamma}" />
-                                            </StackPanel>
-
-                                            <!--  ROW6 Sway  -->
-                                            <!--  Sway Offset/Multi/Gamma Headers  -->
-                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="50,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Sway Offset
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Sway Multiplier
-                                                </TextBlock>
-                                                <TextBlock
-                                                    Width="150"
-                                                    Margin="0,0,50,0"
-                                                    VerticalAlignment="Center"
-                                                    FontWeight="SemiBold"
-                                                    TextAlignment="Center">
-                                                    Sway Gamma
-                                                </TextBlock>
-                                            </StackPanel>
-                                            <!--  Sway Offset/Multi/Gamma TextBoxes  -->
-                                            <StackPanel
-                                                Margin="0,8,0,0"
-                                                HorizontalAlignment="Center"
-                                                Orientation="Horizontal">
-                                                <TextBox
-                                                    Name="MotionSwayOffset"
-                                                    Width="80"
-                                                    Margin="120,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionSwayOffset}" />
-                                                <TextBox
-                                                    Name="MotionSwayMult"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionSwayMult}" />
-                                                <TextBox
-                                                    Name="MotionSwayGamma"
-                                                    Width="80"
-                                                    Margin="0,0,120,0"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    FontFamily="Segoe UI"
-                                                    FontSize="16"
-                                                    Text="{Binding D.MotionSwayGamma}" />
-                                            </StackPanel>
+                                            Orientation="Horizontal">
+                                            <TextBlock FontWeight="SemiBold">
+                                                All Games - Multiplier [0.0- (1.5) -5.0]
+                                            </TextBlock>
+                                            <TextBlock Margin="50,0,0,0" FontWeight="SemiBold">
+                                                Current Game - Multiplier [0.0-2.0]
+                                            </TextBlock>
                                         </StackPanel>
+                                        <!--  Suspension all/current game textboxes  -->
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <TextBox
+                                                Name="SuspensionMultAll"
+                                                Width="80"
+                                                Margin="0,0,0,0"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding D.SuspensionMultAll}" />
+                                            <TextBox
+                                                Name="SuspensionMult"
+                                                Width="80"
+                                                Margin="200,0,0,0"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding D.SuspensionMult}" />
+                                        </StackPanel>
+
+
+
+
+                                        <!--  suspension all/current game gamma multi headers  -->
+                                        <StackPanel
+                                            Margin="0,15,0,8"
+                                            HorizontalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <TextBlock FontWeight="SemiBold">
+                                                All Games - Gamma [0.0- (1.75) -5.0]
+                                            </TextBlock>
+                                            <TextBlock Margin="50,0,0,0" FontWeight="SemiBold">
+                                                Current Game - Gamma [0.0-2.0]
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,10">
+                                            <!--  suspension all/current game gamma textboxes  -->
+                                            <TextBox
+                                                Name="SuspensionGammaAll"
+                                                Width="80"
+                                                Margin="0,0,0,0"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding D.SuspensionGammaAll}" />
+                                            <TextBox
+                                                Name="SuspensionGamma"
+                                                Width="80"
+                                                Margin="200,0,0,0"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontSize="16"
+                                                Text="{Binding D.SuspensionGamma}" />
+                                        </StackPanel>
+
                                     </StackPanel>
                                 </Expander>
                             </StackPanel>
-                        </Grid>
-                    </StackPanel>
-                        </ScrollViewer>
+
+
+                            <Grid>
+
+                                <StackPanel>
+
+                                    <!--  EXPANDER Gforce  -->
+                                    <Expander
+                                        HorizontalAlignment="Stretch"
+                                        BorderThickness="2"
+                                        FontFamily="Segoe UI"
+                                        FontSize="14"
+                                        Header="G-Force"
+                                        IsExpanded="True">
+
+                                        <StackPanel>
+
+
+                                            <!--  GForce Settings  -->
+                                            <StackPanel
+                                                Margin="0,20"
+                                                HorizontalAlignment="Center"
+                                                Orientation="Vertical">
+
+                                                <!--  ROW1 Pitch  -->
+                                                <!--  Pitch Offset/Multi/Gamma Headers  -->
+                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="50,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Pitch Offset
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Pitch Multiplier
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Pitch Gamma
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <!--  Pitch Offset/Multi/Gamma TextBoxes  -->
+                                                <StackPanel
+                                                    Margin="0,8,0,20"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                                    <TextBox
+                                                        Name="MotionPitchOffset"
+                                                        Width="80"
+                                                        Margin="120,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionPitchOffset}" />
+                                                    <TextBox
+                                                        Name="MotionPitchMult"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionPitchMult, Mode=TwoWay}" />
+                                                    <TextBox
+                                                        Name="MotionPitchGamma"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionPitchGamma, Mode=TwoWay}" />
+                                                </StackPanel>
+
+
+
+                                                <!--  ROW2 Roll  -->
+                                                <!--  Roll Offset/Multi/Gamma Headers  -->
+                                                <StackPanel
+                                                    Margin="0,8,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="50,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Roll Offset
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Roll Multiplier
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Roll Gamma
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <!--  Roll Offset/Multi/Gamma TextBoxes  -->
+                                                <StackPanel
+                                                    Margin="0,8,0,20"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                                    <TextBox
+                                                        Name="MotionRollOffset"
+                                                        Width="80"
+                                                        Margin="120,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionRollOffset}" />
+                                                    <TextBox
+                                                        Name="MotionRollMult"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionRollMult}" />
+                                                    <TextBox
+                                                        Name="MotionRollGamma"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionRollGamma}" />
+                                                </StackPanel>
+
+                                                <!--  ROW3 Yaw  -->
+                                                <!--  Yaw Offset/Multi/Gamma Headers  -->
+                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="50,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Yaw Offset
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Yaw Multiplier
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Yaw Gamma
+                                                    </TextBlock>
+                                                </StackPanel>
+
+                                                <!--  Yaw Offset/Multi/Gamma TextBoxes  -->
+                                                <StackPanel
+                                                    Margin="0,8,0,20"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                                    <TextBox
+                                                        Name="MotionYawOffset"
+                                                        Width="80"
+                                                        Margin="120,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionYawOffset}" />
+                                                    <TextBox
+                                                        Name="MotionYawMult"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionYawMult}" />
+                                                    <TextBox
+                                                        Name="MotionYawGamma"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionYawGamma}" />
+                                                </StackPanel>
+
+                                                <!--  ROW4 Heave  -->
+                                                <!--  Heave Offset/Multi/Gamma Headers  -->
+                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="50,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Heave Offset
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Heave Multiplier
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Heave Gamma
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <!--  Heave Offset/Multi/Gamma TextBoxes  -->
+                                                <StackPanel
+                                                    Margin="0,8,0,20"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                                    <TextBox
+                                                        Name="MotionHeaveOffset"
+                                                        Width="80"
+                                                        Margin="120,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionHeaveOffset}" />
+                                                    <TextBox
+                                                        Name="MotionHeaveMult"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionHeaveMult}" />
+                                                    <TextBox
+                                                        Name="MotionHeaveGamma"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionHeaveGamma}" />
+                                                </StackPanel>
+
+                                                <!--  ROW5 Surge  -->
+                                                <!--  Surge Offset/Multi/Gamma Headers  -->
+                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="50,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Surge Offset
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Surge Multiplier
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Surge Gamma
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <!--  Surge Offset/Multi/Gamma TextBoxes  -->
+                                                <StackPanel
+                                                    Margin="0,8,0,20"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                                    <TextBox
+                                                        Name="MotionSurgeOffset"
+                                                        Width="80"
+                                                        Margin="120,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionSurgeOffset}" />
+                                                    <TextBox
+                                                        Name="MotionSurgeMult"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionSurgeMult}" />
+                                                    <TextBox
+                                                        Name="MotionSurgeGamma"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionSurgeGamma}" />
+                                                </StackPanel>
+
+                                                <!--  ROW6 Sway  -->
+                                                <!--  Sway Offset/Multi/Gamma Headers  -->
+                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="50,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Sway Offset
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Sway Multiplier
+                                                    </TextBlock>
+                                                    <TextBlock
+                                                        Width="150"
+                                                        Margin="0,0,50,0"
+                                                        VerticalAlignment="Center"
+                                                        FontWeight="SemiBold"
+                                                        TextAlignment="Center">
+                                                        Sway Gamma
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <!--  Sway Offset/Multi/Gamma TextBoxes  -->
+                                                <StackPanel
+                                                    Margin="0,8,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                                    <TextBox
+                                                        Name="MotionSwayOffset"
+                                                        Width="80"
+                                                        Margin="120,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionSwayOffset}" />
+                                                    <TextBox
+                                                        Name="MotionSwayMult"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionSwayMult}" />
+                                                    <TextBox
+                                                        Name="MotionSwayGamma"
+                                                        Width="80"
+                                                        Margin="0,0,120,0"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        FontFamily="Segoe UI"
+                                                        FontSize="16"
+                                                        Text="{Binding D.MotionSwayGamma}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Expander>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
 
                     <StatusBar Grid.Row="1" FontSize="16">
                         <!--  status message  -->
