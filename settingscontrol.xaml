@@ -170,129 +170,25 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="30" />
                     </Grid.RowDefinitions>
-                    <StackPanel
-                        Margin="0,30,0,0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top"
-                        Orientation="vertical">
-                        <!--  EXPANDER Engine RPM properties  -->
-                        <Expander
-                            BorderThickness="2"
-                            FontFamily="Segoe UI"
-                            FontSize="16"
-                            Header="Engine RPM Properties"
-                            IsExpanded="True">
-                            <StackPanel>
 
-                                <!--  CarName  -->
-                                <StackPanel
-                                    Margin="0,15,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="75"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        FontWeight="SemiBold"
-                                        TextAlignment="Right"><Run Text="Name" /></TextBlock>
-                                    <TextBox
-                                        x:Name="CarName"
-                                        MinWidth="300"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontSize="16"
-                                        Text="{Binding S.CarName}" />
-                                </StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                        <StackPanel
+                            Margin="0,30,0,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            Orientation="vertical">
+                            <!--  EXPANDER Engine RPM properties  -->
+                            <Expander
+                                BorderThickness="2"
+                                FontFamily="Segoe UI"
+                                FontSize="16"
+                                Header="Engine RPM Properties"
+                                IsExpanded="True">
+                                <StackPanel>
 
-                                <!--  ID  -->
-                                <StackPanel
-                                    Margin="0,15,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="75"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        FontWeight="SemiBold"
-                                        TextAlignment="Right"><Run Text="ID" /></TextBlock>
-                                    <TextBox
-                                        x:Name="CarID"
-                                        MinWidth="300"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="Segoe UI"
-                                        FontSize="16"
-                                        Text="{Binding S.Id}" />
-                                </StackPanel>
-
-                                <!--  Category  -->
-                                <StackPanel
-                                    Margin="2,15,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="75"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        FontWeight="SemiBold"
-                                        TextAlignment="Right"><Run Text="Category" /></TextBlock>
-                                    <TextBox
-                                        x:Name="CarClass"
-                                        MinWidth="176"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="Segoe UI"
-                                        FontSize="16"
-                                        Text="{Binding S.Category}" />
-                                    <!--  Idle  -->
+                                    <!--  CarName  -->
                                     <StackPanel
-                                        Margin="0,0,2,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock
-                                            MinWidth="10"
-                                            Margin="9,0,8,0"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Idle" /></TextBlock>
-                                        <TextBox
-                                            x:Name="IdleRPM"
-                                            MinWidth="80"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
-                                            FontSize="16"
-                                            Text="{Binding S.IdleRPM}" />
-                                    </StackPanel>
-                                </StackPanel>
-
-                                <!--  Redline  -->
-                                <StackPanel
-                                    Margin="0,15,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="75"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        FontWeight="SemiBold"
-                                        TextAlignment="Right"><Run Text="Redline" /></TextBlock>
-                                    <TextBox
-                                        x:Name="Redline"
-                                        MinWidth="80"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="Segoe UI"
-                                        FontSize="16"
-                                        Text="{Binding S.Redline}" />
-                                    <!--  MaxRPM  -->
-                                    <StackPanel
-                                        Margin="57,0,0,0"
+                                        Margin="0,15,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
@@ -301,254 +197,438 @@
                                             Margin="0,0,8,0"
                                             VerticalAlignment="Center"
                                             FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Max RPM" /></TextBlock>
+                                            TextAlignment="Right"><Run Text="Name" /></TextBlock>
                                         <TextBox
-                                            x:Name="MaxRPM"
+                                            x:Name="CarName"
+                                            MinWidth="300"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontSize="16"
+                                            Text="{Binding S.CarName}" />
+                                    </StackPanel>
+
+                                    <!--  ID  -->
+                                    <StackPanel
+                                        Margin="0,15,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="ID" /></TextBlock>
+                                        <TextBox
+                                            x:Name="CarID"
+                                            MinWidth="300"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.Id}" />
+                                    </StackPanel>
+
+                                    <!--  Category  -->
+                                    <StackPanel
+                                        Margin="2,15,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="Category" /></TextBlock>
+                                        <TextBox
+                                            x:Name="CarClass"
+                                            MinWidth="176"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.Category}" />
+                                        <!--  Idle  -->
+                                        <StackPanel
+                                            Margin="0,0,2,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                MinWidth="10"
+                                                Margin="9,0,8,0"
+                                                VerticalAlignment="Center"
+                                                FontWeight="SemiBold"
+                                                TextAlignment="Right"><Run Text="Idle" /></TextBlock>
+                                            <TextBox
+                                                x:Name="IdleRPM"
+                                                MinWidth="80"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="16"
+                                                Text="{Binding S.IdleRPM}" />
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!--  Redline  -->
+                                    <StackPanel
+                                        Margin="0,15,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="Redline" /></TextBlock>
+                                        <TextBox
+                                            x:Name="Redline"
                                             MinWidth="80"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="Segoe UI"
                                             FontSize="16"
-                                            Text="{Binding S.MaxRPM}" />
+                                            Text="{Binding S.Redline}" />
+                                        <!--  MaxRPM  -->
+                                        <StackPanel
+                                            Margin="57,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                MinWidth="75"
+                                                Margin="0,0,8,0"
+                                                VerticalAlignment="Center"
+                                                FontWeight="SemiBold"
+                                                TextAlignment="Right"><Run Text="Max RPM" /></TextBlock>
+                                            <TextBox
+                                                x:Name="MaxRPM"
+                                                MinWidth="80"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="16"
+                                                Text="{Binding S.MaxRPM}" />
+                                        </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
 
-                                <!--  Engine configuration  -->
-                                <StackPanel
-                                    Margin="0,15,6,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="75"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        FontWeight="SemiBold"
-                                        TextAlignment="Right"><Run Text="Eng Config" /></TextBlock>
-                                    <ComboBox
-                                        Name="EngineConfig"
-                                        Width="80"
-                                        Height="30"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="Segoe UI"
-                                        FontSize="16"
-                                        Text="{Binding S.EngineConfiguration}">
-                                        <ComboBoxItem Content="V" />
-                                        <ComboBoxItem Content="I" />
-                                        <ComboBoxItem Content="F" />
-                                        <ComboBoxItem Content="E" />
-                                        <ComboBoxItem Content="W" />
-                                        <ComboBoxItem Content="R" />
-                                    </ComboBox>
-                                    <!--  Cylinders  -->
+                                    <!--  Engine configuration  -->
                                     <StackPanel
-                                        Margin="0,0,0,0"
+                                        Margin="0,15,6,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
                                         <TextBlock
                                             MinWidth="75"
-                                            Margin="57,0,8,0"
+                                            Margin="0,0,8,0"
                                             VerticalAlignment="Center"
                                             FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Cylinders" /></TextBlock>
+                                            TextAlignment="Right"><Run Text="Eng Config" /></TextBlock>
                                         <ComboBox
-                                            Name="EngineCylinders"
+                                            Name="EngineConfig"
                                             Width="80"
                                             Height="30"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="Segoe UI"
                                             FontSize="16"
-                                            Text="{Binding S.EngineCylinders}">
-                                            <ComboBoxItem Content="1" />
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="16" />
-                                        </ComboBox>
-                                    </StackPanel>
-                                </StackPanel>
-
-                                <!--  Engine location  -->
-                                <StackPanel
-                                    Margin="0,15,19,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="75"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        FontWeight="SemiBold"
-                                        TextAlignment="Right"><Run Text="Eng Location" /></TextBlock>
-                                    <ComboBox
-                                        Name="Englocation"
-                                        Width="80"
-                                        Height="30"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="Segoe UI"
-                                        FontSize="16"
-                                        Text="{Binding S.EngineLocation}">
-                                        <ComboBoxItem Content="F" />
-                                        <ComboBoxItem Content="FM" />
-                                        <ComboBoxItem Content="M" />
-                                        <ComboBoxItem Content="R" />
-                                        <ComboBoxItem Content="RM" />
-                                    </ComboBox>
-
-                                    <!--  Drivetrain  -->
-                                    <StackPanel
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock
-                                            MinWidth="75"
-                                            Margin="57,0,8,0"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Drivetrain" /></TextBlock>
-                                        <ComboBox
-                                            Name="Drivetrain"
-                                            Width="80"
-                                            Height="30"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
-                                            FontSize="16"
-                                            Text="{Binding S.PoweredWheels}">
+                                            Text="{Binding S.EngineConfiguration}">
+                                            <ComboBoxItem Content="V" />
+                                            <ComboBoxItem Content="I" />
                                             <ComboBoxItem Content="F" />
+                                            <ComboBoxItem Content="E" />
+                                            <ComboBoxItem Content="W" />
                                             <ComboBoxItem Content="R" />
-                                            <ComboBoxItem Content="A" />
                                         </ComboBox>
+                                        <!--  Cylinders  -->
+                                        <StackPanel
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                MinWidth="75"
+                                                Margin="57,0,8,0"
+                                                VerticalAlignment="Center"
+                                                FontWeight="SemiBold"
+                                                TextAlignment="Right"><Run Text="Cylinders" /></TextBlock>
+                                            <ComboBox
+                                                Name="EngineCylinders"
+                                                Width="80"
+                                                Height="30"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="16"
+                                                Text="{Binding S.EngineCylinders}">
+                                                <ComboBoxItem Content="1" />
+                                                <ComboBoxItem Content="2" />
+                                                <ComboBoxItem Content="3" />
+                                                <ComboBoxItem Content="4" />
+                                                <ComboBoxItem Content="5" />
+                                                <ComboBoxItem Content="6" />
+                                                <ComboBoxItem Content="8" />
+                                                <ComboBoxItem Content="10" />
+                                                <ComboBoxItem Content="12" />
+                                                <ComboBoxItem Content="16" />
+                                            </ComboBox>
+                                        </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
 
-                                <!--  HP  -->
-                                <StackPanel
-                                    Margin="0,15,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="75"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        FontWeight="SemiBold"
-                                        TextAlignment="Right"><Run Text="HP" /></TextBlock>
-                                    <TextBox
-                                        x:Name="MaxPowerHP"
-                                        MinWidth="80"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="Segoe UI"
-                                        FontSize="16"
-                                        Text="{Binding S.MaxPower}" />
-                                    <!--  NM  -->
+                                    <!--  Engine location  -->
                                     <StackPanel
-                                        Margin="0,0,0,0"
+                                        Margin="0,15,19,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
                                         <TextBlock
                                             MinWidth="75"
-                                            Margin="57,0,8,0"
+                                            Margin="0,0,8,0"
                                             VerticalAlignment="Center"
                                             FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="NM" /></TextBlock>
-                                        <TextBox
-                                            x:Name="MaxTorqueNM"
-                                            MinWidth="80"
+                                            TextAlignment="Right"><Run Text="Eng Location" /></TextBlock>
+                                        <ComboBox
+                                            Name="Englocation"
+                                            Width="80"
+                                            Height="30"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="Segoe UI"
                                             FontSize="16"
-                                            Text="{Binding S.MaxTorque}" />
-                                    </StackPanel>
-                                </StackPanel>
+                                            Text="{Binding S.EngineLocation}">
+                                            <ComboBoxItem Content="F" />
+                                            <ComboBoxItem Content="FM" />
+                                            <ComboBoxItem Content="M" />
+                                            <ComboBoxItem Content="R" />
+                                            <ComboBoxItem Content="RM" />
+                                        </ComboBox>
 
-                                <!--  EHP  -->
-                                <StackPanel
-                                    Margin="0,15,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="75"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        FontWeight="SemiBold"
-                                        TextAlignment="Right"><Run Text="EHP" /></TextBlock>
-                                    <TextBox
-                                        x:Name="EMaxPowerHP"
-                                        MinWidth="80"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="Segoe UI"
-                                        FontSize="16"
-                                        Text="{Binding S.ElectricMaxPower}" />
-                                    <!--  CC  -->
+                                        <!--  Drivetrain  -->
+                                        <StackPanel
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                MinWidth="75"
+                                                Margin="57,0,8,0"
+                                                VerticalAlignment="Center"
+                                                FontWeight="SemiBold"
+                                                TextAlignment="Right"><Run Text="Drivetrain" /></TextBlock>
+                                            <ComboBox
+                                                Name="Drivetrain"
+                                                Width="80"
+                                                Height="30"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="16"
+                                                Text="{Binding S.PoweredWheels}">
+                                                <ComboBoxItem Content="F" />
+                                                <ComboBoxItem Content="R" />
+                                                <ComboBoxItem Content="A" />
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!--  HP  -->
                                     <StackPanel
-                                        Margin="0,0,0,0"
+                                        Margin="0,15,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
                                         <TextBlock
                                             MinWidth="75"
-                                            Margin="57,0,8,0"
+                                            Margin="0,0,8,0"
                                             VerticalAlignment="Center"
                                             FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="CC" /></TextBlock>
+                                            TextAlignment="Right"><Run Text="HP" /></TextBlock>
                                         <TextBox
-                                            x:Name="Displacement"
+                                            x:Name="MaxPowerHP"
                                             MinWidth="80"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="Segoe UI"
                                             FontSize="16"
-                                            Text="{Binding S.Displacement}" />
+                                            Text="{Binding S.MaxPower}" />
+                                        <!--  NM  -->
+                                        <StackPanel
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                MinWidth="75"
+                                                Margin="57,0,8,0"
+                                                VerticalAlignment="Center"
+                                                FontWeight="SemiBold"
+                                                TextAlignment="Right"><Run Text="NM" /></TextBlock>
+                                            <TextBox
+                                                x:Name="MaxTorqueNM"
+                                                MinWidth="80"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="16"
+                                                Text="{Binding S.MaxTorque}" />
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!--  EHP  -->
+                                    <StackPanel
+                                        Margin="0,15,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            MinWidth="75"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            FontWeight="SemiBold"
+                                            TextAlignment="Right"><Run Text="EHP" /></TextBlock>
+                                        <TextBox
+                                            x:Name="EMaxPowerHP"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Text="{Binding S.ElectricMaxPower}" />
+                                        <!--  CC  -->
+                                        <StackPanel
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                MinWidth="75"
+                                                Margin="57,0,8,0"
+                                                VerticalAlignment="Center"
+                                                FontWeight="SemiBold"
+                                                TextAlignment="Right"><Run Text="CC" /></TextBlock>
+                                            <TextBox
+                                                x:Name="Displacement"
+                                                MinWidth="80"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                FontFamily="Segoe UI"
+                                                FontSize="16"
+                                                Text="{Binding S.Displacement}" />
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!--  Refresh & Lock  -->
+                                    <StackPanel
+                                        Margin="0,25,4,4"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                        <styles:SHButtonSecondary
+                                            Width="150"
+                                            Height="35"
+                                            VerticalContentAlignment="Center"
+                                            Background="#4B4495"
+                                            Click="Lock_Click"
+                                            ContentControl.Content="{Binding D.LockedText}"
+                                            FontSize="16"
+                                            FontWeight="SemiBold"
+                                            FrameworkElement.Name="Lock" />
+                                        <styles:SHButtonSecondary
+                                            Width="150"
+                                            Height="35"
+                                            Margin="5,0,0,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="#4B4495"
+                                            Click="Refresh_Click"
+                                            FontSize="16"
+                                            FontWeight="SemiBold"
+                                            FrameworkElement.Name="Refresh">
+                                            Refresh
+                                        </styles:SHButtonSecondary>
                                     </StackPanel>
                                 </StackPanel>
-
-                                <!--  Refresh & Lock  -->
-                                <StackPanel
-                                    Margin="0,25,4,4"
-                                    HorizontalAlignment="Right"
-                                    Orientation="Horizontal">
-                                    <styles:SHButtonSecondary
-                                        Width="150"
-                                        Height="35"
-                                        VerticalContentAlignment="Center"
-                                        Background="#4B4495"
-                                        Click="Lock_Click"
-                                        ContentControl.Content="{Binding D.LockedText}"
+                            </Expander>
+                            <!--  eq container fundamental  -->
+                            <StackPanel>
+                                <Expander
+                                    Margin="0,6,0,3"
+                                    FontFamily="Segoe UI"
+                                    FontSize="16"
+                                    Header="EQ - Fundamental"
+                                    IsExpanded="False" />
+                                <!--  eq container 1st harmonic  -->
+                                <StackPanel>
+                                    <Expander
+                                        Margin="0,3"
+                                        FontFamily="Segoe UI"
                                         FontSize="16"
-                                        FontWeight="SemiBold"
-                                        FrameworkElement.Name="Lock" />
-                                    <styles:SHButtonSecondary
-                                        Width="150"
-                                        Height="35"
-                                        Margin="5,0,0,0"
-                                        VerticalContentAlignment="Center"
-                                        Background="#4B4495"
-                                        Click="Refresh_Click"
-                                        FontSize="16"
-                                        FontWeight="SemiBold"
-                                        FrameworkElement.Name="Refresh">
-                                        Refresh
-                                    </styles:SHButtonSecondary>
+                                        Header="EQ - 1st Harmonic"
+                                        IsExpanded="False" />
+                                    <!--  eq container 2nd harmonic  -->
+                                    <StackPanel>
+                                        <Expander
+                                            Margin="0,3"
+                                            FontFamily="Segoe UI"
+                                            FontSize="16"
+                                            Header="EQ - 2nd Harmonic"
+                                            IsExpanded="False" />
+                                        <!--  eq container 3rd harmonic  -->
+                                        <StackPanel>
+                                            <Expander
+                                                Margin="0,3"
+                                                FontFamily="Segoe UI"
+                                                FontSize="16"
+                                                Header="EQ - 3rd Harmonic"
+                                                IsExpanded="False" />
+                                            <!--  eq container 4th harmonic  -->
+                                            <StackPanel>
+                                                <Expander
+                                                    Margin="0,3"
+                                                    FontFamily="Segoe UI"
+                                                    FontSize="16"
+                                                    Header="EQ - 4th Harmonic"
+                                                    IsExpanded="False" />
+                                            </StackPanel>
+                                            <!--  eq container 5th harmonic  -->
+                                            <StackPanel>
+                                                <Expander
+                                                    Margin="0,3"
+                                                    FontFamily="Segoe UI"
+                                                    FontSize="16"
+                                                    Header="EQ - 5th Harmonic"
+                                                    IsExpanded="False" />
+                                            </StackPanel>
+                                            <!--  eq container 6th harmonic  -->
+                                            <StackPanel>
+                                                <Expander
+                                                    Margin="0,3"
+                                                    FontFamily="Segoe UI"
+                                                    FontSize="16"
+                                                    Header="EQ - 6th Harmonic"
+                                                    IsExpanded="False" />
+                                            </StackPanel>
+                                            <!--  eq container 7th harmonic  -->
+                                            <StackPanel>
+                                                <Expander
+                                                    Margin="0,3"
+                                                    FontFamily="Segoe UI"
+                                                    FontSize="16"
+                                                    Header="EQ - 7th Harmonic"
+                                                    IsExpanded="False" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
-                        </Expander>
-                    </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+
+
+
+
+
 
                     <!--  status bar  -->
                     <StatusBar Grid.Row="1" FontSize="16">
@@ -593,8 +673,8 @@
                         <RowDefinition Height="30" />
                     </Grid.RowDefinitions>
 
-
-                    <StackPanel
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                        <StackPanel
                         Margin="0,15,0,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
@@ -602,12 +682,12 @@
                         <StackPanel>
                             <!--  EXPANDER Suspension  -->
                             <Expander
-                                Margin="0,15"
+                                Margin="0,6"
                                 BorderThickness="2"
                                 FontFamily="Segoe UI"
                                 FontSize="14"
                                 Header="Suspension Multipliers"
-                                IsExpanded="False">
+                                IsExpanded="True">
                                 <StackPanel>
 
                                     <!--  Suspension all game multi  -->
@@ -699,6 +779,7 @@
                         <Grid>
 
                             <StackPanel>
+
                                 <!--  EXPANDER Gforce  -->
                                 <Expander
                                     HorizontalAlignment="Stretch"
@@ -706,7 +787,8 @@
                                     FontFamily="Segoe UI"
                                     FontSize="14"
                                     Header="G-Force"
-                                    IsExpanded="False">
+                                    IsExpanded="True">
+
                                     <StackPanel>
 
 
@@ -1099,6 +1181,7 @@
                             </StackPanel>
                         </Grid>
                     </StackPanel>
+                        </ScrollViewer>
 
                     <StatusBar Grid.Row="1" FontSize="16">
                         <!--  status message  -->
