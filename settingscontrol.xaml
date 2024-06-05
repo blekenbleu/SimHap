@@ -697,15 +697,17 @@
                                             Margin="0,15,0,8"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBlock FontWeight="SemiBold">
-                                                All Games - Multiplier [0.0- (1.5) -5.0]
+                                            <TextBlock FontWeight="SemiBold" TextAlignment="Center">
+                                                All Games - Multi <LineBreak />
+                                                [0.0- (1.5) -5.0]
                                             </TextBlock>
-                                            <TextBlock Margin="50,0,0,0" FontWeight="SemiBold">
-                                                Current Game - Multiplier [0.0-2.0]
+                                            <TextBlock Margin="50,0,0,0" FontWeight="SemiBold" TextAlignment="Center">
+                                                Current Game - Multi <LineBreak /> 
+                                                [0.0 - 2.0]
                                             </TextBlock>
                                         </StackPanel>
                                         <!--  Suspension all/current game textboxes  -->
-                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,12,0">
                                             <TextBox
                                                 Name="SuspensionMultAll"
                                                 Width="80"
@@ -717,7 +719,7 @@
                                             <TextBox
                                                 Name="SuspensionMult"
                                                 Width="80"
-                                                Margin="200,0,0,0"
+                                                Margin="90,0,0,0"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 FontSize="16"
@@ -732,15 +734,17 @@
                                             Margin="0,15,0,8"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBlock FontWeight="SemiBold">
-                                                All Games - Gamma [0.0- (1.75) -5.0]
+                                            <TextBlock FontWeight="SemiBold" TextAlignment="Center">
+                                                All Games - Gamma <LineBreak/>
+                                                [0.0- (1.75) -5.0]
                                             </TextBlock>
-                                            <TextBlock Margin="50,0,0,0" FontWeight="SemiBold">
-                                                Current Game - Gamma [0.0-2.0]
+                                            <TextBlock Margin="50,0,0,0" FontWeight="SemiBold" TextAlignment="Center">
+                                                Current Game - Gamma <LineBreak/>
+                                                [0.0 - 2.0]
                                             </TextBlock>
                                         </StackPanel>
 
-                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,10">
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,12,10">
                                             <!--  suspension all/current game gamma textboxes  -->
                                             <TextBox
                                                 Name="SuspensionGammaAll"
@@ -753,7 +757,7 @@
                                             <TextBox
                                                 Name="SuspensionGamma"
                                                 Width="80"
-                                                Margin="200,0,0,0"
+                                                Margin="90,0,0,0"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 FontSize="16"
@@ -792,7 +796,6 @@
                                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="50,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -800,15 +803,13 @@
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
-                                                        Pitch Multiplier
+                                                        Pitch Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -823,7 +824,7 @@
                                                     <TextBox
                                                         Name="MotionPitchOffset"
                                                         Width="80"
-                                                        Margin="120,0,120,0"
+                                                        Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -832,7 +833,7 @@
                                                     <TextBox
                                                         Name="MotionPitchMult"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -841,7 +842,7 @@
                                                     <TextBox
                                                         Name="MotionPitchGamma"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -859,7 +860,6 @@
                                                     Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="50,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -867,15 +867,13 @@
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
-                                                        Roll Multiplier
+                                                        Roll Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -890,7 +888,7 @@
                                                     <TextBox
                                                         Name="MotionRollOffset"
                                                         Width="80"
-                                                        Margin="120,0,120,0"
+                                                        Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -899,7 +897,7 @@
                                                     <TextBox
                                                         Name="MotionRollMult"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -908,7 +906,7 @@
                                                     <TextBox
                                                         Name="MotionRollGamma"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -921,7 +919,6 @@
                                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="50,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -929,15 +926,13 @@
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
-                                                        Yaw Multiplier
+                                                        Yaw Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -953,7 +948,7 @@
                                                     <TextBox
                                                         Name="MotionYawOffset"
                                                         Width="80"
-                                                        Margin="120,0,120,0"
+                                                        Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -962,7 +957,7 @@
                                                     <TextBox
                                                         Name="MotionYawMult"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -971,7 +966,7 @@
                                                     <TextBox
                                                         Name="MotionYawGamma"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -984,7 +979,6 @@
                                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="50,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -992,15 +986,13 @@
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
-                                                        Heave Multiplier
+                                                        Heave Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -1015,7 +1007,7 @@
                                                     <TextBox
                                                         Name="MotionHeaveOffset"
                                                         Width="80"
-                                                        Margin="120,0,120,0"
+                                                        Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -1024,7 +1016,7 @@
                                                     <TextBox
                                                         Name="MotionHeaveMult"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -1033,7 +1025,7 @@
                                                     <TextBox
                                                         Name="MotionHeaveGamma"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -1046,7 +1038,6 @@
                                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="50,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -1054,15 +1045,13 @@
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
-                                                        Surge Multiplier
+                                                        Surge Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -1077,7 +1066,7 @@
                                                     <TextBox
                                                         Name="MotionSurgeOffset"
                                                         Width="80"
-                                                        Margin="120,0,120,0"
+                                                        Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -1086,7 +1075,7 @@
                                                     <TextBox
                                                         Name="MotionSurgeMult"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -1095,7 +1084,7 @@
                                                     <TextBox
                                                         Name="MotionSurgeGamma"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -1108,7 +1097,6 @@
                                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="50,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -1116,15 +1104,13 @@
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
-                                                        Sway Multiplier
+                                                        Sway Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
-                                                        Margin="0,0,50,0"
                                                         VerticalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         TextAlignment="Center">
@@ -1139,7 +1125,7 @@
                                                     <TextBox
                                                         Name="MotionSwayOffset"
                                                         Width="80"
-                                                        Margin="120,0,120,0"
+                                                        Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -1148,7 +1134,7 @@
                                                     <TextBox
                                                         Name="MotionSwayMult"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
@@ -1157,7 +1143,7 @@
                                                     <TextBox
                                                         Name="MotionSwayGamma"
                                                         Width="80"
-                                                        Margin="0,0,120,0"
+                                                        Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         FontFamily="Segoe UI"
