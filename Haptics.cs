@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using sierses.Sim.Properties;
 using SimHub;
 using SimHub.Plugins;
+using SimHub.Plugins.DataPlugins.ShakeItV3.Outputs.Audio;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,6 +30,7 @@ namespace sierses.Sim
 		public static long FrameCountTicks = 0;
 		public static GameId CurrentGame = GameId.Other;
 		public static string GameDBText;
+		public Tone Fr;
 		internal static bool Loaded, Waiting, Save, Set, Changed;
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
@@ -562,7 +564,12 @@ namespace sierses.Sim
 			This = this;
 			LoadFailCount = 1;
 			D = new SimData();
-			SetGame(pluginManager);
+            Fr = new Tone
+            {
+                Freq = new ushort[] {20, 50}
+            };
+
+            SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
 			Settings.ABSPulseLength = Settings.ABSPulseLength > 0 ? Settings.ABSPulseLength : 2;
 			Settings.DownshiftDurationMs = Settings.DownshiftDurationMs > 0 ? Settings.DownshiftDurationMs : 400;
@@ -765,6 +772,8 @@ namespace sierses.Sim
 			this.AttachDelegate("MSway", () => D.MotionSway);
 			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
 			this.AttachDelegate("VelocityX", () => D.VelocityX);
+			this.AttachDelegate("Fr0", () => Fr.Freq[0]);
+			this.AttachDelegate("Fr1", () => Fr.Freq[1]);
 			FrameTimeTicks = DateTime.Now.Ticks;
 		}
 	}
