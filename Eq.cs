@@ -45,8 +45,27 @@ namespace sierses.Sim
 			
 			// set a Tone harmonic amplitude for a Tone frequency
 			int i;
+/* binary search increments
+   12/24 (6): 18 :  6
+    18/24 (3): 21 : 15 : 9 : 3
+    21/24 (2): 23 : 19
+	23/24 (1): 24 : 22
+	6:24 (3) 3 : 9
+	3:24 (2) 1 : 5
+	1:24 (1) 0 : 2
+ */
 
-            // Lut has power-spaced values)
+			// Lut[0] has 24 harmonic scaling values;  Lut[1] has power-based frequency values
+/* binary search maybe faster?...
+			for (int j = i = (1 + l) >> 1 ; 0 < j; j = (j + (1 < j) ? 1 : 0) >> 1) 
+			{
+				if (freq < Lut[1][i])
+					i -= j;
+				else if (freq >= Lut[1][i + 1])
+					i += j;
+				else break;
+			}
+ */
             for (i = 1; i <= l; i++)
 				if (freq >= Lut[1][i])	// Lut interval for this Hz?
 					break;
@@ -56,7 +75,7 @@ namespace sierses.Sim
 			int interval = (Lut[1][i + 1] - Lut[1][i]);
 
 			return (ushort)(Tones[1].Freq[harmonic]	// amplitude
-					// linear interpolation on not-quite-linear intervals.
+					// linear interpolation of scaling values on not-quite-linear frequency intervals.
 					* (here + (interval + 2 * (freq - Lut[1][i]) * (next - here)) / (interval * 2))); 
 		}	// Play()
 
