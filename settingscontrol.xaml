@@ -30,12 +30,14 @@
             </Style.Triggers>
         </Style>
 
+
+
         <!--  corner radius textboxes  -->
         <Style TargetType="{x:Type TextBox}">
             <Style.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5" />
-                    <Setter Property="Height" Value="30" />
+                    <Setter Property="Height" Value="32" />
                 </Style>
             </Style.Resources>
         </Style>
@@ -107,7 +109,7 @@
                                         CornerRadius="0,0,10,0">
                                         <ContentPresenter
                                             Height="30"
-                                            Margin="10,2,0,0"
+                                            Margin="10,5,0,0"
                                             ContentSource="Header"
                                             RecognizesAccessKey="True"
                                             TextBlock.FontSize="20"
@@ -136,15 +138,92 @@
         <!--  corner radius expander end  -->
 
 
-        <!--  tabcontrol style start  -->
-
-        <!--  tabcontrol style end  -->
-
-
     </FrameworkElement.Resources>
     <Grid>
         <TabControl>
-            <TabItem Width="200" Padding="0,0,10,0">
+            <!--  custom tab control for no vertical wrap  -->
+            <TabControl.Template>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid
+                        ClipToBounds="true"
+                        KeyboardNavigation.TabNavigation="Local"
+                        SnapsToDevicePixels="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="ColumnDefinition0" />
+                            <ColumnDefinition x:Name="ColumnDefinition1" Width="0" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Name="RowDefinition0" Height="Auto" />
+                            <RowDefinition x:Name="RowDefinition1" Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel
+                            x:Name="HeaderPanel"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="2,2,2,0"
+                            Panel.ZIndex="1"
+                            IsItemsHost="true"
+                            KeyboardNavigation.TabIndex="1"
+                            Orientation="Horizontal" />
+                        <Border
+                            x:Name="ContentPanel"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            KeyboardNavigation.DirectionalNavigation="Contained"
+                            KeyboardNavigation.TabIndex="2"
+                            KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter
+                                x:Name="PART_SelectedContentHost"
+                                Margin="{TemplateBinding Padding}"
+                                ContentSource="SelectedContent"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="TabStripPlacement" Value="Bottom">
+                            <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="1" />
+                            <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="RowDefinition0" Property="Height" Value="*" />
+                            <Setter TargetName="RowDefinition1" Property="Height" Value="Auto" />
+                            <Setter TargetName="HeaderPanel" Property="Margin" Value="2,0,2,2" />
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Left">
+                            <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="ContentPanel" Property="Grid.Column" Value="1" />
+                            <Setter TargetName="ColumnDefinition0" Property="Width" Value="Auto" />
+                            <Setter TargetName="ColumnDefinition1" Property="Width" Value="*" />
+                            <Setter TargetName="RowDefinition0" Property="Height" Value="*" />
+                            <Setter TargetName="RowDefinition1" Property="Height" Value="0" />
+                            <Setter TargetName="HeaderPanel" Property="Margin" Value="2,2,0,2" />
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Right">
+                            <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.Column" Value="1" />
+                            <Setter TargetName="ContentPanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="ColumnDefinition0" Property="Width" Value="*" />
+                            <Setter TargetName="ColumnDefinition1" Property="Width" Value="Auto" />
+                            <Setter TargetName="RowDefinition0" Property="Height" Value="*" />
+                            <Setter TargetName="RowDefinition1" Property="Height" Value="0" />
+                            <Setter TargetName="HeaderPanel" Property="Margin" Value="0,2,2,2" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </TabControl.Template>
+            <!--  custom tab control for no vertical wrap end  -->
+            <TabItem
+                Width="160"
+                Padding="0,10,0,10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center">
                 <HeaderedContentControl.Header>
                     <StackPanel
                         Margin="0,0"
@@ -156,9 +235,10 @@
                             </UIElement.OpacityMask>
                         </Rectangle>
                         <TextBlock
-                            Margin="9,0,0,0"
+                            Margin="5,0,0,0"
                             VerticalAlignment="Center"
-                            FontSize="30"
+                            FontFamily="roboto medium"
+                            FontSize="26"
                             Opacity="0.9"
                             Text="Engine" />
                     </StackPanel>
@@ -173,15 +253,15 @@
 
                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
                         <StackPanel
-                            Margin="0,30,0,0"
+                            Margin="0,10,0,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Top"
                             Orientation="vertical">
                             <!--  EXPANDER Engine RPM properties  -->
                             <Expander
                                 BorderThickness="2"
-                                FontFamily="Segoe UI"
-                                FontSize="16"
+                                FontFamily="roboto"
+                                FontSize="15"
                                 Header="Engine RPM Properties"
                                 IsExpanded="True">
                                 <StackPanel>
@@ -192,148 +272,146 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
-                                        <TextBlock
-                                            MinWidth="75"
-                                            Margin="0,0,8,0"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Name" /></TextBlock>
+                                        <TextBlock VerticalAlignment="Center" TextAlignment="Right"><Run Text="Name" /></TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Margin="0,2,0,0">
                                         <TextBox
                                             x:Name="CarName"
-                                            MinWidth="300"
+                                            Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.CarName}" />
                                     </StackPanel>
 
                                     <!--  ID  -->
                                     <StackPanel
-                                        Margin="0,15,0,0"
+                                        Margin="0,10,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
-                                        <TextBlock
-                                            MinWidth="75"
-                                            Margin="0,0,8,0"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="ID" /></TextBlock>
+                                        <TextBlock VerticalAlignment="Center" TextAlignment="Right"><Run Text="ID" /></TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Margin="0,2,0,0">
                                         <TextBox
                                             x:Name="CarID"
-                                            MinWidth="300"
+                                            Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.Id}" />
                                     </StackPanel>
 
                                     <!--  Category  -->
                                     <StackPanel
-                                        Margin="2,15,0,0"
+                                        Margin="0,10,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
-                                        <TextBlock
-                                            MinWidth="75"
-                                            Margin="0,0,8,0"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Category" /></TextBlock>
+                                        <TextBlock VerticalAlignment="Center" TextAlignment="Right"><Run Text="Category" /></TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Margin="0,2,0,0">
                                         <TextBox
                                             x:Name="CarClass"
-                                            MinWidth="176"
+                                            Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.Category}" />
-                                        <!--  Idle  -->
-                                        <StackPanel
-                                            Margin="0,0,2,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
-                                            <TextBlock
-                                                MinWidth="10"
-                                                Margin="9,0,8,0"
-                                                VerticalAlignment="Center"
-                                                FontWeight="SemiBold"
-                                                TextAlignment="Right"><Run Text="Idle" /></TextBlock>
-                                            <TextBox
-                                                x:Name="IdleRPM"
-                                                MinWidth="80"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontFamily="Segoe UI"
-                                                FontSize="16"
-                                                Text="{Binding S.IdleRPM}" />
-                                        </StackPanel>
                                     </StackPanel>
 
-                                    <!--  Redline  -->
+
+                                    <!--  Idle/Redline/MaxRPM headers  -->
                                     <StackPanel
-                                        Margin="0,15,0,0"
+                                        Margin="0,10,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
                                         <TextBlock
-                                            MinWidth="75"
-                                            Margin="0,0,8,0"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Redline" /></TextBlock>
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
+                                            TextAlignment="Center"><Run Text="Idle" /></TextBlock>
+                                        <TextBlock
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
+                                            TextAlignment="Center"><Run Text="Redline" /></TextBlock>
+                                        <TextBlock
+                                            MinWidth="80"
+                                            Margin="0,0,0,0"
+                                            TextAlignment="Center"><Run Text="Max" /></TextBlock>
+                                    </StackPanel>
+                                    <!--  Idle/Redline/MaxRPM textboxes  -->
+                                    <StackPanel
+                                        Margin="0,2,0,0"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <TextBox
+                                            x:Name="IdleRPM"
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16"
+                                            Text="{Binding S.IdleRPM}" />
                                         <TextBox
                                             x:Name="Redline"
                                             MinWidth="80"
+                                            Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.Redline}" />
-                                        <!--  MaxRPM  -->
-                                        <StackPanel
-                                            Margin="57,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
-                                            <TextBlock
-                                                MinWidth="75"
-                                                Margin="0,0,8,0"
-                                                VerticalAlignment="Center"
-                                                FontWeight="SemiBold"
-                                                TextAlignment="Right"><Run Text="Max RPM" /></TextBlock>
-                                            <TextBox
-                                                x:Name="MaxRPM"
-                                                MinWidth="80"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontFamily="Segoe UI"
-                                                FontSize="16"
-                                                Text="{Binding S.MaxRPM}" />
-                                        </StackPanel>
+                                        <TextBox
+                                            x:Name="MaxRPM"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16"
+                                            Text="{Binding S.MaxRPM}" />
                                     </StackPanel>
 
-                                    <!--  Engine configuration  -->
+                                    <!--  Engine config/cylinders/drivetrain headers  -->
                                     <StackPanel
-                                        Margin="0,15,6,0"
+                                        Margin="0,10,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
                                         <TextBlock
-                                            MinWidth="75"
-                                            Margin="0,0,8,0"
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
                                             VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Eng Config" /></TextBlock>
+                                            TextAlignment="Center"><Run Text="Config" /></TextBlock>
+                                        <TextBlock
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
+                                            VerticalAlignment="Center"
+                                            TextAlignment="Center"><Run Text="Cylinders" /></TextBlock>
+                                        <TextBlock
+                                            MinWidth="80"
+                                            VerticalAlignment="Center"
+                                            TextAlignment="Center"><Run Text="Drivetrain" /></TextBlock>
+                                    </StackPanel>
+
+                                    <!--  Engine config/cylinders/drivetrain comboboxes  -->
+                                    <StackPanel
+                                        Margin="0,2,0,0"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <!--  engine config  -->
                                         <ComboBox
                                             Name="EngineConfig"
                                             Width="80"
-                                            Height="30"
+                                            Height="32"
+                                            Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.EngineConfiguration}">
                                             <ComboBoxItem Content="V" />
@@ -344,59 +422,74 @@
                                             <ComboBoxItem Content="R" />
                                         </ComboBox>
                                         <!--  Cylinders  -->
-                                        <StackPanel
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
-                                            <TextBlock
-                                                MinWidth="75"
-                                                Margin="57,0,8,0"
-                                                VerticalAlignment="Center"
-                                                FontWeight="SemiBold"
-                                                TextAlignment="Right"><Run Text="Cylinders" /></TextBlock>
-                                            <ComboBox
-                                                Name="EngineCylinders"
-                                                Width="80"
-                                                Height="30"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontFamily="Segoe UI"
-                                                FontSize="16"
-                                                Text="{Binding S.EngineCylinders}">
-                                                <ComboBoxItem Content="1" />
-                                                <ComboBoxItem Content="2" />
-                                                <ComboBoxItem Content="3" />
-                                                <ComboBoxItem Content="4" />
-                                                <ComboBoxItem Content="5" />
-                                                <ComboBoxItem Content="6" />
-                                                <ComboBoxItem Content="8" />
-                                                <ComboBoxItem Content="10" />
-                                                <ComboBoxItem Content="12" />
-                                                <ComboBoxItem Content="16" />
-                                            </ComboBox>
-                                        </StackPanel>
+                                        <ComboBox
+                                            Name="EngineCylinders"
+                                            Width="80"
+                                            Margin="0,0,80,0"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16"
+                                            Text="{Binding S.EngineCylinders}">
+                                            <ComboBoxItem Content="1" />
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="16" />
+                                        </ComboBox>
+                                        <ComboBox
+                                            Name="Drivetrain"
+                                            Width="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16"
+                                            Text="{Binding S.PoweredWheels}">
+                                            <ComboBoxItem Content="F" />
+                                            <ComboBoxItem Content="R" />
+                                            <ComboBoxItem Content="A" />
+                                        </ComboBox>
                                     </StackPanel>
 
-                                    <!--  Engine location  -->
+                                    <!--  Engine location/hp/nm headers  -->
                                     <StackPanel
-                                        Margin="0,15,19,0"
+                                        Margin="0,10,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
+
                                         <TextBlock
-                                            MinWidth="75"
-                                            Margin="0,0,8,0"
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
                                             VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="Eng Location" /></TextBlock>
+                                            TextAlignment="Center"><Run Text="Location" /></TextBlock>
+                                        <TextBlock
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
+                                            VerticalAlignment="Center"
+                                            TextAlignment="Center"><Run Text="HP" /></TextBlock>
+                                        <TextBlock
+                                            MinWidth="80"
+                                            VerticalAlignment="Center"
+                                            TextAlignment="Center"><Run Text="NM" /></TextBlock>
+                                    </StackPanel>
+                                    <!--  Engine location/hp/nm comboboxes and textboxes  -->
+                                    <StackPanel
+                                        Margin="0,2,0,0"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
                                         <ComboBox
                                             Name="Englocation"
                                             Width="80"
-                                            Height="30"
+                                            Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.EngineLocation}">
                                             <ComboBoxItem Content="F" />
@@ -405,126 +498,105 @@
                                             <ComboBoxItem Content="R" />
                                             <ComboBoxItem Content="RM" />
                                         </ComboBox>
-
-                                        <!--  Drivetrain  -->
-                                        <StackPanel
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
-                                            <TextBlock
-                                                MinWidth="75"
-                                                Margin="57,0,8,0"
-                                                VerticalAlignment="Center"
-                                                FontWeight="SemiBold"
-                                                TextAlignment="Right"><Run Text="Drivetrain" /></TextBlock>
-                                            <ComboBox
-                                                Name="Drivetrain"
-                                                Width="80"
-                                                Height="30"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontFamily="Segoe UI"
-                                                FontSize="16"
-                                                Text="{Binding S.PoweredWheels}">
-                                                <ComboBoxItem Content="F" />
-                                                <ComboBoxItem Content="R" />
-                                                <ComboBoxItem Content="A" />
-                                            </ComboBox>
-                                        </StackPanel>
-                                    </StackPanel>
-
-                                    <!--  HP  -->
-                                    <StackPanel
-                                        Margin="0,15,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock
-                                            MinWidth="75"
-                                            Margin="0,0,8,0"
-                                            VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="HP" /></TextBlock>
                                         <TextBox
                                             x:Name="MaxPowerHP"
                                             MinWidth="80"
+                                            Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.MaxPower}" />
-                                        <!--  NM  -->
-                                        <StackPanel
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
-                                            <TextBlock
-                                                MinWidth="75"
-                                                Margin="57,0,8,0"
-                                                VerticalAlignment="Center"
-                                                FontWeight="SemiBold"
-                                                TextAlignment="Right"><Run Text="NM" /></TextBlock>
-                                            <TextBox
-                                                x:Name="MaxTorqueNM"
-                                                MinWidth="80"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontFamily="Segoe UI"
-                                                FontSize="16"
-                                                Text="{Binding S.MaxTorque}" />
-                                        </StackPanel>
+                                        <TextBox
+                                            x:Name="MaxTorqueNM"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16"
+                                            Text="{Binding S.MaxTorque}" />
                                     </StackPanel>
 
-                                    <!--  EHP  -->
+
+                                    <!--  Multi/EHP/CC Headers  -->
                                     <StackPanel
-                                        Margin="0,15,0,0"
+                                        Margin="0,10,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
                                         <TextBlock
-                                            MinWidth="75"
-                                            Margin="0,0,8,0"
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
                                             VerticalAlignment="Center"
-                                            FontWeight="SemiBold"
-                                            TextAlignment="Right"><Run Text="EHP" /></TextBlock>
+                                            FontFamily="roboto"
+                                            TextAlignment="Center"><Run Text="Multi" /></TextBlock>
+                                        <TextBlock
+                                            MinWidth="80"
+                                            Margin="0,0,80,0"
+                                            VerticalAlignment="Center"
+                                            FontFamily="roboto"
+                                            TextAlignment="Center"><Run Text="EHP" /></TextBlock>
+                                        <TextBlock
+                                            MinWidth="80"
+                                            VerticalAlignment="Center"
+                                            FontFamily="roboto"
+                                            TextAlignment="Center"><Run Text="CC" /></TextBlock>
+                                    </StackPanel>
+
+                                    <!--  Multi/EHP/CC Textboxes  -->
+                                    <StackPanel
+                                        Margin="0,2,0,0"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <ComboBox
+                                            Name="EngineMulti"
+                                            Width="80"
+                                            Margin="0,0,80,0"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16"
+                                            Text="{Binding D.EngineMult}">
+                                            <ComboBoxItem Content="0.5" />
+                                            <ComboBoxItem Content="0.6" />
+                                            <ComboBoxItem Content="0.7" />
+                                            <ComboBoxItem Content="0.8" />
+                                            <ComboBoxItem Content="0.9" />
+                                            <ComboBoxItem Content="1" />
+                                            <ComboBoxItem Content="1.1" />
+                                            <ComboBoxItem Content="1.2" />
+                                            <ComboBoxItem Content="1.3" />
+                                            <ComboBoxItem Content="1.4" />
+                                            <ComboBoxItem Content="1.5" />
+                                        </ComboBox>
                                         <TextBox
                                             x:Name="EMaxPowerHP"
                                             MinWidth="80"
+                                            Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            FontFamily="Segoe UI"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.ElectricMaxPower}" />
                                         <!--  CC  -->
-                                        <StackPanel
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
-                                            <TextBlock
-                                                MinWidth="75"
-                                                Margin="57,0,8,0"
-                                                VerticalAlignment="Center"
-                                                FontWeight="SemiBold"
-                                                TextAlignment="Right"><Run Text="CC" /></TextBlock>
-                                            <TextBox
-                                                x:Name="Displacement"
-                                                MinWidth="80"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontFamily="Segoe UI"
-                                                FontSize="16"
-                                                Text="{Binding S.Displacement}" />
-                                        </StackPanel>
+                                        <TextBox
+                                            x:Name="Displacement"
+                                            MinWidth="80"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16"
+                                            Text="{Binding S.Displacement}" />
                                     </StackPanel>
+
 
                                     <!--  Refresh & Lock  -->
                                     <StackPanel
-                                        Margin="0,25,4,4"
+                                        Margin="0,30,0,15"
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal">
+
+                                        <!--  Lock/unlock button  -->
                                         <styles:SHButtonSecondary
                                             Width="150"
                                             Height="35"
@@ -532,9 +604,12 @@
                                             Background="#4B4495"
                                             Click="Lock_Click"
                                             ContentControl.Content="{Binding D.LockedText}"
+                                            CornerRadius="6"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             FontWeight="SemiBold"
                                             FrameworkElement.Name="Lock" />
+                                        <!--  Refresh button  -->
                                         <styles:SHButtonSecondary
                                             Width="150"
                                             Height="35"
@@ -542,6 +617,8 @@
                                             VerticalContentAlignment="Center"
                                             Background="#4B4495"
                                             Click="Refresh_Click"
+                                            CornerRadius="6"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             FontWeight="SemiBold"
                                             FrameworkElement.Name="Refresh">
@@ -556,7 +633,7 @@
                             <StackPanel>
                                 <Expander
                                     Margin="0,6,0,3"
-                                    FontFamily="Segoe UI"
+                                    FontFamily="roboto"
                                     FontSize="16"
                                     Header="EQ - Fundamental"
                                     IsExpanded="False" />
@@ -564,7 +641,7 @@
                                 <StackPanel>
                                     <Expander
                                         Margin="0,3"
-                                        FontFamily="Segoe UI"
+                                        FontFamily="roboto"
                                         FontSize="16"
                                         Header="EQ - 1st Harmonic"
                                         IsExpanded="False" />
@@ -572,7 +649,7 @@
                                     <StackPanel>
                                         <Expander
                                             Margin="0,3"
-                                            FontFamily="Segoe UI"
+                                            FontFamily="roboto"
                                             FontSize="16"
                                             Header="EQ - 2nd Harmonic"
                                             IsExpanded="False" />
@@ -580,7 +657,7 @@
                                         <StackPanel>
                                             <Expander
                                                 Margin="0,3"
-                                                FontFamily="Segoe UI"
+                                                FontFamily="roboto"
                                                 FontSize="16"
                                                 Header="EQ - 3rd Harmonic"
                                                 IsExpanded="False" />
@@ -588,7 +665,7 @@
                                             <StackPanel>
                                                 <Expander
                                                     Margin="0,3"
-                                                    FontFamily="Segoe UI"
+                                                    FontFamily="roboto"
                                                     FontSize="16"
                                                     Header="EQ - 4th Harmonic"
                                                     IsExpanded="False" />
@@ -597,7 +674,7 @@
                                             <StackPanel>
                                                 <Expander
                                                     Margin="0,3"
-                                                    FontFamily="Segoe UI"
+                                                    FontFamily="roboto"
                                                     FontSize="16"
                                                     Header="EQ - 5th Harmonic"
                                                     IsExpanded="False" />
@@ -606,7 +683,7 @@
                                             <StackPanel>
                                                 <Expander
                                                     Margin="0,3"
-                                                    FontFamily="Segoe UI"
+                                                    FontFamily="roboto"
                                                     FontSize="16"
                                                     Header="EQ - 6th Harmonic"
                                                     IsExpanded="False" />
@@ -615,7 +692,7 @@
                                             <StackPanel>
                                                 <Expander
                                                     Margin="0,3"
-                                                    FontFamily="Segoe UI"
+                                                    FontFamily="roboto"
                                                     FontSize="16"
                                                     Header="EQ - 7th Harmonic"
                                                     IsExpanded="False" />
@@ -633,14 +710,17 @@
 
 
                     <!--  status bar  -->
-                    <StatusBar Grid.Row="1" FontSize="16">
+                    <StatusBar
+                        Grid.Row="1"
+                        FontFamily="roboto"
+                        FontSize="16">
                         <!--  version number  -->
                         <StatusBarItem>
-                            <TextBlock x:Name="Version" />
+                            <TextBlock Name="Version" />
                         </StatusBarItem>
                         <!--  status message  -->
                         <StatusBarItem>
-                            <TextBlock Text="{Binding D.LoadText}" />
+                            <TextBlock Text="{Binding D.LoadText, Mode=TwoWay}" />
                         </StatusBarItem>
                     </StatusBar>
                 </Grid>
@@ -648,21 +728,29 @@
 
 
             <!--  NEXT TAB 2 - Settings  -->
-            <TabItem Width="240" Padding="0,0,10,0">
+            <TabItem
+                Width="160"
+                Padding="0,10,0,10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center">
                 <HeaderedContentControl.Header>
                     <StackPanel
-                        Margin="0,0,30,0"
+                        Margin="0,0,0,0"
                         Orientation="Horizontal"
                         Style="{StaticResource TabVis}">
                         <Rectangle Style="{StaticResource IconRectangle}">
                             <UIElement.OpacityMask>
-                                <ImageBrush ImageSource="{Binding SuspensionIcon}" RenderOptions.BitmapScalingMode="HighQuality" />
+                                <ImageBrush
+                                    AlignmentX="Left"
+                                    ImageSource="{Binding SuspensionIcon}"
+                                    RenderOptions.BitmapScalingMode="HighQuality" />
                             </UIElement.OpacityMask>
                         </Rectangle>
                         <TextBlock
-                            Margin="10,0,0,0"
+                            Margin="4,0,0,0"
                             VerticalAlignment="Center"
-                            FontSize="30"
+                            FontFamily="roboto medium"
+                            FontSize="26"
                             Opacity="0.9"
                             Text="Settings" />
                     </StackPanel>
@@ -677,7 +765,7 @@
 
                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
                         <StackPanel
-                            Margin="0,15,0,0"
+                            Margin="0,5,0,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Top"
                             Orientation="vertical">
@@ -686,7 +774,7 @@
                                 <Expander
                                     Margin="0,6"
                                     BorderThickness="2"
-                                    FontFamily="Segoe UI"
+                                    FontFamily="roboto"
                                     FontSize="14"
                                     Header="Suspension Multipliers"
                                     IsExpanded="True">
@@ -694,24 +782,29 @@
 
                                         <!--  Suspension all/cuurent game multi headers  -->
                                         <StackPanel
-                                            Margin="0,15,0,8"
+                                            Margin="12,15,0,2"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBlock FontWeight="SemiBold" TextAlignment="Center">
-                                                All Games - Multi <LineBreak />
-                                                [0.0- (1.5) -5.0]
-                                            </TextBlock>
-                                            <TextBlock Margin="50,0,0,0" FontWeight="SemiBold" TextAlignment="Center">
-                                                Current Game - Multi <LineBreak /> 
-                                                [0.0 - 2.0]
-                                            </TextBlock>
+                                            <TextBlock FontFamily="roboto medium" TextAlignment="Center">
+                                                All Games - Multi<LineBreak />
+                                                [0.0- (1.5) -5.0]</TextBlock>
+                                            <TextBlock
+                                                Margin="52,0,0,0"
+                                                FontFamily="roboto medium"
+                                                TextAlignment="Center">
+                                                Current Game - Multi<LineBreak />
+                                                [0.0 - 2.0]</TextBlock>
                                         </StackPanel>
                                         <!--  Suspension all/current game textboxes  -->
-                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,12,0">
+                                        <StackPanel
+                                            Margin="0,2,0,0"
+                                            HorizontalAlignment="Center"
+                                            Orientation="Horizontal">
                                             <TextBox
                                                 Name="SuspensionMultAll"
                                                 Width="80"
                                                 Margin="0,0,0,0"
+                                                FontFamily="roboto"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 FontSize="16"
@@ -720,6 +813,7 @@
                                                 Name="SuspensionMult"
                                                 Width="80"
                                                 Margin="90,0,0,0"
+                                                FontFamily="roboto"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 FontSize="16"
@@ -731,25 +825,30 @@
 
                                         <!--  suspension all/current game gamma multi headers  -->
                                         <StackPanel
-                                            Margin="0,15,0,8"
+                                            Margin="12,15,0,2"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBlock FontWeight="SemiBold" TextAlignment="Center">
-                                                All Games - Gamma <LineBreak/>
-                                                [0.0- (1.75) -5.0]
-                                            </TextBlock>
-                                            <TextBlock Margin="50,0,0,0" FontWeight="SemiBold" TextAlignment="Center">
-                                                Current Game - Gamma <LineBreak/>
-                                                [0.0 - 2.0]
-                                            </TextBlock>
+                                            <TextBlock FontFamily="roboto medium" TextAlignment="Center">
+                                                All Games - Gamma<LineBreak />
+                                                [0.0- (1.75) -5.0]</TextBlock>
+                                            <TextBlock
+                                                Margin="36,0,0,0"
+                                                FontFamily="roboto medium"
+                                                TextAlignment="Center">
+                                                Current Game - Gamma<LineBreak />
+                                                [0.0 - 2.0]</TextBlock>
                                         </StackPanel>
 
-                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,12,10">
+                                        <StackPanel
+                                            Margin="0,0,0,15"
+                                            HorizontalAlignment="Center"
+                                            Orientation="Horizontal">
                                             <!--  suspension all/current game gamma textboxes  -->
                                             <TextBox
                                                 Name="SuspensionGammaAll"
                                                 Width="80"
                                                 Margin="0,0,0,0"
+                                                FontFamily="roboto"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 FontSize="16"
@@ -758,6 +857,7 @@
                                                 Name="SuspensionGamma"
                                                 Width="80"
                                                 Margin="90,0,0,0"
+                                                FontFamily="roboto"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 FontSize="16"
@@ -777,7 +877,7 @@
                                     <Expander
                                         HorizontalAlignment="Stretch"
                                         BorderThickness="2"
-                                        FontFamily="Segoe UI"
+                                        FontFamily="roboto"
                                         FontSize="14"
                                         Header="G-Force"
                                         IsExpanded="True">
@@ -787,7 +887,7 @@
 
                                             <!--  GForce Settings  -->
                                             <StackPanel
-                                                Margin="0,20"
+                                                Margin="0,15"
                                                 HorizontalAlignment="Center"
                                                 Orientation="Vertical">
 
@@ -797,28 +897,28 @@
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Pitch Offset
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Pitch Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Pitch Gamma
                                                     </TextBlock>
                                                 </StackPanel>
                                                 <!--  Pitch Offset/Multi/Gamma TextBoxes  -->
                                                 <StackPanel
-                                                    Margin="0,8,0,20"
+                                                    Margin="0,2,0,0"
                                                     HorizontalAlignment="Center"
                                                     Orientation="Horizontal">
                                                     <TextBox
@@ -827,7 +927,7 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionPitchOffset}" />
                                                     <TextBox
@@ -836,7 +936,7 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionPitchMult, Mode=TwoWay}" />
                                                     <TextBox
@@ -845,7 +945,7 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionPitchGamma, Mode=TwoWay}" />
                                                 </StackPanel>
@@ -855,34 +955,34 @@
                                                 <!--  ROW2 Roll  -->
                                                 <!--  Roll Offset/Multi/Gamma Headers  -->
                                                 <StackPanel
-                                                    Margin="0,8,0,0"
+                                                    Margin="0,10,0,2"
                                                     HorizontalAlignment="Center"
                                                     Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Roll Offset
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Roll Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Roll Gamma
                                                     </TextBlock>
                                                 </StackPanel>
                                                 <!--  Roll Offset/Multi/Gamma TextBoxes  -->
                                                 <StackPanel
-                                                    Margin="0,8,0,20"
+                                                    Margin="0,0,0,2"
                                                     HorizontalAlignment="Center"
                                                     Orientation="Horizontal">
                                                     <TextBox
@@ -891,7 +991,7 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionRollOffset}" />
                                                     <TextBox
@@ -900,7 +1000,7 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionRollMult}" />
                                                     <TextBox
@@ -909,32 +1009,35 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionRollGamma}" />
                                                 </StackPanel>
 
                                                 <!--  ROW3 Yaw  -->
                                                 <!--  Yaw Offset/Multi/Gamma Headers  -->
-                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                <StackPanel
+                                                    Margin="0,10,0,2"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Yaw Offset
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Yaw Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Yaw Gamma
                                                     </TextBlock>
@@ -942,7 +1045,7 @@
 
                                                 <!--  Yaw Offset/Multi/Gamma TextBoxes  -->
                                                 <StackPanel
-                                                    Margin="0,8,0,20"
+                                                    Margin="0,0,0,2"
                                                     HorizontalAlignment="Center"
                                                     Orientation="Horizontal">
                                                     <TextBox
@@ -951,7 +1054,7 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionYawOffset}" />
                                                     <TextBox
@@ -960,7 +1063,7 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionYawMult}" />
                                                     <TextBox
@@ -969,39 +1072,42 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionYawGamma}" />
                                                 </StackPanel>
 
                                                 <!--  ROW4 Heave  -->
                                                 <!--  Heave Offset/Multi/Gamma Headers  -->
-                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                <StackPanel
+                                                    Margin="0,10,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Heave Offset
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Heave Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Heave Gamma
                                                     </TextBlock>
                                                 </StackPanel>
                                                 <!--  Heave Offset/Multi/Gamma TextBoxes  -->
                                                 <StackPanel
-                                                    Margin="0,8,0,20"
+                                                    Margin="0,2,0,0"
                                                     HorizontalAlignment="Center"
                                                     Orientation="Horizontal">
                                                     <TextBox
@@ -1010,7 +1116,7 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionHeaveOffset}" />
                                                     <TextBox
@@ -1019,7 +1125,7 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionHeaveMult}" />
                                                     <TextBox
@@ -1028,39 +1134,42 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionHeaveGamma}" />
                                                 </StackPanel>
 
                                                 <!--  ROW5 Surge  -->
                                                 <!--  Surge Offset/Multi/Gamma Headers  -->
-                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                <StackPanel
+                                                    Margin="0,10,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Surge Offset
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Surge Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Surge Gamma
                                                     </TextBlock>
                                                 </StackPanel>
                                                 <!--  Surge Offset/Multi/Gamma TextBoxes  -->
                                                 <StackPanel
-                                                    Margin="0,8,0,20"
+                                                    Margin="0,2,0,10"
                                                     HorizontalAlignment="Center"
                                                     Orientation="Horizontal">
                                                     <TextBox
@@ -1069,7 +1178,7 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSurgeOffset}" />
                                                     <TextBox
@@ -1078,7 +1187,7 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSurgeMult}" />
                                                     <TextBox
@@ -1087,39 +1196,42 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSurgeGamma}" />
                                                 </StackPanel>
 
                                                 <!--  ROW6 Sway  -->
                                                 <!--  Sway Offset/Multi/Gamma Headers  -->
-                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                <StackPanel
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Sway Offset
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Sway Multi
                                                     </TextBlock>
                                                     <TextBlock
                                                         Width="150"
                                                         VerticalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        FontFamily="roboto medium"
                                                         TextAlignment="Center">
                                                         Sway Gamma
                                                     </TextBlock>
                                                 </StackPanel>
                                                 <!--  Sway Offset/Multi/Gamma TextBoxes  -->
                                                 <StackPanel
-                                                    Margin="0,8,0,0"
+                                                    Margin="0,2,0,15"
                                                     HorizontalAlignment="Center"
                                                     Orientation="Horizontal">
                                                     <TextBox
@@ -1128,7 +1240,7 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSwayOffset}" />
                                                     <TextBox
@@ -1137,7 +1249,7 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSwayMult}" />
                                                     <TextBox
@@ -1146,7 +1258,7 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSwayGamma}" />
                                                 </StackPanel>
@@ -1158,7 +1270,11 @@
                         </StackPanel>
                     </ScrollViewer>
 
-                    <StatusBar Grid.Row="1" FontSize="16">
+                    <StatusBar
+                        Grid.Row="1"
+                        FontFamily="roboto"
+                        FontSize="16">
+                        <!--  version number  -->
                         <!--  status message  -->
                         <StatusBarItem>
                             <TextBlock Text="{Binding D.LoadText}" />

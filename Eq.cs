@@ -56,7 +56,7 @@ namespace sierses.Sim
 				A[destination].Freq[i] = Shape(pitch.Slider[i], LUT[destination]);
 		}
 
-		// convert 6 slider values to 2x24 lookup table for Shape()
+		// convert 6 slider values to paired 4 * (Eq.Slider.Length - 2) lookup table for Shape()
 		public ushort[][] EqSpline(ushort[] slider)
 		{
 			ushort min = slider[6];
