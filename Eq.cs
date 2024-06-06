@@ -27,46 +27,38 @@ namespace sierses.Sim
 
         public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
 
-		// set a Tone harmonic amplitude for a Tone frequency
-		// Shape() depends on Play() to mute out-of-band frequencies
-        public ushort Shape(int hz, ushort[][] Lut)
+		// populate  Tones' amplitudes from rpm
+		// pitch is fundamental (rpm/60) or power stroke harmonic (integer * rpm * cylinders) / 120)
+		public ushort Play(Haptics This, byte destination)
 		{
-            int l = Lut[1].Length - 1;
+			byte harmonic = (byte)(destination & 7);
+            ushort[][] Lut = LUT[destination >> 3];
+			int l = Lut[1].Length - 1;
+			ushort freq;
+
+			if (0 < harmonic)
+				freq = (ushort)((60 + harmonic * This.D.Rpms * This.S.Car.cyl)/120);
+			else freq = (ushort)((30 + This.D.Rpms) / 60);
+			// mute out-of-range frequencies
+			if (freq < Lut[1][0] || freq >= Lut[1][l])
+				return 0;
+			
+			// set a Tone harmonic amplitude for a Tone frequency
 			int i;
 
             // Lut has power-spaced values)
             for (i = 1; i <= l; i++)
-				if (hz >= Lut[1][i])	// Lut interval for this hz?
+				if (freq >= Lut[1][i])	// Lut interval for this Hz?
 					break;
 
 			ushort here = Lut[0][i];
 			ushort next = Lut[0][i + 1];
 			int interval = (Lut[1][i + 1] - Lut[1][i]);
 
-			// linear interpolation among non-linear points.
-			// better would be precalculated circle centers,
-			// then Bresenham’s circle drawing algorithm at run time
-			return (ushort)(here + (interval + 2 * (hz - Lut[1][i]) * (next - here)) / (interval * 2));
-		}
-
-		// populate a Tone's amplitudes from rpm
-		// pitch is fundamental (rpm/60) or power stroke harmonic (integer * rpm * cylinders) / 120)
-		public ushort Play(Haptics This, byte destination)
-		{
-			byte harmonic = (byte)(destination & 7);
-			destination >>= 3;
-			int rate = harmonic * This.D.Rpms;
-			int l = LUT[1].Length - 1;
-			ushort freq;
-
-			if (0 < harmonic)
-				freq = (ushort)((60 + rate * This.S.Car.cyl)/120);
-			else freq = (ushort)((30 + rate) / 60);
-			if (freq < LUT[destination][1][0] || freq >= LUT[destination][1][l])
-				return 0;
-			//				amplitude							harmonic factor           
-			return (ushort)(Tones[1].Freq[harmonic] * Shape(freq * Tones[0].Freq[harmonic], LUT[destination]));
-		}
+			return (ushort)(Tones[1].Freq[harmonic]	// amplitude
+					// linear interpolation on not-quite-linear intervals.
+					* (here + (interval + 2 * (freq - Lut[1][i]) * (next - here)) / (interval * 2))); 
+		}	// Play()
 
 		// convert 6 slider values to paired 4 * (Eq.Slider.Length - 2) lookup table for Shape()
 		public ushort[][] EqSpline(ushort[] slider)
