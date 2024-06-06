@@ -1,4 +1,5 @@
 using MathNet.Numerics.Interpolation;
+using SimHub.Plugins;
 using System.Collections.Generic;
 
 namespace sierses.Sim
@@ -20,40 +21,48 @@ namespace sierses.Sim
 		internal List<Eq> Sliders = new();
 
 		// an array of LUT[][s interpolated from Sliders
-		private List<ushort[][]> lUT = new List<ushort[][]> { };
+		private List<ushort[][]> lUT = new() { };
 
         public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
 
 		// set a Tone harmonic amplitude for a Tone frequency
-        public ushort Shape(ushort rpm, ushort[][] LUT)
+        public ushort Shape(int rpm, int amplitude, ushort[][] Lut)
 		{
-			int l = LUT[1].Length - 1;
-            if (rpm < LUT[1][0] || rpm > LUT[1][l])
+            int l = Lut[1].Length - 1;
+            if (rpm < Lut[1][0] || rpm > Lut[1][l])
 				return 0;
 
 			int i;
-            // LUT is unequally-spaced values)
+            // Lut is unequally-spaced values)
             for (i = 1; i <= l; i++)
-				if (rpm >= LUT[1][i])
+				if (rpm >= Lut[1][i])
 					break;
 			if (i == l)
-				return LUT[0][i];
+				return Lut[0][i];
 
-			ushort below = LUT[0][i];
-			ushort above = LUT[0][i + 1];
-			int step = (LUT[1][i + 1] - LUT[1][i]);
+			ushort below = Lut[0][i];
+			ushort above = Lut[0][i + 1];
+			int step = (Lut[1][i + 1] - Lut[1][i]);
 			// linear interpolation among non-linear points.
 			// better would be precalculated circle centers,
 			// then Bresenham’s circle drawing algorithm at run time
-			return (ushort)(below + (step + 2 * (rpm - LUT[1][i]) * (above - below)) / (step * 2));
+			return (ushort)(amplitude * (below + (step + 2 * (rpm - Lut[1][i]) * (above - below)) / (step * 2)));
 		}
 
 		// populate a Tone's amplitudes from rpm
 		// pitch is fundamental (rpm/60) or power stroke harmonic (integer * rpm * cylinders) / 120)
-		public void Play(List<ushort[][]> LUT, List<Tone> A, int destination, Eq pitch)
+		public ushort Play(Haptics This, int destination, int pitch)
 		{
-			for (int i = 0; i < A[i].Freq.Length - 2; i++)
-				A[destination].Freq[i] = Shape(pitch.Slider[i], LUT[destination]);
+			int rate = pitch * This.D.Rpms;
+			int l = LUT[1].Length - 1;
+			ushort freq;
+
+			if (0 < pitch)
+				freq = (ushort)((60 + rate * This.S.Car.cyl)/120);
+			else freq = (ushort)((30 + rate) / 60);
+			if (freq < LUT[destination][1][0] || freq >= LUT[destination][1][l])
+				return 0;
+			return Shape(freq, Tones[destination].Freq[pitch], LUT[destination]);
 		}
 
 		// convert 6 slider values to paired 4 * (Eq.Slider.Length - 2) lookup table for Shape()
@@ -76,6 +85,53 @@ namespace sierses.Sim
 				f *= ff;			// geometric frequency progression
 			}
 			return lut;
+		}
+
+		public List<Tone> Tones;
+		public string AddProps(Haptics This, Tone that)
+		{
+			Tones.Add(that);
+			string s;
+			switch (Tones.Count)
+			{
+				case 1:
+					This.AttachDelegate("Eq0.0", () => Play(This, 0, 0));
+					This.AttachDelegate("Eq0.1", () => Play(This, 0, 1));
+					This.AttachDelegate("Eq0.2", () => Play(This, 0, 2));
+					This.AttachDelegate("Eq0.3", () => Play(This, 0, 3));
+					This.AttachDelegate("Eq0.4", () => Play(This, 0, 4));
+					This.AttachDelegate("Eq0.5", () => Play(This, 0, 5));
+					This.AttachDelegate("Eq0.6", () => Play(This, 0, 6));
+					This.AttachDelegate("Eq0.7", () => Play(This, 0, 7));
+					s = "Eq0 added";
+					break;
+				case 1:
+					This.AttachDelegate("Eq1.0", () => Play(This, 1, 0));
+					This.AttachDelegate("Eq1.1", () => Play(This, 1, 1));
+					This.AttachDelegate("Eq1.2", () => Play(This, 1, 2));
+					This.AttachDelegate("Eq1.3", () => Play(This, 1, 3));
+					This.AttachDelegate("Eq1.4", () => Play(This, 1, 4));
+					This.AttachDelegate("Eq1.5", () => Play(This, 1, 5));
+					This.AttachDelegate("Eq1.6", () => Play(This, 1, 6));
+					This.AttachDelegate("Eq1.7", () => Play(This, 1, 7));
+					s = "Eq1 added";
+					break;
+				case 1:
+					This.AttachDelegate("Eq2.0", () => Play(This, 2, 0));
+					This.AttachDelegate("Eq2.1", () => Play(This, 2, 1));
+					This.AttachDelegate("Eq2.2", () => Play(This, 2, 2));
+					This.AttachDelegate("Eq2.3", () => Play(This, 2, 3));
+					This.AttachDelegate("Eq2.4", () => Play(This, 2, 4));
+					This.AttachDelegate("Eq2.5", () => Play(This, 2, 5));
+					This.AttachDelegate("Eq2.6", () => Play(This, 2, 6));
+					This.AttachDelegate("Eq2.7", () => Play(This, 2, 7));
+					s = "Eq2 added; max equalizer supported...";
+					break;
+				default:
+					s = "equalizer limit exceeded";
+					break;
+			}
+			return s;
 		}
 	}
 }
