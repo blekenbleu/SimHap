@@ -6,13 +6,13 @@ namespace sierses.Sim
 {
     public class Tone	// array of frequency component properties
 	{
-		internal ushort[] Freq;	// one for frequency values, another for amplitudes
+		internal ushort[] Freq = new ushort[6];	// one for frequency harmonics, another for amplitudes
 	}
 
 	// array of 6 slider values, then min, max frequencies
 	public class Eq : NotifyPropertyChanged
 	{
-		internal ushort[] Slider = new ushort[8];
+		internal ushort[] Slider = new ushort[8];	// one for each Tone.Freq + 2 for min and max
 	}
 
 	public class Geq
@@ -23,46 +23,49 @@ namespace sierses.Sim
 		// an array of LUT[][s interpolated from Sliders
 		private List<ushort[][]> lUT = new() { };
 
+		internal Tone[] Tones = new Tone[2];	// frequency harmonic and amplitude
+
         public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
 
 		// set a Tone harmonic amplitude for a Tone frequency
-        public ushort Shape(int rpm, int amplitude, ushort[][] Lut)
+		// Shape() depends on Play() to mute out-of-band frequencies
+        public ushort Shape(int hz, ushort[][] Lut)
 		{
             int l = Lut[1].Length - 1;
-            if (rpm < Lut[1][0] || rpm > Lut[1][l])
-				return 0;
-
 			int i;
-            // Lut is unequally-spaced values)
-            for (i = 1; i <= l; i++)
-				if (rpm >= Lut[1][i])
-					break;
-			if (i == l)
-				return Lut[0][i];
 
-			ushort below = Lut[0][i];
-			ushort above = Lut[0][i + 1];
-			int step = (Lut[1][i + 1] - Lut[1][i]);
+            // Lut has power-spaced values)
+            for (i = 1; i <= l; i++)
+				if (hz >= Lut[1][i])	// Lut interval for this hz?
+					break;
+
+			ushort here = Lut[0][i];
+			ushort next = Lut[0][i + 1];
+			int interval = (Lut[1][i + 1] - Lut[1][i]);
+
 			// linear interpolation among non-linear points.
 			// better would be precalculated circle centers,
 			// then Bresenham’s circle drawing algorithm at run time
-			return (ushort)(amplitude * (below + (step + 2 * (rpm - Lut[1][i]) * (above - below)) / (step * 2)));
+			return (ushort)(here + (interval + 2 * (hz - Lut[1][i]) * (next - here)) / (interval * 2));
 		}
 
 		// populate a Tone's amplitudes from rpm
 		// pitch is fundamental (rpm/60) or power stroke harmonic (integer * rpm * cylinders) / 120)
-		public ushort Play(Haptics This, int destination, int pitch)
+		public ushort Play(Haptics This, byte destination)
 		{
-			int rate = pitch * This.D.Rpms;
+			byte harmonic = (byte)(destination & 7);
+			destination >>= 3;
+			int rate = harmonic * This.D.Rpms;
 			int l = LUT[1].Length - 1;
 			ushort freq;
 
-			if (0 < pitch)
+			if (0 < harmonic)
 				freq = (ushort)((60 + rate * This.S.Car.cyl)/120);
 			else freq = (ushort)((30 + rate) / 60);
 			if (freq < LUT[destination][1][0] || freq >= LUT[destination][1][l])
 				return 0;
-			return Shape(freq, Tones[destination].Freq[pitch], LUT[destination]);
+			//				amplitude							harmonic factor           
+			return (ushort)(Tones[1].Freq[harmonic] * Shape(freq * Tones[0].Freq[harmonic], LUT[destination]));
 		}
 
 		// convert 6 slider values to paired 4 * (Eq.Slider.Length - 2) lookup table for Shape()
@@ -87,44 +90,46 @@ namespace sierses.Sim
 			return lut;
 		}
 
-		public List<Tone> Tones;
-		public string AddProps(Haptics This, Tone that)
+		// AddProps() should be called by UI to add equalizer instances,
+		// which are Tone components played thru Shape() using that LUT
+		// e.g. AddProps(This, EqSpline(sliders[n]));
+		public string AddProps(Haptics This,  ushort[][] that)
 		{
-			Tones.Add(that);
+			LUT.Add(that);
 			string s;
-			switch (Tones.Count)
+			switch (LUT.Count)
 			{
 				case 1:
-					This.AttachDelegate("Eq0.0", () => Play(This, 0, 0));
-					This.AttachDelegate("Eq0.1", () => Play(This, 0, 1));
-					This.AttachDelegate("Eq0.2", () => Play(This, 0, 2));
-					This.AttachDelegate("Eq0.3", () => Play(This, 0, 3));
-					This.AttachDelegate("Eq0.4", () => Play(This, 0, 4));
-					This.AttachDelegate("Eq0.5", () => Play(This, 0, 5));
-					This.AttachDelegate("Eq0.6", () => Play(This, 0, 6));
-					This.AttachDelegate("Eq0.7", () => Play(This, 0, 7));
+					This.AttachDelegate("Eq0.0", () => Play(This, 0));
+					This.AttachDelegate("Eq0.1", () => Play(This, 1));
+					This.AttachDelegate("Eq0.2", () => Play(This, 2));
+					This.AttachDelegate("Eq0.3", () => Play(This, 3));
+					This.AttachDelegate("Eq0.4", () => Play(This, 4));
+					This.AttachDelegate("Eq0.5", () => Play(This, 5));
+					This.AttachDelegate("Eq0.6", () => Play(This, 6));
+					This.AttachDelegate("Eq0.7", () => Play(This, 7));
 					s = "Eq0 added";
 					break;
-				case 1:
-					This.AttachDelegate("Eq1.0", () => Play(This, 1, 0));
-					This.AttachDelegate("Eq1.1", () => Play(This, 1, 1));
-					This.AttachDelegate("Eq1.2", () => Play(This, 1, 2));
-					This.AttachDelegate("Eq1.3", () => Play(This, 1, 3));
-					This.AttachDelegate("Eq1.4", () => Play(This, 1, 4));
-					This.AttachDelegate("Eq1.5", () => Play(This, 1, 5));
-					This.AttachDelegate("Eq1.6", () => Play(This, 1, 6));
-					This.AttachDelegate("Eq1.7", () => Play(This, 1, 7));
+				case 2:
+					This.AttachDelegate("Eq1.0", () => Play(This, 8));
+					This.AttachDelegate("Eq1.1", () => Play(This, 9));
+					This.AttachDelegate("Eq1.2", () => Play(This, 10));
+					This.AttachDelegate("Eq1.3", () => Play(This, 11));
+					This.AttachDelegate("Eq1.4", () => Play(This, 12));
+					This.AttachDelegate("Eq1.5", () => Play(This, 13));
+					This.AttachDelegate("Eq1.6", () => Play(This, 14));
+					This.AttachDelegate("Eq1.7", () => Play(This, 15));
 					s = "Eq1 added";
 					break;
-				case 1:
-					This.AttachDelegate("Eq2.0", () => Play(This, 2, 0));
-					This.AttachDelegate("Eq2.1", () => Play(This, 2, 1));
-					This.AttachDelegate("Eq2.2", () => Play(This, 2, 2));
-					This.AttachDelegate("Eq2.3", () => Play(This, 2, 3));
-					This.AttachDelegate("Eq2.4", () => Play(This, 2, 4));
-					This.AttachDelegate("Eq2.5", () => Play(This, 2, 5));
-					This.AttachDelegate("Eq2.6", () => Play(This, 2, 6));
-					This.AttachDelegate("Eq2.7", () => Play(This, 2, 7));
+				case 3:
+					This.AttachDelegate("Eq2.0", () => Play(This, 16));
+					This.AttachDelegate("Eq2.1", () => Play(This, 17));
+					This.AttachDelegate("Eq2.2", () => Play(This, 18));
+					This.AttachDelegate("Eq2.3", () => Play(This, 19));
+					This.AttachDelegate("Eq2.4", () => Play(This, 20));
+					This.AttachDelegate("Eq2.5", () => Play(This, 21));
+					This.AttachDelegate("Eq2.6", () => Play(This, 22));
+					This.AttachDelegate("Eq2.7", () => Play(This, 23));
 					s = "Eq2 added; max equalizer supported...";
 					break;
 				default:
