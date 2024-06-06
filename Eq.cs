@@ -24,8 +24,8 @@ namespace sierses.Sim
 
         public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
 
-		// method for setting a Tone amplitude from a Tone frequency
-        public ushort Equalize(ushort rpm, ushort[][] LUT)
+		// set a Tone harmonic amplitude for a Tone frequency
+        public ushort Shape(ushort rpm, ushort[][] LUT)
 		{
 			int l = LUT[1].Length - 1;
             if (rpm < LUT[1][0] || rpm > LUT[1][l])
@@ -53,10 +53,10 @@ namespace sierses.Sim
 		public void Play(List<ushort[][]> LUT, List<Tone> A, int destination, Eq pitch)
 		{
 			for (int i = 0; i < A[i].Freq.Length - 2; i++)
-				A[destination].Freq[i] = Equalize(pitch.Slider[i], LUT[destination]);
+				A[destination].Freq[i] = Shape(pitch.Slider[i], LUT[destination]);
 		}
 
-		// convert 6 slider values to 2x24 lookup table for Equalizer()
+		// convert 6 slider values to 2x24 lookup table for Shape()
 		public ushort[][] EqSpline(ushort[] slider)
 		{
 			ushort min = slider[6];
