@@ -261,6 +261,12 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
+			if (null == Settings.Engine)
+				Settings.Engine = new();
+
+            Settings.Engine.Tones = E.Tones;
+			Settings.Engine.Sliders = E.Sliders;
+
 			if (Save || Loaded || Changed)		// End()
 			{
 				if (Loaded || Changed)
@@ -631,7 +637,7 @@ namespace sierses.Sim
 
 			D.Init(Settings, this);
 			E = new();
-			E.Init(this);
+			E.Init(Settings, this);
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
 			this.AttachDelegate("CarId", () => S.Id);
