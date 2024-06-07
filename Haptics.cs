@@ -565,6 +565,7 @@ namespace sierses.Sim
 			This = this;
 			LoadFailCount = 1;
 			D = new SimData();
+			bool ShowFreq = false, ShowSusp = false, ShowTire = false, ShowPhysics = false;
 
             SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
@@ -650,6 +651,7 @@ namespace sierses.Sim
 			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
 			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
 			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
+if (ShowFreq) {
 			this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
 			this.AttachDelegate("FreqOctave", () => D.FreqOctave);
 			this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
@@ -678,6 +680,8 @@ namespace sierses.Sim
 			this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
 			this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
 			this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
+}
+if (ShowTire) {
 			this.AttachDelegate("SlipXFL", () => D.SlipXFL);
 			this.AttachDelegate("SlipXFR", () => D.SlipXFR);
 			this.AttachDelegate("SlipXRL", () => D.SlipXRL);
@@ -703,8 +707,9 @@ namespace sierses.Sim
 			this.AttachDelegate("TireLoadFR", () => D.WheelLoadFR);
 			this.AttachDelegate("TireLoadRL", () => D.WheelLoadRL);
 			this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
-			this.AttachDelegate("YawRate", () => D.YawRate);
-			this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
+			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
+}
+if (ShowSusp) {
 			this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
 			this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
 			this.AttachDelegate("SuspensionFreqR0b", () => D.SuspensionFreqRb);
@@ -739,17 +744,21 @@ namespace sierses.Sim
 			this.AttachDelegate("SuspensionRight", () => D.SuspensionRight);
 			this.AttachDelegate("SuspensionAll", () => D.SuspensionAll);
 			this.AttachDelegate("SuspensionAccAll", () => D.SuspensionAccAll);
+}
 			this.AttachDelegate("RumbleFromPlugin", () => D.RumbleFromPlugin);
 			this.AttachDelegate("RumbleMult", () => D.RumbleMult);
 			this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
 			this.AttachDelegate("RumbleRight", () => D.RumbleRight);
 			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
-			this.AttachDelegate("Airborne", () => D.Airborne);
 			this.AttachDelegate("Gear", () => D.Gear);
 			this.AttachDelegate("Gears", () => D.Gears);
 			this.AttachDelegate("ShiftDown", () => D.Downshift);
 			this.AttachDelegate("ShiftUp", () => D.Upshift);
 			this.AttachDelegate("WiperStatus", () => D.WiperStatus);
+if (ShowPhysics) {
+			this.AttachDelegate("Airborne", () => D.Airborne);
+			this.AttachDelegate("YawRate", () => D.YawRate);
+			this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
 			this.AttachDelegate("AccHeave", () => D.AccHeave[D.Acc0]);
 			this.AttachDelegate("AccSurge", () => D.AccSurge[D.Acc0]);
 			this.AttachDelegate("AccSway", () => D.AccSway[D.Acc0]);
@@ -769,8 +778,8 @@ namespace sierses.Sim
 			this.AttachDelegate("MHeave", () => D.MotionHeave);
 			this.AttachDelegate("MSurge", () => D.MotionSurge);
 			this.AttachDelegate("MSway", () => D.MotionSway);
-			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
 			this.AttachDelegate("VelocityX", () => D.VelocityX);
+}
 			FrameTimeTicks = DateTime.Now.Ticks;
 		}
 	}
