@@ -26,14 +26,22 @@ namespace sierses.Sim
 			H = h;
 			Tones[0] = new();
 			Tones[0].Freq[0] = 1;
-			Tones[0].Freq[1] = 1;
-			Tones[0].Freq[2] = 1;
-			Tones[0].Freq[3] = 1;
-			Tones[0].Freq[4] = 1;
-			Tones[0].Freq[5] = 1;
-			Tones[0].Freq[6] = 1;
-			Tones[0].Freq[7] = 1;
+			Tones[0].Freq[1] = 3;
+			Tones[0].Freq[2] = 5;
+			Tones[0].Freq[3] = 7;
+			Tones[0].Freq[4] = 9;
+			Tones[0].Freq[5] = 11;
+			Tones[0].Freq[6] = 13;
+			Tones[0].Freq[7] = 15;
 			Tones[1] = new();
+			Tones[1].Freq[0] = 1000;
+			Tones[1].Freq[1] = 1000;
+			Tones[1].Freq[2] = 333;
+			Tones[1].Freq[3] = 111;
+			Tones[1].Freq[4] = 37;
+			Tones[1].Freq[5] = 12;
+			Tones[1].Freq[6] = 4;
+			Tones[1].Freq[7] = 1;
 			H.AttachDelegate("Fr0", () => Fr(0));
 			H.AttachDelegate("Fr1", () => Fr(1));
 			H.AttachDelegate("Fr2", () => Fr(2));
@@ -42,12 +50,20 @@ namespace sierses.Sim
 			H.AttachDelegate("Fr5", () => Fr(5));
 			H.AttachDelegate("Fr6", () => Fr(6));
 			H.AttachDelegate("Fr7", () => Fr(7));
+			H.AttachDelegate("Fa0", () => Tones[1].Freq[0]);
+			H.AttachDelegate("Fa1", () => Tones[1].Freq[1]);
+			H.AttachDelegate("Fa2", () => Tones[1].Freq[2]);
+			H.AttachDelegate("Fa3", () => Tones[1].Freq[3]);
+			H.AttachDelegate("Fa4", () => Tones[1].Freq[4]);
+			H.AttachDelegate("Fa5", () => Tones[1].Freq[5]);
+			H.AttachDelegate("Fa6", () => Tones[1].Freq[6]);
+			H.AttachDelegate("Fa7", () => Tones[1].Freq[7]);
 		}
 
 		// an array of LUT[][s interpolated from Sliders
 		private List<ushort[][]> lUT = new() { };
 
-		internal Tone[] Tones = new Tone[2];	// frequency harmonic and amplitude
+		public Tone[] Tones = new Tone[2];	// frequency harmonic and amplitude
 
         public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
 
