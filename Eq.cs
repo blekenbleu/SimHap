@@ -33,15 +33,15 @@ namespace sierses.Sim
 			if (null == Settings.Engine || null == Settings.Engine.Tones)
 			{
 				Tones[0] = new();
-				Tones[0].Freq[0] = 1;
-				Tones[0].Freq[1] = 3;
-				Tones[0].Freq[2] = 5;
-				Tones[0].Freq[3] = 7;
-				Tones[0].Freq[4] = 9;
-				Tones[0].Freq[5] = 11;
-				Tones[0].Freq[6] = 13;
-				Tones[0].Freq[7] = 15;
-				Tones[1] = new();
+				Tones[0].Freq[0] = 1;	// engine RPM / 60
+				Tones[0].Freq[1] = 1;	// power stroke: cylinders * engine RPM / 120
+				Tones[0].Freq[2] = 3;	// first power stroke harmonic
+				Tones[0].Freq[3] = 5;
+				Tones[0].Freq[4] = 7;
+				Tones[0].Freq[5] = 9;
+				Tones[0].Freq[6] = 11;
+				Tones[0].Freq[7] = 13;	// sixth power stroke harmonic
+				Tones[1] = new();		// harmonic amplitudes
 				Tones[1].Freq[0] = 1000;
 				Tones[1].Freq[1] = 1000;
 				Tones[1].Freq[2] = 333;
