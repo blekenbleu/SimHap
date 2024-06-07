@@ -31,13 +31,140 @@
         </Style>
 
 
+        <!--  Button corner radius and styling  -->
+
+        <Style TargetType="Button">
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="6" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
+
+
+        <!--  slider style for value label  -->
+        <Style x:Key="SliderRepeatButton" TargetType="RepeatButton">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border Background="Transparent" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderRepeatButton1" TargetType="RepeatButton">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border
+                            Height="3"
+                            Background="#4B4495"
+                            BorderBrush="#4B4495"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="True" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderThumb" TargetType="Thumb">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <StackPanel Orientation="Horizontal">
+                            <Path
+                                Margin="-2,0,0,0"
+                                Data="M 1 1 L 1 1 L 1 1 Z"
+                                Fill="#4B4495"
+                                Stroke="#4B4495"
+                                StrokeThickness="30" />
+                            <!--  text label for thumb  -->
+                            <TextBlock
+                                Width="20"
+                                Height="25"
+                                Margin="-30,-7.5,0,0"
+                                FontFamily="roboto medium"
+                                FontSize="13"
+                                Foreground="White"
+                                Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"
+                                TextAlignment="Center" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="Slider" TargetType="Slider">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border BorderBrush="Transparent" BorderThickness="0,0,0,1" />
+                <Border
+                    x:Name="TrackBackground"
+                    Grid.Row="1"
+                    Height="3"
+                    Margin="0,-10,0,0"
+                    VerticalAlignment="Center"
+                    Background="White"
+                    BorderBrush="White"
+                    BorderThickness="1" />
+                <Track
+                    x:Name="PART_Track"
+                    Grid.Row="1"
+                    Margin="0,-10,0,0">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderRepeatButton1}" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <!--  thumb slider position  -->
+                        <Thumb Margin="0,16,0,0" Style="{StaticResource SliderThumb}" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderRepeatButton}" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+
+        <Style x:Key="Horizontal_Slider" TargetType="Slider">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="MinHeight" Value="21" />
+                    <Setter Property="MinWidth" Value="80" />
+                    <Setter Property="Template" Value="{StaticResource Slider}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!--  slider style for value label end  -->
+
+
 
         <!--  corner radius textboxes  -->
         <Style TargetType="{x:Type TextBox}">
             <Style.Resources>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="CornerRadius" Value="6" />
                     <Setter Property="Height" Value="32" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                 </Style>
             </Style.Resources>
         </Style>
@@ -526,18 +653,19 @@
                                         Orientation="Horizontal">
                                         <TextBlock
                                             MinWidth="80"
-                                            Margin="0,0,80,0"
+                                            Margin="-7,0,70,0"
                                             VerticalAlignment="Center"
                                             FontFamily="roboto"
-                                            TextAlignment="Center"><Run Text="Multi" /></TextBlock>
+                                            TextAlignment="Center"><Run Text="PerGame Gain" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
-                                            Margin="0,0,80,0"
+                                            Margin="0,0,62,0"
                                             VerticalAlignment="Center"
                                             FontFamily="roboto"
                                             TextAlignment="Center"><Run Text="EHP" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
+                                            Margin="18,0,0,0"
                                             VerticalAlignment="Center"
                                             FontFamily="roboto"
                                             TextAlignment="Center"><Run Text="CC" /></TextBlock>
@@ -545,34 +673,29 @@
 
                                     <!--  Multi/EHP/CC Textboxes  -->
                                     <StackPanel
+                                        Height="35"
                                         Margin="0,2,0,0"
                                         HorizontalAlignment="Center"
                                         Orientation="Horizontal">
-                                        <ComboBox
-                                            Name="EngineMulti"
+                                        <!--  slider for engine per game multi  -->
+                                        <Slider
+                                            x:Name="EngineMulti"
                                             Width="80"
                                             Margin="0,0,80,0"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16"
-                                            Text="{Binding D.EngineMult}">
-                                            <ComboBoxItem Content="0.5" />
-                                            <ComboBoxItem Content="0.6" />
-                                            <ComboBoxItem Content="0.7" />
-                                            <ComboBoxItem Content="0.8" />
-                                            <ComboBoxItem Content="0.9" />
-                                            <ComboBoxItem Content="1" />
-                                            <ComboBoxItem Content="1.1" />
-                                            <ComboBoxItem Content="1.2" />
-                                            <ComboBoxItem Content="1.3" />
-                                            <ComboBoxItem Content="1.4" />
-                                            <ComboBoxItem Content="1.5" />
-                                        </ComboBox>
+                                            VerticalAlignment="Bottom"
+                                            VerticalContentAlignment="Bottom"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="1.5"
+                                            Minimum="0.5"
+                                            Style="{StaticResource Horizontal_Slider}"
+                                            TickFrequency="0.1"
+                                            ValueChanged="EngineMulti_ValueChanged"
+                                            Value="{Binding D.EngineMult}" />
                                         <TextBox
                                             x:Name="EMaxPowerHP"
                                             MinWidth="80"
                                             Margin="0,0,80,0"
+                                            VerticalAlignment="top"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="roboto"
@@ -582,6 +705,7 @@
                                         <TextBox
                                             x:Name="Displacement"
                                             MinWidth="80"
+                                            VerticalAlignment="top"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="roboto"
@@ -780,44 +904,47 @@
                                     IsExpanded="True">
                                     <StackPanel>
 
-                                        <!--  Suspension all/cuurent game multi headers  -->
+
+                                        <!--  Suspension all/current game multi headers  -->
                                         <StackPanel
-                                            Margin="12,15,0,2"
+                                            Margin="5,15,0,10"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBlock FontFamily="roboto medium" TextAlignment="Center">
-                                                All Games - Multi<LineBreak />
-                                                [0.0- (1.5) -5.0]</TextBlock>
-                                            <TextBlock
-                                                Margin="52,0,0,0"
-                                                FontFamily="roboto medium"
-                                                TextAlignment="Center">
-                                                Current Game - Multi<LineBreak />
-                                                [0.0 - 2.0]</TextBlock>
+                                            <TextBlock FontFamily="roboto medium">
+                                                All Games Gain
+                                            </TextBlock>
+                                            <TextBlock Margin="90,0,0,0" FontFamily="roboto medium">
+                                                Current Game Gain
+                                            </TextBlock>
                                         </StackPanel>
-                                        <!--  Suspension all/current game textboxes  -->
+                                        <!--  Suspension all/current game slider and value labels  -->
                                         <StackPanel
-                                            Margin="0,2,0,0"
+                                            Margin="0,8,0,0"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBox
-                                                Name="SuspensionMultAll"
-                                                Width="80"
-                                                Margin="0,0,0,0"
-                                                FontFamily="roboto"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontSize="16"
-                                                Text="{Binding D.SuspensionMultAll}" />
-                                            <TextBox
-                                                Name="SuspensionMult"
-                                                Width="80"
-                                                Margin="90,0,0,0"
-                                                FontFamily="roboto"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontSize="16"
-                                                Text="{Binding D.SuspensionMult}" />
+                                            <Slider
+                                                x:Name="SuspensionMultAll"
+                                                Width="175"
+                                                HorizontalAlignment="Center"
+                                                IsSnapToTickEnabled="True"
+                                                Maximum="5"
+                                                Minimum="0"
+                                                Style="{StaticResource Horizontal_Slider}"
+                                                TickFrequency="0.1"
+                                                ValueChanged="SuspensionMultAll_ValueChanged"
+                                                Value="{Binding D.SuspensionMultAll}" />
+
+                                            <Slider
+                                                x:Name="SuspensionMult"
+                                                Width="175"
+                                                Margin="30,0,0,0"
+                                                IsSnapToTickEnabled="True"
+                                                Maximum="2"
+                                                Minimum="0"
+                                                Style="{StaticResource Horizontal_Slider}"
+                                                TickFrequency="0.1"
+                                                ValueChanged="SuspensionMultAll_ValueChanged"
+                                                Value="{Binding D.SuspensionMult}" />
                                         </StackPanel>
 
 
@@ -825,44 +952,74 @@
 
                                         <!--  suspension all/current game gamma multi headers  -->
                                         <StackPanel
-                                            Margin="12,15,0,2"
+                                            Margin="7,25,0,18"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBlock FontFamily="roboto medium" TextAlignment="Center">
-                                                All Games - Gamma<LineBreak />
-                                                [0.0- (1.75) -5.0]</TextBlock>
-                                            <TextBlock
-                                                Margin="36,0,0,0"
-                                                FontFamily="roboto medium"
-                                                TextAlignment="Center">
-                                                Current Game - Gamma<LineBreak />
-                                                [0.0 - 2.0]</TextBlock>
+                                            <TextBlock FontFamily="roboto medium">
+                                                All Games Gamma
+                                            </TextBlock>
+                                            <TextBlock Margin="80,0,0,0" FontFamily="roboto medium">
+                                                Current Game Gamma
+                                            </TextBlock>
                                         </StackPanel>
-
                                         <StackPanel
                                             Margin="0,0,0,15"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <!--  suspension all/current game gamma textboxes  -->
-                                            <TextBox
-                                                Name="SuspensionGammaAll"
-                                                Width="80"
-                                                Margin="0,0,0,0"
-                                                FontFamily="roboto"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontSize="16"
-                                                Text="{Binding D.SuspensionGammaAll}" />
-                                            <TextBox
-                                                Name="SuspensionGamma"
-                                                Width="80"
-                                                Margin="90,0,0,0"
-                                                FontFamily="roboto"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                FontSize="16"
-                                                Text="{Binding D.SuspensionGamma}" />
+                                            <!--  suspension all/current game gamma sliders and value labels  -->
+                                            <Slider
+                                                x:Name="SuspensionGammaAll"
+                                                Width="175"
+                                                HorizontalAlignment="Center"
+                                                IsSnapToTickEnabled="True"
+                                                Maximum="2"
+                                                Minimum="0"
+                                                Style="{StaticResource Horizontal_Slider}"
+                                                TickFrequency="0.1"
+                                                ValueChanged="SuspensionGammaAll_ValueChanged"
+                                                Value="{Binding D.SuspensionGammaAll}" />
+
+
+                                            <Slider
+                                                x:Name="SuspensionGamma"
+                                                Width="175"
+                                                Margin="30,0,0,0"
+                                                HorizontalAlignment="Center"
+                                                IsSnapToTickEnabled="True"
+                                                Maximum="2"
+                                                Minimum="0"
+                                                Style="{StaticResource Horizontal_Slider}"
+                                                TickFrequency="0.1"
+                                                ValueChanged="SuspensionGamma_ValueChanged"
+                                                Value="{Binding D.SuspensionGamma}" />
                                         </StackPanel>
+
+
+                                        <StackPanel HorizontalAlignment="Right">
+                                            <!--  Reset button  -->
+                                            <Button
+                                                x:Name="ButtonResetSuspension"
+                                                Width="150"
+                                                Height="35"
+                                                Margin="0,10,0,15"
+                                                Background="#4B4495"
+                                                BorderThickness="0"
+                                                Click="ButtonResetSuspension_Click"
+                                                FontFamily="roboto"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Foreground="White">
+                                                Reset
+                                            </Button>
+
+                                        </StackPanel>
+
+
+
+
+
+
+
 
                                     </StackPanel>
                                 </Expander>

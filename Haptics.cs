@@ -30,7 +30,6 @@ namespace sierses.Sim
 		public static long FrameCountTicks = 0;
 		public static GameId CurrentGame = GameId.Other;
 		public static string GameDBText;
-		public Tone Fr;
 		internal static bool Loaded, Waiting, Save, Set, Changed;
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
@@ -40,6 +39,8 @@ namespace sierses.Sim
 		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
+
+		public Geq E { get; set; } 
 
 		public ImageSource PictureIcon
 		{
@@ -564,10 +565,6 @@ namespace sierses.Sim
 			This = this;
 			LoadFailCount = 1;
 			D = new SimData();
-            Fr = new Tone
-            {
-                Freq = new ushort[] {20, 50}
-            };
 
             SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
@@ -633,6 +630,8 @@ namespace sierses.Sim
 			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found" + Atlasst);
 
 			D.Init(Settings, this);
+			E = new();
+			E.Init(this);
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
 			this.AttachDelegate("CarId", () => S.Id);
@@ -772,8 +771,6 @@ namespace sierses.Sim
 			this.AttachDelegate("MSway", () => D.MotionSway);
 			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
 			this.AttachDelegate("VelocityX", () => D.VelocityX);
-			this.AttachDelegate("Fr0", () => Fr.Freq[0]);
-			this.AttachDelegate("Fr1", () => Fr.Freq[1]);
 			FrameTimeTicks = DateTime.Now.Ticks;
 		}
 	}

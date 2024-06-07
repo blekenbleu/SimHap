@@ -6,19 +6,43 @@ namespace sierses.Sim
 {
     public class Tone	// array of frequency component properties
 	{
-		internal ushort[] Freq = new ushort[6];	// one for frequency harmonics, another for amplitudes
+		internal ushort[] Freq = new ushort[8];	// one for frequency harmonics, another for amplitudes
 	}
 
 	// array of 6 slider values, then min, max frequencies
 	public class Eq : NotifyPropertyChanged
 	{
-		internal ushort[] Slider = new ushort[8];	// one for each Tone.Freq + 2 for min and max
+		internal ushort[] Slider = new ushort[8];	// one for each slider + 2 for min and max frequency
 	}
 
 	public class Geq
 	{
 		// an array of sliders for each equalizer
 		internal List<Eq> Sliders = new();
+
+		internal Haptics H;
+		internal void Init(Haptics h)
+		{
+			H = h;
+			Tones[0] = new();
+			Tones[0].Freq[0] = 1;
+			Tones[0].Freq[1] = 1;
+			Tones[0].Freq[2] = 1;
+			Tones[0].Freq[3] = 1;
+			Tones[0].Freq[4] = 1;
+			Tones[0].Freq[5] = 1;
+			Tones[0].Freq[6] = 1;
+			Tones[0].Freq[7] = 1;
+			Tones[1] = new();
+			H.AttachDelegate("Fr0", () => Fr(0));
+			H.AttachDelegate("Fr1", () => Fr(1));
+			H.AttachDelegate("Fr2", () => Fr(2));
+			H.AttachDelegate("Fr3", () => Fr(3));
+			H.AttachDelegate("Fr4", () => Fr(4));
+			H.AttachDelegate("Fr5", () => Fr(5));
+			H.AttachDelegate("Fr6", () => Fr(6));
+			H.AttachDelegate("Fr7", () => Fr(7));
+		}
 
 		// an array of LUT[][s interpolated from Sliders
 		private List<ushort[][]> lUT = new() { };
@@ -31,6 +55,7 @@ namespace sierses.Sim
 		// pitch is fundamental (rpm/60) or power stroke harmonic (integer * rpm * cylinders) / 120)
 		public ushort Play(Haptics This, byte destination)
 		{
+			H = This;
 			byte harmonic = (byte)(destination & 7);
             ushort[][] Lut = LUT[destination >> 3];
 			int l = Lut[1].Length - 1;
@@ -99,6 +124,13 @@ namespace sierses.Sim
 				f *= ff;			// geometric frequency progression
 			}
 			return lut;
+		}
+
+		// for properties
+		public ushort Fr(byte i)
+		{
+			return (ushort)((0 == i) ? ((30 + Tones[0].Freq[i] * H.D.Rpms) / 60)
+									 : ((60 + Tones[0].Freq[i] * H.D.Rpms * H.S.Car.cyl) / 120));
 		}
 
 		// AddProps() should be called by UI to add equalizer instances,

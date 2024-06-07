@@ -33,5 +33,33 @@ namespace sierses.Sim
 			Plugin.D.Unlocked = !Plugin.D.Unlocked;
 			Plugin.D.LockedText = Plugin.D.Unlocked ? "Lock" : "Unlock";
 		}
-	}
+
+        private void SuspensionMultAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
+
+        private void SuspensionGammaAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
+
+        private void SuspensionGamma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
+
+        private void ButtonResetSuspension_Click(object sender, RoutedEventArgs e)
+        {
+			SuspensionMultAll.Value = 1.5;
+            SuspensionMult.Value = 1;
+            SuspensionGammaAll.Value = 1.7;
+			SuspensionGamma.Value = 1;
+        }
+
+        private void EngineMulti_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
+    }
 }
