@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using sierses.Sim.Properties;
 using SimHub;
 using SimHub.Plugins;
-using SimHub.Plugins.DataPlugins.ShakeItV3.Outputs.Audio;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

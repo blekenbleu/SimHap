@@ -1,8 +1,6 @@
 using GameReaderCommon;
-using MahApps.Metro.Controls;
 using SimHub;
 using System;
-using System.Collections.Generic;
 
 namespace sierses.Sim
 {
