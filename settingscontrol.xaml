@@ -157,7 +157,7 @@
 
 
 
-        <!--  corner radius textboxes  -->
+        <!--  corner radius textboxes
         <Style TargetType="{x:Type TextBox}">
             <Style.Resources>
                 <Style TargetType="{x:Type Border}">
@@ -167,7 +167,7 @@
                     <Setter Property="BorderBrush" Value="Transparent" />
                 </Style>
             </Style.Resources>
-        </Style>
+        </Style>-->
 
         <!--  corner radius expander start  -->
         <Style x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
@@ -407,6 +407,9 @@
                                             Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            BorderThickness="0,0,0,2"
+                                            Background="Transparent"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.CarName}" />
@@ -426,6 +429,9 @@
                                             Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.Id}" />
@@ -445,6 +451,9 @@
                                             Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.Category}" />
@@ -481,6 +490,9 @@
                                             Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.IdleRPM}" />
@@ -490,6 +502,9 @@
                                             Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.Redline}" />
@@ -498,6 +513,9 @@
                                             MinWidth="80"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.MaxRPM}" />
@@ -631,6 +649,9 @@
                                             Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.MaxPower}" />
@@ -639,6 +660,9 @@
                                             MinWidth="80"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.MaxTorque}" />
@@ -655,19 +679,16 @@
                                             MinWidth="80"
                                             Margin="-7,0,70,0"
                                             VerticalAlignment="Center"
-                                            FontFamily="roboto"
                                             TextAlignment="Center"><Run Text="PerGame Gain" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="0,0,62,0"
                                             VerticalAlignment="Center"
-                                            FontFamily="roboto"
                                             TextAlignment="Center"><Run Text="EHP" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="18,0,0,0"
                                             VerticalAlignment="Center"
-                                            FontFamily="roboto"
                                             TextAlignment="Center"><Run Text="CC" /></TextBlock>
                                     </StackPanel>
 
@@ -698,6 +719,9 @@
                                             VerticalAlignment="top"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.ElectricMaxPower}" />
@@ -708,6 +732,9 @@
                                             VerticalAlignment="top"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            BorderBrush="#4B4495"
+                                            Background="Transparent"
+                                            BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.Displacement}" />
@@ -1084,6 +1111,9 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionPitchOffset}" />
@@ -1093,6 +1123,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionPitchMult, Mode=TwoWay}" />
@@ -1102,6 +1135,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionPitchGamma, Mode=TwoWay}" />
@@ -1148,6 +1184,8 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionRollOffset}" />
@@ -1157,6 +1195,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionRollMult}" />
@@ -1166,6 +1207,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionRollGamma}" />
@@ -1211,6 +1255,9 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionYawOffset}" />
@@ -1220,6 +1267,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionYawMult}" />
@@ -1229,6 +1279,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionYawGamma}" />
@@ -1273,6 +1326,9 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionHeaveOffset}" />
@@ -1282,6 +1338,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionHeaveMult}" />
@@ -1291,6 +1350,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionHeaveGamma}" />
@@ -1335,6 +1397,9 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSurgeOffset}" />
@@ -1344,6 +1409,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSurgeMult}" />
@@ -1353,6 +1421,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSurgeGamma}" />
@@ -1397,6 +1468,9 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSwayOffset}" />
@@ -1406,6 +1480,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSwayMult}" />
@@ -1415,6 +1492,9 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        BorderBrush="#4B4495"
+                                                        Background="Transparent"
+                                                        BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
                                                         Text="{Binding D.MotionSwayGamma}" />

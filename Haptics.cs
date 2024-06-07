@@ -565,7 +565,7 @@ namespace sierses.Sim
 			This = this;
 			LoadFailCount = 1;
 			D = new SimData();
-			bool ShowFreq = false, ShowSusp = true, ShowTire = false, ShowPhysics = false;
+			bool ShowFreq = false, ShowSusp = true, ShowTire = false, ShowPhysics = true;
 
             SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
