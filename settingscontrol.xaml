@@ -407,9 +407,9 @@
                                             Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
+                                            Background="Transparent"
                                             BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
-                                            Background="Transparent"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             Text="{Binding S.CarName}" />
@@ -429,8 +429,8 @@
                                             Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -451,8 +451,8 @@
                                             Width="400"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -490,8 +490,8 @@
                                             Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -502,8 +502,8 @@
                                             Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -513,8 +513,8 @@
                                             MinWidth="80"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -649,8 +649,8 @@
                                             Margin="0,0,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -660,8 +660,8 @@
                                             MinWidth="80"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -719,8 +719,8 @@
                                             VerticalAlignment="top"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -732,8 +732,8 @@
                                             VerticalAlignment="top"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            BorderBrush="#4B4495"
                                             Background="Transparent"
+                                            BorderBrush="#4B4495"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -777,81 +777,660 @@
                                         </styles:SHButtonSecondary>
                                     </StackPanel>
                                 </StackPanel>
-
-
                             </Expander>
-                            <!--  eq container fundamental  -->
+
+
+                            <!--  EQ SECTION  -->
+                            <!--  EQ container  -->
                             <StackPanel>
                                 <Expander
                                     Margin="0,6,0,3"
                                     FontFamily="roboto"
                                     FontSize="16"
-                                    Header="EQ - Fundamental"
-                                    IsExpanded="False" />
-                                <!--  eq container 1st harmonic  -->
-                                <StackPanel>
-                                    <Expander
-                                        Margin="0,3"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Header="EQ - 1st Harmonic"
-                                        IsExpanded="False" />
-                                    <!--  eq container 2nd harmonic  -->
-                                    <StackPanel>
-                                        <Expander
-                                            Margin="0,3"
-                                            FontFamily="roboto"
-                                            FontSize="16"
-                                            Header="EQ - 2nd Harmonic"
-                                            IsExpanded="False" />
-                                        <!--  eq container 3rd harmonic  -->
-                                        <StackPanel>
-                                            <Expander
-                                                Margin="0,3"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Header="EQ - 3rd Harmonic"
-                                                IsExpanded="False" />
-                                            <!--  eq container 4th harmonic  -->
-                                            <StackPanel>
-                                                <Expander
-                                                    Margin="0,3"
-                                                    FontFamily="roboto"
-                                                    FontSize="16"
-                                                    Header="EQ - 4th Harmonic"
-                                                    IsExpanded="False" />
-                                            </StackPanel>
-                                            <!--  eq container 5th harmonic  -->
-                                            <StackPanel>
-                                                <Expander
-                                                    Margin="0,3"
-                                                    FontFamily="roboto"
-                                                    FontSize="16"
-                                                    Header="EQ - 5th Harmonic"
-                                                    IsExpanded="False" />
-                                            </StackPanel>
-                                            <!--  eq container 6th harmonic  -->
-                                            <StackPanel>
-                                                <Expander
-                                                    Margin="0,3"
-                                                    FontFamily="roboto"
-                                                    FontSize="16"
-                                                    Header="EQ - 6th Harmonic"
-                                                    IsExpanded="False" />
-                                            </StackPanel>
-                                            <!--  eq container 7th harmonic  -->
-                                            <StackPanel>
-                                                <Expander
-                                                    Margin="0,3"
-                                                    FontFamily="roboto"
-                                                    FontSize="16"
-                                                    Header="EQ - 7th Harmonic"
-                                                    IsExpanded="False" />
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </StackPanel>
+                                    Header="EQ"
+                                    IsExpanded="True">
+                                    <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0" />
+                                            <ColumnDefinition Width="0" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="40" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="33" />
+                                            <RowDefinition Height="8" />
+                                            <RowDefinition Height="40" />
+                                            <RowDefinition Height="50" />
+                                            <RowDefinition Height="40" />
+                                            <RowDefinition Height="28" />
+                                        </Grid.RowDefinitions>
+
+                                        <!--  switch eq  -->
+                                        <RepeatButton
+                                            x:Name="EQswitch_increment"
+                                            Grid.Row="0"
+                                            Grid.Column="8"
+                                            Grid.ColumnSpan="3"
+                                            Margin="2"
+                                            Background="#353069"
+                                            BorderBrush="Transparent"
+                                            Click="EQswitch_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="14"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-3,0,0" Text="NEXT" />
+                                        </RepeatButton>
+                                        <!--  eq switch value  -->
+                                        <Border
+                                            Grid.Row="0"
+                                            Grid.Column="5"
+                                            Grid.ColumnSpan="3"
+                                            Margin="1"
+                                            Background="#353069"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQswitch_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="18"
+                                                Foreground="White">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQswitch_decrement"
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            Grid.ColumnSpan="3"
+                                            Margin="2"
+                                            Background="#353069"
+                                            BorderBrush="Transparent"
+                                            Click="EQswitch_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="14"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-3,0,0" Text="PREV" />
+                                        </RepeatButton>
+
+
+
+                                        <!--  eq slider0  -->
+                                        <RepeatButton
+                                            x:Name="EQ0_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="2"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ0_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-8,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="2"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#7C71F7"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ0_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ0_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="2"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ0_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-18,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="2"
+                                            Margin="3,5,3,5"
+                                            Background="#7C71F7"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                HP
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  eq slider1  -->
+                                        <RepeatButton
+                                            x:Name="EQ1_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="3"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            Click="EQ1_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-8,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="3"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#4B4495"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ1_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ1_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="3"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            Click="EQ1_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-18,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="3"
+                                            Margin="3,5,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                1
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  eq slider2  -->
+                                        <RepeatButton
+                                            x:Name="EQ2_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="4"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ2_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-8,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="4"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#7C71F7"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ2_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ2_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="4"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ2_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-18,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="4"
+                                            Margin="3,5,3,5"
+                                            Background="#7C71F7"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                2
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  eq slider3  -->
+                                        <RepeatButton
+                                            x:Name="EQ3_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="5"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            Click="EQ3_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-8,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="5"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#4B4495"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ3_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ3_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="5"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            Click="EQ3_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-18,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="5"
+                                            Margin="3,5,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                3
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  eq slider4  -->
+                                        <RepeatButton
+                                            x:Name="EQ4_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="6"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ4_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-8,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="6"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#7C71F7"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ4_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ4_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="6"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ4_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-18,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="6"
+                                            Margin="3,5,3,5"
+                                            Background="#7C71F7"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                4
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  eq slider5  -->
+                                        <RepeatButton
+                                            x:Name="EQ5_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="7"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            Click="EQ5_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-8,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="7"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#4B4495"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ5_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ5_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="7"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            Click="EQ5_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-18,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="7"
+                                            Margin="3,5,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                5
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  eq slider6  -->
+                                        <RepeatButton
+                                            x:Name="EQ6_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="8"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ6_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-8,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="8"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#7C71F7"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ6_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ6_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="8"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ6_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-18,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="8"
+                                            Margin="3,5,3,5"
+                                            Background="#7C71F7"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                6
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  eq slider7  -->
+                                        <RepeatButton
+                                            x:Name="EQ7_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="9"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            Click="EQ7_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-8,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="9"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#4B4495"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ7_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ7_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="9"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            Click="EQ7_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-18,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="9"
+                                            Margin="3,5,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                7
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  eq slider8  -->
+                                        <RepeatButton
+                                            x:Name="EQ8_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="10"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ8_increment_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="40"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-14,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  eq value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="10"
+                                            Margin="2,5,2,5"
+                                            BorderBrush="#7C71F7"
+                                            BorderThickness="2"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                x:Name="EQ8_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="EQ8_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="10"
+                                            Margin="2"
+                                            Background="#7C71F7"
+                                            BorderBrush="Transparent"
+                                            Click="EQ8_decrement_Click"
+                                            FontFamily="roboto black"
+                                            FontSize="55"
+                                            Foreground="White"
+                                            Interval="1">
+                                            <TextBlock Margin="0,-24,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="10"
+                                            Margin="3,5,3,5"
+                                            Background="#7C71F7"
+                                            BorderThickness="0"
+                                            CornerRadius="2">
+                                            <TextBlock
+                                                Margin="0,1,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="13">
+                                                LP
+                                            </TextBlock>
+                                        </Border>
+
+                                    </Grid>
+                                </Expander>
                             </StackPanel>
+
+
+
                         </StackPanel>
                     </ScrollViewer>
 
@@ -1111,8 +1690,8 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1123,8 +1702,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1135,8 +1714,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1195,8 +1774,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1207,8 +1786,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1255,8 +1834,8 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1267,8 +1846,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1279,8 +1858,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1326,8 +1905,8 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1338,8 +1917,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1350,8 +1929,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1397,8 +1976,8 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1409,8 +1988,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1421,8 +2000,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1468,8 +2047,8 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1480,8 +2059,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -1492,8 +2071,8 @@
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
                                                         Background="Transparent"
+                                                        BorderBrush="#4B4495"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"

@@ -3,6 +3,7 @@
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 
 using SimHub;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -61,5 +62,187 @@ namespace sierses.Sim
         {
 
         }
+
+        private void EQswitch_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQswitch = Convert.ToInt32(EQswitch_value.Text);
+            if (EQswitch < 9)
+            {
+                EQswitch_value.Text = $"{EQswitch + 1}";
+            }
+        }
+
+        private void EQswitch_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQswitch = Convert.ToInt32(EQswitch_value.Text);
+            if (EQswitch > 1)
+            {
+                EQswitch_value.Text = $"{EQswitch - 1}";
+            }
+        }
+
+        private void EQ0_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ0 = Convert.ToInt32(EQ0_value.Text);
+            if (EQ0 < 100)
+            {
+                EQ0_value.Text = $"{EQ0 + 1}";
+            }
+        }
+
+        private void EQ0_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ0 = Convert.ToInt32(EQ0_value.Text);
+            if (EQ0 > 0)
+            {
+                EQ0_value.Text = $"{EQ0 - 1}";
+            }
+        }
+
+        private void EQ1_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ1 = Convert.ToInt32(EQ1_value.Text);
+            if (EQ1 < 100)
+            {
+                EQ1_value.Text = $"{EQ1 + 1}";
+            }
+        }
+
+        private void EQ1_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ1 = Convert.ToInt32(EQ1_value.Text);
+            if (EQ1 > 0)
+            {
+                EQ1_value.Text = $"{EQ1 - 1}";
+            }
+        }
+
+        private void EQ2_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ2 = Convert.ToInt32(EQ2_value.Text);
+            if (EQ2 < 100)
+            {
+                EQ2_value.Text = $"{EQ2 + 1}";
+            }
+        }
+
+        private void EQ2_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ2 = Convert.ToInt32(EQ2_value.Text);
+            if (EQ2 > 0)
+            {
+                EQ2_value.Text = $"{EQ2 - 1}";
+            }
+        }
+
+        private void EQ3_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ3 = Convert.ToInt32(EQ3_value.Text);
+            if (EQ3 < 100)
+            {
+                EQ3_value.Text = $"{EQ3 + 1}";
+            }
+        }
+
+        private void EQ3_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ3 = Convert.ToInt32(EQ3_value.Text);
+            if (EQ3 > 0)
+            {
+                EQ3_value.Text = $"{EQ3 - 1}";
+            }
+        }
+
+        private void EQ4_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ4 = Convert.ToInt32(EQ4_value.Text);
+            if (EQ4 < 100)
+            {
+                EQ4_value.Text = $"{EQ4 + 1}";
+            }
+        }
+
+        private void EQ4_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ4 = Convert.ToInt32(EQ4_value.Text);
+            if (EQ4 > 0)
+            {
+                EQ4_value.Text = $"{EQ4 - 1}";
+            }
+        }
+
+        private void EQ5_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ5 = Convert.ToInt32(EQ5_value.Text);
+            if (EQ5 < 100)
+            {
+                EQ5_value.Text = $"{EQ5 + 1}";
+            }
+        }
+
+        private void EQ5_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ5 = Convert.ToInt32(EQ5_value.Text);
+            if (EQ5 > 0)
+            {
+                EQ5_value.Text = $"{EQ5 - 1}";
+            }
+        }
+
+        private void EQ6_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ6 = Convert.ToInt32(EQ6_value.Text);
+            if (EQ6 < 100)
+            {
+                EQ6_value.Text = $"{EQ6 + 1}";
+            }
+        }
+
+        private void EQ6_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ6 = Convert.ToInt32(EQ6_value.Text);
+            if (EQ6 > 0)
+            {
+                EQ6_value.Text = $"{EQ6 - 1}";
+            }
+        }
+
+        private void EQ7_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ7 = Convert.ToInt32(EQ7_value.Text);
+            if (EQ7 < 100)
+            {
+                EQ7_value.Text = $"{EQ7 + 1}";
+            }
+        }
+
+        private void EQ7_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ7 = Convert.ToInt32(EQ7_value.Text);
+            if (EQ7 > 0)
+            {
+                EQ7_value.Text = $"{EQ7 - 1}";
+            }
+        }
+
+        private void EQ8_increment_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ8 = Convert.ToInt32(EQ8_value.Text);
+            if (EQ8 < 100)
+            {
+                EQ8_value.Text = $"{EQ8 + 1}";
+            }
+        }
+
+        private void EQ8_decrement_Click(object sender, RoutedEventArgs e)
+        {
+            int EQ8 = Convert.ToInt32(EQ8_value.Text);
+            if (EQ8 > 0)
+            {
+                EQ8_value.Text = $"{EQ8 - 1}";
+            }
+        }
+
+
     }
 }
