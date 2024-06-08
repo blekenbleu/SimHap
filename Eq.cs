@@ -93,66 +93,72 @@ namespace sierses.Sim
 			H = This;
 			byte harmonic = (byte)(destination & 7);
             ushort[][] Lut = LUT[destination >> 3];
-			int l = Lut[1].Length - 1;
+			int L = Lut[1].Length - 1;
 			ushort freq;
 
 			if (0 < harmonic)
 				freq = (ushort)((60 + harmonic * This.D.Rpms * This.S.Car.cyl)/120);
 			else freq = (ushort)((30 + This.D.Rpms) / 60);
 			// mute out-of-range frequencies
-			if (freq < Lut[1][0] || freq >= Lut[1][l])
+			if (freq <= Lut[1][0] || freq > Lut[1][L])
 				return 0;
 			
 			// set a Tone harmonic amplitude for a Tone frequency
 			int i;
 /* binary search increments
-   12/24 (6): 18 :  6
-    18/24 (3): 21 : 15 : 9 : 3
-    21/24 (2): 23 : 19
-	23/24 (1): 24 : 22
-	6:24 (3) 3 : 9
-	3:24 (2) 1 : 5
-	1:24 (1) 0 : 2
+    16/32 (8): 24 :  8
+    24/32 (4): 28 : 20 : 12 : 4
+    28/32 (2): 30 : 26 : 22 : 18 : 14 : 10 : 6 : 2
+	23/24 (1): 31 : 29 : 27 : 25 : 23 : 21 : 19 : 17 : 15 : 13 : 11 : 9 : 7 : 5 : 3 : 1
  */
 
-			// Lut[0] has 24 harmonic scaling values;  Lut[1] has power-based frequency values
+			// Lut[0] has 32 harmonic scaling values;  Lut[1] has power-based frequency values
 /* binary search maybe faster?...
-			for (int j = i = (1 + l) >> 1 ; 0 < j; j = (j + (1 < j) ? 1 : 0) >> 1) 
+			for (int j = (i = L >> 1) >> 1 ; 0 < j; j >>= 1) 
 			{
-				if (freq < Lut[1][i])
+				if (freq < Lut[1][i - 1])
 					i -= j;
-				else if (freq >= Lut[1][i + 1])
+				else if (freq >= Lut[1][i])
 					i += j;
 				else break;
 			}
  */
-            for (i = 1; i <= l; i++)
-				if (freq >= Lut[1][i])	// Lut interval for this Hz?
+            for (i = 1; i <= L; i++)
+				if (freq <= Lut[1][i])	// Lut interval for this Hz?
 					break;
 
-			ushort here = Lut[0][i];
-			ushort next = Lut[0][i + 1];
-			int interval = (Lut[1][i + 1] - Lut[1][i]);
+			ushort here = Lut[0][i - 1];
+			ushort next = Lut[0][i];
+			int interval = (Lut[1][i] - Lut[1][i - 1]);
 
 			return (ushort)(Tones[1].Freq[harmonic]	// amplitude
 					// linear interpolation of scaling values on not-quite-linear frequency intervals.
 					* (here + (interval + 2 * (freq - Lut[1][i]) * (next - here)) / (interval * 2))); 
 		}	// Play()
 
-		// convert 6 slider values to paired 4 * (Eq.Slider.Length - 2) lookup table for Shape()
+		// convert 7 slider values to paired 4 * (Eq.Slider.Length - 2) lookup table for Shape()
 		public ushort[][] EqSpline(ushort[] slider)
 		{
-			ushort min = slider[6];
-			ushort max = slider[7];
-			double[] xdata = new double[] { 1, 2, 3, 4, 5, 6 };	// equal increments
-			double[] ydata = new double[] { slider[0], slider[1], slider[2], slider[3], slider[4], slider[5] };
+			ushort min = slider[0];
+			ushort max = slider[slider.Length - 1];
+			double[] xdata = new double[slider.Length];
+			// ydata has slider values, except with first and last entries replaced by 0
+			double[] ydata = new double[slider.Length];
+			xdata[0] = 1;
+			ydata[0] = 0;
+			for (int i = 1; i < slider.Length; i++)
+			{
+				xdata[i] = i;			// equal increments
+				ydata[i] = slider[i];
+			}
+			ydata[slider.Length - 1] = 0;
 			var q = CubicSpline.InterpolateAkimaSorted(xdata, ydata);
 			ushort[][] lut = new ushort[2][];
-			double ff = System.Math.Log10(((double)max) / min);
+			double ff = System.Math.Log10(((double)max) / min) / (4 * xdata.Length - 4);
 			double f = min;
 
 			lut[0][0] = min;  lut[1][0] = max;
-			for (int i = 0; i < lut[0].Length; i++)
+			for (int i = 0; i < (xdata.Length - 1); i++)
 			{
 				lut[0][1 + i] = (ushort)(0.5 + q.Interpolate(1 + 0.25 * i)); // equally spaced interpolated values
 				lut[1][1 + i] = (ushort)(0.5 + f);
@@ -173,9 +179,20 @@ namespace sierses.Sim
 		// e.g. AddProps(This, EqSpline(sliders[n]));
 		public string AddProps(Haptics This,  ushort[][] that)
 		{
-			LUT.Add(that);
+			if (null != that)
+			{
+				if (3 <= LUT.Count)
+					return("already have 3 equalizers");
+				LUT.Add(that);
+				return Broadcast(This, LUT.Count);
+			}
+			return "null LUT";
+		}
+
+		public string Broadcast(Haptics This, int L)
+		{
 			string s;
-			switch (LUT.Count)
+			switch (L)
 			{
 				case 1:
 					This.AttachDelegate("Eq0.0", () => Play(This, 0));
