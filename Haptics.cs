@@ -93,9 +93,10 @@ namespace sierses.Sim
 		// boilerplate SimHub -------------------------------------------
 		public string LeftMenuTitle => "Haptics";
 
+		internal SettingsControl SC;
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
-			return new SettingsControl(this);
+			return SC = new SettingsControl(this);
 		}
 
 		public Settings Settings { get; set; }

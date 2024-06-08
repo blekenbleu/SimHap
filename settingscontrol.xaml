@@ -844,12 +844,11 @@
                             <!--  EQ SECTION  -->
                             <!--  EQ container  -->
                             <StackPanel>
-                                <Expander
+                                <Expander x:Name="EQ"
                                     Margin="0,6,0,3"
                                     FontFamily="roboto"
                                     FontSize="16"
-                                    Header="EQ"
-                                    IsExpanded="True">
+                                    Header="EQ">
                                     <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="0" />

@@ -24,6 +24,7 @@ namespace sierses.Sim
 
 	public class Geq
 	{
+		internal int EQswitch = 0;
 		// an array of sliders for each equalizer
 		internal ObservableCollection<Eq> Sliders = new();
 
@@ -58,11 +59,15 @@ namespace sierses.Sim
 			if (null == Settings.Engine || null == Settings.Engine.Sliders)
 				Sliders = new();
 			else Sliders = Settings.Engine.Sliders;
-            if (1 > Sliders.Count)
+            if (1 > Sliders.Count || 9 != Sliders[0].Slider.Count)
 			{
 				ushort s = 50, highpass = 20, lowpass = 900;
-                Sliders.Add(new Eq() { Slider = new ObservableCollection<ushort> { highpass, s, s, s, s, s, s, s, lowpass } });
+				ObservableCollection<ushort> S = new() { highpass, s, s, s, s, s, s, s, lowpass };
+				if (1 > Sliders.Count)
+                	Sliders.Add(new Eq() { Slider = S });
+				else Sliders[0] = new Eq() { Slider = S };
 			}
+//			H.SC.Init(Sliders[0].Slider);
 			H.AttachDelegate("Fr0", () => Fr(0));
 			H.AttachDelegate("Fr1", () => Fr(1));
 			H.AttachDelegate("Fr2", () => Fr(2));
@@ -79,6 +84,15 @@ namespace sierses.Sim
 			H.AttachDelegate("Fa5", () => Tones[1].Freq[5]);
 			H.AttachDelegate("Fa6", () => Tones[1].Freq[6]);
 			H.AttachDelegate("Fa7", () => Tones[1].Freq[7]);
+		}
+
+		internal int Incr(int s, bool up)
+		{
+			if (up && 100 > Sliders[EQswitch].Slider[s])
+				Sliders[EQswitch].Slider[s]++;
+			else if ((!up) & 0 < Sliders[EQswitch].Slider[s])
+				Sliders[EQswitch].Slider[s]--;
+			return Sliders[EQswitch].Slider[s];
 		}
 
 		// an array of LUT[][s interpolated from Sliders

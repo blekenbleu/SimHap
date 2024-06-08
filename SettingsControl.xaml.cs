@@ -4,6 +4,7 @@
 
 using SimHub;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -22,6 +23,19 @@ namespace sierses.Sim
 			Version.Text = Plugin.PluginVersion;
 		}
 
+		internal void Init(ObservableCollection<ushort> S)
+		{
+			EQ0_value.Text = S[0].ToString();
+			EQ1_value.Text = S[1].ToString();
+			EQ2_value.Text = S[2].ToString();
+			EQ3_value.Text = S[3].ToString();
+			EQ4_value.Text = S[4].ToString();
+			EQ5_value.Text = S[5].ToString();
+			EQ6_value.Text = S[6].ToString();
+			EQ7_value.Text = S[7].ToString();
+			EQ8_value.Text = S[8].ToString();
+		}
+
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
 			Plugin.S.Id = "";			// Refresh_Click() force a mismatch
@@ -33,6 +47,11 @@ namespace sierses.Sim
 		{
 			Plugin.D.Unlocked = !Plugin.D.Unlocked;
 			Plugin.D.LockedText = Plugin.D.Unlocked ? "Lock" : "Unlock";
+		}
+
+		private void ExpanderHasExpanded(object sender, RoutedEventArgs args)
+		{
+			Init(Plugin.E.Sliders[0].Slider);
 		}
 
         private void SuspensionMultAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -65,184 +84,110 @@ namespace sierses.Sim
 
         private void EQswitch_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQswitch = Convert.ToInt32(EQswitch_value.Text);
-            if (EQswitch < 9)
+            if (Plugin.E.EQswitch < 2)
             {
-                EQswitch_value.Text = $"{EQswitch + 1}";
+				Plugin.E.EQswitch++;
+                EQswitch_value.Text = $"{Plugin.E.EQswitch}";
             }
         }
 
         private void EQswitch_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQswitch = Convert.ToInt32(EQswitch_value.Text);
-            if (EQswitch > 0)
+            if (Plugin.E.EQswitch > 0)
             {
-                EQswitch_value.Text = $"{EQswitch - 1}";
+				Plugin.E.EQswitch--;
+                EQswitch_value.Text = $"{Plugin.E.EQswitch}";
             }
         }
 
         private void EQ0_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ0 = Convert.ToInt32(EQ0_value.Text);
-            if (EQ0 < 100)
-            {
-                EQ0_value.Text = $"{EQ0 + 1}";
-            }
+        	EQ0_value.Text = $"{Plugin.E.Incr(0, true)}";
         }
 
         private void EQ0_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ0 = Convert.ToInt32(EQ0_value.Text);
-            if (EQ0 > 0)
-            {
-                EQ0_value.Text = $"{EQ0 - 1}";
-            }
+        	EQ0_value.Text = $"{Plugin.E.Incr(0, false)}";
         }
 
         private void EQ1_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ1 = Convert.ToInt32(EQ1_value.Text);
-            if (EQ1 < 100)
-            {
-                EQ1_value.Text = $"{EQ1 + 1}";
-            }
+        	EQ1_value.Text = $"{Plugin.E.Incr(1, true)}";
         }
 
         private void EQ1_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ1 = Convert.ToInt32(EQ1_value.Text);
-            if (EQ1 > 0)
-            {
-                EQ1_value.Text = $"{EQ1 - 1}";
-            }
+        	EQ1_value.Text = $"{Plugin.E.Incr(1, false)}";
         }
 
         private void EQ2_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ2 = Convert.ToInt32(EQ2_value.Text);
-            if (EQ2 < 100)
-            {
-                EQ2_value.Text = $"{EQ2 + 1}";
-            }
+        	EQ2_value.Text = $"{Plugin.E.Incr(2, true)}";
         }
 
         private void EQ2_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ2 = Convert.ToInt32(EQ2_value.Text);
-            if (EQ2 > 0)
-            {
-                EQ2_value.Text = $"{EQ2 - 1}";
-            }
+        	EQ2_value.Text = $"{Plugin.E.Incr(2, false)}";
         }
 
         private void EQ3_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ3 = Convert.ToInt32(EQ3_value.Text);
-            if (EQ3 < 100)
-            {
-                EQ3_value.Text = $"{EQ3 + 1}";
-            }
+        	EQ3_value.Text = $"{Plugin.E.Incr(3, true)}";
         }
 
         private void EQ3_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ3 = Convert.ToInt32(EQ3_value.Text);
-            if (EQ3 > 0)
-            {
-                EQ3_value.Text = $"{EQ3 - 1}";
-            }
+        	EQ3_value.Text = $"{Plugin.E.Incr(3, false)}";
         }
 
         private void EQ4_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ4 = Convert.ToInt32(EQ4_value.Text);
-            if (EQ4 < 100)
-            {
-                EQ4_value.Text = $"{EQ4 + 1}";
-            }
+        	EQ4_value.Text = $"{Plugin.E.Incr(4, true)}";
         }
 
         private void EQ4_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ4 = Convert.ToInt32(EQ4_value.Text);
-            if (EQ4 > 0)
-            {
-                EQ4_value.Text = $"{EQ4 - 1}";
-            }
+        	EQ4_value.Text = $"{Plugin.E.Incr(4, false)}";
         }
 
         private void EQ5_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ5 = Convert.ToInt32(EQ5_value.Text);
-            if (EQ5 < 100)
-            {
-                EQ5_value.Text = $"{EQ5 + 1}";
-            }
+        	EQ5_value.Text = $"{Plugin.E.Incr(5, true)}";
         }
 
         private void EQ5_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ5 = Convert.ToInt32(EQ5_value.Text);
-            if (EQ5 > 0)
-            {
-                EQ5_value.Text = $"{EQ5 - 1}";
-            }
+        	EQ5_value.Text = $"{Plugin.E.Incr(5, false)}";
         }
 
         private void EQ6_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ6 = Convert.ToInt32(EQ6_value.Text);
-            if (EQ6 < 100)
-            {
-                EQ6_value.Text = $"{EQ6 + 1}";
-            }
+        	EQ6_value.Text = $"{Plugin.E.Incr(6, true)}";
         }
 
         private void EQ6_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ6 = Convert.ToInt32(EQ6_value.Text);
-            if (EQ6 > 0)
-            {
-                EQ6_value.Text = $"{EQ6 - 1}";
-            }
+        	EQ6_value.Text = $"{Plugin.E.Incr(6, false)}";
         }
 
         private void EQ7_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ7 = Convert.ToInt32(EQ7_value.Text);
-            if (EQ7 < 100)
-            {
-                EQ7_value.Text = $"{EQ7 + 1}";
-            }
+        	EQ7_value.Text = $"{Plugin.E.Incr(7, true)}";
         }
 
         private void EQ7_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ7 = Convert.ToInt32(EQ7_value.Text);
-            if (EQ7 > 0)
-            {
-                EQ7_value.Text = $"{EQ7 - 1}";
-            }
+        	EQ7_value.Text = $"{Plugin.E.Incr(7, false)}";
         }
 
         private void EQ8_increment_Click(object sender, RoutedEventArgs e)
         {
-            int EQ8 = Convert.ToInt32(EQ8_value.Text);
-            if (EQ8 < 100)
-            {
-                EQ8_value.Text = $"{EQ8 + 1}";
-            }
+        	EQ8_value.Text = $"{Plugin.E.Incr(8, true)}";
         }
 
         private void EQ8_decrement_Click(object sender, RoutedEventArgs e)
         {
-            int EQ8 = Convert.ToInt32(EQ8_value.Text);
-            if (EQ8 > 0)
-            {
-                EQ8_value.Text = $"{EQ8 - 1}";
-            }
+        	EQ8_value.Text = $"{Plugin.E.Incr(8, false)}";
         }
-
-
     }
 }
