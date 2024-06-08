@@ -7,13 +7,13 @@ namespace sierses.Sim
 {
     public class Tone	// array of frequency component properties
 	{
-		internal ushort[] Freq = new ushort[8];	// one for frequency harmonics, another for amplitudes
+		internal ObservableCollection<ushort> Freq = new();	// one for frequency harmonics, another for amplitudes
 	}
 
 	// array of 6 slider values, then min, max frequencies
 	public class Eq : NotifyPropertyChanged
 	{
-		internal ushort[] Slider = new ushort[9];	// one for each slider + 2 for min and max frequency
+		internal ObservableCollection<ushort> Slider = new();	// one for each slider + 2 for min and max frequency
 	}
 
 	public class Engine
@@ -32,26 +32,26 @@ namespace sierses.Sim
 		{
 			H = h;
   			if (null == Settings.Engine || null == Settings.Engine.Tones
-			 || null == Settings.Engine.Tones[1].Freq || 0 == Settings.Engine.Tones[1].Freq[0])
+			 || null == Settings.Engine.Tones[1].Freq || 0 == Settings.Engine.Tones[1].Freq.Count)
   			{
 				Tones[0] = new();
-				Tones[0].Freq[0] = 1;	// engine RPM / 60
-				Tones[0].Freq[1] = 1;	// power stroke: cylinders * engine RPM / 120
-				Tones[0].Freq[2] = 3;	// first power stroke harmonic
-				Tones[0].Freq[3] = 5;
-				Tones[0].Freq[4] = 7;
-				Tones[0].Freq[5] = 9;
-				Tones[0].Freq[6] = 11;
-				Tones[0].Freq[7] = 13;	// sixth power stroke harmonic
+				Tones[0].Freq.Add(1);	// engine RPM / 60
+				Tones[0].Freq.Add(1);	// power stroke: cylinders * engine RPM / 120
+				Tones[0].Freq.Add(3);	// first power stroke harmonic
+				Tones[0].Freq.Add(5);
+				Tones[0].Freq.Add(7);
+				Tones[0].Freq.Add(9);
+				Tones[0].Freq.Add(11);
+				Tones[0].Freq.Add(13);	// sixth power stroke harmonic
 				Tones[1] = new();		// harmonic amplitudes
-				Tones[1].Freq[0] = 1000;
-				Tones[1].Freq[1] = 1000;
-				Tones[1].Freq[2] = 333;
-				Tones[1].Freq[3] = 111;
-				Tones[1].Freq[4] = 37;
-				Tones[1].Freq[5] = 12;
-				Tones[1].Freq[6] = 4;
-				Tones[1].Freq[7] = 1;
+				Tones[1].Freq.Add(1000);
+				Tones[1].Freq.Add(1000);
+				Tones[1].Freq.Add(333);
+				Tones[1].Freq.Add(111);
+				Tones[1].Freq.Add(37);
+				Tones[1].Freq.Add(12);
+				Tones[1].Freq.Add(4);
+				Tones[1].Freq.Add(1);
   			}
   			else Tones = Settings.Engine.Tones;
 
@@ -61,7 +61,7 @@ namespace sierses.Sim
             if (1 > Sliders.Count)
 			{
 				ushort s = 50, highpass = 20, lowpass = 900;
-                Sliders.Add(new Eq() { Slider = new ushort[] { highpass, s, s, s, s, s, s, s, lowpass } });
+                Sliders.Add(new Eq() { Slider = new ObservableCollection<ushort> { highpass, s, s, s, s, s, s, s, lowpass } });
 			}
 			H.AttachDelegate("Fr0", () => Fr(0));
 			H.AttachDelegate("Fr1", () => Fr(1));
