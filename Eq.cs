@@ -1,6 +1,7 @@
 using MathNet.Numerics.Interpolation;
 using SimHub.Plugins;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace sierses.Sim
 {
@@ -18,13 +19,13 @@ namespace sierses.Sim
 	public class Engine
 	{
 		public Tone[] Tones;		// engine fundamental and harmonic settings
-		public List<Eq> Sliders;	// graphic equalizer settings
+		public ObservableCollection<Eq> Sliders;	// graphic equalizer settings
 	}
 
 	public class Geq
 	{
 		// an array of sliders for each equalizer
-		internal List<Eq> Sliders = new();
+		internal ObservableCollection<Eq> Sliders = new();
 
 		internal Haptics H;
 		internal void Init(Settings Settings, Haptics h)
