@@ -30,8 +30,9 @@ namespace sierses.Sim
 		internal void Init(Settings Settings, Haptics h)
 		{
 			H = h;
-			if (null == Settings.Engine || null == Settings.Engine.Tones)
-			{
+  			if (null == Settings.Engine || null == Settings.Engine.Tones
+			 || null == Settings.Engine.Tones[1].Freq || 0 == Settings.Engine.Tones[1].Freq[0])
+  			{
 				Tones[0] = new();
 				Tones[0].Freq[0] = 1;	// engine RPM / 60
 				Tones[0].Freq[1] = 1;	// power stroke: cylinders * engine RPM / 120
@@ -50,8 +51,8 @@ namespace sierses.Sim
 				Tones[1].Freq[5] = 12;
 				Tones[1].Freq[6] = 4;
 				Tones[1].Freq[7] = 1;
-			}
-			else Tones = Settings.Engine.Tones;
+  			}
+  			else Tones = Settings.Engine.Tones;
 
 			if (null == Settings.Engine || null == Settings.Engine.Sliders)
 				Sliders = new();
