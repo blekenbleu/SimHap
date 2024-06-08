@@ -135,14 +135,16 @@
                     <ControlTemplate TargetType="Thumb">
                         <StackPanel Orientation="Horizontal">
                             <Path
+                                x:Name="ThumbdMASS"
                                 Margin="-2,0,0,0"
                                 Data="M 1 1 L 1 1 L 1 1 Z"
                                 Fill="#4B4495"
                                 Stroke="#4B4495"
                                 StrokeThickness="30" />
                             <!--  text label for thumb  -->
-                            <TextBlock
+                                <TextBlock
                                 Width="20"
+                                    x:Name ="ThumbdMASSlabel"
                                 Height="25"
                                 Margin="-30,-7.5,0,0"
                                 FontFamily="roboto medium"
@@ -151,23 +153,14 @@
                                 Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"
                                 TextAlignment="Center" />
                         </StackPanel>
+                        <!-- mouse hover color change-->
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Trigger.Setters>
-                                    <Setter Property="Effect">
-                                        <Setter.Value>
-                                            <DropShadowEffect
-                                                BlurRadius="10"
-                                                ShadowDepth="0"
-                                                Color="#70153C"/>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Trigger.Setters>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
-                                <Setter Property="Opacity" Value="1" />
-                            </Trigger>
+                                <Setter TargetName="ThumbdMASS" Property="Stroke" Value="#38345D" />
+                                <Setter TargetName="ThumbdMASSlabel" Property="Opacity" Value="0.6" />
+                                    </Trigger>
                         </ControlTemplate.Triggers>
+
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

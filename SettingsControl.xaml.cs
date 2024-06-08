@@ -75,7 +75,7 @@ namespace sierses.Sim
         private void EQswitch_decrement_Click(object sender, RoutedEventArgs e)
         {
             int EQswitch = Convert.ToInt32(EQswitch_value.Text);
-            if (EQswitch > 1)
+            if (EQswitch > 0)
             {
                 EQswitch_value.Text = $"{EQswitch - 1}";
             }
