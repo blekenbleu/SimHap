@@ -5,8 +5,11 @@
 using SimHub;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace sierses.Sim
 {
@@ -23,6 +26,7 @@ namespace sierses.Sim
 			Version.Text = Plugin.PluginVersion;
 		}
 
+		// called when expanding EQ, 
 		internal void Init(ObservableCollection<ushort> S)
 		{
 			EQ0_value.Text = S[0].ToString();
@@ -34,6 +38,21 @@ namespace sierses.Sim
 			EQ6_value.Text = S[6].ToString();
 			EQ7_value.Text = S[7].ToString();
 			EQ8_value.Text = S[8].ToString();
+		}
+
+		private void EQ_Expanded(object sender, RoutedEventArgs e)
+		{
+			Init(Plugin.E.Sliders[Plugin.E.EQswitch].Slider);
+		}
+
+		private void EQswitch_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQswitch_value.Text = Plugin.E.NextUp(true);
+		}
+
+		private void EQswitch_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQswitch_value.Text = Plugin.E.NextUp(false);
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
@@ -49,145 +68,122 @@ namespace sierses.Sim
 			Plugin.D.LockedText = Plugin.D.Unlocked ? "Lock" : "Unlock";
 		}
 
-		private void ExpanderHasExpanded(object sender, RoutedEventArgs args)
+		private void SuspensionMultAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			Init(Plugin.E.Sliders[0].Slider);
+
 		}
 
-        private void SuspensionMultAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
+		private void SuspensionGammaAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
 
-        }
+		}
 
-        private void SuspensionGammaAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
+		private void SuspensionGamma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
 
-        }
+		}
 
-        private void SuspensionGamma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
+		private void EngineMulti_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
 
-        }
+		}
 
-        private void ButtonResetSuspension_Click(object sender, RoutedEventArgs e)
-        {
+		private void ButtonResetSuspension_Click(object sender, RoutedEventArgs e)
+		{
 			SuspensionMultAll.Value = 1.5;
-            SuspensionMult.Value = 1;
-            SuspensionGammaAll.Value = 1.7;
+			SuspensionMult.Value = 1;
+			SuspensionGammaAll.Value = 1.7;
 			SuspensionGamma.Value = 1;
-        }
+		}
 
-        private void EngineMulti_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
+		private void EQ0_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ0_value.Text = $"{Plugin.E.Incr(0, true)}";
+		}
 
-        }
+		private void EQ0_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ0_value.Text = $"{Plugin.E.Incr(0, false)}";
+		}
 
-        private void EQswitch_increment_Click(object sender, RoutedEventArgs e)
-        {
-            if (Plugin.E.EQswitch < 2)
-            {
-				Plugin.E.EQswitch++;
-                EQswitch_value.Text = $"{Plugin.E.EQswitch}";
-            }
-        }
+		private void EQ1_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ1_value.Text = $"{Plugin.E.Incr(1, true)}";
+		}
 
-        private void EQswitch_decrement_Click(object sender, RoutedEventArgs e)
-        {
-            if (Plugin.E.EQswitch > 0)
-            {
-				Plugin.E.EQswitch--;
-                EQswitch_value.Text = $"{Plugin.E.EQswitch}";
-            }
-        }
+		private void EQ1_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ1_value.Text = $"{Plugin.E.Incr(1, false)}";
+		}
 
-        private void EQ0_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ0_value.Text = $"{Plugin.E.Incr(0, true)}";
-        }
+		private void EQ2_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ2_value.Text = $"{Plugin.E.Incr(2, true)}";
+		}
 
-        private void EQ0_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ0_value.Text = $"{Plugin.E.Incr(0, false)}";
-        }
+		private void EQ2_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ2_value.Text = $"{Plugin.E.Incr(2, false)}";
+		}
 
-        private void EQ1_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ1_value.Text = $"{Plugin.E.Incr(1, true)}";
-        }
+		private void EQ3_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ3_value.Text = $"{Plugin.E.Incr(3, true)}";
+		}
 
-        private void EQ1_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ1_value.Text = $"{Plugin.E.Incr(1, false)}";
-        }
+		private void EQ3_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ3_value.Text = $"{Plugin.E.Incr(3, false)}";
+		}
 
-        private void EQ2_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ2_value.Text = $"{Plugin.E.Incr(2, true)}";
-        }
+		private void EQ4_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ4_value.Text = $"{Plugin.E.Incr(4, true)}";
+		}
 
-        private void EQ2_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ2_value.Text = $"{Plugin.E.Incr(2, false)}";
-        }
+		private void EQ4_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ4_value.Text = $"{Plugin.E.Incr(4, false)}";
+		}
 
-        private void EQ3_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ3_value.Text = $"{Plugin.E.Incr(3, true)}";
-        }
+		private void EQ5_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ5_value.Text = $"{Plugin.E.Incr(5, true)}";
+		}
 
-        private void EQ3_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ3_value.Text = $"{Plugin.E.Incr(3, false)}";
-        }
+		private void EQ5_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ5_value.Text = $"{Plugin.E.Incr(5, false)}";
+		}
 
-        private void EQ4_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ4_value.Text = $"{Plugin.E.Incr(4, true)}";
-        }
+		private void EQ6_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ6_value.Text = $"{Plugin.E.Incr(6, true)}";
+		}
 
-        private void EQ4_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ4_value.Text = $"{Plugin.E.Incr(4, false)}";
-        }
+		private void EQ6_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ6_value.Text = $"{Plugin.E.Incr(6, false)}";
+		}
 
-        private void EQ5_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ5_value.Text = $"{Plugin.E.Incr(5, true)}";
-        }
+		private void EQ7_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ7_value.Text = $"{Plugin.E.Incr(7, true)}";
+		}
 
-        private void EQ5_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ5_value.Text = $"{Plugin.E.Incr(5, false)}";
-        }
+		private void EQ7_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ7_value.Text = $"{Plugin.E.Incr(7, false)}";
+		}
 
-        private void EQ6_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ6_value.Text = $"{Plugin.E.Incr(6, true)}";
-        }
+		private void EQ8_increment_Click(object sender, RoutedEventArgs e)
+		{
+			EQ8_value.Text = $"{Plugin.E.Incr(8, true)}";
+		}
 
-        private void EQ6_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ6_value.Text = $"{Plugin.E.Incr(6, false)}";
-        }
-
-        private void EQ7_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ7_value.Text = $"{Plugin.E.Incr(7, true)}";
-        }
-
-        private void EQ7_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ7_value.Text = $"{Plugin.E.Incr(7, false)}";
-        }
-
-        private void EQ8_increment_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ8_value.Text = $"{Plugin.E.Incr(8, true)}";
-        }
-
-        private void EQ8_decrement_Click(object sender, RoutedEventArgs e)
-        {
-        	EQ8_value.Text = $"{Plugin.E.Incr(8, false)}";
-        }
-    }
+		private void EQ8_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			EQ8_value.Text = $"{Plugin.E.Incr(8, false)}";
+		}
+	}
 }

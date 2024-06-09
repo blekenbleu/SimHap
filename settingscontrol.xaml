@@ -127,7 +127,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="SliderThumb" TargetType="Thumb" >
+        <Style x:Key="SliderThumb" TargetType="Thumb">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
             <Setter Property="Template">
@@ -142,9 +142,9 @@
                                 Stroke="#4B4495"
                                 StrokeThickness="30" />
                             <!--  text label for thumb  -->
-                                <TextBlock
+                            <TextBlock
+                                x:Name="ThumbdMASSlabel"
                                 Width="20"
-                                    x:Name ="ThumbdMASSlabel"
                                 Height="25"
                                 Margin="-30,-7.5,0,0"
                                 FontFamily="roboto medium"
@@ -153,12 +153,12 @@
                                 Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"
                                 TextAlignment="Center" />
                         </StackPanel>
-                        <!-- mouse hover color change-->
+                        <!--  mouse hover color change  -->
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="ThumbdMASS" Property="Stroke" Value="#38345D" />
                                 <Setter TargetName="ThumbdMASSlabel" Property="Opacity" Value="0.6" />
-                                    </Trigger>
+                            </Trigger>
                         </ControlTemplate.Triggers>
 
                     </ControlTemplate>
@@ -844,8 +844,10 @@
                             <!--  EQ SECTION  -->
                             <!--  EQ container  -->
                             <StackPanel>
-                                <Expander x:Name="EQ"
+                                <Expander
+                                    x:Name="EQ"
                                     Margin="0,6,0,3"
+                                    Expander.Expanded="EQ_Expanded"
                                     FontFamily="roboto"
                                     FontSize="16"
                                     Header="EQ">

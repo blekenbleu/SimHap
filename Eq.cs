@@ -38,6 +38,14 @@ namespace sierses.Sim
 			return Sliders[EQswitch].Slider[s];
 		}
 
+		internal string NextUp(bool up)
+		{
+			if ((up && 2 == EQswitch) || (0 == EQswitch && !up))
+				return $"{EQswitch}"; 
+			EQswitch += up ? +1 : -1;
+			return $"{EQswitch}";
+		}
+
 		// an array of LUT[][s interpolated from Sliders
 		private List<ushort[][]> lUT = new() { };
 
