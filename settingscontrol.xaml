@@ -301,8 +301,8 @@
                                             Margin="10,5,0,0"
                                             ContentSource="Header"
                                             RecognizesAccessKey="True"
-                                            TextBlock.FontSize="20"
                                             TextBlock.FontFamily="roboto"
+                                            TextBlock.FontSize="20"
                                             TextBlock.Foreground="White" />
                                     </Border>
 
@@ -454,13 +454,18 @@
                                 FontSize="15"
                                 IsExpanded="True">
                                 <Expander.Header>
-                                    <StackPanel Orientation="Horizontal" Margin="-4,-2,0,0">
+                                    <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
                                         <Image
-                                                Width="29"
-                                                Margin="0,-3,10,0"
-                                                Source="C:\Users\demas\source\repos\SimHap\Resources\engine50x50.png" />
-                                        <TextBlock FontFamily="roboto" FontSize="20" Foreground="White" Margin="-7,-5,0,0" VerticalAlignment="Center">
-                                                Engine Properties
+                                            Width="29"
+                                            Margin="0,-3,10,0"
+                                            Source="C:\Users\demas\source\repos\SimHap\Resources\engine50x50.png" />
+                                        <TextBlock
+                                            Margin="-7,-5,0,0"
+                                            VerticalAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="20"
+                                            Foreground="White">
+                                            Engine Properties
                                         </TextBlock>
                                     </StackPanel>
                                 </Expander.Header>
@@ -863,12 +868,17 @@
                                     FontFamily="roboto"
                                     FontSize="16">
                                     <Expander.Header>
-                                        <StackPanel Orientation="Horizontal" Margin="-4,-2,0,0">
+                                        <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
                                             <Image
                                                 Width="29"
                                                 Margin="0,-3,10,0"
                                                 Source="C:\Users\demas\source\repos\SimHap\Resources\eq.png" />
-                                            <TextBlock FontFamily="roboto" FontSize="20" Foreground="White" Margin="-7,-5,0,0" VerticalAlignment="Center">
+                                            <TextBlock
+                                                Margin="-7,-5,0,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto"
+                                                FontSize="20"
+                                                Foreground="White">
                                                 EQ
                                             </TextBlock>
                                         </StackPanel>
@@ -942,7 +952,6 @@
                                             Click="EQswitch_decrement_Click"
                                             FontFamily="roboto black"
                                             FontSize="17"
-                                            
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
@@ -1534,6 +1543,842 @@
                             </StackPanel>
 
 
+                            <!--  tone calibration expander  -->
+                            <!--  EQ container  -->
+                            <StackPanel>
+                                <Expander
+                                    Margin="0,6,0,3"
+                                    FontFamily="roboto"
+                                    FontSize="16">
+                                    <Expander.Header>
+                                        <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
+                                            <Image
+                                                Width="29"
+                                                Margin="0,-3,10,0"
+                                                Source="C:\Users\demas\source\repos\SimHap\Resources\eq.png" />
+                                            <TextBlock
+                                                Margin="-7,-5,0,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto"
+                                                FontSize="20"
+                                                Foreground="White">
+                                                Tone Calibration
+                                            </TextBlock>
+
+
+                                        </StackPanel>
+                                    </Expander.Header>
+                                    <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="49" />
+                                            <ColumnDefinition Width="49" />
+                                            <ColumnDefinition Width="49" />
+                                            <ColumnDefinition Width="49" />
+                                            <ColumnDefinition Width="49" />
+                                            <ColumnDefinition Width="49" />
+                                            <ColumnDefinition Width="49" />
+                                            <ColumnDefinition Width="49" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="32" />
+                                            <RowDefinition Height="32" />
+                                            <RowDefinition Height="40" />
+                                            <RowDefinition Height="50" />
+                                            <RowDefinition Height="40" />
+                                            <RowDefinition Height="32" />
+                                        </Grid.RowDefinitions>
+
+                                        <!--  top row header  -->
+                                        <Border
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="8"
+                                            Background="#38326E"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="16"
+                                                Foreground="White">
+                                                Power harmonic factor (2-13)
+                                            </TextBlock>
+                                        </Border>
+
+
+
+                                        <!--  f1  -->
+                                        <RepeatButton
+                                            x:Name="F1_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Margin="2"
+                                            Background="#38326E"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-2,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="0"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#38326E"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                x:Name="F1_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="17">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                              x:Name="F1_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="0"
+                                            Margin="2"
+                                            Background="#38326E"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="0"
+                                            Margin="3,5,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                F1
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  f2  -->
+                                        <RepeatButton
+                                            x:Name="F2_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-2,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="1"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#4B4495"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                x:Name="F2_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="17">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="F2_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="1"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="1"
+                                            Margin="3,5,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                F2
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  H1  -->
+                                        <RepeatButton
+                                            x:Name="H1_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="2"
+                                            Margin="2"
+                                            Background="#6057BF"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-2,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="2"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#6057BF"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                x:Name="H1_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="17">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="H1_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="2"
+                                            Margin="2"
+                                            Background="#6057BF"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="2"
+                                            Margin="3,5,3,5"
+                                            Background="#6057BF"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                H1
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H2  -->
+                                        <RepeatButton
+                                            x:Name="H2_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="3"
+                                            Margin="2"
+                                            Background="#38326E"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-2,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="3"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#38326E"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                x:Name="H2_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="17">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="H2_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="3"
+                                            Margin="2"
+                                            Background="#38326E"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="3"
+                                            Margin="3,5,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                H2
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H3  -->
+                                        <RepeatButton
+                                            x:Name="H3_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="4"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-2,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="4"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#4B4495"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                x:Name="H3_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="17">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="H3_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="4"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="4"
+                                            Margin="3,5,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                H3
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  H4  -->
+                                        <RepeatButton
+                                            x:Name="H4_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="5"
+                                            Margin="2"
+                                            Background="#6057BF"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-2,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="5"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#6057BF"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                x:Name="H4_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="17">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="H4_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="5"
+                                            Margin="2"
+                                            Background="#6057BF"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="5"
+                                            Margin="3,5,3,5"
+                                            Background="#6057BF"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                H4
+                                            </TextBlock>
+                                        </Border>
+
+                                        <!--  H5  -->
+                                        <RepeatButton
+                                            x:Name="H5_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="6"
+                                            Margin="2"
+                                            Background="#38326E"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-2,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="6"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#38326E"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                x:Name="H5_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="17">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="H5_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="6"
+                                            Margin="2"
+                                            Background="#38326E"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="6"
+                                            Margin="3,5,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                H5
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H6  -->
+                                        <RepeatButton
+                                            x:Name="H6_increment"
+                                            Grid.Row="2"
+                                            Grid.Column="7"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="32"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-2,0,0" Text="+" />
+                                        </RepeatButton>
+                                        <!--  value  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="7"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#4B4495"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                x:Name="H6_value"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto black"
+                                                FontSize="17">
+                                                0
+                                            </TextBlock>
+                                        </Border>
+                                        <RepeatButton
+                                            x:Name="H6_decrement"
+                                            Grid.Row="4"
+                                            Grid.Column="7"
+                                            Margin="2"
+                                            Background="#4B4495"
+                                            BorderBrush="Transparent"
+                                            FontFamily="roboto black"
+                                            FontSize="45"
+                                            Foreground="White"
+                                            Interval="1"
+                                            Style="{StaticResource EQbutton}">
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
+                                        </RepeatButton>
+                                        <Border
+                                            Grid.Row="5"
+                                            Grid.Column="7"
+                                            Margin="3,5,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="15">
+                                                H6
+                                            </TextBlock>
+                                        </Border>
+
+
+
+                                        <!--  factor comboboxes  -->
+
+                                        <!--  F1 engine fundamental factor  -->
+                                        <ComboBox
+                                            x:Name="F1factor_value"
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Width="45"
+                                            Margin="0,4,0,4"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16">
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="7" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="9" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="11" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="13" />
+                                        </ComboBox>
+
+                                        <!--  F2 exhaust fundamental factor  -->
+                                        <ComboBox
+                                            x:Name="F2factor_value"
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Width="45"
+                                            Margin="0,4,0,4"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16">
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="7" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="9" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="11" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="13" />
+                                        </ComboBox>
+
+
+                                        <!--  H1 harmonic factor  -->
+                                        <ComboBox
+                                            x:Name="H1factor_value"
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Width="45"
+                                            Margin="0,4,0,4"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16">
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="7" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="9" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="11" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="13" />
+                                        </ComboBox>
+
+                                        <!--  H2 harmonic factor  -->
+                                        <ComboBox
+                                            x:Name="H2factor_value"
+                                            Grid.Row="1"
+                                            Grid.Column="3"
+                                            Width="45"
+                                            Margin="0,4,0,4"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16">
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="7" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="9" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="11" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="13" />
+                                        </ComboBox>
+
+                                        <!--  H3 harmonic factor  -->
+                                        <ComboBox
+                                            x:Name="H3factor_value"
+                                            Grid.Row="1"
+                                            Grid.Column="4"
+                                            Width="45"
+                                            Margin="0,4,0,4"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16">
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="7" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="9" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="11" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="13" />
+                                        </ComboBox>
+
+                                        <!--  H4 harmonic factor  -->
+                                        <ComboBox
+                                            x:Name="H4factor_value"
+                                            Grid.Row="1"
+                                            Grid.Column="5"
+                                            Width="45"
+                                            Margin="0,4,0,4"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16">
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="7" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="9" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="11" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="13" />
+                                        </ComboBox>
+
+                                        <!--  H5 harmonic factor  -->
+                                        <ComboBox
+                                            x:Name="H5factor_value"
+                                            Grid.Row="1"
+                                            Grid.Column="6"
+                                            Width="45"
+                                            Margin="0,4,0,4"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16">
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="7" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="9" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="11" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="13" />
+                                        </ComboBox>
+
+
+                                        <!--  H6 harmonic factor  -->
+                                        <ComboBox
+                                            x:Name="H6factor_value"
+                                            Grid.Row="1"
+                                            Grid.Column="7"
+                                            Width="45"
+                                            Margin="0,4,0,4"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            FontFamily="roboto"
+                                            FontSize="16">
+                                            <ComboBoxItem Content="2" />
+                                            <ComboBoxItem Content="3" />
+                                            <ComboBoxItem Content="4" />
+                                            <ComboBoxItem Content="5" />
+                                            <ComboBoxItem Content="6" />
+                                            <ComboBoxItem Content="7" />
+                                            <ComboBoxItem Content="8" />
+                                            <ComboBoxItem Content="9" />
+                                            <ComboBoxItem Content="10" />
+                                            <ComboBoxItem Content="11" />
+                                            <ComboBoxItem Content="12" />
+                                            <ComboBoxItem Content="13" />
+                                        </ComboBox>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    </Grid>
+                                </Expander>
+                            </StackPanel>
+                            <!--  end of tone calibration container  -->
+
+
+
+
+
+
+
+
+
+
 
                         </StackPanel>
                     </ScrollViewer>
@@ -1610,15 +2455,19 @@
                                     BorderThickness="2"
                                     FontFamily="roboto"
                                     FontSize="14"
-                                    
                                     IsExpanded="True">
                                     <Expander.Header>
-                                        <StackPanel Orientation="Horizontal" Margin="-4,-2,0,0">
+                                        <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
                                             <Image
                                                 Width="29"
                                                 Margin="0,-3,10,0"
                                                 Source="C:\Users\demas\source\repos\SimHap\Resources\suspension50x50.png" />
-                                            <TextBlock FontFamily="roboto" FontSize="20" Foreground="White" Margin="-7,-5,0,0" VerticalAlignment="Center">
+                                            <TextBlock
+                                                Margin="-7,-5,0,0"
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto"
+                                                FontSize="20"
+                                                Foreground="White">
                                                 Suspension Multipliers
                                             </TextBlock>
                                         </StackPanel>
@@ -1758,19 +2607,23 @@
                                         BorderThickness="2"
                                         FontFamily="roboto"
                                         FontSize="14"
-                                        
                                         IsExpanded="True">
-                                    <Expander.Header>
-                                        <StackPanel Orientation="Horizontal" Margin="-7,-2,0,0">
-                                            <Image
-                                                Width="32"
-                                                Margin="0,-3,10,0"
-                                                Source="C:\Users\demas\source\repos\SimHap\Resources\gforce50x50.png" />
-                                            <TextBlock FontFamily="roboto" FontSize="20" Foreground="White" Margin="-7,-5,0,0" VerticalAlignment="Center">
-                                                G-Force
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </Expander.Header>
+                                        <Expander.Header>
+                                            <StackPanel Margin="-7,-2,0,0" Orientation="Horizontal">
+                                                <Image
+                                                    Width="32"
+                                                    Margin="0,-3,10,0"
+                                                    Source="C:\Users\demas\source\repos\SimHap\Resources\gforce50x50.png" />
+                                                <TextBlock
+                                                    Margin="-7,-5,0,0"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="roboto"
+                                                    FontSize="20"
+                                                    Foreground="White">
+                                                    G-Force
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Expander.Header>
                                         <StackPanel>
 
 
