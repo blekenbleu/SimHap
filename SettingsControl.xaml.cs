@@ -26,7 +26,7 @@ namespace sierses.Sim
 			Version.Text = Plugin.PluginVersion;
 		}
 
-		// called when expanding EQ, 
+		// called when expanding EQ or Plugin.E.NextUp() 
 		internal void Init(ObservableCollection<ushort> S)
 		{
 			EQ0_value.Text = S[0].ToString();
@@ -45,6 +45,7 @@ namespace sierses.Sim
 			Init(Plugin.E.Sliders[Plugin.E.EQswitch].Slider);
 		}
 
+		// this may provoke new equalizer creation
 		private void EQswitch_increment_Click(object sender, RoutedEventArgs e)
 		{
 			EQswitch_value.Text = Plugin.E.NextUp(true);
@@ -96,6 +97,7 @@ namespace sierses.Sim
 			SuspensionGamma.Value = 1;
 		}
 
+		// these should provoke equalizer property recalculations
 		private void EQ0_increment_Click(object sender, RoutedEventArgs e)
 		{
 			EQ0_value.Text = $"{Plugin.E.Incr(0, true)}";

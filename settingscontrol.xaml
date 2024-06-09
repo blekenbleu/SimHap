@@ -55,6 +55,7 @@
             </Setter>
         </Style>
 
+
         <!--  button style for other buttons curved and opacity  -->
         <Style x:Key="dMASSbutton" TargetType="Button">
             <Setter Property="Template">
@@ -301,6 +302,7 @@
                                             ContentSource="Header"
                                             RecognizesAccessKey="True"
                                             TextBlock.FontSize="20"
+                                            TextBlock.FontFamily="roboto"
                                             TextBlock.Foreground="White" />
                                     </Border>
 
@@ -450,8 +452,18 @@
                                 BorderThickness="2"
                                 FontFamily="roboto"
                                 FontSize="15"
-                                Header="Engine RPM Properties"
                                 IsExpanded="True">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal" Margin="-4,-2,0,0">
+                                        <Image
+                                                Width="29"
+                                                Margin="0,-3,10,0"
+                                                Source="C:\Users\demas\source\repos\SimHap\Resources\engine50x50.png" />
+                                        <TextBlock FontFamily="roboto" FontSize="20" Foreground="White" Margin="-7,-5,0,0" VerticalAlignment="Center">
+                                                Engine Properties
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Expander.Header>
                                 <StackPanel>
 
                                     <!--  CarName  -->
@@ -849,29 +861,39 @@
                                     Margin="0,6,0,3"
                                     Expander.Expanded="EQ_Expanded"
                                     FontFamily="roboto"
-                                    FontSize="16"
-                                    Header="EQ">
+                                    FontSize="16">
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal" Margin="-4,-2,0,0">
+                                            <Image
+                                                Width="29"
+                                                Margin="0,-3,10,0"
+                                                Source="C:\Users\demas\source\repos\SimHap\Resources\eq.png" />
+                                            <TextBlock FontFamily="roboto" FontSize="20" Foreground="White" Margin="-7,-5,0,0" VerticalAlignment="Center">
+                                                EQ
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Expander.Header>
                                     <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="0" />
                                             <ColumnDefinition Width="0" />
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="44" />
+                                            <ColumnDefinition Width="44" />
+                                            <ColumnDefinition Width="44" />
+                                            <ColumnDefinition Width="44" />
+                                            <ColumnDefinition Width="44" />
+                                            <ColumnDefinition Width="44" />
+                                            <ColumnDefinition Width="44" />
+                                            <ColumnDefinition Width="44" />
+                                            <ColumnDefinition Width="44" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="33" />
-                                            <RowDefinition Height="4" />
+                                            <RowDefinition Height="35" />
+                                            <RowDefinition Height="7" />
                                             <RowDefinition Height="40" />
                                             <RowDefinition Height="50" />
                                             <RowDefinition Height="40" />
-                                            <RowDefinition Height="28" />
+                                            <RowDefinition Height="32" />
                                         </Grid.RowDefinitions>
 
                                         <!--  switch eq  -->
@@ -881,11 +903,11 @@
                                             Grid.Column="8"
                                             Grid.ColumnSpan="3"
                                             Margin="2"
-                                            Background="#353069"
+                                            Background="#38326E"
                                             BorderBrush="Transparent"
                                             Click="EQswitch_increment_Click"
                                             FontFamily="roboto black"
-                                            FontSize="14"
+                                            FontSize="17"
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
@@ -896,17 +918,16 @@
                                             Grid.Row="0"
                                             Grid.Column="5"
                                             Grid.ColumnSpan="3"
-                                            Margin="0"
-                                            Background="#353069"
-                                            BorderThickness="2"
-                                            CornerRadius="6">
+                                            Margin="2,0,2,0"
+                                            BorderBrush="#38326E"
+                                            BorderThickness="3"
+                                            CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQswitch_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="18"
-                                                Foreground="White">
+                                                FontSize="23">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -916,11 +937,12 @@
                                             Grid.Column="2"
                                             Grid.ColumnSpan="3"
                                             Margin="2"
-                                            Background="#353069"
+                                            Background="#38326E"
                                             BorderBrush="Transparent"
                                             Click="EQswitch_decrement_Click"
                                             FontFamily="roboto black"
-                                            FontSize="14"
+                                            FontSize="17"
+                                            
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
@@ -935,7 +957,7 @@
                                             Grid.Row="2"
                                             Grid.Column="2"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#38326E"
                                             BorderBrush="Transparent"
                                             Click="EQ0_increment_Click"
                                             FontFamily="roboto black"
@@ -949,17 +971,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="2"
-                                            Margin="2,5,2,5"
-                                            BorderBrush="#7C71F7"
-                                            BorderThickness="2"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#38326E"
+                                            BorderThickness="3"
                                             CornerRadius="5">
-
                                             <TextBlock
                                                 x:Name="EQ0_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -968,7 +989,7 @@
                                             Grid.Row="4"
                                             Grid.Column="2"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#38326E"
                                             BorderBrush="Transparent"
                                             Click="EQ0_decrement_Click"
                                             FontFamily="roboto black"
@@ -976,20 +997,20 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
                                             Grid.Column="2"
                                             Margin="3,5,3,5"
-                                            Background="#7C71F7"
+                                            Background="#38326E"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 HP
                                             </TextBlock>
                                         </Border>
@@ -1014,16 +1035,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="3"
-                                            Margin="2,5,2,5"
+                                            Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
-                                            BorderThickness="2"
+                                            BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQ1_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1040,7 +1061,7 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
@@ -1050,10 +1071,10 @@
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 1
                                             </TextBlock>
                                         </Border>
@@ -1064,7 +1085,7 @@
                                             Grid.Row="2"
                                             Grid.Column="4"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderBrush="Transparent"
                                             Click="EQ2_increment_Click"
                                             FontFamily="roboto black"
@@ -1078,16 +1099,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="4"
-                                            Margin="2,5,2,5"
-                                            BorderBrush="#7C71F7"
-                                            BorderThickness="2"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#6057BF"
+                                            BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQ2_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1096,7 +1117,7 @@
                                             Grid.Row="4"
                                             Grid.Column="4"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderBrush="Transparent"
                                             Click="EQ2_decrement_Click"
                                             FontFamily="roboto black"
@@ -1104,20 +1125,20 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
                                             Grid.Column="4"
                                             Margin="3,5,3,5"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 2
                                             </TextBlock>
                                         </Border>
@@ -1143,16 +1164,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="5"
-                                            Margin="2,5,2,5"
+                                            Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
-                                            BorderThickness="2"
+                                            BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQ3_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1169,7 +1190,7 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
@@ -1179,10 +1200,10 @@
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 3
                                             </TextBlock>
                                         </Border>
@@ -1194,7 +1215,7 @@
                                             Grid.Row="2"
                                             Grid.Column="6"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderBrush="Transparent"
                                             Click="EQ4_increment_Click"
                                             FontFamily="roboto black"
@@ -1208,16 +1229,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="6"
-                                            Margin="2,5,2,5"
-                                            BorderBrush="#7C71F7"
-                                            BorderThickness="2"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#6057BF"
+                                            BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQ4_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1226,7 +1247,7 @@
                                             Grid.Row="4"
                                             Grid.Column="6"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderBrush="Transparent"
                                             Click="EQ4_decrement_Click"
                                             FontFamily="roboto black"
@@ -1234,20 +1255,20 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
                                             Grid.Column="6"
                                             Margin="3,5,3,5"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 4
                                             </TextBlock>
                                         </Border>
@@ -1272,16 +1293,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="7"
-                                            Margin="2,5,2,5"
+                                            Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
-                                            BorderThickness="2"
+                                            BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQ5_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1298,7 +1319,7 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
@@ -1308,10 +1329,10 @@
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 5
                                             </TextBlock>
                                         </Border>
@@ -1322,7 +1343,7 @@
                                             Grid.Row="2"
                                             Grid.Column="8"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderBrush="Transparent"
                                             Click="EQ6_increment_Click"
                                             FontFamily="roboto black"
@@ -1336,16 +1357,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="8"
-                                            Margin="2,5,2,5"
-                                            BorderBrush="#7C71F7"
-                                            BorderThickness="2"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#6057BF"
+                                            BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQ6_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1354,7 +1375,7 @@
                                             Grid.Row="4"
                                             Grid.Column="8"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderBrush="Transparent"
                                             Click="EQ6_decrement_Click"
                                             FontFamily="roboto black"
@@ -1362,20 +1383,20 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
                                             Grid.Column="8"
                                             Margin="3,5,3,5"
-                                            Background="#7C71F7"
+                                            Background="#6057BF"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 6
                                             </TextBlock>
                                         </Border>
@@ -1400,16 +1421,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="9"
-                                            Margin="2,5,2,5"
+                                            Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
-                                            BorderThickness="2"
+                                            BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQ7_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1426,7 +1447,7 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
@@ -1436,10 +1457,10 @@
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 7
                                             </TextBlock>
                                         </Border>
@@ -1450,7 +1471,7 @@
                                             Grid.Row="2"
                                             Grid.Column="10"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#38326E"
                                             BorderBrush="Transparent"
                                             Click="EQ8_increment_Click"
                                             FontFamily="roboto black"
@@ -1464,16 +1485,16 @@
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="10"
-                                            Margin="2,5,2,5"
-                                            BorderBrush="#7C71F7"
-                                            BorderThickness="2"
+                                            Margin="1.5,3,1.5,3"
+                                            BorderBrush="#38326E"
+                                            BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
                                                 x:Name="EQ8_value"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="15">
+                                                FontFamily="roboto black"
+                                                FontSize="17">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1482,7 +1503,7 @@
                                             Grid.Row="4"
                                             Grid.Column="10"
                                             Margin="2"
-                                            Background="#7C71F7"
+                                            Background="#38326E"
                                             BorderBrush="Transparent"
                                             Click="EQ8_decrement_Click"
                                             FontFamily="roboto black"
@@ -1490,20 +1511,20 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock Margin="0,-11,0,0" Text="-" />
+                                            <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="5"
                                             Grid.Column="10"
                                             Margin="3,5,3,5"
-                                            Background="#7C71F7"
+                                            Background="#38326E"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
-                                                Margin="0,1,0,0"
+                                                Margin="0,2,0,0"
                                                 HorizontalAlignment="Center"
                                                 FontFamily="roboto medium"
-                                                FontSize="13">
+                                                FontSize="15">
                                                 LP
                                             </TextBlock>
                                         </Border>
@@ -1589,8 +1610,19 @@
                                     BorderThickness="2"
                                     FontFamily="roboto"
                                     FontSize="14"
-                                    Header="Suspension Multipliers"
+                                    
                                     IsExpanded="True">
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal" Margin="-4,-2,0,0">
+                                            <Image
+                                                Width="29"
+                                                Margin="0,-3,10,0"
+                                                Source="C:\Users\demas\source\repos\SimHap\Resources\suspension50x50.png" />
+                                            <TextBlock FontFamily="roboto" FontSize="20" Foreground="White" Margin="-7,-5,0,0" VerticalAlignment="Center">
+                                                Suspension Multipliers
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Expander.Header>
                                     <StackPanel>
 
 
@@ -1726,9 +1758,19 @@
                                         BorderThickness="2"
                                         FontFamily="roboto"
                                         FontSize="14"
-                                        Header="G-Force"
+                                        
                                         IsExpanded="True">
-
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal" Margin="-7,-2,0,0">
+                                            <Image
+                                                Width="32"
+                                                Margin="0,-3,10,0"
+                                                Source="C:\Users\demas\source\repos\SimHap\Resources\gforce50x50.png" />
+                                            <TextBlock FontFamily="roboto" FontSize="20" Foreground="White" Margin="-7,-5,0,0" VerticalAlignment="Center">
+                                                G-Force
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Expander.Header>
                                         <StackPanel>
 
 
