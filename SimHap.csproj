@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Eq.cs" />
+    <Compile Include="EqProps.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="SimData.cs" />
     <Compile Include="SimDataMethods.cs" />
