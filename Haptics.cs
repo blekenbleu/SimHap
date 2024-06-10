@@ -266,7 +266,8 @@ namespace sierses.Sim
 				Settings.Engine = new();
 
             Settings.Engine.Tones = E.Tones;
-			Settings.Engine.Sliders = E.Q;
+			Settings.Engine.Sliders = new();
+			Settings.Engine.Sliders.Add(E.Q[0]);
 
 			if (Save || Loaded || Changed)		// End()
 			{
