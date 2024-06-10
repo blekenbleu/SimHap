@@ -24,89 +24,124 @@ namespace sierses.Sim
 
 	public partial class Geq
 	{
+		internal Haptics H;	// set in Init()
 		internal string Feedback;
 		internal int EQswitch = 0;
 		// an array of sliders for each equalizer
-		internal ObservableCollection<Eq> Sliders = new();
+		internal ObservableCollection<Eq> Q = new();
 
-		internal Haptics H;	// set in Init()
-		// incrementing some EQ "slider"
-		internal int Incr(int s, bool up)
-		{
-			int end = Sliders[EQswitch].Slider.Count - 1;
-			if (0 == s || end == s)		// cutoff frequencies
+		// increment EQ high-/low-pass frequency
+		internal int Pincr(int s, bool up)
+		{	// Slider 0, 8 are min, max frequency
+			if (!up && Q[EQswitch].Slider[s]  > (0 == s ? 0 : 1))
 			{
-				if (0 < Sliders[EQswitch].Slider[s] && !up)
-				{
-					// should check for max > min
-					Sliders[EQswitch].Slider[s]--;
-					Feedback = "decremented";
-				}
-				else if(up)
-				{
-					// should check for min < max
-					Sliders[EQswitch].Slider[s]++;
-					Feedback = "incremented";
-				}
-				else Feedback = "0 is min";
-				return Sliders[EQswitch].Slider[s];
+				Q[EQswitch].Slider[s]--;
+				// check for max > min
+				if (Q[EQswitch].Slider[8] <= Q[EQswitch].Slider[0])
+					Q[EQswitch].Slider[0] = (ushort)(Q[EQswitch].Slider[8] - 1);
+				Feedback = "decremented";
+			}
+			else if(up)
+			{
+				Q[EQswitch].Slider[s]++;
+				// check for min < max
+				if (Q[EQswitch].Slider[0] >= Q[EQswitch].Slider[8])
+					Q[EQswitch].Slider[8] = (ushort)(1 + Q[EQswitch].Slider[0]);
+				Feedback = "incremented";
 			}
 
+			// range checks
+			if (10 > Q[EQswitch].Slider[0]
+			 || 10000 < Q[EQswitch].Slider[8]
+			 || Q[EQswitch].Slider[8] < 10 * Q[EQswitch].Slider[0])
+			{	// constrain the limit being changed
+				Feedback = "frequency range limit exceeded";
+				if (10 > Q[EQswitch].Slider[0])
+					Q[EQswitch].Slider[0] = 10;
+				if (10000 < Q[EQswitch].Slider[8])
+					Q[EQswitch].Slider[8] = 10000;
+
+				// interpolation over power-of-2 LUTs
+				// range >= 10 supports 8 == LUT.Length
+				if (Q[EQswitch].Slider[8] < Q[EQswitch].Slider[0] * 10)
+				{
+					if (8 == s)
+						Q[EQswitch].Slider[8] = (ushort)(10 * Q[EQswitch].Slider[0]);
+					else Q[EQswitch].Slider[0] = (ushort)(0.1 * Q[EQswitch].Slider[8]);
+				}
+			}
+			return Q[EQswitch].Slider[s];
+		}
+
+		// increment some EQ gain
+		internal void Incr(int s, bool up)
+		{	// Slider 0, 8 are min, max frequency
+			int end = Q[EQswitch].Slider.Count - 1;
 			int sum = 0;
-			if (up && 100 > Sliders[EQswitch].Slider[s])
-			{
+
+			if (up && 100 > Q[EQswitch].Slider[s])
+			{	// EQ gains are Slider[1-7]
 				for (int i = 1; i < end; i++)
 				{
 					if (i == s)
 						continue;
-				 	if (0 < Sliders[EQswitch].Slider[i])
-						Sliders[EQswitch].Slider[i]--;
-					sum += Sliders[EQswitch].Slider[i];
+				 	if (0 < Q[EQswitch].Slider[i])
+						Q[EQswitch].Slider[i]--;
+					sum += Q[EQswitch].Slider[i];
 				}
 				if (sum < 250)
-					Sliders[EQswitch].Slider[s] = 100;
-				else Sliders[EQswitch].Slider[s] = (ushort)(350 - sum);
+					Q[EQswitch].Slider[s] = 100;
+				else Q[EQswitch].Slider[s] = (ushort)(350 - sum);
 				Feedback = "incremented";
 			}
-			else if ((!up) & 0 < Sliders[EQswitch].Slider[s])
+			else if ((!up) & 0 < Q[EQswitch].Slider[s])
 			{
 				for (int i = 1; i < end; i++)
 				{
 					if (i == s)
 					continue;
- 					if (100 > Sliders[EQswitch].Slider[i])
-						Sliders[EQswitch].Slider[i]++;
-					sum += Sliders[EQswitch].Slider[i];
+ 					if (100 > Q[EQswitch].Slider[i])
+						Q[EQswitch].Slider[i]++;
+					sum += Q[EQswitch].Slider[i];
 				}
 				if (sum > 350)
-					Sliders[EQswitch].Slider[s]  = 0;
-				else Sliders[EQswitch].Slider[s] = (ushort)(350 - sum);
+					Q[EQswitch].Slider[s]  = 0;
+				else Q[EQswitch].Slider[s] = (ushort)(350 - sum);
 				Feedback = "decremented";
 			}
-			else Feedback = up ? "100 is max" : "0 is min";
-			H.SC.Init(Sliders[EQswitch].Slider);
-			return Sliders[EQswitch].Slider[s];
+			else Feedback = up ? "100 is max gain" : "0 is min gain";
+			H.SC.Init(Q[EQswitch].Slider);
+			return;
 		}
 
-		// selecting another EQ AKA Sliders
+		// select another EQ Slider set
 		internal string NextUp(bool up)
 		{
 			if ((up && 2 == EQswitch) || (0 == EQswitch && !up))
-				return $"{EQswitch}"; 
+			{
+				Feedback = "limits are >= 0 and <= 2";
+				return $"{EQswitch}";
+			}
 			EQswitch += up ? +1 : -1;
 			return $"{EQswitch}";
 		}
 
-		// an array of LUT[][s interpolated from Sliders
-		private List<ushort[][]> lUT = new() { };
+		public Tone[] Tones = new Tone[2];			// engine frequency harmonic, amplitude
 
-		public Tone[] Tones = new Tone[2];			// frequency harmonic, amplitude
+		/* an array of LUT[][s interpolated from Sliders
+		 ; 36 is the lowest frequency for which
+		 ; 1 <= the smallest step in 32 == LUT.Count with only an octave range
+		 */
+		private List<ushort[][]> lUT = new() { };	// EQ
 
         public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
 
-		// populate  Tones' amplitudes from rpm
-		// pitch is fundamental (rpm/60) or power stroke harmonic:
-		// 	(integer * rpm * cylinders) / 120)
+		/* EQ gains interpolated by rpm frequency harmonics
+		 ; pitch is fundamental (rpm/60)
+		 ; or power stroke harmonic: (integer * rpm * cylinders) / 120)
+		 ; piecewise linear interpolation wants power-of-2 LUT.Length
+		 ; 10 <= max/min frequency ratio supports LUT.Length = 8
+		 */
 		public ushort Play(Haptics This, byte destination)
 		{
 			H = This;
@@ -130,9 +165,9 @@ namespace sierses.Sim
     28/32 (2): 30 : 26 : 22 : 18 : 14 : 10 : 6 : 2
 	23/24 (1): (odd values 31 to 1)
  */
-
-			// Lut[0] has 32 harmonic scaling values;
-			// Lut[1] has power-based frequency values
+			// Luts have power-of-2 length
+			// Lut[0] has harmonic scaling values;
+			// Lut[1] has power-spaced frequency values
 /* binary search maybe faster?...
 			for (int j = (i = L >> 1) >> 1 ; 0 < j; j >>= 1) 
 			{
@@ -151,7 +186,7 @@ namespace sierses.Sim
 			ushort range = (ushort)(Lut[0][i] - here);
 			int interval = (Lut[1][i] - Lut[1][i - 1]);
 
-			return (ushort)(Tones[1].Freq[harmonic]	// amplitude
+			return (ushort)(Tones[0].Freq[harmonic]	// amplitude
 					// linearly interpolate on non-linear frequency intervals.
 					* (here + (interval + 2 * (freq - Lut[1][i]) * range)
 							/ (interval * 2))); 
@@ -161,30 +196,41 @@ namespace sierses.Sim
 		// to paired 4 * (Eq.Slider.Length - 2) lookup table for Shape()
 		public ushort[][] EqSpline(ushort[] slider)
 		{
-			ushort min = slider[0];
-			ushort max = slider[slider.Length - 1];
-			double[] xdata = new double[slider.Length];
+			// slider.Length should be 9
+			int L = slider.Length;
+			double[] xdata = new double[L];
 			// ydata has slider values; 0 first and last entries
-			double[] ydata = new double[slider.Length];
-			xdata[0] = 1;
-			ydata[0] = 0;
-			for (int i = 1; i < slider.Length; i++)
+			double[] ydata = new double[L];
+			xdata[0] = 1;	// frequency step
+			ydata[0] = 0;	// corresponding gain
+			for (int i = 1; i < L; i++)
 			{
 				xdata[i] = i;			// equal increments
 				ydata[i] = slider[i];
 			}
-			ydata[slider.Length - 1] = 0;
+			L--;
+			ydata[L] = 0;
 			var q = CubicSpline.InterpolateAkimaSorted(xdata, ydata);
-			ushort[][] lut = new ushort[2][];
-			double ff = System.Math.Log10(((double)max) / min)
-					  / (4 * xdata.Length - 4);
-			double f = min;
 
-			lut[0][0] = min;  lut[1][0] = max;
-			for (int i = 0; i < (xdata.Length - 1); i++)
+			// now, generate an interpolation LUT with power-of-2 length
+			ushort min = slider[0];
+			ushort max = slider[L];
+			ushort F;			// interpolation increment factor: 1, 2 or 4
+
+			// interpolation lut[].Length depends on min value and max/min range 
+			double ff = System.Math.Log10(((double)max) / min);
+			double f = min;
+			ushort[][] lut = new ushort[2][];
+
+			// find largest F for which lut[1][1] > lut[1][0] by at least 1
+			for (F = 1; 4 >= F && min < (ushort)((f * ff) / (F * L)); F <<= 1);
+
+			double inc = 1.0;
+			inc /= F;
+			for (int i = 0; i < F*L; i++)
 			{	// equally spaced interpolated values
-				lut[0][1 + i] = (ushort)(0.5 + q.Interpolate(1 + 0.25 * i));
-				lut[1][1 + i] = (ushort)(0.5 + f);
+				lut[0][i] = (ushort)(0.5 + q.Interpolate(1 + inc * i));
+				lut[1][i] = (ushort)(f);
 				f *= ff;			// geometric frequency progression
 			}
 			return lut;

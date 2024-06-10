@@ -35,14 +35,14 @@ namespace sierses.Sim
   			else Tones = Settings.Engine.Tones;
 
 			if (null != Settings.Engine && null != Settings.Engine.Sliders)
-				Sliders = Settings.Engine.Sliders;
-            if (1 > Sliders.Count || 9 != Sliders[0].Slider.Count)
+				Q = Settings.Engine.Sliders;
+            if (1 > Q.Count || 9 != Q[0].Slider.Count)
 			{
 				ushort s = 50, highpass = 20, lowpass = 900;
 				ObservableCollection<ushort> S = new() { highpass, s, s, s, s, s, s, s, lowpass };
-				if (1 > Sliders.Count)
-                	Sliders.Add(new Eq() { Slider = S });
-				else Sliders[0] = new Eq() { Slider = S };
+				if (1 > Q.Count)
+                	Q.Add(new Eq() { Slider = S });
+				else Q[0] = new Eq() { Slider = S };
 			}
 //			H.SC.Init(Sliders[0].Slider);
 			H.AttachDelegate("Fr0", () => Fr(0));

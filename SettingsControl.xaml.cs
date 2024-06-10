@@ -42,7 +42,7 @@ namespace sierses.Sim
 
 		private void EQ_Expanded(object sender, RoutedEventArgs e)
 		{
-			Init(Plugin.E.Sliders[Plugin.E.EQswitch].Slider);
+			Init(Plugin.E.Q[Plugin.E.EQswitch].Slider);
 		}
 
 		// this may provoke new equalizer creation
@@ -100,92 +100,92 @@ namespace sierses.Sim
 		// these should provoke equalizer property recalculations
 		private void EQ0_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ0_value.Text = $"{Plugin.E.Incr(0, true)}";
+			EQ0_value.Text = $"{Plugin.E.Pincr(0, true)}";
 		}
 
 		private void EQ0_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ0_value.Text = $"{Plugin.E.Incr(0, false)}";
+			EQ0_value.Text = $"{Plugin.E.Pincr(0, false)}";
 		}
 
 		private void EQ1_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ1_value.Text = $"{Plugin.E.Incr(1, true)}";
+			Plugin.E.Incr(1, true);
 		}
 
 		private void EQ1_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ1_value.Text = $"{Plugin.E.Incr(1, false)}";
+			Plugin.E.Incr(1, false);
 		}
 
 		private void EQ2_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ2_value.Text = $"{Plugin.E.Incr(2, true)}";
+			Plugin.E.Incr(2, true);
 		}
 
 		private void EQ2_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ2_value.Text = $"{Plugin.E.Incr(2, false)}";
+			Plugin.E.Incr(2, false);
 		}
 
 		private void EQ3_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ3_value.Text = $"{Plugin.E.Incr(3, true)}";
+			Plugin.E.Incr(3, true);
 		}
 
 		private void EQ3_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ3_value.Text = $"{Plugin.E.Incr(3, false)}";
+			Plugin.E.Incr(3, false);
 		}
 
 		private void EQ4_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ4_value.Text = $"{Plugin.E.Incr(4, true)}";
+			Plugin.E.Incr(4, true);
 		}
 
 		private void EQ4_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ4_value.Text = $"{Plugin.E.Incr(4, false)}";
+			Plugin.E.Incr(4, false);
 		}
 
 		private void EQ5_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ5_value.Text = $"{Plugin.E.Incr(5, true)}";
+			Plugin.E.Incr(5, true);
 		}
 
 		private void EQ5_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ5_value.Text = $"{Plugin.E.Incr(5, false)}";
+			Plugin.E.Incr(5, false);
 		}
 
 		private void EQ6_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ6_value.Text = $"{Plugin.E.Incr(6, true)}";
+			Plugin.E.Incr(6, true);
 		}
 
 		private void EQ6_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ6_value.Text = $"{Plugin.E.Incr(6, false)}";
+			Plugin.E.Incr(6, false);
 		}
 
 		private void EQ7_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ7_value.Text = $"{Plugin.E.Incr(7, true)}";
+			Plugin.E.Incr(7, true);
 		}
 
 		private void EQ7_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ7_value.Text = $"{Plugin.E.Incr(7, false)}";
+			Plugin.E.Incr(7, false);
 		}
 
 		private void EQ8_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQ8_value.Text = $"{Plugin.E.Incr(8, true)}";
+			EQ8_value.Text = $"{Plugin.E.Pincr(8, true)}";
 		}
 
 		private void EQ8_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQ8_value.Text = $"{Plugin.E.Incr(8, false)}";
+			EQ8_value.Text = $"{Plugin.E.Pincr(8, false)}";
 		}
 	}
 }
