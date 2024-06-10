@@ -34,9 +34,8 @@ namespace sierses.Sim
   			}
   			else Tones = Settings.Engine.Tones;
 
-			if (null == Settings.Engine || null == Settings.Engine.Sliders)
-				Sliders = new();
-			else Sliders = Settings.Engine.Sliders;
+			if (null != Settings.Engine && null != Settings.Engine.Sliders)
+				Sliders = Settings.Engine.Sliders;
             if (1 > Sliders.Count || 9 != Sliders[0].Slider.Count)
 			{
 				ushort s = 50, highpass = 20, lowpass = 900;
