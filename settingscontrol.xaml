@@ -96,78 +96,108 @@
 
 
 
-        <!--  slider style for value label  -->
-        <Style x:Key="SliderRepeatButton" TargetType="RepeatButton">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="IsTabStop" Value="false" />
-            <Setter Property="Focusable" Value="false" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border Background="Transparent" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+
+
+        <!--  slider style !!!NEW!!! horizontal and vertical  -->
+
+        <Style x:Key="Style_SliderLeftButton" TargetType="{x:Type RepeatButton}">
+            <Style.Setters>
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border
+                                Height="4"
+                                Margin="8,0,-8,0"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="2" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
         </Style>
 
-        <Style x:Key="SliderRepeatButton1" TargetType="RepeatButton">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border
-                            Height="3"
-                            Background="#4B4495"
-                            BorderBrush="#4B4495"
-                            BorderThickness="1"
-                            SnapsToDevicePixels="True" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="Style_SliderRightButton" TargetType="{x:Type RepeatButton}">
+            <Style.Setters>
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border
+                                Height="4"
+                                Margin="0,0,8,0"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="2" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
         </Style>
 
-        <Style x:Key="SliderThumb" TargetType="Thumb">
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Thumb">
-                        <StackPanel Orientation="Horizontal">
-                            <Path
-                                x:Name="ThumbdMASS"
-                                Margin="-2,0,0,0"
-                                Data="M 1 1 L 1 1 L 1 1 Z"
-                                Fill="#4B4495"
-                                Stroke="#4B4495"
-                                StrokeThickness="30" />
-                            <!--  text label for thumb  -->
-                            <TextBlock
-                                x:Name="ThumbdMASSlabel"
-                                Width="20"
-                                Height="25"
-                                Margin="-30,-7.5,0,0"
-                                FontFamily="roboto medium"
-                                FontSize="13"
-                                Foreground="White"
-                                Text="{Binding Value, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"
-                                TextAlignment="Center" />
-                        </StackPanel>
-                        <!--  mouse hover color change  -->
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ThumbdMASS" Property="Stroke" Value="#38345D" />
-                                <Setter TargetName="ThumbdMASSlabel" Property="Opacity" Value="0.6" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
+        <Style x:Key="Style_SliderThumb" TargetType="{x:Type Thumb}">
+            <Style.Setters>
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <StackPanel Orientation="Vertical">
+                                <Grid>
+                                    <!--  Big point  -->
+                                    <Path
+                                        x:Name="ThumbdMASSnew"
+                                        Margin="20,8,0,0"
+                                        Data="M 1 1 L 1 1 L 1 1 Z"
+                                        Fill="#4B4495"
+                                        Stroke="#4B4495"
+                                        StrokeThickness="30" />
 
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+
+
+
+
+
+
+                                </Grid>
+
+                                <!--  text label  -->
+                                <TextBlock
+                                    x:Name="ThumbdMASSlabelnew"
+                                    Margin="5,-24,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Background="Transparent"
+                                    FontFamily="roboto"
+                                    FontSize="14"
+                                    Foreground="white"
+                                    Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Slider}, Path=Value}"
+                                    TextAlignment="Center" />
+                            </StackPanel>
+                            <!--  mouse hover color change  -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ThumbdMASSnew" Property="Stroke" Value="#3F3A69" />
+                                    <Setter TargetName="ThumbdMASSlabelnew" Property="Opacity" Value="0.6" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+
+                        </ControlTemplate>
+
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
         </Style>
 
-        <ControlTemplate x:Key="Slider" TargetType="Slider">
+        <!--  Template when the orientation of the Slider is Horizontal.  -->
+        <ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type Slider}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -175,47 +205,159 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Border BorderBrush="Transparent" BorderThickness="0,0,0,1" />
+                <TickBar
+                    x:Name="TopTick"
+                    Height="4"
+                    Fill="white"
+                    Placement="Top"
+                    SnapsToDevicePixels="True"
+                    Visibility="Collapsed" />
+
                 <Border
                     x:Name="TrackBackground"
                     Grid.Row="1"
                     Height="3"
-                    Margin="0,-10,0,0"
-                    VerticalAlignment="Center"
+                    Margin="8,-7,0,0"
                     Background="White"
-                    BorderBrush="White"
-                    BorderThickness="1" />
-                <Track
-                    x:Name="PART_Track"
-                    Grid.Row="1"
-                    Margin="0,-10,0,0">
+                    BorderThickness="0"
+                    CornerRadius="2" />
+
+                <Track x:Name="PART_Track" Grid.Row="1">
+
                     <Track.DecreaseRepeatButton>
-                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderRepeatButton1}" />
+                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
                     </Track.DecreaseRepeatButton>
+
                     <Track.Thumb>
-                        <!--  thumb slider position  -->
-                        <Thumb Margin="0,16,0,0" Style="{StaticResource SliderThumb}" />
+                        <Thumb Style="{StaticResource Style_SliderThumb}" />
                     </Track.Thumb>
+
                     <Track.IncreaseRepeatButton>
-                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderRepeatButton}" />
+                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
                     </Track.IncreaseRepeatButton>
                 </Track>
+
+                <TickBar
+                    x:Name="BottomTick"
+                    Grid.Row="2"
+                    Height="4"
+                    Fill="{TemplateBinding Foreground}"
+                    Placement="Bottom"
+                    SnapsToDevicePixels="True"
+                    Visibility="Collapsed" />
             </Grid>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="TopLeft">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="BottomRight">
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+            </ControlTemplate.Triggers>
         </ControlTemplate>
 
-        <Style x:Key="Horizontal_Slider" TargetType="Slider">
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="SnapsToDevicePixels" Value="true" />
-            <Setter Property="OverridesDefaultStyle" Value="true" />
+        <!--  Template when the orientation of the Slider is Vertical.  -->
+        <ControlTemplate x:Key="VerticalSlider" TargetType="{x:Type Slider}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding MinWidth}" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TickBar
+                    x:Name="TopTick"
+                    Width="4"
+                    Fill="white"
+                    Placement="Left"
+                    SnapsToDevicePixels="True"
+                    Visibility="Collapsed" />
+
+                <!--  background line  -->
+                <Border
+                    x:Name="TrackBackground"
+                    Grid.Column="1"
+                    Width="5"
+                    Margin="6,0,0,0"
+                    Background="White"
+                    BorderThickness="1"
+                    CornerRadius="2" />
+
+                <Track x:Name="PART_Track" Grid.Column="1">
+
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
+                    </Track.DecreaseRepeatButton>
+
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource Style_SliderThumb}" />
+                    </Track.Thumb>
+
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+
+                <TickBar
+                    x:Name="BottomTick"
+                    Grid.Column="2"
+                    Width="4"
+                    Fill="{TemplateBinding Foreground}"
+                    Placement="Right"
+                    SnapsToDevicePixels="True"
+                    Visibility="Collapsed" />
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="TopLeft">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="BottomRight">
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type Slider}">
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="OverridesDefaultStyle" Value="True" />
             <Style.Triggers>
                 <Trigger Property="Orientation" Value="Horizontal">
-                    <Setter Property="MinHeight" Value="21" />
-                    <Setter Property="MinWidth" Value="80" />
-                    <Setter Property="Template" Value="{StaticResource Slider}" />
+                    <!--<Setter Property="MinWidth"
+                    Value="104" />
+            <Setter Property="MinHeight"
+                    Value="21" />-->
+                    <Setter Property="Template" Value="{StaticResource HorizontalSlider}" />
+                </Trigger>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <!--<Setter Property="MinWidth"
+                    Value="21" />
+            <Setter Property="MinHeight"
+                    Value="104" />-->
+                    <Setter Property="Template" Value="{StaticResource VerticalSlider}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <!--  slider style for value label end  -->
+
+        <!--  slider style for value label end vertical  -->
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -458,7 +600,7 @@
                                         <Image
                                             Width="29"
                                             Margin="0,-3,10,0"
-                                            Source="C:\Users\demas\source\repos\SimHap\Resources\engine50x50.png" />
+                                            Source="Resources\engine50x50.png" />
                                         <TextBlock
                                             Margin="-7,-5,0,0"
                                             VerticalAlignment="Center"
@@ -773,20 +915,19 @@
                                     <!--  Multi/EHP/CC Textboxes  -->
                                     <StackPanel
                                         Height="35"
-                                        Margin="0,2,0,0"
+                                        Margin="-8,2,0,0"
                                         HorizontalAlignment="Center"
                                         Orientation="Horizontal">
                                         <!--  slider for engine per game multi  -->
                                         <Slider
                                             x:Name="EngineMulti"
-                                            Width="80"
+                                            Width="88"
                                             Margin="0,0,80,0"
                                             VerticalAlignment="Bottom"
                                             VerticalContentAlignment="Bottom"
                                             IsSnapToTickEnabled="True"
                                             Maximum="1.5"
                                             Minimum="0.5"
-                                            Style="{StaticResource Horizontal_Slider}"
                                             TickFrequency="0.1"
                                             ValueChanged="EngineMulti_ValueChanged"
                                             Value="{Binding D.EngineMult}" />
@@ -826,33 +967,52 @@
                                         Orientation="Horizontal">
 
                                         <!--  Lock/unlock button  -->
-                                        <styles:SHButtonSecondary
-                                            Width="150"
-                                            Height="35"
-                                            VerticalContentAlignment="Center"
-                                            Background="#4B4495"
-                                            Click="Lock_Click"
-                                            ContentControl.Content="{Binding D.LockedText}"
-                                            CornerRadius="6"
-                                            FontFamily="roboto"
-                                            FontSize="16"
-                                            FontWeight="SemiBold"
-                                            FrameworkElement.Name="Lock" />
+                                        <StackPanel HorizontalAlignment="Right">
+                                            <Button
+                                                Width="150"
+                                                Height="35"
+                                                Margin="0,10,0,15"
+                                                VerticalContentAlignment="Center"
+                                                Background="#4B4495"
+                                                BorderThickness="0"
+                                                Click="Lock_Click"
+                                                ContentControl.Content="{Binding D.LockedText}"
+                                                FontFamily="roboto"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Foreground="White"
+                                                Style="{StaticResource dMASSbutton}" />
+
+
+
+
+                                        </StackPanel>
                                         <!--  Refresh button  -->
-                                        <styles:SHButtonSecondary
+                                        <Button
                                             Width="150"
                                             Height="35"
-                                            Margin="5,0,0,0"
+                                            Margin="10,10,0,15"
                                             VerticalContentAlignment="Center"
                                             Background="#4B4495"
+                                            BorderThickness="0"
                                             Click="Refresh_Click"
-                                            CornerRadius="6"
                                             FontFamily="roboto"
                                             FontSize="16"
                                             FontWeight="SemiBold"
-                                            FrameworkElement.Name="Refresh">
-                                            Refresh
-                                        </styles:SHButtonSecondary>
+                                            Foreground="White"
+                                            FrameworkElement.Name="Refresh"
+                                            Style="{StaticResource dMASSbutton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Width="31" Source="Resources\refresh50x50.png" />
+                                                <TextBlock
+                                                    Margin="10,0,11,0"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="roboto"
+                                                    FontSize="16"
+                                                    Text="Refresh" />
+                                            </StackPanel>
+
+                                        </Button>
                                     </StackPanel>
                                 </StackPanel>
                             </Expander>
@@ -872,7 +1032,7 @@
                                             <Image
                                                 Width="29"
                                                 Margin="0,-3,10,0"
-                                                Source="C:\Users\demas\source\repos\SimHap\Resources\eq.png" />
+                                                Source="Resources\eq.png" />
                                             <TextBlock
                                                 Margin="-7,-5,0,0"
                                                 VerticalAlignment="Center"
@@ -921,7 +1081,14 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock VerticalAlignment="Center" Text="NEXT" />
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <TextBlock
+                                                    Margin="0,0,15,0"
+                                                    VerticalAlignment="Center"
+                                                    Text="NEXT" />
+                                                <Image Width="33" Source="Resources\nextraw.png" />
+                                            </StackPanel>
                                         </RepeatButton>
                                         <!--  eq switch value  -->
                                         <Border
@@ -955,7 +1122,13 @@
                                             Foreground="White"
                                             Interval="1"
                                             Style="{StaticResource EQbutton}">
-                                            <TextBlock VerticalAlignment="Center" Text="PREV" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Width="33" Source="Resources\backraw.png" />
+                                                <TextBlock
+                                                    Margin="15,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Text="PREV" />
+                                            </StackPanel>
                                         </RepeatButton>
 
 
@@ -1544,18 +1717,19 @@
 
 
                             <!--  tone calibration expander  -->
-                            <!--  EQ container  -->
                             <StackPanel>
                                 <Expander
                                     Margin="0,6,0,3"
+                                    Expander.Expanded="TC_Expanded"
                                     FontFamily="roboto"
-                                    FontSize="16">
+                                    FontSize="16"
+                                    IsExpanded="False">
                                     <Expander.Header>
                                         <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
                                             <Image
                                                 Width="29"
                                                 Margin="0,-3,10,0"
-                                                Source="C:\Users\demas\source\repos\SimHap\Resources\eq.png" />
+                                                Source="Resources\eq.png" />
                                             <TextBlock
                                                 Margin="-7,-5,0,0"
                                                 VerticalAlignment="Center"
@@ -1568,7 +1742,7 @@
 
                                         </StackPanel>
                                     </Expander.Header>
-                                    <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
+                                    <Grid Margin="0,9,0,0" HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="49" />
                                             <ColumnDefinition Width="49" />
@@ -1580,38 +1754,26 @@
                                             <ColumnDefinition Width="49" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="32" />
-                                            <RowDefinition Height="32" />
                                             <RowDefinition Height="40" />
                                             <RowDefinition Height="50" />
                                             <RowDefinition Height="40" />
                                             <RowDefinition Height="32" />
+                                            <RowDefinition Height="32" />
+                                            <RowDefinition Height="50" />
+                                            <RowDefinition Height="50" />
+                                            <RowDefinition Height="40" />
+                                            <RowDefinition Height="32" />
+                                            <RowDefinition Height="32" />
                                         </Grid.RowDefinitions>
 
-                                        <!--  top row header  -->
-                                        <Border
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="8"
-                                            Background="#38326E"
-                                            BorderThickness="3"
-                                            CornerRadius="5">
-                                            <TextBlock
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                FontFamily="roboto medium"
-                                                FontSize="16"
-                                                Foreground="White">
-                                                Power harmonic factor (2-13)
-                                            </TextBlock>
-                                        </Border>
+
 
 
 
                                         <!--  f1  -->
                                         <RepeatButton
                                             x:Name="F1_increment"
-                                            Grid.Row="2"
+                                            Grid.Row="0"
                                             Grid.Column="0"
                                             Margin="2"
                                             Background="#38326E"
@@ -1625,7 +1787,7 @@
                                         </RepeatButton>
                                         <!--  value  -->
                                         <Border
-                                            Grid.Row="3"
+                                            Grid.Row="1"
                                             Grid.Column="0"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#38326E"
@@ -1641,8 +1803,8 @@
                                             </TextBlock>
                                         </Border>
                                         <RepeatButton
-                                              x:Name="F1_decrement"
-                                            Grid.Row="4"
+                                            x:Name="F1_decrement"
+                                            Grid.Row="2"
                                             Grid.Column="0"
                                             Margin="2"
                                             Background="#38326E"
@@ -1655,9 +1817,10 @@
                                             <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
-                                            Grid.Row="5"
+                                            Grid.Row="4"
                                             Grid.Column="0"
-                                            Margin="3,5,3,5"
+                                            Grid.ColumnSpan="2"
+                                            Margin="3,0,3,10"
                                             Background="#38326E"
                                             BorderThickness="0"
                                             CornerRadius="5">
@@ -1674,8 +1837,8 @@
                                         <!--  f2  -->
                                         <RepeatButton
                                             x:Name="F2_increment"
-                                            Grid.Row="2"
-                                            Grid.Column="1"
+                                            Grid.Row="0"
+                                            Grid.Column="2"
                                             Margin="2"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
@@ -1688,8 +1851,8 @@
                                         </RepeatButton>
                                         <!--  value  -->
                                         <Border
-                                            Grid.Row="3"
-                                            Grid.Column="1"
+                                            Grid.Row="1"
+                                            Grid.Column="2"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
                                             BorderThickness="3"
@@ -1705,8 +1868,8 @@
                                         </Border>
                                         <RepeatButton
                                             x:Name="F2_decrement"
-                                            Grid.Row="4"
-                                            Grid.Column="1"
+                                            Grid.Row="2"
+                                            Grid.Column="2"
                                             Margin="2"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
@@ -1718,9 +1881,10 @@
                                             <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
-                                            Grid.Row="5"
-                                            Grid.Column="1"
-                                            Margin="3,5,3,5"
+                                            Grid.Row="4"
+                                            Grid.Column="2"
+                                            Grid.ColumnSpan="2"
+                                            Margin="3,0,3,10"
                                             Background="#4B4495"
                                             BorderThickness="0"
                                             CornerRadius="5">
@@ -1736,8 +1900,8 @@
                                         <!--  H1  -->
                                         <RepeatButton
                                             x:Name="H1_increment"
-                                            Grid.Row="2"
-                                            Grid.Column="2"
+                                            Grid.Row="0"
+                                            Grid.Column="4"
                                             Margin="2"
                                             Background="#6057BF"
                                             BorderBrush="Transparent"
@@ -1750,8 +1914,8 @@
                                         </RepeatButton>
                                         <!--  value  -->
                                         <Border
-                                            Grid.Row="3"
-                                            Grid.Column="2"
+                                            Grid.Row="1"
+                                            Grid.Column="4"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#6057BF"
                                             BorderThickness="3"
@@ -1767,8 +1931,8 @@
                                         </Border>
                                         <RepeatButton
                                             x:Name="H1_decrement"
-                                            Grid.Row="4"
-                                            Grid.Column="2"
+                                            Grid.Row="2"
+                                            Grid.Column="4"
                                             Margin="2"
                                             Background="#6057BF"
                                             BorderBrush="Transparent"
@@ -1780,9 +1944,10 @@
                                             <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
-                                            Grid.Row="5"
-                                            Grid.Column="2"
-                                            Margin="3,5,3,5"
+                                            Grid.Row="4"
+                                            Grid.Column="4"
+                                            Grid.ColumnSpan="2"
+                                            Margin="3,0,3,10"
                                             Background="#6057BF"
                                             BorderThickness="0"
                                             CornerRadius="5">
@@ -1799,8 +1964,8 @@
                                         <!--  H2  -->
                                         <RepeatButton
                                             x:Name="H2_increment"
-                                            Grid.Row="2"
-                                            Grid.Column="3"
+                                            Grid.Row="0"
+                                            Grid.Column="6"
                                             Margin="2"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
@@ -1813,8 +1978,8 @@
                                         </RepeatButton>
                                         <!--  value  -->
                                         <Border
-                                            Grid.Row="3"
-                                            Grid.Column="3"
+                                            Grid.Row="1"
+                                            Grid.Column="6"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#38326E"
                                             BorderThickness="3"
@@ -1830,8 +1995,8 @@
                                         </Border>
                                         <RepeatButton
                                             x:Name="H2_decrement"
-                                            Grid.Row="4"
-                                            Grid.Column="3"
+                                            Grid.Row="2"
+                                            Grid.Column="6"
                                             Margin="2"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
@@ -1843,9 +2008,10 @@
                                             <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
-                                            Grid.Row="5"
-                                            Grid.Column="3"
-                                            Margin="3,5,3,5"
+                                            Grid.Row="4"
+                                            Grid.Column="6"
+                                            Grid.ColumnSpan="2"
+                                            Margin="3,0,3,10"
                                             Background="#38326E"
                                             BorderThickness="0"
                                             CornerRadius="5">
@@ -1862,9 +2028,10 @@
                                         <!--  H3  -->
                                         <RepeatButton
                                             x:Name="H3_increment"
-                                            Grid.Row="2"
-                                            Grid.Column="4"
-                                            Margin="2"
+                                            Grid.Row="5"
+                                            Grid.Column="0"
+                                            Height="36"
+                                            Margin="2,10,0,0"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
@@ -1876,8 +2043,8 @@
                                         </RepeatButton>
                                         <!--  value  -->
                                         <Border
-                                            Grid.Row="3"
-                                            Grid.Column="4"
+                                            Grid.Row="6"
+                                            Grid.Column="0"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
                                             BorderThickness="3"
@@ -1893,8 +2060,8 @@
                                         </Border>
                                         <RepeatButton
                                             x:Name="H3_decrement"
-                                            Grid.Row="4"
-                                            Grid.Column="4"
+                                            Grid.Row="7"
+                                            Grid.Column="0"
                                             Margin="2"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
@@ -1906,9 +2073,10 @@
                                             <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
-                                            Grid.Row="5"
-                                            Grid.Column="4"
-                                            Margin="3,5,3,5"
+                                            Grid.Row="9"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Margin="3,0,3,10"
                                             Background="#4B4495"
                                             BorderThickness="0"
                                             CornerRadius="5">
@@ -1924,9 +2092,10 @@
                                         <!--  H4  -->
                                         <RepeatButton
                                             x:Name="H4_increment"
-                                            Grid.Row="2"
-                                            Grid.Column="5"
-                                            Margin="2"
+                                            Grid.Row="5"
+                                            Grid.Column="2"
+                                            Height="36"
+                                            Margin="2,10,0,0"
                                             Background="#6057BF"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
@@ -1938,8 +2107,8 @@
                                         </RepeatButton>
                                         <!--  value  -->
                                         <Border
-                                            Grid.Row="3"
-                                            Grid.Column="5"
+                                            Grid.Row="6"
+                                            Grid.Column="2"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#6057BF"
                                             BorderThickness="3"
@@ -1955,8 +2124,8 @@
                                         </Border>
                                         <RepeatButton
                                             x:Name="H4_decrement"
-                                            Grid.Row="4"
-                                            Grid.Column="5"
+                                            Grid.Row="7"
+                                            Grid.Column="2"
                                             Margin="2"
                                             Background="#6057BF"
                                             BorderBrush="Transparent"
@@ -1968,9 +2137,10 @@
                                             <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
-                                            Grid.Row="5"
-                                            Grid.Column="5"
-                                            Margin="3,5,3,5"
+                                            Grid.Row="9"
+                                            Grid.Column="2"
+                                            Grid.ColumnSpan="2"
+                                            Margin="3,0,3,10"
                                             Background="#6057BF"
                                             BorderThickness="0"
                                             CornerRadius="5">
@@ -1986,9 +2156,10 @@
                                         <!--  H5  -->
                                         <RepeatButton
                                             x:Name="H5_increment"
-                                            Grid.Row="2"
-                                            Grid.Column="6"
-                                            Margin="2"
+                                            Grid.Row="5"
+                                            Grid.Column="4"
+                                            Height="36"
+                                            Margin="2,10,0,0"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
@@ -2000,8 +2171,8 @@
                                         </RepeatButton>
                                         <!--  value  -->
                                         <Border
-                                            Grid.Row="3"
-                                            Grid.Column="6"
+                                            Grid.Row="6"
+                                            Grid.Column="4"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#38326E"
                                             BorderThickness="3"
@@ -2017,8 +2188,8 @@
                                         </Border>
                                         <RepeatButton
                                             x:Name="H5_decrement"
-                                            Grid.Row="4"
-                                            Grid.Column="6"
+                                            Grid.Row="7"
+                                            Grid.Column="4"
                                             Margin="2"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
@@ -2030,9 +2201,10 @@
                                             <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
-                                            Grid.Row="5"
-                                            Grid.Column="6"
-                                            Margin="3,5,3,5"
+                                            Grid.Row="9"
+                                            Grid.Column="4"
+                                            Grid.ColumnSpan="2"
+                                            Margin="3,0,3,10"
                                             Background="#38326E"
                                             BorderThickness="0"
                                             CornerRadius="5">
@@ -2049,9 +2221,10 @@
                                         <!--  H6  -->
                                         <RepeatButton
                                             x:Name="H6_increment"
-                                            Grid.Row="2"
-                                            Grid.Column="7"
-                                            Margin="2"
+                                            Grid.Row="5"
+                                            Grid.Column="6"
+                                            Height="36"
+                                            Margin="2,10,0,0"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
@@ -2063,8 +2236,8 @@
                                         </RepeatButton>
                                         <!--  value  -->
                                         <Border
-                                            Grid.Row="3"
-                                            Grid.Column="7"
+                                            Grid.Row="6"
+                                            Grid.Column="6"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
                                             BorderThickness="3"
@@ -2080,8 +2253,8 @@
                                         </Border>
                                         <RepeatButton
                                             x:Name="H6_decrement"
-                                            Grid.Row="4"
-                                            Grid.Column="7"
+                                            Grid.Row="7"
+                                            Grid.Column="6"
                                             Margin="2"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
@@ -2093,9 +2266,10 @@
                                             <TextBlock Margin="0,-10,0,0" Text="-" />
                                         </RepeatButton>
                                         <Border
-                                            Grid.Row="5"
-                                            Grid.Column="7"
-                                            Margin="3,5,3,5"
+                                            Grid.Row="9"
+                                            Grid.Column="6"
+                                            Grid.ColumnSpan="2"
+                                            Margin="3,0,3,10"
                                             Background="#4B4495"
                                             BorderThickness="0"
                                             CornerRadius="5">
@@ -2110,212 +2284,399 @@
 
 
 
-                                        <!--  factor comboboxes  -->
 
-                                        <!--  F1 engine fundamental factor  -->
-                                        <ComboBox
-                                            x:Name="F1factor_value"
-                                            Grid.Row="1"
-                                            Grid.Column="0"
-                                            Width="45"
-                                            Margin="0,4,0,4"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16">
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="7" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="9" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="11" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="13" />
-                                        </ComboBox>
 
-                                        <!--  F2 exhaust fundamental factor  -->
-                                        <ComboBox
-                                            x:Name="F2factor_value"
-                                            Grid.Row="1"
+
+                                        <!--  factor sliders  -->
+
+                                        <!--  F1  -->
+                                        <Slider
+                                            x:Name="F1_factor"
+                                            Grid.Row="0"
+                                            Grid.RowSpan="3"
                                             Grid.Column="1"
-                                            Width="45"
-                                            Margin="0,4,0,4"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16">
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="7" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="9" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="11" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="13" />
-                                        </ComboBox>
+                                            Margin="3,1,0,2"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="992"
+                                            Minimum="0"
+                                            Orientation="Vertical"
+                                            TickFrequency="7"
+                                            Value="500" />
 
 
-                                        <!--  H1 harmonic factor  -->
-                                        <ComboBox
-                                            x:Name="H1factor_value"
-                                            Grid.Row="1"
-                                            Grid.Column="2"
-                                            Width="45"
-                                            Margin="0,4,0,4"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16">
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="7" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="9" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="11" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="13" />
-                                        </ComboBox>
+                                        <TextBlock />
 
-                                        <!--  H2 harmonic factor  -->
-                                        <ComboBox
-                                            x:Name="H2factor_value"
-                                            Grid.Row="1"
+
+                                        <!--  F2  -->
+                                        <Slider
+                                            x:Name="F2_factor"
+                                            Grid.Row="0"
+                                            Grid.RowSpan="3"
                                             Grid.Column="3"
-                                            Width="45"
-                                            Margin="0,4,0,4"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16">
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="7" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="9" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="11" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="13" />
-                                        </ComboBox>
+                                            Margin="3,0,0,0"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="992"
+                                            Minimum="0"
+                                            Orientation="Vertical"
+                                            TickFrequency="7"
+                                            Value="500" />
 
-                                        <!--  H3 harmonic factor  -->
-                                        <ComboBox
-                                            x:Name="H3factor_value"
-                                            Grid.Row="1"
-                                            Grid.Column="4"
-                                            Width="45"
-                                            Margin="0,4,0,4"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16">
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="7" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="9" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="11" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="13" />
-                                        </ComboBox>
-
-                                        <!--  H4 harmonic factor  -->
-                                        <ComboBox
-                                            x:Name="H4factor_value"
-                                            Grid.Row="1"
+                                        <!--  H1  -->
+                                        <Slider
+                                            x:Name="H1_factor"
+                                            Grid.Row="0"
+                                            Grid.RowSpan="3"
                                             Grid.Column="5"
-                                            Width="45"
-                                            Margin="0,4,0,4"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16">
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="7" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="9" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="11" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="13" />
-                                        </ComboBox>
+                                            Margin="3,0,0,0"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="13"
+                                            Minimum="2"
+                                            Orientation="Vertical"
+                                            TickFrequency="1"
+                                            Value="2" />
 
-                                        <!--  H5 harmonic factor  -->
-                                        <ComboBox
-                                            x:Name="H5factor_value"
-                                            Grid.Row="1"
-                                            Grid.Column="6"
-                                            Width="45"
-                                            Margin="0,4,0,4"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16">
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="7" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="9" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="11" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="13" />
-                                        </ComboBox>
-
-
-                                        <!--  H6 harmonic factor  -->
-                                        <ComboBox
-                                            x:Name="H6factor_value"
-                                            Grid.Row="1"
+                                        <!--  H2  -->
+                                        <Slider
+                                            x:Name="H2_factor"
+                                            Grid.Row="0"
+                                            Grid.RowSpan="3"
                                             Grid.Column="7"
-                                            Width="45"
-                                            Margin="0,4,0,4"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="16">
-                                            <ComboBoxItem Content="2" />
-                                            <ComboBoxItem Content="3" />
-                                            <ComboBoxItem Content="4" />
-                                            <ComboBoxItem Content="5" />
-                                            <ComboBoxItem Content="6" />
-                                            <ComboBoxItem Content="7" />
-                                            <ComboBoxItem Content="8" />
-                                            <ComboBoxItem Content="9" />
-                                            <ComboBoxItem Content="10" />
-                                            <ComboBoxItem Content="11" />
-                                            <ComboBoxItem Content="12" />
-                                            <ComboBoxItem Content="13" />
-                                        </ComboBox>
+                                            Margin="3,0,0,0"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="13"
+                                            Minimum="2"
+                                            Orientation="Vertical"
+                                            TickFrequency="1"
+                                            Value="2" />
+
+
+                                        <!--  H3  -->
+                                        <Slider
+                                            x:Name="H3_factor"
+                                            Grid.Row="5"
+                                            Height="125"
+                                            Grid.RowSpan="3"
+                                            Grid.Column="1"
+                                            Margin="3,10,0,0"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="13"
+                                            Minimum="2"
+                                            Orientation="Vertical"
+                                            TickFrequency="1"
+                                            Value="2" />
+
+                                        <!--  H4  -->
+                                        <Slider
+                                            x:Name="H4_factor"
+                                            Grid.Row="5"
+                                            Grid.RowSpan="3"
+                                            Height="125"
+                                            Grid.Column="3"
+                                            Margin="3,10,0,0"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="13"
+                                            Minimum="2"
+                                            Orientation="Vertical"
+                                            TickFrequency="1"
+                                            Value="2" />
+
+                                        <!--  H5  -->
+                                        <Slider
+                                            x:Name="H5_factor"
+                                            Grid.Row="5"
+                                            Grid.RowSpan="3"
+                                            Height="125"
+                                            Grid.Column="5"
+                                            Margin="3.5,10,0,0"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="13"
+                                            Minimum="2"
+                                            Orientation="Vertical"
+                                            TickFrequency="1"
+                                            Value="2" />
+
+                                        <!--  H6  -->
+                                        <Slider
+                                            x:Name="H6_factor"
+                                            Grid.Row="5"
+                                            Height="125"
+                                            Grid.RowSpan="3"
+                                            Grid.Column="7"
+                                            Margin="3.5,10,0,0"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="13"
+                                            Minimum="2"
+                                            Orientation="Vertical"
+                                            TickFrequency="1"
+                                            Value="2" />
 
 
 
+
+                                        <!--  gain and factor headers)  -->
+
+                                        <!--  F1  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="0"
+                                            Margin="3,8,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Gain
+                                            </TextBlock>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="1"
+                                            Margin="3,8,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Factor
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  F2  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="2"
+                                            Margin="3,8,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Gain
+                                            </TextBlock>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="3"
+                                            Margin="3,8,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Factor
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H1  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="4"
+                                            Margin="3,8,3,5"
+                                            Background="#6057BF"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Gain
+                                            </TextBlock>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="5"
+                                            Margin="3,8,3,5"
+                                            Background="#6057BF"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Factor
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H2  -->
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="6"
+                                            Margin="3,8,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Gain
+                                            </TextBlock>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="3"
+                                            Grid.Column="7"
+                                            Margin="3,8,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Factor
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H3  -->
+                                        <Border
+                                            Grid.Row="8"
+                                            Grid.Column="0"
+                                            Margin="3,8,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Gain
+                                            </TextBlock>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="8"
+                                            Grid.Column="1"
+                                            Margin="3,8,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Factor
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H4  -->
+                                        <Border
+                                            Grid.Row="8"
+                                            Grid.Column="2"
+                                            Margin="3,8,3,5"
+                                            Background="#6057BF"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Gain
+                                            </TextBlock>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="8"
+                                            Grid.Column="3"
+                                            Margin="3,8,3,5"
+                                            Background="#6057BF"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Factor
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H5  -->
+                                        <Border
+                                            Grid.Row="8"
+                                            Grid.Column="6"
+                                            Margin="3,8,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Gain
+                                            </TextBlock>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="8"
+                                            Grid.Column="5"
+                                            Margin="3,8,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Factor
+                                            </TextBlock>
+                                        </Border>
+
+
+                                        <!--  H6  -->
+                                        <Border
+                                            Grid.Row="8"
+                                            Grid.Column="4"
+                                            Margin="3,8,3,5"
+                                            Background="#38326E"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Gain
+                                            </TextBlock>
+                                        </Border>
+                                        <Border
+                                            Grid.Row="8"
+                                            Grid.Column="7"
+                                            Margin="3,8,3,5"
+                                            Background="#4B4495"
+                                            BorderThickness="0"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                Margin="0,2,0,0"
+                                                HorizontalAlignment="Center"
+                                                FontFamily="roboto medium"
+                                                FontSize="12">
+                                                Factor
+                                            </TextBlock>
+                                        </Border>
 
 
 
@@ -2461,7 +2822,7 @@
                                             <Image
                                                 Width="29"
                                                 Margin="0,-3,10,0"
-                                                Source="C:\Users\demas\source\repos\SimHap\Resources\suspension50x50.png" />
+                                                Source="Resources\suspension50x50.png" />
                                             <TextBlock
                                                 Margin="-7,-5,0,0"
                                                 VerticalAlignment="Center"
@@ -2499,7 +2860,6 @@
                                                 IsSnapToTickEnabled="True"
                                                 Maximum="5"
                                                 Minimum="0"
-                                                Style="{StaticResource Horizontal_Slider}"
                                                 TickFrequency="0.1"
                                                 ValueChanged="SuspensionMultAll_ValueChanged"
                                                 Value="{Binding D.SuspensionMultAll}" />
@@ -2511,7 +2871,6 @@
                                                 IsSnapToTickEnabled="True"
                                                 Maximum="2"
                                                 Minimum="0"
-                                                Style="{StaticResource Horizontal_Slider}"
                                                 TickFrequency="0.1"
                                                 ValueChanged="SuspensionMultAll_ValueChanged"
                                                 Value="{Binding D.SuspensionMult}" />
@@ -2544,7 +2903,6 @@
                                                 IsSnapToTickEnabled="True"
                                                 Maximum="2"
                                                 Minimum="0"
-                                                Style="{StaticResource Horizontal_Slider}"
                                                 TickFrequency="0.1"
                                                 ValueChanged="SuspensionGammaAll_ValueChanged"
                                                 Value="{Binding D.SuspensionGammaAll}" />
@@ -2558,7 +2916,6 @@
                                                 IsSnapToTickEnabled="True"
                                                 Maximum="2"
                                                 Minimum="0"
-                                                Style="{StaticResource Horizontal_Slider}"
                                                 TickFrequency="0.1"
                                                 ValueChanged="SuspensionGamma_ValueChanged"
                                                 Value="{Binding D.SuspensionGamma}" />
@@ -2580,7 +2937,15 @@
                                                 FontWeight="SemiBold"
                                                 Foreground="White"
                                                 Style="{StaticResource dMASSbutton}">
-                                                Reset
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Width="31" Source="Resources\refresh50x50.png" />
+                                                    <TextBlock
+                                                        Margin="10,0,11,0"
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="roboto"
+                                                        FontSize="16"
+                                                        Text="Reset" />
+                                                </StackPanel>
                                             </Button>
 
                                         </StackPanel>
@@ -2613,7 +2978,7 @@
                                                 <Image
                                                     Width="32"
                                                     Margin="0,-3,10,0"
-                                                    Source="C:\Users\demas\source\repos\SimHap\Resources\gforce50x50.png" />
+                                                    Source="Resources\gforce50x50.png" />
                                                 <TextBlock
                                                     Margin="-7,-5,0,0"
                                                     VerticalAlignment="Center"

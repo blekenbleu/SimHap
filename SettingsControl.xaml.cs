@@ -45,6 +45,11 @@ namespace sierses.Sim
 			Init(Plugin.E.Q[Plugin.E.EQswitch].Slider);
 		}
 
+		private void TC_Expanded(object sender, RoutedEventArgs e)
+		{
+			Init(Plugin.E.Q[Plugin.E.EQswitch].Slider);
+		}
+
 		// this may provoke new equalizer creation
 		private void EQswitch_increment_Click(object sender, RoutedEventArgs e)
 		{
@@ -187,5 +192,10 @@ namespace sierses.Sim
 		{
 			EQ8_value.Text = $"{Plugin.E.Pincr(8, false)}";
 		}
-	}
+
+        private void ToneCal_Expanded(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
 }
