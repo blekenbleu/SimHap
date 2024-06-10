@@ -123,6 +123,12 @@ namespace sierses.Sim
 				return $"{EQswitch}";
 			}
 			EQswitch += up ? +1 : -1;
+			if (EQswitch == Q.Count)
+			{
+				ushort s = 50, highpass = 20, lowpass = 900;
+				Q.Add(new Eq() { Slider = new ObservableCollection<ushort> { highpass, s, s, s, s, s, s, s, lowpass } });
+				H.SC.Init(Q[EQswitch].Slider);
+			}
 			return $"{EQswitch}";
 		}
 
@@ -193,7 +199,7 @@ namespace sierses.Sim
 		}	// Play()
 
 		// convert 7 slider values
-		// to paired 4 * (Eq.Slider.Length - 2) lookup table for Shape()
+		// to (Eq.Slider.Length - 2) lookup table pairs for Play()
 		public ushort[][] EqSpline(ushort[] slider)
 		{
 			// slider.Length should be 9
@@ -245,7 +251,7 @@ namespace sierses.Sim
 		}
 
 		// AddProps() should be called by UI to add equalizer instances,
-		// which are Tone components played thru Shape() using that LUT
+		// which are Tone components played thru Play() using that LUT
 		// e.g. AddProps(This, EqSpline(sliders[n]));
 		public string AddProps(Haptics This,  ushort[][] that)
 		{

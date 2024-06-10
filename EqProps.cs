@@ -44,7 +44,7 @@ namespace sierses.Sim
                 	Q.Add(new Eq() { Slider = S });
 				else Q[0] = new Eq() { Slider = S };
 			}
-//			H.SC.Init(Sliders[0].Slider);
+//			H.SC.Init(Q[0].Slider);
 			H.AttachDelegate("Fr0", () => Fr(0));
 			H.AttachDelegate("Fr1", () => Fr(1));
 			H.AttachDelegate("Fr2", () => Fr(2));
