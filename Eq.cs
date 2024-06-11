@@ -13,7 +13,7 @@ namespace sierses.Sim
 	// array of 6 slider values, then min, max frequencies
 	public class Eq : NotifyPropertyChanged
 	{	// one for each slider + 2 for min and max frequency
-		internal ObservableCollection<ushort> Slider = new();
+		internal ushort[] Slider = new ushort[9];
 	}
 
 	public class Engine
@@ -25,49 +25,45 @@ namespace sierses.Sim
 	public partial class Geq
 	{
 		internal Haptics H;	// set in Init()
+		internal ObservableCollection<Eq> Q = new();	// EQ Slider array
 		internal string Feedback;
 		internal int EQswitch = 0;
-		// an array of sliders for each equalizer
-		internal ObservableCollection<Eq> Q = new();
 
 		// increment EQ high-/low-pass frequency
 		internal int Pincr(int s, bool up)
 		{	// Slider 0, 8 are min, max frequency
-			if (!up && Q[EQswitch].Slider[s]  > (0 == s ? 0 : 1))
+			if (!up && Q[EQswitch].Slider[s] > (0 == s ? 10 : 100))
 			{
 				Q[EQswitch].Slider[s]--;
-				// check for max > min
-				if (Q[EQswitch].Slider[8] <= Q[EQswitch].Slider[0])
-					Q[EQswitch].Slider[0] = (ushort)(Q[EQswitch].Slider[8] - 1);
 				Feedback = "decremented";
+				// interpolation over power-of-2 LUTs
+				// range >= 10 supports 8 == LUT.Length
+				if (Q[EQswitch].Slider[8] <= 10 * Q[EQswitch].Slider[0]
+				 && 10 < Q[EQswitch].Slider[0])
+				{
+					Q[EQswitch].Slider[0]--;
+					Feedback = "High pass also decremented";
+				}
+				else
+				{
+					Q[EQswitch].Slider[8] =	(ushort)(10 * Q[EQswitch].Slider[0]);
+					Feedback = $"Low pass set to {Q[EQswitch].Slider[8]}";
+				}
 			}
 			else if(up)
 			{
-				Q[EQswitch].Slider[s]++;
-				// check for min < max
-				if (Q[EQswitch].Slider[0] >= Q[EQswitch].Slider[8])
-					Q[EQswitch].Slider[8] = (ushort)(1 + Q[EQswitch].Slider[0]);
-				Feedback = "incremented";
-			}
-
-			// range checks
-			if (10 > Q[EQswitch].Slider[0]
-			 || 10000 < Q[EQswitch].Slider[8]
-			 || Q[EQswitch].Slider[8] < 10 * Q[EQswitch].Slider[0])
-			{	// constrain the limit being changed
-				Feedback = "frequency range limit exceeded";
-				if (10 > Q[EQswitch].Slider[0])
-					Q[EQswitch].Slider[0] = 10;
-				if (10000 < Q[EQswitch].Slider[8])
-					Q[EQswitch].Slider[8] = 10000;
-
+				Feedback = "limit imposed";
+				if (Q[EQswitch].Slider[s] < (8 == s ? 10000 : 1000))
+				{
+					Q[EQswitch].Slider[s]++;
+					Feedback = "incremented";
+				}
 				// interpolation over power-of-2 LUTs
 				// range >= 10 supports 8 == LUT.Length
-				if (Q[EQswitch].Slider[8] < Q[EQswitch].Slider[0] * 10)
+				if (0 == s && (Q[EQswitch].Slider[0] * 10) > Q[EQswitch].Slider[8])
 				{
-					if (8 == s)
-						Q[EQswitch].Slider[8] = (ushort)(10 * Q[EQswitch].Slider[0]);
-					else Q[EQswitch].Slider[0] = (ushort)(0.1 * Q[EQswitch].Slider[8]);
+					Q[EQswitch].Slider[8] = (ushort)(10 * Q[EQswitch].Slider[0]);
+					Feedback = $"Low pass set to {Q[EQswitch].Slider[8]}";
 				}
 			}
 			return Q[EQswitch].Slider[s];
@@ -76,7 +72,7 @@ namespace sierses.Sim
 		// increment some EQ gain
 		internal void Incr(int s, bool up)
 		{	// Slider 0, 8 are min, max frequency
-			int end = Q[EQswitch].Slider.Count - 1;
+			int end = Q[EQswitch].Slider.Length - 1;
 			int sum = 0;
 
 			if (up && 100 > Q[EQswitch].Slider[s])
@@ -89,9 +85,8 @@ namespace sierses.Sim
 						Q[EQswitch].Slider[i]--;
 					sum += Q[EQswitch].Slider[i];
 				}
-				if (sum < 250)
-					Q[EQswitch].Slider[s] = 100;
-				else Q[EQswitch].Slider[s] = (ushort)(350 - sum);
+				Q[EQswitch].Slider[s] = (ushort)((350 < sum)
+						? 0 : (sum < 250) ? 100 : (350 - sum));
 				Feedback = "incremented";
 			}
 			else if ((!up) & 0 < Q[EQswitch].Slider[s])
@@ -104,9 +99,9 @@ namespace sierses.Sim
 						Q[EQswitch].Slider[i]++;
 					sum += Q[EQswitch].Slider[i];
 				}
-				if (sum > 350)
-					Q[EQswitch].Slider[s]  = 0;
-				else Q[EQswitch].Slider[s] = (ushort)(350 - sum);
+				
+				Q[EQswitch].Slider[s] = (ushort)((350 < sum)
+						? 0 : (sum < 250) ? 100 : (350 - sum));
 				Feedback = "decremented";
 			}
 			else Feedback = up ? "100 is max gain" : "0 is min gain";
@@ -126,7 +121,8 @@ namespace sierses.Sim
 			if (EQswitch == Q.Count)
 			{
 				ushort s = 50, highpass = 20, lowpass = 900;
-				Q.Add(new Eq() { Slider = new ObservableCollection<ushort> { highpass, s, s, s, s, s, s, s, lowpass } });
+				ushort[] l = { highpass, s, s, s, s, s, s, s, lowpass };
+				Q.Add(new Eq() { Slider = l });
 				H.SC.Init(Q[EQswitch].Slider);
 			}
 			return $"{EQswitch}";
@@ -231,6 +227,8 @@ namespace sierses.Sim
 			// find largest F for which lut[1][1] > lut[1][0] by at least 1
 			for (F = 1; 4 >= F && min < (ushort)((f * ff) / (F * L)); F <<= 1);
 
+			lut[0] = new ushort[F*L];
+			lut[1] = new ushort[F*L];
 			double inc = 1.0;
 			inc /= F;
 			for (int i = 0; i < F*L; i++)
