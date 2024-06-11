@@ -193,9 +193,9 @@ namespace sierses.Sim
 			EQ8_value.Text = $"{Plugin.E.Pincr(8, false)}";
 		}
 
-        private void ToneCal_Expanded(object sender, RoutedEventArgs e)
-        {
+		private void ToneCal_Expanded(object sender, RoutedEventArgs e)
+		{
 
-        }
-    }
+		}
+	}
 }

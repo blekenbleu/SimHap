@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace sierses.Sim
 {
-    public class Tone	// array of frequency component properties
+	public class Tone	// array of frequency component properties
 	{	// one for frequency harmonics, another for amplitudes
 		internal ObservableCollection<ushort> Freq = new();
 	}
@@ -109,6 +109,13 @@ namespace sierses.Sim
 			return;
 		}
 
+		private Eq NewEQ()
+		{
+			ushort s = 50, highpass = 20, lowpass = 900;
+			ushort[] S = { highpass, s, s, s, s, s, s, s, lowpass };
+			return new Eq() { Slider = S };
+		}
+
 		// select another EQ Slider set
 		internal string NextUp(bool up)
 		{
@@ -118,13 +125,15 @@ namespace sierses.Sim
 				return $"{EQswitch}";
 			}
 			EQswitch += up ? +1 : -1;
-			if (EQswitch == Q.Count)
+			if (EQswitch == Q.Count || 0 == Q[EQswitch].Slider.Length || 0 == Q[EQswitch].Slider[0])
 			{
-				ushort s = 50, highpass = 20, lowpass = 900;
-				ushort[] l = { highpass, s, s, s, s, s, s, s, lowpass };
-				Q.Add(new Eq() { Slider = l });
+				if (EQswitch == Q.Count)
+					Q.Add(NewEQ());
+				else Q[EQswitch] = NewEQ();
 				H.SC.Init(Q[EQswitch].Slider);
+				Feedback = "Initialized";
 			}
+			else Feedback = up ? "Incremented" : "Decremented";
 			return $"{EQswitch}";
 		}
 
@@ -136,7 +145,7 @@ namespace sierses.Sim
 		 */
 		private List<ushort[][]> lUT = new() { };	// EQ
 
-        public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
+		public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
 
 		/* EQ gains interpolated by rpm frequency harmonics
 		 ; pitch is fundamental (rpm/60)
@@ -148,7 +157,7 @@ namespace sierses.Sim
 		{
 			H = This;
 			byte harmonic = (byte)(destination & 7);
-            ushort[][] Lut = LUT[destination >> 3];
+			ushort[][] Lut = LUT[destination >> 3];
 			int L = Lut[1].Length - 1;
 			ushort freq;
 
@@ -162,9 +171,9 @@ namespace sierses.Sim
 			// set a Tone harmonic amplitude for a Tone frequency
 			int i;
 /* binary search increments
-    16/32 (8): 24 :  8
-    24/32 (4): 28 : 20 : 12 : 4
-    28/32 (2): 30 : 26 : 22 : 18 : 14 : 10 : 6 : 2
+	16/32 (8): 24 :  8
+	24/32 (4): 28 : 20 : 12 : 4
+	28/32 (2): 30 : 26 : 22 : 18 : 14 : 10 : 6 : 2
 	23/24 (1): (odd values 31 to 1)
  */
 			// Luts have power-of-2 length
@@ -180,7 +189,7 @@ namespace sierses.Sim
 				else break;
 			}
  */
-            for (i = 1; i <= L; i++)
+			for (i = 1; i <= L; i++)
 				if (freq <= Lut[1][i])	// Lut interval for this Hz?
 					break;
 

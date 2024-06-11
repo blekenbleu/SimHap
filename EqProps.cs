@@ -30,18 +30,6 @@ namespace sierses.Sim
 				Tones[1].Freq.Add(1);
   			}
   			else Tones = Engine.Tones;
-
-			if (null != Engine && null != Engine.Sliders)
-				Q = Engine.Sliders;
-            if (1 > Q.Count || 9 != Q[0].Slider.Length)
-			{
-				ushort s = 50, highpass = 20, lowpass = 900;
-				ushort[] S = { highpass, s, s, s, s, s, s, s, lowpass };
-				if (1 > Q.Count)
-                	Q.Add(new Eq() { Slider = S });
-				else Q[0] = new Eq() { Slider = S };
-			}
-//			H.SC.Init(Q[0].Slider);
 			H.AttachDelegate("E.Fr0", () => Fr(0));
 			H.AttachDelegate("E.Fr1", () => Fr(1));
 			H.AttachDelegate("E.Fr2", () => Fr(2));
@@ -58,6 +46,15 @@ namespace sierses.Sim
 			H.AttachDelegate("E.Fa5", () => Tones[1].Freq[5]);
 			H.AttachDelegate("E.Fa6", () => Tones[1].Freq[6]);
 			H.AttachDelegate("E.Fa7", () => Tones[1].Freq[7]);
+
+			if (null != Engine && null != Engine.Sliders)
+				Q = Engine.Sliders;
+			if (1 > Q.Count || 9 != Q[0].Slider.Length || 0 == Q[0].Slider[0])
+			{
+				if (1 > Q.Count)
+					Q.Add(NewEQ());
+				else Q[0] = NewEQ();
+			}
 			AddProps(H, EqSpline(Q[0].Slider));
 		}
 
