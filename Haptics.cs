@@ -23,7 +23,8 @@ namespace sierses.Sim
 	[PluginName("Haptics")]
 	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
-		public string PluginVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
+		public string PluginVersion = FileVersionInfo.GetVersionInfo(
+			Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
 		public static long FrameTimeTicks = 0;
 		public static long FrameCountTicks = 0;
@@ -123,13 +124,14 @@ namespace sierses.Sim
 				This.S.Notes = "";
 				Set = false;
 				StatusDataBase db = This.Gdat.NewData;
-				string sid = (GameId.Forza == CurrentGame && "Car_" == db.CarId.Substring(0,4)) ? db.CarId.Substring(4) : db.CarId;
+				string sid = (GameId.Forza == CurrentGame && "Car_" == db.CarId.Substring(0,4))
+							? db.CarId.Substring(4) : db.CarId;
 				This.D.Index = This.S.SelectCar(sid, // set game RPM defaults
 													redlineFromGame, maxRPMFromGame, ushortIdleRPM);
 				Logging.Current.Info($"Haptics.SelectCar({sid}): "
-									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
-							   		+ (Set ? " Set": "") + (Changed ? "Changed " : "")
-									+ $" Index = {This.D.Index}");
+									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
+									+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
+									+ (Changed ? "Changed " : "") + $" Index = {This.D.Index}");
 				if (0 <= This.D.Index)
 					return;
 			}
@@ -159,9 +161,10 @@ namespace sierses.Sim
 					{
 						CarSpec car = dljc.data[0];
 						car.defaults = "DB";
-						This.S.Cache(car);								// FetchCarData(): Set(id) at the end of SetVehicle()
+						This.S.Cache(car);					// FetchCarData(): Set(id) at the end of SetVehicle()
 						LoadFailCount = 1;
-						Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; CarInitCount = {This.D.CarInitCount}");
+						Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
+											+ $" CarInitCount = {This.D.CarInitCount}");
 						This.D.CarInitCount = 0;
 						This.D.Index = -4;
 						return;
@@ -176,8 +179,8 @@ namespace sierses.Sim
 /*
 						Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
 					else if (0 < dls.Length)
-						Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  result length {dls.Length}: "
-											+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length)); // (<= 20) dls characters
+						Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  length {dls.Length}: "
+											+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
  */
 				}
 				// else Waiting
@@ -251,8 +254,8 @@ namespace sierses.Sim
 			}
 		}	// DataUpdate()
 
-		// remove 0 value ushorts
-		private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" }; // Null0() remove these if 0 value before saving JSON
+		// Null0() remove these if 0 value before saving JSON
+		private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" };
 		private string Null0(string j)
 		{
 			for (int i = 0; i < zero.Count; i++)
@@ -266,8 +269,7 @@ namespace sierses.Sim
 				Settings.Engine = new();
 
             Settings.Engine.Tones = E.Tones;
-			Settings.Engine.Sliders = new();
-			Settings.Engine.Sliders.Add(E.Q[0]);
+			Settings.Engine.Sliders = new() { E.Q[0] };
 
 			if (Save || Loaded || Changed)		// End()
 			{
@@ -280,7 +282,8 @@ namespace sierses.Sim
 									+ (Save ? "changes made.." : "(no changes)"));
 				else if (Save) { 
 					File.WriteAllText(myfile, sjs);
-					Logging.Current.Info( $"Haptics.End(): {S.LD.Count} games, including {S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
+					Logging.Current.Info( $"Haptics.End(): {S.LD.Count} games, including "
+						+ $"{S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
 				}
 			}
 			if (!Save)
@@ -632,14 +635,15 @@ namespace sierses.Sim
 			if (File.Exists(myfile))
 			{
 				string text = File.ReadAllText(myfile);
-				Dictionary<string, List<CarSpec>> json = JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
+				Dictionary<string, List<CarSpec>> json =
+					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
 				Logging.Current.Info("Haptics.Init():  " + S.LD.Set(json) + myfile + Atlasst);
 			}
 			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found" + Atlasst);
 
 			D.Init(Settings, this);
 			E = new();
-			E.Init(Settings, this);
+			E.Init(Settings.Engine, this);
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
 			this.AttachDelegate("CarId", () => S.Id);
