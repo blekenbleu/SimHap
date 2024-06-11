@@ -6,4 +6,15 @@
   <PropertyGroup>
     <ReferencePath>$(SIMHUB_INSTALL_PATH)</ReferencePath>
   </PropertyGroup>
+  <ItemGroup>
+    <Page Update="BlueTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PurpleTheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>
