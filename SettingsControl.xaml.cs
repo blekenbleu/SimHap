@@ -27,7 +27,7 @@ namespace sierses.Sim
 		}
 
 		// called when expanding EQ or Plugin.E.NextUp() 
-		internal void Init(ObservableCollection<ushort> S)
+		internal void Init(ushort[] S)
 		{
 			EQ0_value.Text = S[0].ToString();
 			EQ1_value.Text = S[1].ToString();
