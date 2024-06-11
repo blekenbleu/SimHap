@@ -113,5 +113,29 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\backraw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\engine50x50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\nextraw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\refresh50x50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\suspension50x50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\eq.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\tone50x50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\gforcenew.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
