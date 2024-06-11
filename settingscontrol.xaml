@@ -29,8 +29,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-
+        
         <!--  button style for eq repeat buttons  -->
         <Style x:Key="EQbutton" TargetType="RepeatButton">
             <Setter Property="Template">
@@ -598,8 +597,8 @@
                                 <Expander.Header>
                                     <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
                                         <Image
-                                            Width="29"
-                                            Margin="0,-3,10,0"
+                                            Width="31"
+                                            Margin="-2,-3,10,0"
                                             Source="Resources\engine50x50.png" />
                                         <TextBlock
                                             Margin="-7,-5,0,0"
@@ -615,7 +614,7 @@
 
                                     <!--  CarName  -->
                                     <StackPanel
-                                        Margin="0,15,0,0"
+                                        Margin="0,5,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
@@ -962,7 +961,7 @@
 
                                     <!--  Refresh & Lock  -->
                                     <StackPanel
-                                        Margin="0,30,0,15"
+                                        Margin="0,15,0,4"
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal">
 
@@ -971,7 +970,6 @@
                                             <Button
                                                 Width="150"
                                                 Height="35"
-                                                Margin="0,10,0,15"
                                                 VerticalContentAlignment="Center"
                                                 Background="#4B4495"
                                                 BorderThickness="0"
@@ -991,7 +989,7 @@
                                         <Button
                                             Width="150"
                                             Height="35"
-                                            Margin="10,10,0,15"
+                                            Margin="10,0,0,5"
                                             VerticalContentAlignment="Center"
                                             Background="#4B4495"
                                             BorderThickness="0"
@@ -1719,7 +1717,7 @@
                             <!--  tone calibration expander  -->
                             <StackPanel>
                                 <Expander
-                                    Margin="0,6,0,3"
+                                    Margin="0,3,0,3"
                                     Expander.Expanded="TC_Expanded"
                                     FontFamily="roboto"
                                     FontSize="16"
@@ -1727,9 +1725,9 @@
                                     <Expander.Header>
                                         <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
                                             <Image
-                                                Width="29"
+                                                Width="30"
                                                 Margin="0,-3,10,0"
-                                                Source="Resources\eq.png" />
+                                                Source="Resources\tone50x50.png" />
                                             <TextBlock
                                                 Margin="-7,-5,0,0"
                                                 VerticalAlignment="Center"
@@ -1744,6 +1742,7 @@
                                     </Expander.Header>
                                     <Grid Margin="0,9,0,0" HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0" />
                                             <ColumnDefinition Width="49" />
                                             <ColumnDefinition Width="49" />
                                             <ColumnDefinition Width="49" />
@@ -1774,7 +1773,7 @@
                                         <RepeatButton
                                             x:Name="F1_increment"
                                             Grid.Row="0"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Margin="2"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
@@ -1788,7 +1787,7 @@
                                         <!--  value  -->
                                         <Border
                                             Grid.Row="1"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#38326E"
                                             BorderThickness="3"
@@ -1805,7 +1804,7 @@
                                         <RepeatButton
                                             x:Name="F1_decrement"
                                             Grid.Row="2"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Margin="2"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
@@ -1818,7 +1817,7 @@
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="4"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
                                             Background="#38326E"
@@ -1838,7 +1837,7 @@
                                         <RepeatButton
                                             x:Name="F2_increment"
                                             Grid.Row="0"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Margin="2"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
@@ -1852,7 +1851,7 @@
                                         <!--  value  -->
                                         <Border
                                             Grid.Row="1"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
                                             BorderThickness="3"
@@ -1869,7 +1868,7 @@
                                         <RepeatButton
                                             x:Name="F2_decrement"
                                             Grid.Row="2"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Margin="2"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
@@ -1882,7 +1881,7 @@
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="4"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
                                             Background="#4B4495"
@@ -1901,7 +1900,7 @@
                                         <RepeatButton
                                             x:Name="H1_increment"
                                             Grid.Row="0"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Margin="2"
                                             Background="#6057BF"
                                             BorderBrush="Transparent"
@@ -1915,7 +1914,7 @@
                                         <!--  value  -->
                                         <Border
                                             Grid.Row="1"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#6057BF"
                                             BorderThickness="3"
@@ -1932,7 +1931,7 @@
                                         <RepeatButton
                                             x:Name="H1_decrement"
                                             Grid.Row="2"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Margin="2"
                                             Background="#6057BF"
                                             BorderBrush="Transparent"
@@ -1945,7 +1944,7 @@
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="4"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
                                             Background="#6057BF"
@@ -1965,7 +1964,7 @@
                                         <RepeatButton
                                             x:Name="H2_increment"
                                             Grid.Row="0"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Margin="2"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
@@ -1979,7 +1978,7 @@
                                         <!--  value  -->
                                         <Border
                                             Grid.Row="1"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#38326E"
                                             BorderThickness="3"
@@ -1996,7 +1995,7 @@
                                         <RepeatButton
                                             x:Name="H2_decrement"
                                             Grid.Row="2"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Margin="2"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
@@ -2009,7 +2008,7 @@
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="4"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
                                             Background="#38326E"
@@ -2029,7 +2028,7 @@
                                         <RepeatButton
                                             x:Name="H3_increment"
                                             Grid.Row="5"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Height="36"
                                             Margin="2,10,0,0"
                                             Background="#4B4495"
@@ -2044,7 +2043,7 @@
                                         <!--  value  -->
                                         <Border
                                             Grid.Row="6"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
                                             BorderThickness="3"
@@ -2061,7 +2060,7 @@
                                         <RepeatButton
                                             x:Name="H3_decrement"
                                             Grid.Row="7"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Margin="2"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
@@ -2074,7 +2073,7 @@
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="9"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
                                             Background="#4B4495"
@@ -2093,7 +2092,7 @@
                                         <RepeatButton
                                             x:Name="H4_increment"
                                             Grid.Row="5"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Height="36"
                                             Margin="2,10,0,0"
                                             Background="#6057BF"
@@ -2108,7 +2107,7 @@
                                         <!--  value  -->
                                         <Border
                                             Grid.Row="6"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#6057BF"
                                             BorderThickness="3"
@@ -2125,7 +2124,7 @@
                                         <RepeatButton
                                             x:Name="H4_decrement"
                                             Grid.Row="7"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Margin="2"
                                             Background="#6057BF"
                                             BorderBrush="Transparent"
@@ -2138,7 +2137,7 @@
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="9"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
                                             Background="#6057BF"
@@ -2157,7 +2156,7 @@
                                         <RepeatButton
                                             x:Name="H5_increment"
                                             Grid.Row="5"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Height="36"
                                             Margin="2,10,0,0"
                                             Background="#38326E"
@@ -2172,7 +2171,7 @@
                                         <!--  value  -->
                                         <Border
                                             Grid.Row="6"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#38326E"
                                             BorderThickness="3"
@@ -2189,7 +2188,7 @@
                                         <RepeatButton
                                             x:Name="H5_decrement"
                                             Grid.Row="7"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Margin="2"
                                             Background="#38326E"
                                             BorderBrush="Transparent"
@@ -2202,7 +2201,7 @@
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="9"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
                                             Background="#38326E"
@@ -2222,7 +2221,7 @@
                                         <RepeatButton
                                             x:Name="H6_increment"
                                             Grid.Row="5"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Height="36"
                                             Margin="2,10,0,0"
                                             Background="#4B4495"
@@ -2237,7 +2236,7 @@
                                         <!--  value  -->
                                         <Border
                                             Grid.Row="6"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Margin="1.5,3,1.5,3"
                                             BorderBrush="#4B4495"
                                             BorderThickness="3"
@@ -2254,7 +2253,7 @@
                                         <RepeatButton
                                             x:Name="H6_decrement"
                                             Grid.Row="7"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Margin="2"
                                             Background="#4B4495"
                                             BorderBrush="Transparent"
@@ -2267,7 +2266,7 @@
                                         </RepeatButton>
                                         <Border
                                             Grid.Row="9"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
                                             Background="#4B4495"
@@ -2294,7 +2293,7 @@
                                             x:Name="F1_factor"
                                             Grid.Row="0"
                                             Grid.RowSpan="3"
-                                            Grid.Column="1"
+                                            Grid.Column="2"
                                             Margin="3,1,0,2"
                                             IsSnapToTickEnabled="True"
                                             Maximum="992"
@@ -2312,7 +2311,7 @@
                                             x:Name="F2_factor"
                                             Grid.Row="0"
                                             Grid.RowSpan="3"
-                                            Grid.Column="3"
+                                            Grid.Column="4"
                                             Margin="3,0,0,0"
                                             IsSnapToTickEnabled="True"
                                             Maximum="992"
@@ -2326,7 +2325,7 @@
                                             x:Name="H1_factor"
                                             Grid.Row="0"
                                             Grid.RowSpan="3"
-                                            Grid.Column="5"
+                                            Grid.Column="6"
                                             Margin="3,0,0,0"
                                             IsSnapToTickEnabled="True"
                                             Maximum="13"
@@ -2340,7 +2339,7 @@
                                             x:Name="H2_factor"
                                             Grid.Row="0"
                                             Grid.RowSpan="3"
-                                            Grid.Column="7"
+                                            Grid.Column="8"
                                             Margin="3,0,0,0"
                                             IsSnapToTickEnabled="True"
                                             Maximum="13"
@@ -2354,9 +2353,9 @@
                                         <Slider
                                             x:Name="H3_factor"
                                             Grid.Row="5"
-                                            Height="125"
                                             Grid.RowSpan="3"
-                                            Grid.Column="1"
+                                            Grid.Column="2"
+                                            Height="125"
                                             Margin="3,10,0,0"
                                             IsSnapToTickEnabled="True"
                                             Maximum="13"
@@ -2370,8 +2369,8 @@
                                             x:Name="H4_factor"
                                             Grid.Row="5"
                                             Grid.RowSpan="3"
+                                            Grid.Column="4"
                                             Height="125"
-                                            Grid.Column="3"
                                             Margin="3,10,0,0"
                                             IsSnapToTickEnabled="True"
                                             Maximum="13"
@@ -2385,8 +2384,8 @@
                                             x:Name="H5_factor"
                                             Grid.Row="5"
                                             Grid.RowSpan="3"
+                                            Grid.Column="6"
                                             Height="125"
-                                            Grid.Column="5"
                                             Margin="3.5,10,0,0"
                                             IsSnapToTickEnabled="True"
                                             Maximum="13"
@@ -2399,9 +2398,9 @@
                                         <Slider
                                             x:Name="H6_factor"
                                             Grid.Row="5"
-                                            Height="125"
                                             Grid.RowSpan="3"
-                                            Grid.Column="7"
+                                            Grid.Column="8"
+                                            Height="125"
                                             Margin="3.5,10,0,0"
                                             IsSnapToTickEnabled="True"
                                             Maximum="13"
@@ -2418,7 +2417,7 @@
                                         <!--  F1  -->
                                         <Border
                                             Grid.Row="3"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Margin="3,8,3,5"
                                             Background="#38326E"
                                             BorderThickness="0"
@@ -2433,7 +2432,7 @@
                                         </Border>
                                         <Border
                                             Grid.Row="3"
-                                            Grid.Column="1"
+                                            Grid.Column="2"
                                             Margin="3,8,3,5"
                                             Background="#38326E"
                                             BorderThickness="0"
@@ -2451,7 +2450,7 @@
                                         <!--  F2  -->
                                         <Border
                                             Grid.Row="3"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Margin="3,8,3,5"
                                             Background="#4B4495"
                                             BorderThickness="0"
@@ -2466,7 +2465,7 @@
                                         </Border>
                                         <Border
                                             Grid.Row="3"
-                                            Grid.Column="3"
+                                            Grid.Column="4"
                                             Margin="3,8,3,5"
                                             Background="#4B4495"
                                             BorderThickness="0"
@@ -2484,7 +2483,7 @@
                                         <!--  H1  -->
                                         <Border
                                             Grid.Row="3"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             Margin="3,8,3,5"
                                             Background="#6057BF"
                                             BorderThickness="0"
@@ -2499,7 +2498,7 @@
                                         </Border>
                                         <Border
                                             Grid.Row="3"
-                                            Grid.Column="5"
+                                            Grid.Column="6"
                                             Margin="3,8,3,5"
                                             Background="#6057BF"
                                             BorderThickness="0"
@@ -2517,7 +2516,7 @@
                                         <!--  H2  -->
                                         <Border
                                             Grid.Row="3"
-                                            Grid.Column="6"
+                                            Grid.Column="7"
                                             Margin="3,8,3,5"
                                             Background="#38326E"
                                             BorderThickness="0"
@@ -2532,7 +2531,7 @@
                                         </Border>
                                         <Border
                                             Grid.Row="3"
-                                            Grid.Column="7"
+                                            Grid.Column="8"
                                             Margin="3,8,3,5"
                                             Background="#38326E"
                                             BorderThickness="0"
@@ -2550,7 +2549,7 @@
                                         <!--  H3  -->
                                         <Border
                                             Grid.Row="8"
-                                            Grid.Column="0"
+                                            Grid.Column="1"
                                             Margin="3,8,3,5"
                                             Background="#4B4495"
                                             BorderThickness="0"
@@ -2565,7 +2564,7 @@
                                         </Border>
                                         <Border
                                             Grid.Row="8"
-                                            Grid.Column="1"
+                                            Grid.Column="2"
                                             Margin="3,8,3,5"
                                             Background="#4B4495"
                                             BorderThickness="0"
@@ -2583,7 +2582,7 @@
                                         <!--  H4  -->
                                         <Border
                                             Grid.Row="8"
-                                            Grid.Column="2"
+                                            Grid.Column="3"
                                             Margin="3,8,3,5"
                                             Background="#6057BF"
                                             BorderThickness="0"
@@ -2598,7 +2597,7 @@
                                         </Border>
                                         <Border
                                             Grid.Row="8"
-                                            Grid.Column="3"
+                                            Grid.Column="4"
                                             Margin="3,8,3,5"
                                             Background="#6057BF"
                                             BorderThickness="0"
@@ -2616,9 +2615,9 @@
                                         <!--  H5  -->
                                         <Border
                                             Grid.Row="8"
-                                            Grid.Column="6"
+                                            Grid.Column="5"
                                             Margin="3,8,3,5"
-                                            Background="#4B4495"
+                                            Background="#38326E"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2631,7 +2630,7 @@
                                         </Border>
                                         <Border
                                             Grid.Row="8"
-                                            Grid.Column="5"
+                                            Grid.Column="6"
                                             Margin="3,8,3,5"
                                             Background="#38326E"
                                             BorderThickness="0"
@@ -2649,9 +2648,9 @@
                                         <!--  H6  -->
                                         <Border
                                             Grid.Row="8"
-                                            Grid.Column="4"
+                                            Grid.Column="7"
                                             Margin="3,8,3,5"
-                                            Background="#38326E"
+                                            Background="#4B4495"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2664,7 +2663,7 @@
                                         </Border>
                                         <Border
                                             Grid.Row="8"
-                                            Grid.Column="7"
+                                            Grid.Column="8"
                                             Margin="3,8,3,5"
                                             Background="#4B4495"
                                             BorderThickness="0"
@@ -2928,7 +2927,7 @@
                                                 x:Name="ButtonResetSuspension"
                                                 Width="150"
                                                 Height="35"
-                                                Margin="0,10,0,15"
+                                                Margin="0,10,0,6"
                                                 Background="#4B4495"
                                                 BorderThickness="0"
                                                 Click="ButtonResetSuspension_Click"
@@ -2974,11 +2973,11 @@
                                         FontSize="14"
                                         IsExpanded="True">
                                         <Expander.Header>
-                                            <StackPanel Margin="-7,-2,0,0" Orientation="Horizontal">
+                                            <StackPanel Margin="-6,-2,0,0" Orientation="Horizontal">
                                                 <Image
-                                                    Width="32"
+                                                    Width="31"
                                                     Margin="0,-3,10,0"
-                                                    Source="Resources\gforce50x50.png" />
+                                                    Source="Resources\gforcenew.png" />
                                                 <TextBlock
                                                     Margin="-7,-5,0,0"
                                                     VerticalAlignment="Center"

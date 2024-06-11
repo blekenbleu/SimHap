@@ -118,14 +118,29 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="backraw" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\backraw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="eq" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\eq.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gforcenew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gforcenew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nextraw" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\nextraw.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh50x50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh50x50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SimHapticsShakerStyleIcon_alt012" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\hapticslogoaa1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_100x100_Impacts_White" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\gforce.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="suspension50x50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\suspension50x50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tone50x50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tone50x50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_100x100_RPM_White" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\engine50x50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
