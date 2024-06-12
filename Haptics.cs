@@ -97,7 +97,11 @@ namespace sierses.Sim
 		internal SettingsControl SC;
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
-			return SC = new SettingsControl(this);
+			SC = new SettingsControl(this);
+			if (null == SC.Theme)
+				SC.ChangeTheme((null != Settings.Engine && null != Settings.Engine.Theme)
+								   ? Settings.Engine.Theme : "BlueLightTheme.xaml" );
+			return SC;
 		}
 
 		public Settings Settings { get; set; }
@@ -268,6 +272,7 @@ namespace sierses.Sim
 			if (null == Settings.Engine)
 				Settings.Engine = new();
 
+			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
             Settings.Engine.Tones = E.Tones;
 			Settings.Engine.Sliders = new() { E.Q[0] };
 

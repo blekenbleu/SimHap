@@ -2,4 +2,7 @@
     <SolidColorBrush x:Key="Light" Color="#77916E" />
     <SolidColorBrush x:Key="Mid" Color="#5E7357" />
     <SolidColorBrush x:Key="Dark" Color="#424C3E" />
+    <SolidColorBrush x:Key="Foreground" Color="White" />
+    <SolidColorBrush x:Key="Background" Color="#252525" />
+    <SolidColorBrush x:Key="Slider" Color="White" />
 </ResourceDictionary>

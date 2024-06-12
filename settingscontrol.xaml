@@ -11,7 +11,7 @@
 
     <UserControl.Resources>
 
-            <!--  slider style for value label end vertical  -->
+        <!--  slider style for value label end vertical  -->
         <!--  corner radius textboxes
         <Style TargetType="{x:Type TextBox}">
             <Style.Resources>
@@ -27,155 +27,328 @@
         <!--  corner radius expander end  -->
 
 
-		<ResourceDictionary>
-
-            <ResourceDictionary x:Key="themerd" Source="/sierses.Sim;component/Themes/SteelTheme.xaml"/>
-			
-			<Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
-				<Setter Property="Opacity" Value="0.9" />
-				<Setter Property="Fill" Value="White" />
-				<Setter Property="Height" Value="50" />
-				<Setter Property="Width" Value="50" />
-			</Style>
-			<Style x:Key="StatusCircle" TargetType="{x:Type Rectangle}">
-				<Setter Property="Opacity" Value="0.9" />
-				<Setter Property="Fill" Value="White" />
-				<Setter Property="Height" Value="10" />
-				<Setter Property="Width" Value="10" />
-			</Style>
-			<Style x:Key="TabVis" TargetType="{x:Type StackPanel}">
-				<Style.Triggers>
-					<Trigger Property="IsMouseOver" Value="true">
-						<Setter Property="Opacity" Value="0.6" />
-					</Trigger>
-				</Style.Triggers>
-			</Style>
-        
-        
-        
-			<!--  button style for eq repeat buttons  -->
-			<Style x:Key="EQbutton" TargetType="{x:Type RepeatButton}">
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type RepeatButton}">
-							<Border
-								Background="{TemplateBinding Background}"
-								BorderThickness="0"
-								CornerRadius="5">
-								<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-							</Border>
-							<ControlTemplate.Triggers>
-								<Trigger Property="IsMouseOver" Value="True">
-									<Setter Property="Opacity" Value="0.5" />
-								</Trigger>
-								<Trigger Property="IsMouseOver" Value="False">
-									<Setter Property="Opacity" Value="1" />
-								</Trigger>
-							</ControlTemplate.Triggers>
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
+        <ResourceDictionary>
 
 
-			<!--  button style for other buttons curved and opacity  -->
-			<Style x:Key="dMASSbutton" TargetType="{x:Type Button}">
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type Button}">
-							<Border
-								Background="{TemplateBinding Background}"
-								BorderThickness="0"
-								CornerRadius="5">
-								<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-							</Border>
-							<ControlTemplate.Triggers>
-								<Trigger Property="IsMouseOver" Value="True">
-									<Setter Property="Opacity" Value="0.5" />
-								</Trigger>
-								<Trigger Property="IsMouseOver" Value="False">
-									<Setter Property="Opacity" Value="1" />
-								</Trigger>
-							</ControlTemplate.Triggers>
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
+            <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
+                <Setter Property="Opacity" Value="0.9" />
+                <Setter Property="Fill" Value="White" />
+                <Setter Property="Height" Value="50" />
+                <Setter Property="Width" Value="50" />
+            </Style>
+            <Style x:Key="StatusCircle" TargetType="{x:Type Rectangle}">
+                <Setter Property="Opacity" Value="0.9" />
+                <Setter Property="Fill" Value="White" />
+                <Setter Property="Height" Value="10" />
+                <Setter Property="Width" Value="10" />
+            </Style>
+            <Style x:Key="TabVis" TargetType="{x:Type StackPanel}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="true">
+                        <Setter Property="Opacity" Value="0.6" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
 
 
+            <!--  button style for eq repeat buttons  -->
+            <Style x:Key="EQbutton" TargetType="{x:Type RepeatButton}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="False">
+                                    <Setter Property="Opacity" Value="1" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
-			<!--  Button corner radius and styling  -->
 
-			<Style TargetType="{x:Type Button}">
-				<Style.Resources>
-					<Style TargetType="{x:Type Border}">
-						<Setter Property="CornerRadius" Value="6" />
-						<Setter Property="BorderThickness" Value="0" />
-					</Style>
-				</Style.Resources>
-			</Style>
+            <!--  button style for other buttons curved and opacity  -->
+            <Style x:Key="dMASSbutton" TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="False">
+                                    <Setter Property="Opacity" Value="1" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
 
 
 
+            <!--  combobox styling start  -->
+            <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        x:Name="Border"
+                        Grid.ColumnSpan="2"
+                        Background="{DynamicResource Mid}"
+                        BorderBrush="{DynamicResource Mid}"
+                        BorderThickness="0"
+                        CornerRadius="6" />
+                    <Border
+                        Grid.Column="0"
+                        Margin="1"
+                        Background="{DynamicResource Dark}"
+                        BorderBrush="{DynamicResource Mid}"
+                        BorderThickness="0,0,1,0"
+                        CornerRadius="6,0,0,6" />
+                    <Path
+                        x:Name="Arrow"
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
+                        Fill="White" />
+                </Grid>
+                <!--<ControlTemplate.Triggers>
+            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#808080" />
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#E0E0E0" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                <Setter Property="Foreground" Value="#888888"/>
+                <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
+            </Trigger>
+        </ControlTemplate.Triggers>-->
+            </ControlTemplate>
 
-			<!--  slider style !!!NEW!!! horizontal and vertical  -->
+            <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+                <Border
+                    x:Name="PART_ContentHost"
+                    Background="{TemplateBinding Background}"
+                    Focusable="False" />
+            </ControlTemplate>
 
-			<Style x:Key="Style_SliderLeftButton" TargetType="{x:Type RepeatButton}">
-				<Setter Property="SnapsToDevicePixels" Value="True" />
-				<Setter Property="OverridesDefaultStyle" Value="True" />
-				<Setter Property="IsTabStop" Value="False" />
-				<Setter Property="Focusable" Value="False" />
-				<Setter Property="Background" Value="Transparent" />
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type RepeatButton}">
-							<Border
-								Height="4"
-								Margin="8,0,-8,0"
-								Background="{TemplateBinding Background}"
-								CornerRadius="2" />
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
+            <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+                <Setter Property="SnapsToDevicePixels" Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+                <Setter Property="MinWidth" Value="80" />
+                <Setter Property="MinHeight" Value="20" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBox}">
+                            <Grid>
+                                <ToggleButton
+                                    Name="ToggleButton"
+                                    Grid.Column="2"
+                                    ClickMode="Press"
+                                    Focusable="false"
+                                    IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Template="{StaticResource ComboBoxToggleButton}" />
+                                <ContentPresenter
+                                    Name="ContentSite"
+                                    Margin="3,3,23,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding SelectionBoxItem}"
+                                    ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                    IsHitTestVisible="False" />
+                                <TextBox
+                                    x:Name="PART_EditableTextBox"
+                                    Margin="3,3,23,3"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Background="#FF3F3F3F"
+                                    Focusable="True"
+                                    Foreground="Green"
+                                    IsReadOnly="{TemplateBinding IsReadOnly}"
+                                    Style="{x:Null}"
+                                    Template="{StaticResource ComboBoxTextBox}"
+                                    Visibility="Hidden" />
+                                <Popup
+                                    Name="Popup"
+                                    AllowsTransparency="True"
+                                    Focusable="False"
+                                    IsOpen="{TemplateBinding IsDropDownOpen}"
+                                    Placement="Bottom"
+                                    PopupAnimation="Slide">
 
-			<Style x:Key="Style_SliderRightButton" TargetType="{x:Type RepeatButton}">
-				<Setter Property="SnapsToDevicePixels" Value="True" />
-				<Setter Property="OverridesDefaultStyle" Value="True" />
-				<Setter Property="IsTabStop" Value="False" />
-				<Setter Property="Focusable" Value="False" />
-				<Setter Property="Background" Value="Transparent" />
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type RepeatButton}">
-							<Border
-								Height="4"
-								Margin="0,0,8,0"
-								Background="{TemplateBinding Background}"
-								CornerRadius="2" />
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
+                                    <Grid
+                                        Name="DropDown"
+                                        MinWidth="{TemplateBinding ActualWidth}"
+                                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                        SnapsToDevicePixels="True">
+                                        <Border
+                                            x:Name="DropDownBorder"
+                                            Background="{DynamicResource Light}"
+                                            BorderBrush="{DynamicResource Mid}"
+                                            BorderThickness="1" />
+                                        <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="#888888" />
+                                </Trigger>
+                                <Trigger Property="IsGrouping" Value="true">
+                                    <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                                </Trigger>
+                                <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                    <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0" />
+                                    <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0" />
+                                </Trigger>
+                                <Trigger Property="IsEditable" Value="true">
+                                    <Setter Property="IsTabStop" Value="false" />
+                                    <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
+                                    <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers />
+            </Style>
 
-			<Style x:Key="Style_SliderThumb" TargetType="{x:Type Thumb}">
-				<Setter Property="SnapsToDevicePixels" Value="True" />
-				<Setter Property="OverridesDefaultStyle" Value="True" />
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type Thumb}">
-							<StackPanel Orientation="Vertical">
-								<Grid>
-									<!--  Big point  -->
-									<Path
-										x:Name="ThumbdMASSnew"
-										Margin="20,8,0,0"
-										Data="M 1 1 L 1 1 L 1 1 Z"
-										Fill="{DynamicResource Mid}"
-										Stroke="{DynamicResource Mid}"
-										StrokeThickness="30" />
+            <!--  SimpleStyles: ComboBoxItem  -->
+            <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+                <Setter Property="SnapsToDevicePixels" Value="true" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                            <Border
+                                Name="Border"
+                                Padding="2"
+                                SnapsToDevicePixels="true">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted" Value="true">
+                                    <Setter TargetName="Border" Property="Background" Value="#FF4F4F4F" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="#888888" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--  combobox styling end  -->
+
+
+
+
+            <!--  Button corner radius and styling  -->
+
+            <Style TargetType="{x:Type Button}">
+                <Style.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="6" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+
+
+
+
+
+            <!--  slider style !!!NEW!!! horizontal and vertical  -->
+
+            <Style x:Key="Style_SliderLeftButton" TargetType="{x:Type RepeatButton}">
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border
+                                Height="4"
+                                Margin="8,0,-8,0"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="2" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="Style_SliderRightButton" TargetType="{x:Type RepeatButton}">
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border
+                                Height="4"
+                                Margin="0,0,8,0"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="2" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="Style_SliderThumb" TargetType="{x:Type Thumb}">
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <StackPanel Orientation="Vertical">
+                                <Grid>
+                                    <!--  Big point  -->
+                                    <Path
+                                        x:Name="ThumbdMASSnew"
+                                        Margin="20,8,0,0"
+                                        Data="M 1 1 L 1 1 L 1 1 Z"
+                                        Fill="{DynamicResource Mid}"
+                                        Stroke="{DynamicResource Mid}"
+                                        StrokeThickness="30" />
 
 
 
@@ -183,282 +356,282 @@
 
 
 
-								</Grid>
+                                </Grid>
 
-								<!--  text label  -->
-								<TextBlock
-									x:Name="ThumbdMASSlabelnew"
-									Margin="5,-24,0,0"
-									HorizontalAlignment="Center"
-									VerticalAlignment="Top"
-									Background="Transparent"
-									FontFamily="roboto"
-									FontSize="14"
-									Foreground="white"
-									Text="{Binding Value, RelativeSource={RelativeSource AncestorType={x:Type Slider}, Mode=FindAncestor}}"
-									TextAlignment="Center" />
-							</StackPanel>
-							<!--  mouse hover color change  -->
-							<ControlTemplate.Triggers>
-								<Trigger Property="IsMouseOver" Value="True">
+                                <!--  text label  -->
+                                <TextBlock
+                                    x:Name="ThumbdMASSlabelnew"
+                                    Margin="5,-24,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Background="Transparent"
+                                    FontFamily="roboto"
+                                    FontSize="14"
+                                    Foreground="white"
+                                    Text="{Binding Value, RelativeSource={RelativeSource AncestorType={x:Type Slider}, Mode=FindAncestor}}"
+                                    TextAlignment="Center" />
+                            </StackPanel>
+                            <!--  mouse hover color change  -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="ThumbdMASSnew" Property="Stroke" Value="{DynamicResource Dark}" />
-									<Setter TargetName="ThumbdMASSlabelnew" Property="Opacity" Value="0.6" />
-								</Trigger>
-							</ControlTemplate.Triggers>
+                                    <Setter TargetName="ThumbdMASSlabelnew" Property="Opacity" Value="0.6" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
 
-						</ControlTemplate>
+                        </ControlTemplate>
 
-					</Setter.Value>
-				</Setter>
-			</Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
-			<!--  Template when the orientation of the Slider is Horizontal.  -->
-			<ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type Slider}">
-				<Grid>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
-						<RowDefinition Height="Auto" />
-					</Grid.RowDefinitions>
+            <!--  Template when the orientation of the Slider is Horizontal.  -->
+            <ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type Slider}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-					<TickBar
-						x:Name="TopTick"
-						Height="4"
-						Fill="white"
-						Placement="Top"
-						SnapsToDevicePixels="True"
-						Visibility="Collapsed" />
+                    <TickBar
+                        x:Name="TopTick"
+                        Height="4"
+                        Fill="white"
+                        Placement="Top"
+                        SnapsToDevicePixels="True"
+                        Visibility="Collapsed" />
 
-					<Border
-						x:Name="TrackBackground"
-						Grid.Row="1"
-						Height="3"
-						Margin="8,-7,0,0"
-						Background="White"
-						BorderThickness="0"
-						CornerRadius="2" />
+                    <Border
+                        x:Name="TrackBackground"
+                        Grid.Row="1"
+                        Height="3"
+                        Margin="8,-7,0,0"
+                        Background="{DynamicResource Slider}"
+                        BorderThickness="0"
+                        CornerRadius="2" />
 
-					<Track x:Name="PART_Track" Grid.Row="1">
+                    <Track x:Name="PART_Track" Grid.Row="1">
 
-						<Track.DecreaseRepeatButton>
-							<RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
-						</Track.DecreaseRepeatButton>
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
+                        </Track.DecreaseRepeatButton>
 
-						<Track.Thumb>
-							<Thumb Style="{StaticResource Style_SliderThumb}" />
-						</Track.Thumb>
+                        <Track.Thumb>
+                            <Thumb Style="{StaticResource Style_SliderThumb}" />
+                        </Track.Thumb>
 
-						<Track.IncreaseRepeatButton>
-							<RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
-						</Track.IncreaseRepeatButton>
-					</Track>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
+                        </Track.IncreaseRepeatButton>
+                    </Track>
 
-					<TickBar
-						x:Name="BottomTick"
-						Grid.Row="2"
-						Height="4"
-						Fill="{TemplateBinding Foreground}"
-						Placement="Bottom"
-						SnapsToDevicePixels="True"
-						Visibility="Collapsed" />
-				</Grid>
+                    <TickBar
+                        x:Name="BottomTick"
+                        Grid.Row="2"
+                        Height="4"
+                        Fill="{TemplateBinding Foreground}"
+                        Placement="Bottom"
+                        SnapsToDevicePixels="True"
+                        Visibility="Collapsed" />
+                </Grid>
 
-				<ControlTemplate.Triggers>
-					<Trigger Property="TickPlacement" Value="TopLeft">
-						<Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-					</Trigger>
-					<Trigger Property="TickPlacement" Value="BottomRight">
-						<Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-					</Trigger>
-					<Trigger Property="TickPlacement" Value="Both">
-						<Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-						<Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-					</Trigger>
-				</ControlTemplate.Triggers>
-			</ControlTemplate>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="TickPlacement" Value="TopLeft">
+                        <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                    </Trigger>
+                    <Trigger Property="TickPlacement" Value="BottomRight">
+                        <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                    </Trigger>
+                    <Trigger Property="TickPlacement" Value="Both">
+                        <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                        <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
 
-			<!--  Template when the orientation of the Slider is Vertical.  -->
-			<ControlTemplate x:Key="VerticalSlider" TargetType="{x:Type Slider}">
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto" />
-						<ColumnDefinition Width="Auto" MinWidth="{TemplateBinding MinWidth}" />
-						<ColumnDefinition Width="Auto" />
-					</Grid.ColumnDefinitions>
+            <!--  Template when the orientation of the Slider is Vertical.  -->
+            <ControlTemplate x:Key="VerticalSlider" TargetType="{x:Type Slider}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding MinWidth}" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-					<TickBar
-						x:Name="TopTick"
-						Width="4"
-						Fill="white"
-						Placement="Left"
-						SnapsToDevicePixels="True"
-						Visibility="Collapsed" />
+                    <TickBar
+                        x:Name="TopTick"
+                        Width="4"
+                        Fill="white"
+                        Placement="Left"
+                        SnapsToDevicePixels="True"
+                        Visibility="Collapsed" />
 
-					<!--  background line  -->
-					<Border
-						x:Name="TrackBackground"
-						Grid.Column="1"
-						Width="5"
-						Margin="6,0,0,0"
-						Background="White"
-						BorderThickness="1"
-						CornerRadius="2" />
+                    <!--  background line  -->
+                    <Border
+                        x:Name="TrackBackground"
+                        Grid.Column="1"
+                        Width="5"
+                        Margin="6,0,0,0"
+                        Background="{DynamicResource Slider}"
+                        BorderThickness="1"
+                        CornerRadius="2" />
 
-					<Track x:Name="PART_Track" Grid.Column="1">
+                    <Track x:Name="PART_Track" Grid.Column="1">
 
-						<Track.DecreaseRepeatButton>
-							<RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
-						</Track.DecreaseRepeatButton>
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
+                        </Track.DecreaseRepeatButton>
 
-						<Track.Thumb>
-							<Thumb Style="{StaticResource Style_SliderThumb}" />
-						</Track.Thumb>
+                        <Track.Thumb>
+                            <Thumb Style="{StaticResource Style_SliderThumb}" />
+                        </Track.Thumb>
 
-						<Track.IncreaseRepeatButton>
-							<RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
-						</Track.IncreaseRepeatButton>
-					</Track>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
+                        </Track.IncreaseRepeatButton>
+                    </Track>
 
-					<TickBar
-						x:Name="BottomTick"
-						Grid.Column="2"
-						Width="4"
-						Fill="{TemplateBinding Foreground}"
-						Placement="Right"
-						SnapsToDevicePixels="True"
-						Visibility="Collapsed" />
-				</Grid>
-				<ControlTemplate.Triggers>
-					<Trigger Property="TickPlacement" Value="TopLeft">
-						<Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-					</Trigger>
-					<Trigger Property="TickPlacement" Value="BottomRight">
-						<Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-					</Trigger>
-					<Trigger Property="TickPlacement" Value="Both">
-						<Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-						<Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-					</Trigger>
-				</ControlTemplate.Triggers>
-			</ControlTemplate>
+                    <TickBar
+                        x:Name="BottomTick"
+                        Grid.Column="2"
+                        Width="4"
+                        Fill="{TemplateBinding Foreground}"
+                        Placement="Right"
+                        SnapsToDevicePixels="True"
+                        Visibility="Collapsed" />
+                </Grid>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="TickPlacement" Value="TopLeft">
+                        <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                    </Trigger>
+                    <Trigger Property="TickPlacement" Value="BottomRight">
+                        <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                    </Trigger>
+                    <Trigger Property="TickPlacement" Value="Both">
+                        <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                        <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
 
-			<Style TargetType="{x:Type Slider}">
-				<Setter Property="SnapsToDevicePixels" Value="True" />
-				<Setter Property="OverridesDefaultStyle" Value="True" />
-				<Style.Triggers>
-					<Trigger Property="Orientation" Value="Horizontal">
-						<!--<Setter Property="MinWidth"
+            <Style TargetType="{x:Type Slider}">
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="OverridesDefaultStyle" Value="True" />
+                <Style.Triggers>
+                    <Trigger Property="Orientation" Value="Horizontal">
+                        <!--<Setter Property="MinWidth"
                     Value="104" />
             <Setter Property="MinHeight"
                     Value="21" />-->
-						<Setter Property="Template" Value="{StaticResource HorizontalSlider}" />
-					</Trigger>
-					<Trigger Property="Orientation" Value="Vertical">
-						<!--<Setter Property="MinWidth"
+                        <Setter Property="Template" Value="{StaticResource HorizontalSlider}" />
+                    </Trigger>
+                    <Trigger Property="Orientation" Value="Vertical">
+                        <!--<Setter Property="MinWidth"
                     Value="21" />
             <Setter Property="MinHeight"
                     Value="104" />-->
-						<Setter Property="Template" Value="{StaticResource VerticalSlider}" />
-					</Trigger>
-				</Style.Triggers>
-			</Style>
+                        <Setter Property="Template" Value="{StaticResource VerticalSlider}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-			<!--  corner radius expander start  -->
-			<Style x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
-				<Setter Property="UseLayoutRounding" Value="True" />
-				<Setter Property="SnapsToDevicePixels" Value="True" />
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type ToggleButton}">
-							<Grid Width="24" Height="24">
-								<Border
-									x:Name="border"
-									Background="{DynamicResource Dark}"
-									CornerRadius="12" />
-								<Path
-									x:Name="arrow"
-									Data="M4.5 9 l4 0 l3.5 4.6667 l3.5 -4.6667 l4 0 l-7.5 10 z"
-									Fill="White" />
-							</Grid>
-							<ControlTemplate.Triggers>
-								<Trigger Property="IsMouseOver" Value="True">
-									<Setter TargetName="border" Property="Background" Value="DarkGray" />
-									<Setter TargetName="arrow" Property="Fill" Value="LightGray" />
-								</Trigger>
-								<Trigger Property="IsChecked" Value="True">
-									<Setter TargetName="border" Property="Background" Value="White" />
-                                    <Setter TargetName="arrow" Property="Fill" Value="{DynamicResource Dark}"/>
-									<Setter TargetName="arrow" Property="Data" Value="M4.5 15 l4 0 l3.5 -4.6667 l3.5 4.6667 l4 0 l-7.5 -10 z" />
-								</Trigger>
-							</ControlTemplate.Triggers>
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
+            <!--  corner radius expander start  -->
+            <Style x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
+                <Setter Property="UseLayoutRounding" Value="True" />
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Grid Width="24" Height="24">
+                                <Border
+                                    x:Name="border"
+                                    Background="{DynamicResource Dark}"
+                                    CornerRadius="12" />
+                                <Path
+                                    x:Name="arrow"
+                                    Data="M4.5 9 l4 0 l3.5 4.6667 l3.5 -4.6667 l4 0 l-7.5 10 z"
+                                    Fill="White" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="DarkGray" />
+                                    <Setter TargetName="arrow" Property="Fill" Value="LightGray" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="White" />
+                                    <Setter TargetName="arrow" Property="Fill" Value="{DynamicResource Dark}" />
+                                    <Setter TargetName="arrow" Property="Data" Value="M4.5 15 l4 0 l3.5 -4.6667 l3.5 4.6667 l4 0 l-7.5 -10 z" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
-			<Style TargetType="{x:Type Expander}">
-				<Setter Property="Template">
-					<Setter.Value>
-						<ControlTemplate TargetType="{x:Type Expander}">
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="Auto" />
-									<RowDefinition x:Name="ContentRow" Height="0" />
-								</Grid.RowDefinitions>
-								<Border
-									x:Name="Border"
-									Grid.Row="0"
-									Background="{DynamicResource Mid}"
-									BorderThickness="0"
-									CornerRadius="2,0,10,0">
-									<!--  color arround arrow  -->
-									<Grid>
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="31" />
-											<ColumnDefinition Width="*" />
-										</Grid.ColumnDefinitions>
-										<ToggleButton
-											Grid.Column="0"
-											IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-											OverridesDefaultStyle="True"
-											Style="{StaticResource ExpanderToggleButton}" />
-										<!--  This is the border that puts the styling around the Expander Header  -->
-										<!--  Add more detail here for a fancier header.  -->
-										<Border
-											Grid.Column="1"
-											Background="{DynamicResource Mid}"
-											CornerRadius="0,0,10,0">
-											<ContentPresenter
-												Height="30"
-												Margin="10,5,0,0"
-												ContentSource="Header"
-												RecognizesAccessKey="True"
-												TextBlock.FontFamily="roboto"
-												TextBlock.FontSize="20"
-												TextBlock.Foreground="White" />
-										</Border>
+            <Style TargetType="{x:Type Expander}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Expander}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition x:Name="ContentRow" Height="0" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    x:Name="Border"
+                                    Grid.Row="0"
+                                    Background="{DynamicResource Mid}"
+                                    BorderThickness="0"
+                                    CornerRadius="2,0,10,0">
+                                    <!--  color arround arrow  -->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="31" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ToggleButton
+                                            Grid.Column="0"
+                                            IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                            OverridesDefaultStyle="True"
+                                            Style="{StaticResource ExpanderToggleButton}" />
+                                        <!--  This is the border that puts the styling around the Expander Header  -->
+                                        <!--  Add more detail here for a fancier header.  -->
+                                        <Border
+                                            Grid.Column="1"
+                                            Background="{DynamicResource Mid}"
+                                            CornerRadius="0,0,10,0">
+                                            <ContentPresenter
+                                                Height="30"
+                                                Margin="10,5,0,0"
+                                                ContentSource="Header"
+                                                RecognizesAccessKey="True"
+                                                TextBlock.FontFamily="roboto"
+                                                TextBlock.FontSize="20"
+                                                TextBlock.Foreground="White" />
+                                        </Border>
 
-									</Grid>
-								</Border>
-								<Border
-									x:Name="Content"
-									Grid.Row="1"
-									BorderThickness="0"
-									CornerRadius="0,0,2,2">
-									<ContentPresenter Margin="4" />
-								</Border>
-							</Grid>
-							<ControlTemplate.Triggers>
-								<Trigger Property="IsExpanded" Value="True">
-									<Setter TargetName="ContentRow" Property="Height" Value="{Binding DesiredSize, ElementName=Content}" />
-								</Trigger>
-							</ControlTemplate.Triggers>
-						</ControlTemplate>
-					</Setter.Value>
-				</Setter>
-			</Style>
-		</ResourceDictionary>
-</UserControl.Resources>
+                                    </Grid>
+                                </Border>
+                                <Border
+                                    x:Name="Content"
+                                    Grid.Row="1"
+                                    BorderThickness="0"
+                                    CornerRadius="0,0,2,2">
+                                    <ContentPresenter Margin="4" />
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="True">
+                                    <Setter TargetName="ContentRow" Property="Height" Value="{Binding DesiredSize, ElementName=Content}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <TabControl>
             <!--  custom tab control for no vertical wrap  -->
@@ -564,20 +737,21 @@
                     </StackPanel>
                 </HeaderedContentControl.Header>
 
-                <Grid>
+                <Grid Background="{DynamicResource Background}">
                     <Grid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Amber Theme"  Click="AmberTheme"/>
-                            <MenuItem Header="Blue Theme" Click="BlueTheme"/>
-                            <MenuItem Header="Crimson Theme" Click="CrimsonTheme"/>
-                            <MenuItem Header="Green Theme"  Click="GreenTheme"/>
-                            <MenuItem Header="Olive Theme" Click="OliveTheme"/>
-                            <MenuItem Header="Orange Theme" Click="OrangeTheme"/>
-                            <MenuItem Header="Purple Theme"  Click="PurpleTheme"/>
-                            <MenuItem Header="Steel Theme" Click="SteelTheme"/>
+                            <MenuItem Click="AmberTheme" Header="Amber Theme" />
+                            <MenuItem Click="BlueTheme" Header="Blue Theme" />
+                            <MenuItem Click="CrimsonTheme" Header="Crimson Theme" />
+                            <MenuItem Click="GreenTheme" Header="Green Theme" />
+                            <MenuItem Click="OliveTheme" Header="Olive Theme" />
+                            <MenuItem Click="OrangeTheme" Header="Orange Theme" />
+                            <MenuItem Click="PurpleTheme" Header="Purple Theme" />
+                            <MenuItem Click="SteelTheme" Header="Steel Theme" />
+                            <MenuItem Click="BlueLightTheme" Header="Blue Light Theme" />
                         </ContextMenu>
                     </Grid.ContextMenu>
-                    
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="30" />
@@ -592,6 +766,7 @@
                             <!--  EXPANDER Engine RPM properties  -->
                             <Expander
                                 BorderThickness="2"
+                                Margin="5"
                                 FontFamily="roboto"
                                 FontSize="15"
                                 IsExpanded="True">
@@ -619,7 +794,10 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
-                                        <TextBlock VerticalAlignment="Center" TextAlignment="Right"><Run Text="Name" /></TextBlock>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
+                                            TextAlignment="Right"><Run Text="Name" /></TextBlock>
                                     </StackPanel>
                                     <StackPanel Margin="0,2,0,0">
                                         <TextBox
@@ -630,8 +808,10 @@
                                             Background="Transparent"
                                             BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.CarName}" />
                                     </StackPanel>
 
@@ -641,7 +821,10 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
-                                        <TextBlock VerticalAlignment="Center" TextAlignment="Right"><Run Text="ID" /></TextBlock>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
+                                            TextAlignment="Right"><Run Text="ID" /></TextBlock>
                                     </StackPanel>
                                     <StackPanel Margin="0,2,0,0">
                                         <TextBox
@@ -652,8 +835,10 @@
                                             Background="Transparent"
                                             BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.Id}" />
                                     </StackPanel>
 
@@ -663,7 +848,10 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Horizontal">
-                                        <TextBlock VerticalAlignment="Center" TextAlignment="Right"><Run Text="Category" /></TextBlock>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
+                                            TextAlignment="Right"><Run Text="Category" /></TextBlock>
                                     </StackPanel>
                                     <StackPanel Margin="0,2,0,0">
                                         <TextBox
@@ -674,8 +862,10 @@
                                             Background="Transparent"
                                             BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.Category}" />
                                     </StackPanel>
 
@@ -689,14 +879,17 @@
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="0,0,80,0"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="Idle" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="0,0,80,0"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="Redline" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="0,0,0,0"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="Max" /></TextBlock>
                                     </StackPanel>
                                     <!--  Idle/Redline/MaxRPM textboxes  -->
@@ -713,8 +906,10 @@
                                             Background="Transparent"
                                             BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.IdleRPM}" />
                                         <TextBox
                                             x:Name="Redline"
@@ -725,8 +920,10 @@
                                             Background="Transparent"
                                             BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.Redline}" />
                                         <TextBox
                                             x:Name="MaxRPM"
@@ -736,8 +933,10 @@
                                             Background="Transparent"
                                             BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.MaxRPM}" />
                                     </StackPanel>
 
@@ -751,15 +950,18 @@
                                             MinWidth="80"
                                             Margin="0,0,80,0"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="Config" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="0,0,80,0"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="Cylinders" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="Drivetrain" /></TextBlock>
                                     </StackPanel>
 
@@ -772,8 +974,8 @@
                                         <ComboBox
                                             Name="EngineConfig"
                                             Width="80"
-                                            Height="32"
-                                            Margin="0,0,80,0"
+                                            Height="25.2"
+                                            Margin="0,5,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="roboto"
@@ -790,7 +992,8 @@
                                         <ComboBox
                                             Name="EngineCylinders"
                                             Width="80"
-                                            Margin="0,0,80,0"
+                                            Height="25.2"
+                                            Margin="0,5,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="roboto"
@@ -810,6 +1013,8 @@
                                         <ComboBox
                                             Name="Drivetrain"
                                             Width="80"
+                                            Height="25.2"
+                                            Margin="0,5,0,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="roboto"
@@ -832,15 +1037,18 @@
                                             MinWidth="80"
                                             Margin="0,0,80,0"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="Location" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="0,0,80,0"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="HP" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="NM" /></TextBlock>
                                     </StackPanel>
                                     <!--  Engine location/hp/nm comboboxes and textboxes  -->
@@ -851,7 +1059,8 @@
                                         <ComboBox
                                             Name="Englocation"
                                             Width="80"
-                                            Margin="0,0,80,0"
+                                            Height="25.2"
+                                            Margin="0,5,80,0"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             FontFamily="roboto"
@@ -867,6 +1076,7 @@
                                             x:Name="MaxPowerHP"
                                             MinWidth="80"
                                             Margin="0,0,80,0"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
@@ -874,10 +1084,12 @@
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.MaxPower}" />
                                         <TextBox
                                             x:Name="MaxTorqueNM"
                                             MinWidth="80"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
@@ -885,6 +1097,7 @@
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.MaxTorque}" />
                                     </StackPanel>
 
@@ -899,16 +1112,19 @@
                                             MinWidth="80"
                                             Margin="-7,0,70,0"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="PerGame Gain" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="0,0,62,0"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="EHP" /></TextBlock>
                                         <TextBlock
                                             MinWidth="80"
                                             Margin="18,0,0,0"
                                             VerticalAlignment="Center"
+                                            Foreground="{DynamicResource Foreground}"
                                             TextAlignment="Center"><Run Text="CC" /></TextBlock>
                                     </StackPanel>
 
@@ -934,6 +1150,7 @@
                                         <TextBox
                                             x:Name="EMaxPowerHP"
                                             MinWidth="80"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             Margin="0,0,80,0"
                                             VerticalAlignment="top"
                                             HorizontalContentAlignment="Center"
@@ -943,11 +1160,13 @@
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.ElectricMaxPower}" />
                                         <!--  CC  -->
                                         <TextBox
                                             x:Name="Displacement"
                                             MinWidth="80"
+                                            CaretBrush="{DynamicResource Foreground}"
                                             VerticalAlignment="top"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
@@ -956,6 +1175,7 @@
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
+                                            Foreground="{DynamicResource Foreground}"
                                             Text="{Binding S.Displacement}" />
                                     </StackPanel>
 
@@ -1022,7 +1242,7 @@
                             <StackPanel>
                                 <Expander
                                     x:Name="EQ"
-                                    Margin="0,6,0,3"
+                                    Margin="5,6,5,3"
                                     Expander.Expanded="EQ_Expanded"
                                     FontFamily="roboto"
                                     FontSize="16">
@@ -1103,7 +1323,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="23">
+                                                FontSize="23"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1161,7 +1382,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1225,7 +1447,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1289,7 +1512,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1354,7 +1578,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1419,7 +1644,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1483,7 +1709,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1547,7 +1774,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1611,7 +1839,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1675,7 +1904,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1718,7 +1948,7 @@
                             <!--  tone calibration expander  -->
                             <StackPanel>
                                 <Expander
-                                    Margin="0,3,0,3"
+                                    Margin="5,3,5,3"
                                     Expander.Expanded="TC_Expanded"
                                     FontFamily="roboto"
                                     FontSize="16"
@@ -1798,7 +2028,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1862,7 +2093,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1925,7 +2157,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -1989,7 +2222,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -2054,7 +2288,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -2118,7 +2353,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -2182,7 +2418,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -2247,7 +2484,8 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 FontFamily="roboto black"
-                                                FontSize="17">
+                                                FontSize="17"
+                                                Foreground="{DynamicResource Foreground}">
                                                 0
                                             </TextBlock>
                                         </Border>
@@ -2753,7 +2991,8 @@
                     <StatusBar
                         Grid.Row="1"
                         FontFamily="roboto"
-                        FontSize="16">
+                        FontSize="16"
+                        Foreground="{DynamicResource Foreground}">
                         <!--  version number  -->
                         <StatusBarItem>
                             <TextBlock Name="Version" />
@@ -2796,7 +3035,21 @@
                     </StackPanel>
                 </HeaderedContentControl.Header>
 
-                <Grid>
+                <Grid Background="{DynamicResource Background}">
+
+                    <Grid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Click="AmberTheme" Header="Amber Theme" />
+                            <MenuItem Click="BlueTheme" Header="Blue Theme" />
+                            <MenuItem Click="CrimsonTheme" Header="Crimson Theme" />
+                            <MenuItem Click="GreenTheme" Header="Green Theme" />
+                            <MenuItem Click="OliveTheme" Header="Olive Theme" />
+                            <MenuItem Click="OrangeTheme" Header="Orange Theme" />
+                            <MenuItem Click="PurpleTheme" Header="Purple Theme" />
+                            <MenuItem Click="SteelTheme" Header="Steel Theme" />
+                            <MenuItem Click="BlueLightTheme" Header="Blue Light Theme" />
+                        </ContextMenu>
+                    </Grid.ContextMenu>
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -2812,7 +3065,7 @@
                             <StackPanel>
                                 <!--  EXPANDER Suspension  -->
                                 <Expander
-                                    Margin="0,6"
+                                    Margin="5,6,5,6"
                                     BorderThickness="2"
                                     FontFamily="roboto"
                                     FontSize="14"
@@ -2841,10 +3094,13 @@
                                             Margin="5,15,0,10"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBlock FontFamily="roboto medium">
+                                            <TextBlock FontFamily="roboto medium" Foreground="{DynamicResource Foreground}">
                                                 All Games Gain
                                             </TextBlock>
-                                            <TextBlock Margin="90,0,0,0" FontFamily="roboto medium">
+                                            <TextBlock
+                                                Margin="90,0,0,0"
+                                                FontFamily="roboto medium"
+                                                Foreground="{DynamicResource Foreground}">
                                                 Current Game Gain
                                             </TextBlock>
                                         </StackPanel>
@@ -2884,10 +3140,13 @@
                                             Margin="7,25,0,18"
                                             HorizontalAlignment="Center"
                                             Orientation="Horizontal">
-                                            <TextBlock FontFamily="roboto medium">
+                                            <TextBlock FontFamily="roboto medium" Foreground="{DynamicResource Foreground}">
                                                 All Games Gamma
                                             </TextBlock>
-                                            <TextBlock Margin="80,0,0,0" FontFamily="roboto medium">
+                                            <TextBlock
+                                                Margin="80,0,0,0"
+                                                FontFamily="roboto medium"
+                                                Foreground="{DynamicResource Foreground}">
                                                 Current Game Gamma
                                             </TextBlock>
                                         </StackPanel>
@@ -2970,6 +3229,7 @@
                                     <Expander
                                         HorizontalAlignment="Stretch"
                                         BorderThickness="2"
+                                        Margin="5,0,5,0"
                                         FontFamily="roboto"
                                         FontSize="14"
                                         IsExpanded="True">
@@ -3005,6 +3265,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Pitch Offset
                                                     </TextBlock>
@@ -3012,6 +3273,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Pitch Multi
                                                     </TextBlock>
@@ -3019,6 +3281,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Pitch Gamma
                                                     </TextBlock>
@@ -3031,6 +3294,7 @@
                                                     <TextBox
                                                         Name="MotionPitchOffset"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3039,10 +3303,12 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionPitchOffset}" />
                                                     <TextBox
                                                         Name="MotionPitchMult"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3051,10 +3317,12 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionPitchMult, Mode=TwoWay}" />
                                                     <TextBox
                                                         Name="MotionPitchGamma"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3063,6 +3331,7 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionPitchGamma, Mode=TwoWay}" />
                                                 </StackPanel>
 
@@ -3078,6 +3347,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Roll Offset
                                                     </TextBlock>
@@ -3085,6 +3355,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Roll Multi
                                                     </TextBlock>
@@ -3092,6 +3363,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Roll Gamma
                                                     </TextBlock>
@@ -3105,17 +3377,22 @@
                                                         Name="MotionRollOffset"
                                                         Width="80"
                                                         Margin="70,0,70,0"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
+                                                        Background="Transparent"
                                                         BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
+                                                        Cursor=""
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionRollOffset}" />
                                                     <TextBox
                                                         Name="MotionRollMult"
                                                         Width="80"
                                                         Margin="0,0,70,0"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
@@ -3123,10 +3400,12 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionRollMult}" />
                                                     <TextBox
                                                         Name="MotionRollGamma"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3135,6 +3414,7 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionRollGamma}" />
                                                 </StackPanel>
 
@@ -3148,6 +3428,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Yaw Offset
                                                     </TextBlock>
@@ -3155,6 +3436,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Yaw Multi
                                                     </TextBlock>
@@ -3162,6 +3444,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Yaw Gamma
                                                     </TextBlock>
@@ -3176,6 +3459,7 @@
                                                         Name="MotionYawOffset"
                                                         Width="80"
                                                         Margin="70,0,70,0"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
@@ -3183,11 +3467,13 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionYawOffset}" />
                                                     <TextBox
                                                         Name="MotionYawMult"
                                                         Width="80"
                                                         Margin="0,0,70,0"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
@@ -3195,10 +3481,12 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionYawMult}" />
                                                     <TextBox
                                                         Name="MotionYawGamma"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3207,6 +3495,7 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionYawGamma}" />
                                                 </StackPanel>
 
@@ -3220,6 +3509,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Heave Offset
                                                     </TextBlock>
@@ -3227,6 +3517,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Heave Multi
                                                     </TextBlock>
@@ -3234,6 +3525,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Heave Gamma
                                                     </TextBlock>
@@ -3246,6 +3538,7 @@
                                                     <TextBox
                                                         Name="MotionHeaveOffset"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3254,11 +3547,13 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionHeaveOffset}" />
                                                     <TextBox
                                                         Name="MotionHeaveMult"
                                                         Width="80"
                                                         Margin="0,0,70,0"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
@@ -3266,10 +3561,12 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionHeaveMult}" />
                                                     <TextBox
                                                         Name="MotionHeaveGamma"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3278,6 +3575,7 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionHeaveGamma}" />
                                                 </StackPanel>
 
@@ -3291,6 +3589,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Surge Offset
                                                     </TextBlock>
@@ -3298,6 +3597,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Surge Multi
                                                     </TextBlock>
@@ -3305,6 +3605,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Surge Gamma
                                                     </TextBlock>
@@ -3318,6 +3619,7 @@
                                                         Name="MotionSurgeOffset"
                                                         Width="80"
                                                         Margin="70,0,70,0"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
@@ -3325,10 +3627,12 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionSurgeOffset}" />
                                                     <TextBox
                                                         Name="MotionSurgeMult"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3337,11 +3641,13 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionSurgeMult}" />
                                                     <TextBox
                                                         Name="MotionSurgeGamma"
                                                         Width="80"
                                                         Margin="0,0,70,0"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
@@ -3349,6 +3655,7 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionSurgeGamma}" />
                                                 </StackPanel>
 
@@ -3362,6 +3669,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Sway Offset
                                                     </TextBlock>
@@ -3369,6 +3677,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Sway Multi
                                                     </TextBlock>
@@ -3376,6 +3685,7 @@
                                                         Width="150"
                                                         VerticalAlignment="Center"
                                                         FontFamily="roboto medium"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         TextAlignment="Center">
                                                         Sway Gamma
                                                     </TextBlock>
@@ -3388,6 +3698,7 @@
                                                     <TextBox
                                                         Name="MotionSwayOffset"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3396,10 +3707,12 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionSwayOffset}" />
                                                     <TextBox
                                                         Name="MotionSwayMult"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3408,10 +3721,12 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionSwayMult}" />
                                                     <TextBox
                                                         Name="MotionSwayGamma"
                                                         Width="80"
+                                                        CaretBrush="{DynamicResource Foreground}"
                                                         Margin="0,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
@@ -3420,6 +3735,7 @@
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
+                                                        Foreground="{DynamicResource Foreground}"
                                                         Text="{Binding D.MotionSwayGamma}" />
                                                 </StackPanel>
                                             </StackPanel>

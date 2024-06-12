@@ -19,6 +19,7 @@ namespace sierses.Sim
 	{
 		public Tone[] Tones;						// engine fundamental and harmonic
 		public ObservableCollection<Eq> Sliders;	// graphic equalizer
+		public string Theme;
 	}
 
 	public partial class Geq

@@ -3,4 +3,7 @@
     <SolidColorBrush x:Key="Light"  Color="#A1082B"/>
     <SolidColorBrush x:Key="Mid"  Color="#890725"/>
     <SolidColorBrush x:Key="Dark"  Color= "#571625"/>
+    <SolidColorBrush x:Key="Foreground" Color="White" />
+    <SolidColorBrush x:Key="Background" Color="#252525" />
+    <SolidColorBrush x:Key="Slider" Color="White" />
 </ResourceDictionary>
