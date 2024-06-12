@@ -105,10 +105,18 @@ namespace sierses.Sim
 				Feedback = "decremented";
 			}
 			else Feedback = up ? "100 is max gain" : "0 is min gain";
-			H.SC.Init(Q[EQswitch].Slider);
+			H.SC.InitEq(Q[EQswitch].Slider);
 			return;
 		}
 
+		internal string Hval(int index, bool up)
+		{
+			if (up && 1000 > Tones[1].Freq[index])
+				Tones[1].Freq[index]++;
+			else if ((!up) && 0 < Tones[1].Freq[index])
+				Tones[1].Freq[index]--;
+			return Tones[1].Freq[index].ToString();
+		}
 		private Eq NewEQ()
 		{
 			ushort s = 50, highpass = 20, lowpass = 900;
@@ -130,7 +138,7 @@ namespace sierses.Sim
 				if (EQswitch == Q.Count)
 					Q.Add(NewEQ());
 				else Q[EQswitch] = NewEQ();
-				H.SC.Init(Q[EQswitch].Slider);
+				H.SC.InitEq(Q[EQswitch].Slider);
 				Feedback = "Initialized";
 			}
 			else Feedback = up ? "Incremented" : "Decremented";

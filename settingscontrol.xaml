@@ -1965,7 +1965,7 @@
                                                 FontFamily="roboto"
                                                 FontSize="20"
                                                 Foreground="White">
-                                                Tone Calibration
+                                                Tone Controls
                                             </TextBlock>
 
 
@@ -2527,7 +2527,7 @@
 
                                         <!--  factor sliders  -->
 
-                                        <!--  F1  -->
+                                        <!--  F1
                                         <Slider
                                             x:Name="F1_factor"
                                             Grid.Row="0"
@@ -2539,13 +2539,13 @@
                                             Minimum="0"
                                             Orientation="Vertical"
                                             TickFrequency="7"
-                                            Value="500" />
+                                            Value="500" /> -->
 
 
                                         <TextBlock />
 
 
-                                        <!--  F2  -->
+                                        <!--  F2
                                         <Slider
                                             x:Name="F2_factor"
                                             Grid.Row="0"
@@ -2557,7 +2557,7 @@
                                             Minimum="0"
                                             Orientation="Vertical"
                                             TickFrequency="7"
-                                            Value="500" />
+                                            Value="500" /> -->
 
                                         <!--  H1  -->
                                         <Slider
@@ -2669,6 +2669,7 @@
                                                 Gain
                                             </TextBlock>
                                         </Border>
+										<!-- F1, F2 fixed factors - 1
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="2"
@@ -2683,7 +2684,7 @@
                                                 FontSize="12">
                                                 Factor
                                             </TextBlock>
-                                        </Border>
+                                        </Border>	-->
 
 
                                         <!--  F2  -->
@@ -2702,6 +2703,7 @@
                                                 Gain
                                             </TextBlock>
                                         </Border>
+										<!-- F1, F2 fixed factors - 1
                                         <Border
                                             Grid.Row="3"
                                             Grid.Column="4"
@@ -2716,7 +2718,7 @@
                                                 FontSize="12">
                                                 Factor
                                             </TextBlock>
-                                        </Border>
+                                        </Border>	-->
 
 
                                         <!--  H1  -->

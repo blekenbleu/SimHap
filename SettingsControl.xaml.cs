@@ -30,7 +30,7 @@ namespace sierses.Sim
 		}
 
 		// called when expanding EQ or Plugin.E.NextUp() 
-		internal void Init(ushort[] S)
+		internal void InitEq(ushort[] S)
 		{
 			EQ0_value.Text = S[0].ToString();
 			EQ1_value.Text = S[1].ToString();
@@ -43,14 +43,92 @@ namespace sierses.Sim
 			EQ8_value.Text = S[8].ToString();
 		}
 
+		internal void InitHarmonics(Tone[] harmonic)
+		{
+			F1_value.Text = harmonic[1].Freq[0].ToString();
+			F2_value.Text = harmonic[1].Freq[1].ToString();
+			H1_value.Text = harmonic[1].Freq[2].ToString();
+			H2_value.Text = harmonic[1].Freq[3].ToString();
+			H3_value.Text = harmonic[1].Freq[4].ToString();
+			H4_value.Text = harmonic[1].Freq[5].ToString();
+			H5_value.Text = harmonic[1].Freq[6].ToString();
+			H6_value.Text = harmonic[1].Freq[7].ToString();
+			H1_factor.Value = harmonic[0].Freq[2];
+			H2_factor.Value = harmonic[0].Freq[3];
+			H3_factor.Value = harmonic[0].Freq[4];
+			H4_factor.Value = harmonic[0].Freq[5];
+			H5_factor.Value = harmonic[0].Freq[6];
+			H6_factor.Value = harmonic[0].Freq[7];
+		}
+
 		private void EQ_Expanded(object sender, RoutedEventArgs e)
 		{
-			Init(Plugin.E.Q[Plugin.E.EQswitch].Slider);
+			InitEq(Plugin.E.Q[Plugin.E.EQswitch].Slider);
 		}
 
 		private void TC_Expanded(object sender, RoutedEventArgs e)
 		{
-			Init(Plugin.E.Q[Plugin.E.EQswitch].Slider);
+            InitHarmonics(Plugin.E.Tones);
+		}
+
+		private void H1_increment_Click(object sender, RoutedEventArgs e)
+		{
+			H1_value.Text = Plugin.E.Hval(2, true);
+		}
+
+		private void H1_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			H1_value.Text = Plugin.E.Hval(2, false);
+		}
+
+		private void H2_increment_Click(object sender, RoutedEventArgs e)
+		{
+			H2_value.Text = Plugin.E.Hval(3, true);
+		}
+
+		private void H2_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			H2_value.Text = Plugin.E.Hval(3, false);
+		}
+
+		private void H3_increment_Click(object sender, RoutedEventArgs e)
+		{
+			H3_value.Text = Plugin.E.Hval(4, true);
+		}
+
+		private void H3_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			H3_value.Text = Plugin.E.Hval(4, false);
+		}
+
+		private void H4_increment_Click(object sender, RoutedEventArgs e)
+		{
+			H4_value.Text = Plugin.E.Hval(5, true);
+		}
+
+		private void H4_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			H4_value.Text = Plugin.E.Hval(5, false);
+		}
+
+		private void H5_increment_Click(object sender, RoutedEventArgs e)
+		{
+			H5_value.Text = Plugin.E.Hval(6, true);
+		}
+
+		private void H5_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			H5_value.Text = Plugin.E.Hval(6, false);
+		}
+
+		private void H6_increment_Click(object sender, RoutedEventArgs e)
+		{
+			H6_value.Text = Plugin.E.Hval(7, true);
+		}
+
+		private void H6_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			H6_value.Text = Plugin.E.Hval(7, false);
 		}
 
 		// this may provoke new equalizer creation
@@ -194,11 +272,6 @@ namespace sierses.Sim
 		private void EQ8_decrement_Click(object sender, RoutedEventArgs e)
 		{
 			EQ8_value.Text = $"{Plugin.E.Pincr(8, false)}";
-		}
-
-		private void ToneCal_Expanded(object sender, RoutedEventArgs e)
-		{
-
 		}
 
         private void AmberTheme(object sender, RoutedEventArgs e)
