@@ -1,17 +1,10 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: sierses.Haptics.SettingsControl
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using MahApps.Metro;
-using MahApps.Metro.Controls;
 using SimHub;
 using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 
 namespace sierses.Sim
 {
@@ -26,6 +19,7 @@ namespace sierses.Sim
 			Plugin = plugin;
 			DataContext = Plugin;
 			Version.Text = Plugin.PluginVersion;
+			Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/BlueTheme.xaml", UriKind.Relative));
 		}
 
 		// called when expanding EQ or Plugin.E.NextUp() 
