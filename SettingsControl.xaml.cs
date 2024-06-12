@@ -2,6 +2,8 @@
 // Type: sierses.Haptics.SettingsControl
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 
+using MahApps.Metro;
+using MahApps.Metro.Controls;
 using SimHub;
 using System;
 using System.Collections.ObjectModel;
@@ -197,5 +199,46 @@ namespace sierses.Sim
 		{
 
 		}
-	}
+
+        private void AmberTheme(object sender, RoutedEventArgs e)
+        {
+			Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/AmberTheme.xaml", UriKind.Relative));
+        }
+
+        private void BlueTheme(object sender, RoutedEventArgs e)
+        {
+            Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/BlueTheme.xaml", UriKind.Relative));
+        }
+
+        private void CrimsonTheme(object sender, RoutedEventArgs e)
+        {
+            Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/CrimsonTheme.xaml", UriKind.Relative));
+        }
+        private void GreenTheme(object sender, RoutedEventArgs e)
+        {
+            Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/GreenTheme.xaml", UriKind.Relative));
+        }
+
+        private void OliveTheme(object sender, RoutedEventArgs e)
+        {
+            Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/OliveTheme.xaml", UriKind.Relative));
+        }
+
+        private void OrangeTheme(object sender, RoutedEventArgs e)
+        {
+            Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/OrangeTheme.xaml", UriKind.Relative));
+        }
+
+        private void PurpleTheme(object sender, RoutedEventArgs e)
+        {
+            Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/PurpleTheme.xaml", UriKind.Relative));
+        }
+
+        private void SteelTheme(object sender, RoutedEventArgs e)
+        {
+            Themes.ChangeTheme(new Uri("/sierses.Sim;component/Themes/SteelTheme.xaml", UriKind.Relative));
+        }
+
+
+    }
 }

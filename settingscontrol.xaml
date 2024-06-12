@@ -9,357 +9,9 @@
     d:DataContext="{d:DesignInstance}"
     mc:Ignorable="d">
 
-    <FrameworkElement.Resources>
-        <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
-            <Setter Property="UIElement.Opacity" Value="0.9" />
-            <Setter Property="Shape.Fill" Value="White" />
-            <Setter Property="FrameworkElement.Height" Value="50" />
-            <Setter Property="FrameworkElement.Width" Value="50" />
-        </Style>
-        <Style x:Key="StatusCircle" TargetType="{x:Type Rectangle}">
-            <Setter Property="UIElement.Opacity" Value="0.9" />
-            <Setter Property="Shape.Fill" Value="White" />
-            <Setter Property="FrameworkElement.Height" Value="10" />
-            <Setter Property="FrameworkElement.Width" Value="10" />
-        </Style>
-        <Style x:Key="TabVis" TargetType="{x:Type StackPanel}">
-            <Style.Triggers>
-                <Trigger Property="UIElement.IsMouseOver" Value="true">
-                    <Setter Property="UIElement.Opacity" Value="0.6" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        
-        <!--  button style for eq repeat buttons  -->
-        <Style x:Key="EQbutton" TargetType="RepeatButton">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RepeatButton">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="0"
-                            CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.5" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
-                                <Setter Property="Opacity" Value="1" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+    <UserControl.Resources>
 
-
-        <!--  button style for other buttons curved and opacity  -->
-        <Style x:Key="dMASSbutton" TargetType="Button">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="0"
-                            CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.5" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
-                                <Setter Property="Opacity" Value="1" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-
-
-        <!--  Button corner radius and styling  -->
-
-        <Style TargetType="Button">
-            <Style.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="6" />
-                    <Setter Property="BorderThickness" Value="0" />
-                </Style>
-            </Style.Resources>
-        </Style>
-
-
-
-
-
-        <!--  slider style !!!NEW!!! horizontal and vertical  -->
-
-        <Style x:Key="Style_SliderLeftButton" TargetType="{x:Type RepeatButton}">
-            <Style.Setters>
-                <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="OverridesDefaultStyle" Value="True" />
-                <Setter Property="IsTabStop" Value="False" />
-                <Setter Property="Focusable" Value="False" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type RepeatButton}">
-                            <Border
-                                Height="4"
-                                Margin="8,0,-8,0"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="2" />
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style.Setters>
-        </Style>
-
-        <Style x:Key="Style_SliderRightButton" TargetType="{x:Type RepeatButton}">
-            <Style.Setters>
-                <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="OverridesDefaultStyle" Value="True" />
-                <Setter Property="IsTabStop" Value="False" />
-                <Setter Property="Focusable" Value="False" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type RepeatButton}">
-                            <Border
-                                Height="4"
-                                Margin="0,0,8,0"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="2" />
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style.Setters>
-        </Style>
-
-        <Style x:Key="Style_SliderThumb" TargetType="{x:Type Thumb}">
-            <Style.Setters>
-                <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="OverridesDefaultStyle" Value="True" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Thumb}">
-                            <StackPanel Orientation="Vertical">
-                                <Grid>
-                                    <!--  Big point  -->
-                                    <Path
-                                        x:Name="ThumbdMASSnew"
-                                        Margin="20,8,0,0"
-                                        Data="M 1 1 L 1 1 L 1 1 Z"
-                                        Fill="#4B4495"
-                                        Stroke="#4B4495"
-                                        StrokeThickness="30" />
-
-
-
-
-
-
-
-                                </Grid>
-
-                                <!--  text label  -->
-                                <TextBlock
-                                    x:Name="ThumbdMASSlabelnew"
-                                    Margin="5,-24,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Background="Transparent"
-                                    FontFamily="roboto"
-                                    FontSize="14"
-                                    Foreground="white"
-                                    Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Slider}, Path=Value}"
-                                    TextAlignment="Center" />
-                            </StackPanel>
-                            <!--  mouse hover color change  -->
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="ThumbdMASSnew" Property="Stroke" Value="#3F3A69" />
-                                    <Setter TargetName="ThumbdMASSlabelnew" Property="Opacity" Value="0.6" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-
-                        </ControlTemplate>
-
-                    </Setter.Value>
-                </Setter>
-            </Style.Setters>
-        </Style>
-
-        <!--  Template when the orientation of the Slider is Horizontal.  -->
-        <ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type Slider}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <TickBar
-                    x:Name="TopTick"
-                    Height="4"
-                    Fill="white"
-                    Placement="Top"
-                    SnapsToDevicePixels="True"
-                    Visibility="Collapsed" />
-
-                <Border
-                    x:Name="TrackBackground"
-                    Grid.Row="1"
-                    Height="3"
-                    Margin="8,-7,0,0"
-                    Background="White"
-                    BorderThickness="0"
-                    CornerRadius="2" />
-
-                <Track x:Name="PART_Track" Grid.Row="1">
-
-                    <Track.DecreaseRepeatButton>
-                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
-                    </Track.DecreaseRepeatButton>
-
-                    <Track.Thumb>
-                        <Thumb Style="{StaticResource Style_SliderThumb}" />
-                    </Track.Thumb>
-
-                    <Track.IncreaseRepeatButton>
-                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
-                    </Track.IncreaseRepeatButton>
-                </Track>
-
-                <TickBar
-                    x:Name="BottomTick"
-                    Grid.Row="2"
-                    Height="4"
-                    Fill="{TemplateBinding Foreground}"
-                    Placement="Bottom"
-                    SnapsToDevicePixels="True"
-                    Visibility="Collapsed" />
-            </Grid>
-
-            <ControlTemplate.Triggers>
-                <Trigger Property="TickPlacement" Value="TopLeft">
-                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="BottomRight">
-                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="Both">
-                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-        <!--  Template when the orientation of the Slider is Vertical.  -->
-        <ControlTemplate x:Key="VerticalSlider" TargetType="{x:Type Slider}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding MinWidth}" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <TickBar
-                    x:Name="TopTick"
-                    Width="4"
-                    Fill="white"
-                    Placement="Left"
-                    SnapsToDevicePixels="True"
-                    Visibility="Collapsed" />
-
-                <!--  background line  -->
-                <Border
-                    x:Name="TrackBackground"
-                    Grid.Column="1"
-                    Width="5"
-                    Margin="6,0,0,0"
-                    Background="White"
-                    BorderThickness="1"
-                    CornerRadius="2" />
-
-                <Track x:Name="PART_Track" Grid.Column="1">
-
-                    <Track.DecreaseRepeatButton>
-                        <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
-                    </Track.DecreaseRepeatButton>
-
-                    <Track.Thumb>
-                        <Thumb Style="{StaticResource Style_SliderThumb}" />
-                    </Track.Thumb>
-
-                    <Track.IncreaseRepeatButton>
-                        <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
-                    </Track.IncreaseRepeatButton>
-                </Track>
-
-                <TickBar
-                    x:Name="BottomTick"
-                    Grid.Column="2"
-                    Width="4"
-                    Fill="{TemplateBinding Foreground}"
-                    Placement="Right"
-                    SnapsToDevicePixels="True"
-                    Visibility="Collapsed" />
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="TickPlacement" Value="TopLeft">
-                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="BottomRight">
-                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-                </Trigger>
-                <Trigger Property="TickPlacement" Value="Both">
-                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
-                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-        <Style TargetType="{x:Type Slider}">
-            <Setter Property="SnapsToDevicePixels" Value="True" />
-            <Setter Property="OverridesDefaultStyle" Value="True" />
-            <Style.Triggers>
-                <Trigger Property="Orientation" Value="Horizontal">
-                    <!--<Setter Property="MinWidth"
-                    Value="104" />
-            <Setter Property="MinHeight"
-                    Value="21" />-->
-                    <Setter Property="Template" Value="{StaticResource HorizontalSlider}" />
-                </Trigger>
-                <Trigger Property="Orientation" Value="Vertical">
-                    <!--<Setter Property="MinWidth"
-                    Value="21" />
-            <Setter Property="MinHeight"
-                    Value="104" />-->
-                    <Setter Property="Template" Value="{StaticResource VerticalSlider}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!--  slider style for value label end vertical  -->
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <!--  slider style for value label end vertical  -->
         <!--  corner radius textboxes
         <Style TargetType="{x:Type TextBox}">
             <Style.Resources>
@@ -372,104 +24,441 @@
             </Style.Resources>
         </Style>-->
 
-        <!--  corner radius expander start  -->
-        <Style x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
-            <Setter Property="UseLayoutRounding" Value="True" />
-            <Setter Property="SnapsToDevicePixels" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Grid Width="24" Height="24">
-                            <Border
-                                x:Name="border"
-                                Background="#27234D"
-                                CornerRadius="12" />
-                            <Path
-                                x:Name="arrow"
-                                Data="M4.5 9 l4 0 l3.5 4.6667 l3.5 -4.6667 l4 0 l-7.5 10 z"
-                                Fill="White" />
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="DarkGray" />
-                                <Setter TargetName="arrow" Property="Fill" Value="LightGray" />
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="White" />
-                                <Setter TargetName="arrow" Property="Fill" Value="#27234D" />
-                                <Setter TargetName="arrow" Property="Data" Value="M4.5 15 l4 0 l3.5 -4.6667 l3.5 4.6667 l4 0 l-7.5 -10 z" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type Expander}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Expander}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition x:Name="ContentRow" Height="0" />
-                            </Grid.RowDefinitions>
-                            <Border
-                                x:Name="Border"
-                                Grid.Row="0"
-                                Background="#4B4495"
-                                BorderThickness="0"
-                                CornerRadius="2,0,10,0">
-                                <!--  color arround arrow  -->
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="31" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <ToggleButton
-                                        Grid.Column="0"
-                                        IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                        OverridesDefaultStyle="True"
-                                        Style="{StaticResource ExpanderToggleButton}" />
-                                    <!--  This is the border that puts the styling around the Expander Header  -->
-                                    <!--  Add more detail here for a fancier header.  -->
-                                    <Border
-                                        Grid.Column="1"
-                                        Background="#4B4495"
-                                        CornerRadius="0,0,10,0">
-                                        <ContentPresenter
-                                            Height="30"
-                                            Margin="10,5,0,0"
-                                            ContentSource="Header"
-                                            RecognizesAccessKey="True"
-                                            TextBlock.FontFamily="roboto"
-                                            TextBlock.FontSize="20"
-                                            TextBlock.Foreground="White" />
-                                    </Border>
-
-                                </Grid>
-                            </Border>
-                            <Border
-                                x:Name="Content"
-                                Grid.Row="1"
-                                BorderThickness="0"
-                                CornerRadius="0,0,2,2">
-                                <ContentPresenter Margin="4" />
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsExpanded" Value="True">
-                                <Setter TargetName="ContentRow" Property="Height" Value="{Binding DesiredSize, ElementName=Content}" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <!--  corner radius expander end  -->
 
 
-    </FrameworkElement.Resources>
+		<ResourceDictionary>
+
+            <ResourceDictionary x:Key="themerd" Source="/sierses.Sim;component/Themes/SteelTheme.xaml"/>
+			
+			<Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
+				<Setter Property="Opacity" Value="0.9" />
+				<Setter Property="Fill" Value="White" />
+				<Setter Property="Height" Value="50" />
+				<Setter Property="Width" Value="50" />
+			</Style>
+			<Style x:Key="StatusCircle" TargetType="{x:Type Rectangle}">
+				<Setter Property="Opacity" Value="0.9" />
+				<Setter Property="Fill" Value="White" />
+				<Setter Property="Height" Value="10" />
+				<Setter Property="Width" Value="10" />
+			</Style>
+			<Style x:Key="TabVis" TargetType="{x:Type StackPanel}">
+				<Style.Triggers>
+					<Trigger Property="IsMouseOver" Value="true">
+						<Setter Property="Opacity" Value="0.6" />
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+        
+        
+        
+			<!--  button style for eq repeat buttons  -->
+			<Style x:Key="EQbutton" TargetType="{x:Type RepeatButton}">
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type RepeatButton}">
+							<Border
+								Background="{TemplateBinding Background}"
+								BorderThickness="0"
+								CornerRadius="5">
+								<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter Property="Opacity" Value="0.5" />
+								</Trigger>
+								<Trigger Property="IsMouseOver" Value="False">
+									<Setter Property="Opacity" Value="1" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+
+			<!--  button style for other buttons curved and opacity  -->
+			<Style x:Key="dMASSbutton" TargetType="{x:Type Button}">
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type Button}">
+							<Border
+								Background="{TemplateBinding Background}"
+								BorderThickness="0"
+								CornerRadius="5">
+								<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter Property="Opacity" Value="0.5" />
+								</Trigger>
+								<Trigger Property="IsMouseOver" Value="False">
+									<Setter Property="Opacity" Value="1" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+
+
+
+			<!--  Button corner radius and styling  -->
+
+			<Style TargetType="{x:Type Button}">
+				<Style.Resources>
+					<Style TargetType="{x:Type Border}">
+						<Setter Property="CornerRadius" Value="6" />
+						<Setter Property="BorderThickness" Value="0" />
+					</Style>
+				</Style.Resources>
+			</Style>
+
+
+
+
+
+			<!--  slider style !!!NEW!!! horizontal and vertical  -->
+
+			<Style x:Key="Style_SliderLeftButton" TargetType="{x:Type RepeatButton}">
+				<Setter Property="SnapsToDevicePixels" Value="True" />
+				<Setter Property="OverridesDefaultStyle" Value="True" />
+				<Setter Property="IsTabStop" Value="False" />
+				<Setter Property="Focusable" Value="False" />
+				<Setter Property="Background" Value="Transparent" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type RepeatButton}">
+							<Border
+								Height="4"
+								Margin="8,0,-8,0"
+								Background="{TemplateBinding Background}"
+								CornerRadius="2" />
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+			<Style x:Key="Style_SliderRightButton" TargetType="{x:Type RepeatButton}">
+				<Setter Property="SnapsToDevicePixels" Value="True" />
+				<Setter Property="OverridesDefaultStyle" Value="True" />
+				<Setter Property="IsTabStop" Value="False" />
+				<Setter Property="Focusable" Value="False" />
+				<Setter Property="Background" Value="Transparent" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type RepeatButton}">
+							<Border
+								Height="4"
+								Margin="0,0,8,0"
+								Background="{TemplateBinding Background}"
+								CornerRadius="2" />
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+			<Style x:Key="Style_SliderThumb" TargetType="{x:Type Thumb}">
+				<Setter Property="SnapsToDevicePixels" Value="True" />
+				<Setter Property="OverridesDefaultStyle" Value="True" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type Thumb}">
+							<StackPanel Orientation="Vertical">
+								<Grid>
+									<!--  Big point  -->
+									<Path
+										x:Name="ThumbdMASSnew"
+										Margin="20,8,0,0"
+										Data="M 1 1 L 1 1 L 1 1 Z"
+										Fill="{DynamicResource Mid}"
+										Stroke="{DynamicResource Mid}"
+										StrokeThickness="30" />
+
+
+
+
+
+
+
+								</Grid>
+
+								<!--  text label  -->
+								<TextBlock
+									x:Name="ThumbdMASSlabelnew"
+									Margin="5,-24,0,0"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Top"
+									Background="Transparent"
+									FontFamily="roboto"
+									FontSize="14"
+									Foreground="white"
+									Text="{Binding Value, RelativeSource={RelativeSource AncestorType={x:Type Slider}, Mode=FindAncestor}}"
+									TextAlignment="Center" />
+							</StackPanel>
+							<!--  mouse hover color change  -->
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ThumbdMASSnew" Property="Stroke" Value="{DynamicResource Dark}" />
+									<Setter TargetName="ThumbdMASSlabelnew" Property="Opacity" Value="0.6" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+
+						</ControlTemplate>
+
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+			<!--  Template when the orientation of the Slider is Horizontal.  -->
+			<ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type Slider}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+
+					<TickBar
+						x:Name="TopTick"
+						Height="4"
+						Fill="white"
+						Placement="Top"
+						SnapsToDevicePixels="True"
+						Visibility="Collapsed" />
+
+					<Border
+						x:Name="TrackBackground"
+						Grid.Row="1"
+						Height="3"
+						Margin="8,-7,0,0"
+						Background="White"
+						BorderThickness="0"
+						CornerRadius="2" />
+
+					<Track x:Name="PART_Track" Grid.Row="1">
+
+						<Track.DecreaseRepeatButton>
+							<RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
+						</Track.DecreaseRepeatButton>
+
+						<Track.Thumb>
+							<Thumb Style="{StaticResource Style_SliderThumb}" />
+						</Track.Thumb>
+
+						<Track.IncreaseRepeatButton>
+							<RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
+						</Track.IncreaseRepeatButton>
+					</Track>
+
+					<TickBar
+						x:Name="BottomTick"
+						Grid.Row="2"
+						Height="4"
+						Fill="{TemplateBinding Foreground}"
+						Placement="Bottom"
+						SnapsToDevicePixels="True"
+						Visibility="Collapsed" />
+				</Grid>
+
+				<ControlTemplate.Triggers>
+					<Trigger Property="TickPlacement" Value="TopLeft">
+						<Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+					</Trigger>
+					<Trigger Property="TickPlacement" Value="BottomRight">
+						<Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+					</Trigger>
+					<Trigger Property="TickPlacement" Value="Both">
+						<Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+						<Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+					</Trigger>
+				</ControlTemplate.Triggers>
+			</ControlTemplate>
+
+			<!--  Template when the orientation of the Slider is Vertical.  -->
+			<ControlTemplate x:Key="VerticalSlider" TargetType="{x:Type Slider}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" MinWidth="{TemplateBinding MinWidth}" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+
+					<TickBar
+						x:Name="TopTick"
+						Width="4"
+						Fill="white"
+						Placement="Left"
+						SnapsToDevicePixels="True"
+						Visibility="Collapsed" />
+
+					<!--  background line  -->
+					<Border
+						x:Name="TrackBackground"
+						Grid.Column="1"
+						Width="5"
+						Margin="6,0,0,0"
+						Background="White"
+						BorderThickness="1"
+						CornerRadius="2" />
+
+					<Track x:Name="PART_Track" Grid.Column="1">
+
+						<Track.DecreaseRepeatButton>
+							<RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource Style_SliderLeftButton}" />
+						</Track.DecreaseRepeatButton>
+
+						<Track.Thumb>
+							<Thumb Style="{StaticResource Style_SliderThumb}" />
+						</Track.Thumb>
+
+						<Track.IncreaseRepeatButton>
+							<RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource Style_SliderRightButton}" />
+						</Track.IncreaseRepeatButton>
+					</Track>
+
+					<TickBar
+						x:Name="BottomTick"
+						Grid.Column="2"
+						Width="4"
+						Fill="{TemplateBinding Foreground}"
+						Placement="Right"
+						SnapsToDevicePixels="True"
+						Visibility="Collapsed" />
+				</Grid>
+				<ControlTemplate.Triggers>
+					<Trigger Property="TickPlacement" Value="TopLeft">
+						<Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+					</Trigger>
+					<Trigger Property="TickPlacement" Value="BottomRight">
+						<Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+					</Trigger>
+					<Trigger Property="TickPlacement" Value="Both">
+						<Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+						<Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+					</Trigger>
+				</ControlTemplate.Triggers>
+			</ControlTemplate>
+
+			<Style TargetType="{x:Type Slider}">
+				<Setter Property="SnapsToDevicePixels" Value="True" />
+				<Setter Property="OverridesDefaultStyle" Value="True" />
+				<Style.Triggers>
+					<Trigger Property="Orientation" Value="Horizontal">
+						<!--<Setter Property="MinWidth"
+                    Value="104" />
+            <Setter Property="MinHeight"
+                    Value="21" />-->
+						<Setter Property="Template" Value="{StaticResource HorizontalSlider}" />
+					</Trigger>
+					<Trigger Property="Orientation" Value="Vertical">
+						<!--<Setter Property="MinWidth"
+                    Value="21" />
+            <Setter Property="MinHeight"
+                    Value="104" />-->
+						<Setter Property="Template" Value="{StaticResource VerticalSlider}" />
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+
+			<!--  corner radius expander start  -->
+			<Style x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
+				<Setter Property="UseLayoutRounding" Value="True" />
+				<Setter Property="SnapsToDevicePixels" Value="True" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type ToggleButton}">
+							<Grid Width="24" Height="24">
+								<Border
+									x:Name="border"
+									Background="{DynamicResource Dark}"
+									CornerRadius="12" />
+								<Path
+									x:Name="arrow"
+									Data="M4.5 9 l4 0 l3.5 4.6667 l3.5 -4.6667 l4 0 l-7.5 10 z"
+									Fill="White" />
+							</Grid>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter TargetName="border" Property="Background" Value="DarkGray" />
+									<Setter TargetName="arrow" Property="Fill" Value="LightGray" />
+								</Trigger>
+								<Trigger Property="IsChecked" Value="True">
+									<Setter TargetName="border" Property="Background" Value="White" />
+                                    <Setter TargetName="arrow" Property="Fill" Value="{DynamicResource Dark}"/>
+									<Setter TargetName="arrow" Property="Data" Value="M4.5 15 l4 0 l3.5 -4.6667 l3.5 4.6667 l4 0 l-7.5 -10 z" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+			<Style TargetType="{x:Type Expander}">
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type Expander}">
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto" />
+									<RowDefinition x:Name="ContentRow" Height="0" />
+								</Grid.RowDefinitions>
+								<Border
+									x:Name="Border"
+									Grid.Row="0"
+									Background="{DynamicResource Mid}"
+									BorderThickness="0"
+									CornerRadius="2,0,10,0">
+									<!--  color arround arrow  -->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="31" />
+											<ColumnDefinition Width="*" />
+										</Grid.ColumnDefinitions>
+										<ToggleButton
+											Grid.Column="0"
+											IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+											OverridesDefaultStyle="True"
+											Style="{StaticResource ExpanderToggleButton}" />
+										<!--  This is the border that puts the styling around the Expander Header  -->
+										<!--  Add more detail here for a fancier header.  -->
+										<Border
+											Grid.Column="1"
+											Background="{DynamicResource Mid}"
+											CornerRadius="0,0,10,0">
+											<ContentPresenter
+												Height="30"
+												Margin="10,5,0,0"
+												ContentSource="Header"
+												RecognizesAccessKey="True"
+												TextBlock.FontFamily="roboto"
+												TextBlock.FontSize="20"
+												TextBlock.Foreground="White" />
+										</Border>
+
+									</Grid>
+								</Border>
+								<Border
+									x:Name="Content"
+									Grid.Row="1"
+									BorderThickness="0"
+									CornerRadius="0,0,2,2">
+									<ContentPresenter Margin="4" />
+								</Border>
+							</Grid>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsExpanded" Value="True">
+									<Setter TargetName="ContentRow" Property="Height" Value="{Binding DesiredSize, ElementName=Content}" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</ResourceDictionary>
+</UserControl.Resources>
     <Grid>
         <TabControl>
             <!--  custom tab control for no vertical wrap  -->
@@ -576,7 +565,19 @@
                 </HeaderedContentControl.Header>
 
                 <Grid>
-
+                    <Grid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Amber Theme"  Click="AmberTheme"/>
+                            <MenuItem Header="Blue Theme" Click="BlueTheme"/>
+                            <MenuItem Header="Crimson Theme" Click="CrimsonTheme"/>
+                            <MenuItem Header="Green Theme"  Click="GreenTheme"/>
+                            <MenuItem Header="Olive Theme" Click="OliveTheme"/>
+                            <MenuItem Header="Orange Theme" Click="OrangeTheme"/>
+                            <MenuItem Header="Purple Theme"  Click="PurpleTheme"/>
+                            <MenuItem Header="Steel Theme" Click="SteelTheme"/>
+                        </ContextMenu>
+                    </Grid.ContextMenu>
+                    
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="30" />
@@ -627,7 +628,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -649,7 +650,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -671,7 +672,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -710,7 +711,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -722,7 +723,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -733,7 +734,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -869,7 +870,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -880,7 +881,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -938,7 +939,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -951,7 +952,7 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="0,0,0,2"
                                             FontFamily="roboto"
                                             FontSize="16"
@@ -971,7 +972,7 @@
                                                 Width="150"
                                                 Height="35"
                                                 VerticalContentAlignment="Center"
-                                                Background="#4B4495"
+                                                Background="{DynamicResource Mid}"
                                                 BorderThickness="0"
                                                 Click="Lock_Click"
                                                 ContentControl.Content="{Binding D.LockedText}"
@@ -991,7 +992,7 @@
                                             Height="35"
                                             Margin="10,0,0,5"
                                             VerticalContentAlignment="Center"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             Click="Refresh_Click"
                                             FontFamily="roboto"
@@ -1071,7 +1072,7 @@
                                             Grid.Column="8"
                                             Grid.ColumnSpan="3"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             Click="EQswitch_increment_Click"
                                             FontFamily="roboto black"
@@ -1094,7 +1095,7 @@
                                             Grid.Column="5"
                                             Grid.ColumnSpan="3"
                                             Margin="2,0,2,0"
-                                            BorderBrush="#38326E"
+                                            BorderBrush="{DynamicResource Dark}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1112,7 +1113,7 @@
                                             Grid.Column="2"
                                             Grid.ColumnSpan="3"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             Click="EQswitch_decrement_Click"
                                             FontFamily="roboto black"
@@ -1137,7 +1138,7 @@
                                             Grid.Row="2"
                                             Grid.Column="2"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             Click="EQ0_increment_Click"
                                             FontFamily="roboto black"
@@ -1152,7 +1153,7 @@
                                             Grid.Row="3"
                                             Grid.Column="2"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#38326E"
+                                            BorderBrush="{DynamicResource Dark}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1169,7 +1170,7 @@
                                             Grid.Row="4"
                                             Grid.Column="2"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             Click="EQ0_decrement_Click"
                                             FontFamily="roboto black"
@@ -1183,7 +1184,7 @@
                                             Grid.Row="5"
                                             Grid.Column="2"
                                             Margin="3,5,3,5"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1201,7 +1202,7 @@
                                             Grid.Row="2"
                                             Grid.Column="3"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             Click="EQ1_increment_Click"
                                             FontFamily="roboto black"
@@ -1216,7 +1217,7 @@
                                             Grid.Row="3"
                                             Grid.Column="3"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1233,7 +1234,7 @@
                                             Grid.Row="4"
                                             Grid.Column="3"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             Click="EQ1_decrement_Click"
                                             FontFamily="roboto black"
@@ -1247,7 +1248,7 @@
                                             Grid.Row="5"
                                             Grid.Column="3"
                                             Margin="3,5,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1265,7 +1266,7 @@
                                             Grid.Row="2"
                                             Grid.Column="4"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             Click="EQ2_increment_Click"
                                             FontFamily="roboto black"
@@ -1280,7 +1281,7 @@
                                             Grid.Row="3"
                                             Grid.Column="4"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#6057BF"
+                                            BorderBrush="{DynamicResource Light}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1297,7 +1298,7 @@
                                             Grid.Row="4"
                                             Grid.Column="4"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             Click="EQ2_decrement_Click"
                                             FontFamily="roboto black"
@@ -1311,7 +1312,7 @@
                                             Grid.Row="5"
                                             Grid.Column="4"
                                             Margin="3,5,3,5"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1330,7 +1331,7 @@
                                             Grid.Row="2"
                                             Grid.Column="5"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             Click="EQ3_increment_Click"
                                             FontFamily="roboto black"
@@ -1345,7 +1346,7 @@
                                             Grid.Row="3"
                                             Grid.Column="5"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1362,7 +1363,7 @@
                                             Grid.Row="4"
                                             Grid.Column="5"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             Click="EQ3_decrement_Click"
                                             FontFamily="roboto black"
@@ -1376,7 +1377,7 @@
                                             Grid.Row="5"
                                             Grid.Column="5"
                                             Margin="3,5,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1395,7 +1396,7 @@
                                             Grid.Row="2"
                                             Grid.Column="6"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             Click="EQ4_increment_Click"
                                             FontFamily="roboto black"
@@ -1410,7 +1411,7 @@
                                             Grid.Row="3"
                                             Grid.Column="6"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#6057BF"
+                                            BorderBrush="{DynamicResource Light}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1427,7 +1428,7 @@
                                             Grid.Row="4"
                                             Grid.Column="6"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             Click="EQ4_decrement_Click"
                                             FontFamily="roboto black"
@@ -1441,7 +1442,7 @@
                                             Grid.Row="5"
                                             Grid.Column="6"
                                             Margin="3,5,3,5"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1459,7 +1460,7 @@
                                             Grid.Row="2"
                                             Grid.Column="7"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             Click="EQ5_increment_Click"
                                             FontFamily="roboto black"
@@ -1474,7 +1475,7 @@
                                             Grid.Row="3"
                                             Grid.Column="7"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1491,7 +1492,7 @@
                                             Grid.Row="4"
                                             Grid.Column="7"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             Click="EQ5_decrement_Click"
                                             FontFamily="roboto black"
@@ -1505,7 +1506,7 @@
                                             Grid.Row="5"
                                             Grid.Column="7"
                                             Margin="3,5,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1523,7 +1524,7 @@
                                             Grid.Row="2"
                                             Grid.Column="8"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             Click="EQ6_increment_Click"
                                             FontFamily="roboto black"
@@ -1538,7 +1539,7 @@
                                             Grid.Row="3"
                                             Grid.Column="8"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#6057BF"
+                                            BorderBrush="{DynamicResource Light}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1555,7 +1556,7 @@
                                             Grid.Row="4"
                                             Grid.Column="8"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             Click="EQ6_decrement_Click"
                                             FontFamily="roboto black"
@@ -1569,7 +1570,7 @@
                                             Grid.Row="5"
                                             Grid.Column="8"
                                             Margin="3,5,3,5"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1587,7 +1588,7 @@
                                             Grid.Row="2"
                                             Grid.Column="9"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             Click="EQ7_increment_Click"
                                             FontFamily="roboto black"
@@ -1602,7 +1603,7 @@
                                             Grid.Row="3"
                                             Grid.Column="9"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1619,7 +1620,7 @@
                                             Grid.Row="4"
                                             Grid.Column="9"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             Click="EQ7_decrement_Click"
                                             FontFamily="roboto black"
@@ -1633,7 +1634,7 @@
                                             Grid.Row="5"
                                             Grid.Column="9"
                                             Margin="3,5,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1651,7 +1652,7 @@
                                             Grid.Row="2"
                                             Grid.Column="10"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             Click="EQ8_increment_Click"
                                             FontFamily="roboto black"
@@ -1666,7 +1667,7 @@
                                             Grid.Row="3"
                                             Grid.Column="10"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#38326E"
+                                            BorderBrush="{DynamicResource Dark}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1683,7 +1684,7 @@
                                             Grid.Row="4"
                                             Grid.Column="10"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             Click="EQ8_decrement_Click"
                                             FontFamily="roboto black"
@@ -1697,7 +1698,7 @@
                                             Grid.Row="5"
                                             Grid.Column="10"
                                             Margin="3,5,3,5"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1775,7 +1776,7 @@
                                             Grid.Row="0"
                                             Grid.Column="1"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="32"
@@ -1789,7 +1790,7 @@
                                             Grid.Row="1"
                                             Grid.Column="1"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#38326E"
+                                            BorderBrush="{DynamicResource Dark}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1806,7 +1807,7 @@
                                             Grid.Row="2"
                                             Grid.Column="1"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="45"
@@ -1820,7 +1821,7 @@
                                             Grid.Column="1"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1839,7 +1840,7 @@
                                             Grid.Row="0"
                                             Grid.Column="3"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="32"
@@ -1853,7 +1854,7 @@
                                             Grid.Row="1"
                                             Grid.Column="3"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1870,7 +1871,7 @@
                                             Grid.Row="2"
                                             Grid.Column="3"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="45"
@@ -1884,7 +1885,7 @@
                                             Grid.Column="3"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1902,7 +1903,7 @@
                                             Grid.Row="0"
                                             Grid.Column="5"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="32"
@@ -1916,7 +1917,7 @@
                                             Grid.Row="1"
                                             Grid.Column="5"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#6057BF"
+                                            BorderBrush="{DynamicResource Light}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1933,7 +1934,7 @@
                                             Grid.Row="2"
                                             Grid.Column="5"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="45"
@@ -1947,7 +1948,7 @@
                                             Grid.Column="5"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1966,7 +1967,7 @@
                                             Grid.Row="0"
                                             Grid.Column="7"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="32"
@@ -1980,7 +1981,7 @@
                                             Grid.Row="1"
                                             Grid.Column="7"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#38326E"
+                                            BorderBrush="{DynamicResource Dark}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -1997,7 +1998,7 @@
                                             Grid.Row="2"
                                             Grid.Column="7"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="45"
@@ -2011,7 +2012,7 @@
                                             Grid.Column="7"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2031,7 +2032,7 @@
                                             Grid.Column="1"
                                             Height="36"
                                             Margin="2,10,0,0"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="32"
@@ -2045,7 +2046,7 @@
                                             Grid.Row="6"
                                             Grid.Column="1"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2062,7 +2063,7 @@
                                             Grid.Row="7"
                                             Grid.Column="1"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="45"
@@ -2076,7 +2077,7 @@
                                             Grid.Column="1"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2095,7 +2096,7 @@
                                             Grid.Column="3"
                                             Height="36"
                                             Margin="2,10,0,0"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="32"
@@ -2109,7 +2110,7 @@
                                             Grid.Row="6"
                                             Grid.Column="3"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#6057BF"
+                                            BorderBrush="{DynamicResource Light}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2126,7 +2127,7 @@
                                             Grid.Row="7"
                                             Grid.Column="3"
                                             Margin="2"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="45"
@@ -2140,7 +2141,7 @@
                                             Grid.Column="3"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2159,7 +2160,7 @@
                                             Grid.Column="5"
                                             Height="36"
                                             Margin="2,10,0,0"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="32"
@@ -2173,7 +2174,7 @@
                                             Grid.Row="6"
                                             Grid.Column="5"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#38326E"
+                                            BorderBrush="{DynamicResource Dark}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2190,7 +2191,7 @@
                                             Grid.Row="7"
                                             Grid.Column="5"
                                             Margin="2"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="45"
@@ -2204,7 +2205,7 @@
                                             Grid.Column="5"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2224,7 +2225,7 @@
                                             Grid.Column="7"
                                             Height="36"
                                             Margin="2,10,0,0"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="32"
@@ -2238,7 +2239,7 @@
                                             Grid.Row="6"
                                             Grid.Column="7"
                                             Margin="1.5,3,1.5,3"
-                                            BorderBrush="#4B4495"
+                                            BorderBrush="{DynamicResource Mid}"
                                             BorderThickness="3"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2255,7 +2256,7 @@
                                             Grid.Row="7"
                                             Grid.Column="7"
                                             Margin="2"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderBrush="Transparent"
                                             FontFamily="roboto black"
                                             FontSize="45"
@@ -2269,7 +2270,7 @@
                                             Grid.Column="7"
                                             Grid.ColumnSpan="2"
                                             Margin="3,0,3,10"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2419,7 +2420,7 @@
                                             Grid.Row="3"
                                             Grid.Column="1"
                                             Margin="3,8,3,5"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2434,7 +2435,7 @@
                                             Grid.Row="3"
                                             Grid.Column="2"
                                             Margin="3,8,3,5"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2452,7 +2453,7 @@
                                             Grid.Row="3"
                                             Grid.Column="3"
                                             Margin="3,8,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2467,7 +2468,7 @@
                                             Grid.Row="3"
                                             Grid.Column="4"
                                             Margin="3,8,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2485,7 +2486,7 @@
                                             Grid.Row="3"
                                             Grid.Column="5"
                                             Margin="3,8,3,5"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2500,7 +2501,7 @@
                                             Grid.Row="3"
                                             Grid.Column="6"
                                             Margin="3,8,3,5"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2518,7 +2519,7 @@
                                             Grid.Row="3"
                                             Grid.Column="7"
                                             Margin="3,8,3,5"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2533,7 +2534,7 @@
                                             Grid.Row="3"
                                             Grid.Column="8"
                                             Margin="3,8,3,5"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2551,7 +2552,7 @@
                                             Grid.Row="8"
                                             Grid.Column="1"
                                             Margin="3,8,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2566,7 +2567,7 @@
                                             Grid.Row="8"
                                             Grid.Column="2"
                                             Margin="3,8,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2584,7 +2585,7 @@
                                             Grid.Row="8"
                                             Grid.Column="3"
                                             Margin="3,8,3,5"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2599,7 +2600,7 @@
                                             Grid.Row="8"
                                             Grid.Column="4"
                                             Margin="3,8,3,5"
-                                            Background="#6057BF"
+                                            Background="{DynamicResource Light}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2617,7 +2618,7 @@
                                             Grid.Row="8"
                                             Grid.Column="5"
                                             Margin="3,8,3,5"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2632,7 +2633,7 @@
                                             Grid.Row="8"
                                             Grid.Column="6"
                                             Margin="3,8,3,5"
-                                            Background="#38326E"
+                                            Background="{DynamicResource Dark}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2650,7 +2651,7 @@
                                             Grid.Row="8"
                                             Grid.Column="7"
                                             Margin="3,8,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2665,7 +2666,7 @@
                                             Grid.Row="8"
                                             Grid.Column="8"
                                             Margin="3,8,3,5"
-                                            Background="#4B4495"
+                                            Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             CornerRadius="5">
                                             <TextBlock
@@ -2928,7 +2929,7 @@
                                                 Width="150"
                                                 Height="35"
                                                 Margin="0,10,0,6"
-                                                Background="#4B4495"
+                                                Background="{DynamicResource Mid}"
                                                 BorderThickness="0"
                                                 Click="ButtonResetSuspension_Click"
                                                 FontFamily="roboto"
@@ -3034,7 +3035,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3046,7 +3047,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3058,7 +3059,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3106,7 +3107,7 @@
                                                         Margin="70,0,70,0"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3118,7 +3119,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3130,7 +3131,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3178,7 +3179,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3190,7 +3191,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3202,7 +3203,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3249,7 +3250,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3261,7 +3262,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3273,7 +3274,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3320,7 +3321,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3332,7 +3333,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3344,7 +3345,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3391,7 +3392,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3403,7 +3404,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
@@ -3415,7 +3416,7 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Background="Transparent"
-                                                        BorderBrush="#4B4495"
+                                                        BorderBrush="{DynamicResource Mid}"
                                                         BorderThickness="0,0,0,2"
                                                         FontFamily="roboto"
                                                         FontSize="16"
