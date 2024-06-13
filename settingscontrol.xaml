@@ -2994,7 +2994,8 @@
                         Grid.Row="1"
                         FontFamily="roboto"
                         FontSize="16"
-                        Foreground="{DynamicResource Foreground}">
+                        Foreground="{DynamicResource Foreground}"
+                        Background="{DynamicResource Background}">
                         <!--  version number  -->
                         <StatusBarItem>
                             <TextBlock Name="Version" />
