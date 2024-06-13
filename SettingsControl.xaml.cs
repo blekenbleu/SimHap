@@ -83,6 +83,26 @@ namespace sierses.Sim
             InitHarmonics(Plugin.E.Tones);
 		}
 
+		private void F1_increment_Click(object sender, RoutedEventArgs e)
+		{
+			F1_value.Text = Plugin.E.Hval(0, true);
+		}
+
+		private void F1_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			F1_value.Text = Plugin.E.Hval(0, false);
+		}
+
+		private void F2_increment_Click(object sender, RoutedEventArgs e)
+		{
+			F2_value.Text = Plugin.E.Hval(1, true);
+		}
+
+		private void F2_decrement_Click(object sender, RoutedEventArgs e)
+		{
+			F2_value.Text = Plugin.E.Hval(1, false);
+		}
+
 		private void H1_increment_Click(object sender, RoutedEventArgs e)
 		{
 			H1_value.Text = Plugin.E.Hval(2, true);
