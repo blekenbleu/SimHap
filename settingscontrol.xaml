@@ -2031,7 +2031,6 @@
                                     <Border
                                         Grid.Row="4"
                                         Grid.Column="1"
-                                        Grid.ColumnSpan="2"
                                         Margin="3,0,3,10"
                                         Background="{DynamicResource Dark}"
                                         BorderThickness="0"
@@ -2041,7 +2040,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
-                                            F1
+                                            RPM
                                         </TextBlock>
                                     </Border>
 
@@ -2050,7 +2049,7 @@
                                     <RepeatButton
                                         x:Name="F2_increment"
                                         Grid.Row="0"
-                                        Grid.Column="3"
+                                        Grid.Column="2"
                                         Margin="2"
                                         Background="{DynamicResource Mid}"
                                         BorderBrush="Transparent"
@@ -2065,7 +2064,7 @@
                                     <!--  value  -->
                                     <Border
                                         Grid.Row="1"
-                                        Grid.Column="3"
+                                        Grid.Column="2"
                                         Margin="1.5,3,1.5,3"
                                         BorderBrush="{DynamicResource Mid}"
                                         BorderThickness="3"
@@ -2083,7 +2082,7 @@
                                     <RepeatButton
                                         x:Name="F2_decrement"
                                         Grid.Row="2"
-                                        Grid.Column="3"
+                                        Grid.Column="2"
                                         Margin="2"
                                         Background="{DynamicResource Mid}"
                                         BorderBrush="Transparent"
@@ -2097,8 +2096,7 @@
                                     </RepeatButton>
                                     <Border
                                         Grid.Row="4"
-                                        Grid.Column="3"
-                                        Grid.ColumnSpan="2"
+                                        Grid.Column="2"
                                         Margin="3,0,3,10"
                                         Background="{DynamicResource Mid}"
                                         BorderThickness="0"
@@ -2108,7 +2106,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
-                                            F2
+                                            Fund
                                         </TextBlock>
                                     </Border>
 
@@ -2116,7 +2114,7 @@
                                     <RepeatButton
                                         x:Name="H1_increment"
                                         Grid.Row="0"
-                                        Grid.Column="5"
+                                        Grid.Column="3"
                                         Margin="2"
                                         Background="{DynamicResource Light}"
                                         BorderBrush="Transparent"
@@ -2131,7 +2129,7 @@
                                     <!--  value  -->
                                     <Border
                                         Grid.Row="1"
-                                        Grid.Column="5"
+                                        Grid.Column="3"
                                         Margin="1.5,3,1.5,3"
                                         BorderBrush="{DynamicResource Light}"
                                         BorderThickness="3"
@@ -2149,7 +2147,7 @@
                                     <RepeatButton
                                         x:Name="H1_decrement"
                                         Grid.Row="2"
-                                        Grid.Column="5"
+                                        Grid.Column="3"
                                         Margin="2"
                                         Background="{DynamicResource Light}"
                                         BorderBrush="Transparent"
@@ -2163,7 +2161,7 @@
                                     </RepeatButton>
                                     <Border
                                         Grid.Row="4"
-                                        Grid.Column="5"
+                                        Grid.Column="3"
                                         Grid.ColumnSpan="2"
                                         Margin="3,0,3,10"
                                         Background="{DynamicResource Light}"
@@ -2183,7 +2181,7 @@
                                     <RepeatButton
                                         x:Name="H2_increment"
                                         Grid.Row="0"
-                                        Grid.Column="7"
+                                        Grid.Column="5"
                                         Margin="2"
                                         Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
@@ -2198,7 +2196,7 @@
                                     <!--  value  -->
                                     <Border
                                         Grid.Row="1"
-                                        Grid.Column="7"
+                                        Grid.Column="5"
                                         Margin="1.5,3,1.5,3"
                                         BorderBrush="{DynamicResource Dark}"
                                         BorderThickness="3"
@@ -2216,7 +2214,7 @@
                                     <RepeatButton
                                         x:Name="H2_decrement"
                                         Grid.Row="2"
-                                        Grid.Column="7"
+                                        Grid.Column="5"
                                         Margin="2"
                                         Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
@@ -2230,7 +2228,7 @@
                                     </RepeatButton>
                                     <Border
                                         Grid.Row="4"
-                                        Grid.Column="7"
+                                        Grid.Column="5"
                                         Grid.ColumnSpan="2"
                                         Margin="3,0,3,10"
                                         Background="{DynamicResource Dark}"
@@ -2559,7 +2557,7 @@
                                         x:Name="H1_factor"
                                         Grid.Row="0"
                                         Grid.RowSpan="3"
-                                        Grid.Column="6"
+                                        Grid.Column="4"
                                         Margin="3,0,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="13"
@@ -2573,7 +2571,7 @@
                                         x:Name="H2_factor"
                                         Grid.Row="0"
                                         Grid.RowSpan="3"
-                                        Grid.Column="8"
+                                        Grid.Column="6"
                                         Margin="3,0,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="13"
@@ -2661,7 +2659,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="12">
-                                            Gain
+                                            Peak
                                         </TextBlock>
                                     </Border>
                                     <!-- F1, F2 fixed factors - 1
@@ -2685,7 +2683,7 @@
                                     <!--  F2  -->
                                     <Border
                                         Grid.Row="3"
-                                        Grid.Column="3"
+                                        Grid.Column="2"
                                         Margin="3,8,3,5"
                                         Background="{DynamicResource Mid}"
                                         BorderThickness="0"
@@ -2695,7 +2693,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="12">
-                                            Gain
+                                            Peak
                                         </TextBlock>
                                     </Border>
                                     <!-- F1, F2 fixed factors - 1
@@ -2719,7 +2717,7 @@
                                     <!--  H1  -->
                                     <Border
                                         Grid.Row="3"
-                                        Grid.Column="5"
+                                        Grid.Column="3"
                                         Margin="3,8,3,5"
                                         Background="{DynamicResource Light}"
                                         BorderThickness="0"
@@ -2729,12 +2727,12 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="12">
-                                            Gain
+                                            Peak
                                         </TextBlock>
                                     </Border>
                                     <Border
                                         Grid.Row="3"
-                                        Grid.Column="6"
+                                        Grid.Column="4"
                                         Margin="3,8,3,5"
                                         Background="{DynamicResource Light}"
                                         BorderThickness="0"
@@ -2752,7 +2750,7 @@
                                     <!--  H2  -->
                                     <Border
                                         Grid.Row="3"
-                                        Grid.Column="7"
+                                        Grid.Column="5"
                                         Margin="3,8,3,5"
                                         Background="{DynamicResource Dark}"
                                         BorderThickness="0"
@@ -2762,12 +2760,12 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="12">
-                                            Gain
+                                            Peak
                                         </TextBlock>
                                     </Border>
                                     <Border
                                         Grid.Row="3"
-                                        Grid.Column="8"
+                                        Grid.Column="6"
                                         Margin="3,8,3,5"
                                         Background="{DynamicResource Dark}"
                                         BorderThickness="0"
@@ -2795,7 +2793,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="12">
-                                            Gain
+                                            Peak
                                         </TextBlock>
                                     </Border>
                                     <Border
@@ -2828,7 +2826,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="12">
-                                            Gain
+                                            Peak
                                         </TextBlock>
                                     </Border>
                                     <Border
@@ -2861,7 +2859,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="12">
-                                            Gain
+                                            Peak
                                         </TextBlock>
                                     </Border>
                                     <Border
@@ -2894,7 +2892,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="12">
-                                            Gain
+                                            Peak
                                         </TextBlock>
                                     </Border>
                                     <Border
