@@ -2,6 +2,7 @@ using SimHub;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace sierses.Sim
@@ -18,6 +19,16 @@ namespace sierses.Sim
 		{
 			if (null != Plugin)
 				InitHarmonics(Plugin.E.Tones);
+		}
+
+		private void H_Click(object sender, RoutedEventArgs e)
+		{
+			RepeatButton r = sender as RepeatButton;
+			string s = r.Name;
+			bool incr = "i" == s.Substring(3, 1);
+			int index = int.Parse(s.Substring(1, 1));
+			Plugin.E.Hval(1 + index, incr);
+		    InitHarmonics(Plugin.E.Tones);
 		}
 
 		private void H1_increment_Click(object sender, RoutedEventArgs e)
