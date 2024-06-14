@@ -10,13 +10,13 @@ namespace sierses.Sim
 {
 	public partial class SettingsControl : UserControl //, IComponentConnector
 	{
-        public readonly Haptics Plugin;
+		public readonly Haptics Plugin;
 		readonly ResourceDictionary Tres;
-        public SettingsControl()
+		public SettingsControl()
 		{
 			Tres = new ResourceDictionary();
 			// VS generates InitializeComponent() from settingscontrol.xaml
-            InitializeComponent();
+			InitializeComponent();
 		}
 
 		public SettingsControl(Haptics plugin) : this()
@@ -25,21 +25,22 @@ namespace sierses.Sim
 			DataContext = Plugin;
 			Version.Text = Plugin.PluginVersion;
 			SetTheme();
-        }
+		}
 
 		internal string Theme = "SteelLightTheme.xaml";
-        internal void ChangeTheme(string theme)
+		internal void ChangeTheme(string theme)
 		{
 			Theme = theme;
 			SetTheme();
 		}
 
-        internal void SetTheme()
+		internal void SetTheme()
 		{
 			Tres.Source = new Uri("/sierses.Sim;component/Themes/" + Theme, UriKind.Relative);
-            Resources.MergedDictionaries.Clear();
-            Resources.MergedDictionaries.Add(Tres);
-        }
+//			Resources.MergedDictionaries.Clear();
+//			Resources.MergedDictionaries.Add(Tres);
+			Resources.MergedDictionaries[0] = Tres;
+		}
 
 		// called when expanding EQ or Plugin.E.NextUp() 
 		internal void InitEq(ushort[] S)
@@ -97,7 +98,7 @@ namespace sierses.Sim
 			Plugin.D.LockedText = Plugin.D.Unlocked ? "Lock" : "Unlock";
 		}
 
-        // limit check Engine Tone Factor sliders
+		// limit check Engine Tone Factor sliders
 		private void ReFactor(int index, double factor)
 		{
 			// index 0 and 1 do not exist; those factors are fixed at one
@@ -148,160 +149,160 @@ namespace sierses.Sim
 			SuspensionGamma.Value = 1;
 		}
 
-        private void AmberTheme(object sender, RoutedEventArgs e)
-        {
+		private void AmberTheme(object sender, RoutedEventArgs e)
+		{
 			ChangeTheme("AmberTheme.xaml");
-        }
+		}
 
-        private void BlueTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("BlueTheme.xaml");
-        }
+		private void BlueTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("BlueTheme.xaml");
+		}
 
-        private void CrimsonTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("CrimsonTheme.xaml");
-        }
-        private void GreenTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("GreenTheme.xaml");
-        }
+		private void CrimsonTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("CrimsonTheme.xaml");
+		}
+		private void GreenTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("GreenTheme.xaml");
+		}
 
-        private void OliveTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("OliveTheme.xaml");
-        }
+		private void OliveTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("OliveTheme.xaml");
+		}
 
-        private void OrangeTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("OrangeTheme.xaml");
-        }
+		private void OrangeTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("OrangeTheme.xaml");
+		}
 
-        private void PurpleTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("PurpleTheme.xaml");
-        }
+		private void PurpleTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("PurpleTheme.xaml");
+		}
 
-        private void SteelTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("SteelTheme.xaml");
-        }
+		private void SteelTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("SteelTheme.xaml");
+		}
 
-        private void BlueLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("BlueLightTheme.xaml");
-        }
+		private void BlueLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("BlueLightTheme.xaml");
+		}
 
-        private void AmberLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("AmberLightTheme.xaml");
-        }
+		private void AmberLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("AmberLightTheme.xaml");
+		}
 
-        private void CrimsonLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("CrimsonLightTheme.xaml");
-        }
+		private void CrimsonLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("CrimsonLightTheme.xaml");
+		}
 
-        private void GreenLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("GreenLightTheme.xaml");
-        }
+		private void GreenLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("GreenLightTheme.xaml");
+		}
 
-        private void OliveLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("OliveLightTheme.xaml");
-        }
+		private void OliveLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("OliveLightTheme.xaml");
+		}
 
-        private void OrangeLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("OrangeLightTheme.xaml");
-        }
+		private void OrangeLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("OrangeLightTheme.xaml");
+		}
 
-        private void PurpleLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("PurpleLightTheme.xaml");
-        }
+		private void PurpleLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("PurpleLightTheme.xaml");
+		}
 
-        private void SteelLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("SteelLightTheme.xaml");
-        }
+		private void SteelLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("SteelLightTheme.xaml");
+		}
 
-        private void MauveTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("MauveTheme.xaml");
-        }
+		private void MauveTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("MauveTheme.xaml");
+		}
 
-        private void MauveLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("MauveLightTheme.xaml");
-        }
+		private void MauveLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("MauveLightTheme.xaml");
+		}
 
-        private void CobaltTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("CobaltTheme.xaml");
-        }
+		private void CobaltTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("CobaltTheme.xaml");
+		}
 
-        private void CobaltLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("CobaltLightTheme.xaml");
-        }
+		private void CobaltLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("CobaltLightTheme.xaml");
+		}
 
-        private void TaupeTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("TaupeTheme.xaml");
-        }
+		private void TaupeTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("TaupeTheme.xaml");
+		}
 
-        private void TaupeLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("TaupeLightTheme.xaml");
-        }
+		private void TaupeLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("TaupeLightTheme.xaml");
+		}
 
-        private void EmeraldTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("EmeraldTheme.xaml");
-        }
+		private void EmeraldTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("EmeraldTheme.xaml");
+		}
 
-        private void EmeraldLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("EmeraldLightTheme.xaml");
-        }
-        private void TealTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("TealTheme.xaml");
-        }
+		private void EmeraldLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("EmeraldLightTheme.xaml");
+		}
+		private void TealTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("TealTheme.xaml");
+		}
 
-        private void TealLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("TealLightTheme.xaml");
-        }
+		private void TealLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("TealLightTheme.xaml");
+		}
 
 		private void MagentaTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("MagentaTheme.xaml");
-        }
+		{
+			ChangeTheme("MagentaTheme.xaml");
+		}
 
-        private void MagentaLightTheme(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("MagentaLightTheme.xaml");
-        }
+		private void MagentaLightTheme(object sender, RoutedEventArgs e)
+		{
+			ChangeTheme("MagentaLightTheme.xaml");
+		}
 
-        private void EngineView_Switch_Checked(object sender, RoutedEventArgs e)
-        {
-            EngineView_Switch.Content = "Expand";
-            EngView1.Height = new GridLength(0);
-            EngView2.Height = new GridLength(0);
-            EngView3.Height = new GridLength(0);
-            EngView4.Height = new GridLength(0);
-        }
+		private void EngineView_Switch_Checked(object sender, RoutedEventArgs e)
+		{
+			EngineView_Switch.Content = "Expand";
+			EngView1.Height = new GridLength(0);
+			EngView2.Height = new GridLength(0);
+			EngView3.Height = new GridLength(0);
+			EngView4.Height = new GridLength(0);
+		}
 
-        private void EngineView_Switch_Unchecked(object sender, RoutedEventArgs e)
-        {
-            EngineView_Switch.Content = "Collapse";
-            EngView1.Height = GridLength.Auto;
-            EngView2.Height = GridLength.Auto;
-            EngView3.Height = GridLength.Auto;
-            EngView4.Height = GridLength.Auto;
-        }
-    }
+		private void EngineView_Switch_Unchecked(object sender, RoutedEventArgs e)
+		{
+			EngineView_Switch.Content = "Collapse";
+			EngView1.Height = GridLength.Auto;
+			EngView2.Height = GridLength.Auto;
+			EngView3.Height = GridLength.Auto;
+			EngView4.Height = GridLength.Auto;
+		}
+	}
 }
