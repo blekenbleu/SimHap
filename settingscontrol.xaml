@@ -1934,7 +1934,7 @@
                                 Expander.Expanded="TC_Expanded"
                                 FontFamily="roboto"
                                 FontSize="16"
-                                IsExpanded="False">
+                                IsExpanded="True">
                                 <Expander.Header>
                                     <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
                                         <Image
@@ -1978,56 +1978,13 @@
                                     </Grid.RowDefinitions>
 
                                     <!--  f1  -->
-                                    <RepeatButton
-                                        x:Name="F1_increment"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Margin="2"
-                                        Background="{DynamicResource Dark}"
-                                        BorderBrush="Transparent"
-                                        Click="F1_increment_Click"
-                                        FontFamily="roboto black"
-                                        FontSize="32"
-                                        Foreground="White"
-                                        Interval="1"
-                                        Style="{StaticResource EQbutton}">
-                                        <TextBlock Margin="0,-2,0,0" Text="+" />
-                                    </RepeatButton>
-                                    <!--  value  -->
+
+                                    
+                                    
+                     
+
                                     <Border
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        Margin="1.5,3,1.5,3"
-                                        BorderBrush="{DynamicResource Dark}"
-                                        BorderThickness="3"
-                                        CornerRadius="5">
-                                        <TextBlock
-                                            x:Name="F1_value"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontFamily="roboto black"
-                                            FontSize="17"
-                                            Foreground="{DynamicResource Foreground}">
-                                            0
-                                        </TextBlock>
-                                    </Border>
-                                    <RepeatButton
-                                        x:Name="F1_decrement"
-                                        Grid.Row="2"
-                                        Grid.Column="1"
-                                        Margin="2"
-                                        Background="{DynamicResource Dark}"
-                                        BorderBrush="Transparent"
-                                        Click="F1_decrement_Click"
-                                        FontFamily="roboto black"
-                                        FontSize="45"
-                                        Foreground="White"
-                                        Interval="1"
-                                        Style="{StaticResource EQbutton}">
-                                        <TextBlock Margin="0,-10,0,0" Text="-" />
-                                    </RepeatButton>
-                                    <Border
-                                        Grid.Row="4"
+                                        Grid.Row="9"
                                         Grid.Column="1"
                                         Margin="3,0,3,10"
                                         Background="{DynamicResource Dark}"
@@ -2042,59 +1999,10 @@
                                         </TextBlock>
                                     </Border>
 
-                                    <!--  f2  -->
-                                    <RepeatButton
-                                        x:Name="F2_increment"
-                                        Grid.Row="5"
-                                        Grid.Column="1"
-                                        Height="36"
-                                        Margin="2,10,0,0"
-                                        Background="{DynamicResource Dark}"
-                                        BorderBrush="Transparent"
-                                        Click="F2_increment_Click"
-                                        FontFamily="roboto black"
-                                        FontSize="32"
-                                        Foreground="White"
-                                        Interval="1"
-                                        Style="{StaticResource EQbutton}">
-                                        <TextBlock Margin="0,-2,0,0" Text="+" />
-                                    </RepeatButton>
-                                    <!--  value  -->
-                                    <Border
-                                        Grid.Row="6"
-                                        Grid.Column="1"
-                                        Margin="1.5,3,1.5,3"
-                                        BorderBrush="{DynamicResource Dark}"
-                                        BorderThickness="3"
-                                        CornerRadius="5">
-                                        <TextBlock
-                                            x:Name="F2_value"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontFamily="roboto black"
-                                            FontSize="17"
-                                            Foreground="{DynamicResource Foreground}">
-                                            0
-                                        </TextBlock>
-                                    </Border>
-                                    <RepeatButton
-                                        x:Name="F2_decrement"
-                                        Grid.Row="7"
-                                        Grid.Column="1"
-                                        Margin="2"
-                                        Background="{DynamicResource Dark}"
-                                        BorderBrush="Transparent"
-                                        Click="F2_decrement_Click"
-                                        FontFamily="roboto black"
-                                        FontSize="45"
-                                        Foreground="White"
-                                        Interval="1"
-                                        Style="{StaticResource EQbutton}">
-                                        <TextBlock Margin="0,-10,0,0" Text="-" />
-                                    </RepeatButton>
+                                    
                                     <Border
                                         Grid.Row="9"
-                                        Grid.Column="1"
+                                        Grid.Column="2"
                                         Margin="3,0,3,10"
                                         Background="{DynamicResource Dark}"
                                         BorderThickness="0"
@@ -2511,39 +2419,37 @@
 
                                     <!--  factor sliders  -->
 
-                                    <!--  F1
+                                    <!--  F1 -->
                                         <Slider
-                                            x:Name="F1_factor"
+                                            x:Name="F1_value"
                                             Grid.Row="0"
-                                            Grid.RowSpan="3"
+                                            Grid.RowSpan="9"
+                                            Grid.Column="1"
+                                            Margin="3,1,0,10"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="992"
+                                            Minimum="0"
+                                            Orientation="Vertical"
+                                            TickFrequency="7"
+											ValueChanged="FSlider"
+                                            Value="500" />
+                                    
+
+
+                                    <!--  F2 -->
+                                        <Slider
+                                            x:Name="F2_value"
+                                            Grid.Row="0"
+                                            Grid.RowSpan="9"
                                             Grid.Column="2"
-                                            Margin="3,1,0,2"
+                                            Margin="3,0,0,10"
                                             IsSnapToTickEnabled="True"
                                             Maximum="992"
                                             Minimum="0"
                                             Orientation="Vertical"
                                             TickFrequency="7"
-	                                        ValueChanged="HSlider"
-                                            Value="500" />-->
-
-
-                                    <TextBlock />
-
-
-                                    <!--  F2
-                                        <Slider
-                                            x:Name="F2_factor"
-                                            Grid.Row="0"
-                                            Grid.RowSpan="3"
-                                            Grid.Column="4"
-                                            Margin="3,0,0,0"
-                                            IsSnapToTickEnabled="True"
-                                            Maximum="992"
-                                            Minimum="0"
-                                            Orientation="Vertical"
-                                            TickFrequency="7"
-                                        	ValueChanged="HSlider"
-                                            Value="500" />-->
+											ValueChanged="FSlider"
+                                            Value="500" />
 
                                     <!--  H1  -->
                                     <Slider
@@ -2556,9 +2462,9 @@
                                         Maximum="8"
                                         Minimum="2"
                                         Orientation="Vertical"
-                                        ValueChanged="HSlider"
+										ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="5" />
+                                        Value="2" />
 
                                     <!--  H2  -->
                                     <Slider
@@ -2569,11 +2475,11 @@
                                         Margin="3,0,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="9"
-                                        Minimum="3"
+                                        Minimum="2"
                                         Orientation="Vertical"
-                                        ValueChanged="HSlider"
+										ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="6" />
+                                        Value="2" />
 
 
                                     <!--  H3  -->
@@ -2586,11 +2492,11 @@
                                         Margin="3,0,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="10"
-                                        Minimum="4"
+                                        Minimum="3"
                                         Orientation="Vertical"
-                                        ValueChanged="HSlider"
+										ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="7" />
+                                        Value="2" />
 
                                     <!--  H4  -->
                                     <Slider
@@ -2602,11 +2508,11 @@
                                         Margin="3,10,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="11"
-                                        Minimum="5"
+                                        Minimum="4"
                                         Orientation="Vertical"
-                                        ValueChanged="HSlider"
+										ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="8" />
+                                        Value="2" />
 
                                     <!--  H5  -->
                                     <Slider
@@ -2618,11 +2524,11 @@
                                         Margin="3.5,10,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="12"
-                                        Minimum="6"
+                                        Minimum="5"
                                         Orientation="Vertical"
-                                        ValueChanged="HSlider"
+										ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="9" />
+                                        Value="2" />
 
                                     <!--  H6  -->
                                     <Slider
@@ -2634,30 +2540,16 @@
                                         Margin="3.5,10,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="13"
-                                        Minimum="7"
+                                        Minimum="6"
                                         Orientation="Vertical"
-                                        ValueChanged="HSlider"
+										ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="10" />
+                                        Value="2" />
 
                                     <!--  gain and factor headers)  -->
 
                                     <!--  F1  -->
-                                    <Border
-                                        Grid.Row="3"
-                                        Grid.Column="1"
-                                        Margin="3,8,3,5"
-                                        Background="{DynamicResource Dark}"
-                                        BorderThickness="0"
-                                        CornerRadius="5">
-                                        <TextBlock
-                                            Margin="0,2,0,0"
-                                            HorizontalAlignment="Center"
-                                            FontFamily="roboto medium"
-                                            FontSize="12">
-                                            Peak
-                                        </TextBlock>
-                                    </Border>
+
                                     <!-- F1, F2 fixed factors - 1
                                         <Border
                                             Grid.Row="3"
@@ -2676,21 +2568,7 @@
                                         </Border>	-->
 
                                     <!--  F2  -->
-                                    <Border
-                                        Grid.Row="8"
-                                        Grid.Column="1"
-                                        Margin="3,8,3,5"
-                                        Background="{DynamicResource Dark}"
-                                        BorderThickness="0"
-                                        CornerRadius="5">
-                                        <TextBlock
-                                            Margin="0,2,0,0"
-                                            HorizontalAlignment="Center"
-                                            FontFamily="roboto medium"
-                                            FontSize="12">
-                                            Peak
-                                        </TextBlock>
-                                    </Border>
+
                                     <!-- F1, F2 fixed factors - 1
                                         <Border
                                             Grid.Row="3"

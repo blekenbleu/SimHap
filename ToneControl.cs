@@ -16,27 +16,8 @@ namespace sierses.Sim
 
 		private void TC_Expanded(object sender, RoutedEventArgs e)
 		{
-            InitHarmonics(Plugin.E.Tones);
-		}
-
-		private void F1_increment_Click(object sender, RoutedEventArgs e)
-		{
-			F1_value.Text = Plugin.E.Hval(0, true);
-		}
-
-		private void F1_decrement_Click(object sender, RoutedEventArgs e)
-		{
-			F1_value.Text = Plugin.E.Hval(0, false);
-		}
-
-		private void F2_increment_Click(object sender, RoutedEventArgs e)
-		{
-			F2_value.Text = Plugin.E.Hval(1, true);
-		}
-
-		private void F2_decrement_Click(object sender, RoutedEventArgs e)
-		{
-			F2_value.Text = Plugin.E.Hval(1, false);
+			if (null != Plugin)
+				InitHarmonics(Plugin.E.Tones);
 		}
 
 		private void H1_increment_Click(object sender, RoutedEventArgs e)
@@ -99,13 +80,20 @@ namespace sierses.Sim
 			H6_value.Text = Plugin.E.Hval(7, false);
 		}
 
+		private void FSlider(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			Slider s = sender as Slider;
+			string h = s.Name.ToString();
+			int i = int.Parse(h.Substring(1, 1));
+			ReFactor(i, s.Value);
+		}
+
 		private void HSlider(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			Slider s = sender as Slider;
 			string h = s.Name.ToString();
 			int i = int.Parse(h.Substring(1, 1));
-            ReFactor(1 + i, s.Value);
-        }
-
-    }
+			ReFactor(1 + i, s.Value);
+		}
+	}
 }
