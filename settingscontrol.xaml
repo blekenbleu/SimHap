@@ -28,12 +28,11 @@
 
 
         <ResourceDictionary>
-<!-- needed for Designer debugging -->
+            <!--  needed for Designer debugging  -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/sierses.Sim;component/Themes/SteelTheme.xaml">
-                </ResourceDictionary>
+                <ResourceDictionary Source="/sierses.Sim;component/Themes/SteelTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-<!-- gets overridden by ChangeTheme() -->  
+            <!--  gets overridden by ChangeTheme()  -->
 
 
             <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
@@ -109,6 +108,47 @@
 
 
 
+            <!--  button style for toggle button  -->
+            <Style x:Key="dMASSbuttonToggle" TargetType="{x:Type ToggleButton}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="False">
+                                    <Setter Property="Opacity" Value="1" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+
+
+
+            <!--  engine container textbox style  -->
+            <Style x:Key="EngineTBstyle" TargetType="{x:Type TextBox}">
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0,0,0,2" />
+                <Setter Property="BorderBrush" Value="{DynamicResource Mid}" />
+                <Setter Property="CaretBrush" Value="{DynamicResource Foreground}" />
+                <Setter Property="FontFamily" Value="roboto" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+            </Style>
+
 
             <!--  tab styling start
             <Style TargetType="{x:Type TabItem}">
@@ -145,7 +185,25 @@
 
 
 
+            <!--  lock toggle button  -->
+            <Style x:Name="LockToggle" TargetType="{x:Type ToggleButton}">
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Image Source="C:\Users\demas\source\repos\SimHap\Resources\unlocked50x50.png" />
+                    </Setter.Value>
+                </Setter>
 
+                <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Image Source="C:\Users\demas\source\repos\SimHap\Resources\locked50x50.png" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+
+            </Style>
 
 
 
@@ -695,7 +753,7 @@
             <Grid Background="{DynamicResource Background}">
                 <Grid.ContextMenu>
                     <ContextMenu Height="600">
-                        <!--dark themes-->
+                        <!--  dark themes  -->
                         <MenuItem Click="GreenTheme" Header="Green" />
                         <MenuItem Click="BlueTheme" Header="Blue" />
                         <MenuItem Click="PurpleTheme" Header="Purple" />
@@ -713,7 +771,7 @@
 
                         <Separator />
 
-                        <!--light themes-->
+                        <!--  light themes  -->
                         <MenuItem Click="GreenLightTheme" Header="Green Light" />
                         <MenuItem Click="BlueLightTheme" Header="Blue Light" />
                         <MenuItem Click="PurpleLightTheme" Header="Purple Light" />
@@ -765,454 +823,477 @@
                                     </TextBlock>
                                 </StackPanel>
                             </Expander.Header>
-                            <StackPanel>
+
+
+                            <Grid HorizontalAlignment="Center">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition x:Name="EngView1" Height="*" />
+                                    <RowDefinition x:Name="EngView2" Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition x:Name="EngView3" Height="*" />
+                                    <RowDefinition x:Name="EngView4" Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="10" />
+                                    <RowDefinition Height="*" />
+
+                                </Grid.RowDefinitions>
+
 
                                 <!--  CarName  -->
-                                <StackPanel
-                                    Margin="0,5,0,0"
+
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Right"><Run Text="Name" /></TextBlock>
-                                </StackPanel>
-                                <StackPanel Margin="0,2,0,0">
-                                    <TextBox
-                                        x:Name="CarName"
-                                        Width="400"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.CarName}" />
-                                </StackPanel>
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Right"><Run Text="Name" /></TextBlock>
+
+
+                                <TextBox
+                                    x:Name="CarName"
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Margin="10,3,10,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.CarName}" />
+
 
                                 <!--  ID  -->
-                                <StackPanel
-                                    Margin="0,10,0,0"
+
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Right"><Run Text="ID" /></TextBlock>
-                                </StackPanel>
-                                <StackPanel Margin="0,2,0,0">
-                                    <TextBox
-                                        x:Name="CarID"
-                                        Width="400"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.Id}" />
-                                </StackPanel>
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Right"><Run Text="ID" /></TextBlock>
+
+
+                                <TextBox
+                                    x:Name="CarID"
+                                    Grid.Row="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Margin="10,3"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.Id}" />
+
 
                                 <!--  Category  -->
-                                <StackPanel
-                                    Margin="0,10,0,0"
+
+                                <TextBlock
+                                    Grid.Row="5"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Right"><Run Text="Category" /></TextBlock>
-                                </StackPanel>
-                                <StackPanel Margin="0,2,0,0">
-                                    <TextBox
-                                        x:Name="CarClass"
-                                        Width="400"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.Category}" />
-                                </StackPanel>
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Right"><Run Text="Category" /></TextBlock>
 
 
-                                <!--  Idle/Redline/MaxRPM headers  -->
-                                <StackPanel
-                                    Margin="0,10,0,0"
+                                <TextBox
+                                    x:Name="CarClass"
+                                    Grid.Row="6"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Margin="10,3,10,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.Category}" />
+
+
+
+                                <!--  Idle/Redline/MaxRPM/pergame gain headers  -->
+
+                                <TextBlock
+                                    Grid.Row="7"
+                                    Grid.Column="0"
+                                    Width="80"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="Idle" /></TextBlock>
+
+                                <TextBlock
+                                    Grid.Row="7"
+                                    Grid.Column="1"
+                                    Width="80"
+                                    Margin="0,3"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="Redline" /></TextBlock>
+
+                                <TextBlock
+                                    Grid.Row="7"
+                                    Grid.Column="2"
+                                    Width="80"
+                                    Margin="0,3"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="Max" /></TextBlock>
+
+                                <TextBlock
+                                    Grid.Row="7"
+                                    Grid.Column="3"
+                                    Width="100"
+                                    Margin="0,3"
                                     VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="Idle" /></TextBlock>
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="Redline" /></TextBlock>
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="0,0,0,0"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="Max" /></TextBlock>
-                                </StackPanel>
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="PerGame Gain" /></TextBlock>
+
+
+
+
+
                                 <!--  Idle/Redline/MaxRPM textboxes  -->
-                                <StackPanel
-                                    Margin="0,2,0,0"
-                                    HorizontalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBox
-                                        x:Name="IdleRPM"
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.IdleRPM}" />
-                                    <TextBox
-                                        x:Name="Redline"
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.Redline}" />
-                                    <TextBox
-                                        x:Name="MaxRPM"
-                                        MinWidth="80"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.MaxRPM}" />
-                                </StackPanel>
 
-                                <!--  Engine config/cylinders/drivetrain headers  -->
-                                <StackPanel
-                                    Margin="0,10,0,0"
+                                <TextBox
+                                    x:Name="IdleRPM"
+                                    Grid.Row="8"
+                                    Grid.Column="0"
+                                    Width="80"
+                                    Margin="0,3,0,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.IdleRPM}" />
+                                <TextBox
+                                    x:Name="Redline"
+                                    Grid.Row="8"
+                                    Grid.Column="1"
+                                    Width="80"
+                                    Margin="0,3,0,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.Redline}" />
+
+                                <TextBox
+                                    x:Name="MaxRPM"
+                                    Grid.Row="8"
+                                    Grid.Column="2"
+                                    Width="80"
+                                    Margin="0,3,0,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.MaxRPM}" />
+
+                                <!--  slider for engine per game multi  -->
+                                <Slider
+                                    x:Name="EngineMulti"
+                                    Grid.Row="8"
+                                    Grid.Column="3"
+                                    Width="88"
+                                    Margin="0,3,8,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    VerticalContentAlignment="Bottom"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="1.5"
+                                    Minimum="0.5"
+                                    TickFrequency="0.1"
+                                    ValueChanged="EngineMulti_ValueChanged"
+                                    Value="{Binding D.EngineMult}" />
+
+
+
+
+                                <!--  Engine config/cylinders/drivetrain/location headers  -->
+
+
+                                <TextBlock
+                                    Grid.Row="9"
+                                    Grid.Column="0"
+                                    Width="80"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="Config" /></TextBlock>
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="Cylinders" /></TextBlock>
-                                    <TextBlock
-                                        MinWidth="80"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="Drivetrain" /></TextBlock>
-                                </StackPanel>
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="Config" /></TextBlock>
+                                <TextBlock
+                                    Grid.Row="9"
+                                    Grid.Column="1"
+                                    Width="80"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="Cylinders" /></TextBlock>
+                                <TextBlock
+                                    Grid.Row="9"
+                                    Grid.Column="2"
+                                    Width="80"
+                                    Margin="0,3"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="Drivetrain" /></TextBlock>
+
+                                <TextBlock
+                                    Grid.Row="9"
+                                    Grid.Column="3"
+                                    Width="80"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="Location" /></TextBlock>
+
 
                                 <!--  Engine config/cylinders/drivetrain comboboxes  -->
-                                <StackPanel
-                                    Margin="0,2,0,0"
+
+
+                                <!--  engine config  -->
+                                <ComboBox
+                                    Name="EngineConfig"
+                                    Grid.Row="10"
+                                    Grid.Column="0"
+                                    Width="80"
+                                    Height="25.2"
+                                    Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <!--  engine config  -->
-                                    <ComboBox
-                                        Name="EngineConfig"
-                                        Width="80"
-                                        Height="25.2"
-                                        Margin="0,5,80,0"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Text="{Binding S.EngineConfiguration}">
-                                        <ComboBoxItem Content="V" />
-                                        <ComboBoxItem Content="I" />
-                                        <ComboBoxItem Content="F" />
-                                        <ComboBoxItem Content="E" />
-                                        <ComboBoxItem Content="W" />
-                                        <ComboBoxItem Content="R" />
-                                    </ComboBox>
-                                    <!--  Cylinders  -->
-                                    <ComboBox
-                                        Name="EngineCylinders"
-                                        Width="80"
-                                        Height="25.2"
-                                        Margin="0,5,80,0"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Text="{Binding S.EngineCylinders}">
-                                        <ComboBoxItem Content="1" />
-                                        <ComboBoxItem Content="2" />
-                                        <ComboBoxItem Content="3" />
-                                        <ComboBoxItem Content="4" />
-                                        <ComboBoxItem Content="5" />
-                                        <ComboBoxItem Content="6" />
-                                        <ComboBoxItem Content="8" />
-                                        <ComboBoxItem Content="10" />
-                                        <ComboBoxItem Content="12" />
-                                        <ComboBoxItem Content="16" />
-                                    </ComboBox>
-                                    <ComboBox
-                                        Name="Drivetrain"
-                                        Width="80"
-                                        Height="25.2"
-                                        Margin="0,5,0,0"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Text="{Binding S.PoweredWheels}">
-                                        <ComboBoxItem Content="F" />
-                                        <ComboBoxItem Content="R" />
-                                        <ComboBoxItem Content="A" />
-                                    </ComboBox>
-                                </StackPanel>
-
-                                <!--  Engine location/hp/nm headers  -->
-                                <StackPanel
-                                    Margin="0,10,0,0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    FontFamily="roboto"
+                                    FontSize="16"
+                                    Text="{Binding S.EngineConfiguration}">
+                                    <ComboBoxItem Content="V" />
+                                    <ComboBoxItem Content="I" />
+                                    <ComboBoxItem Content="F" />
+                                    <ComboBoxItem Content="E" />
+                                    <ComboBoxItem Content="W" />
+                                    <ComboBoxItem Content="R" />
+                                </ComboBox>
+                                <!--  Cylinders  -->
+                                <ComboBox
+                                    Name="EngineCylinders"
+                                    Grid.Row="10"
+                                    Grid.Column="1"
+                                    Width="80"
+                                    Height="25.2"
+                                    Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="Location" /></TextBlock>
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="HP" /></TextBlock>
-                                    <TextBlock
-                                        MinWidth="80"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="NM" /></TextBlock>
-                                </StackPanel>
-                                <!--  Engine location/hp/nm comboboxes and textboxes  -->
-                                <StackPanel
-                                    Margin="0,2,0,0"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    FontFamily="roboto"
+                                    FontSize="16"
+                                    Text="{Binding S.EngineCylinders}">
+                                    <ComboBoxItem Content="1" />
+                                    <ComboBoxItem Content="2" />
+                                    <ComboBoxItem Content="3" />
+                                    <ComboBoxItem Content="4" />
+                                    <ComboBoxItem Content="5" />
+                                    <ComboBoxItem Content="6" />
+                                    <ComboBoxItem Content="8" />
+                                    <ComboBoxItem Content="10" />
+                                    <ComboBoxItem Content="12" />
+                                    <ComboBoxItem Content="16" />
+                                </ComboBox>
+                                <ComboBox
+                                    Name="Drivetrain"
+                                    Grid.Row="10"
+                                    Grid.Column="2"
+                                    Width="80"
+                                    Height="25.2"
+                                    Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <ComboBox
-                                        Name="Englocation"
-                                        Width="80"
-                                        Height="25.2"
-                                        Margin="0,5,80,0"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Text="{Binding S.EngineLocation}">
-                                        <ComboBoxItem Content="F" />
-                                        <ComboBoxItem Content="FM" />
-                                        <ComboBoxItem Content="M" />
-                                        <ComboBoxItem Content="R" />
-                                        <ComboBoxItem Content="RM" />
-                                    </ComboBox>
-                                    <TextBox
-                                        x:Name="MaxPowerHP"
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.MaxPower}" />
-                                    <TextBox
-                                        x:Name="MaxTorqueNM"
-                                        MinWidth="80"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.MaxTorque}" />
-                                </StackPanel>
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    FontFamily="roboto"
+                                    FontSize="16"
+                                    Text="{Binding S.PoweredWheels}">
+                                    <ComboBoxItem Content="F" />
+                                    <ComboBoxItem Content="R" />
+                                    <ComboBoxItem Content="A" />
+                                </ComboBox>
+                                <ComboBox
+                                    Name="Englocation"
+                                    Grid.Row="10"
+                                    Grid.Column="3"
+                                    Width="80"
+                                    Height="25.2"
+                                    Margin="0,3,0,5"
+                                    HorizontalAlignment="Center"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    FontFamily="roboto"
+                                    FontSize="16"
+                                    Text="{Binding S.EngineLocation}">
+                                    <ComboBoxItem Content="F" />
+                                    <ComboBoxItem Content="FM" />
+                                    <ComboBoxItem Content="M" />
+                                    <ComboBoxItem Content="R" />
+                                    <ComboBoxItem Content="RM" />
+                                </ComboBox>
 
 
-                                <!--  Multi/EHP/CC Headers  -->
-                                <StackPanel
-                                    Margin="0,10,0,0"
+
+                                <!--  hp/ehp/nm/cc headers  -->
+
+
+
+                                <TextBlock
+                                    Grid.Row="11"
+                                    Grid.Column="0"
+                                    Width="80"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="-7,0,70,0"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="PerGame Gain" /></TextBlock>
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="0,0,62,0"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="EHP" /></TextBlock>
-                                    <TextBlock
-                                        MinWidth="80"
-                                        Margin="18,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource Foreground}"
-                                        TextAlignment="Center"><Run Text="CC" /></TextBlock>
-                                </StackPanel>
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="HP" /></TextBlock>
 
-                                <!--  Multi/EHP/CC Textboxes  -->
-                                <StackPanel
-                                    Height="35"
-                                    Margin="-8,2,0,0"
+                                <TextBlock
+                                    Grid.Row="11"
+                                    Grid.Column="1"
+                                    Width="80"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
-                                    Orientation="Horizontal">
-                                    <!--  slider for engine per game multi  -->
-                                    <Slider
-                                        x:Name="EngineMulti"
-                                        Width="88"
-                                        Margin="0,0,80,0"
-                                        VerticalAlignment="Bottom"
-                                        VerticalContentAlignment="Bottom"
-                                        IsSnapToTickEnabled="True"
-                                        Maximum="1.5"
-                                        Minimum="0.5"
-                                        TickFrequency="0.1"
-                                        ValueChanged="EngineMulti_ValueChanged"
-                                        Value="{Binding D.EngineMult}" />
-                                    <TextBox
-                                        x:Name="EMaxPowerHP"
-                                        MinWidth="80"
-                                        Margin="0,0,80,0"
-                                        VerticalAlignment="top"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="EHP" /></TextBlock>
+
+                                <TextBlock
+                                    Grid.Row="11"
+                                    Grid.Column="2"
+                                    Width="80"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="NM" /></TextBlock>
+
+                                <TextBlock
+                                    Grid.Row="11"
+                                    Grid.Column="3"
+                                    Width="80"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="CC" /></TextBlock>
+
+                                <!--  hp/ehp/nm/cc textboxes  -->
+
+
+
+                                <TextBox
+                                    x:Name="MaxPowerHP"
+                                    Grid.Row="12"
+                                    Grid.Column="0"
+                                    Width="80"
+                                    Margin="0,3,0,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.MaxPower}" />
+
+                                <TextBox
+                                    x:Name="EMaxPowerHP"
+                                    Grid.Row="12"
+                                    Grid.Column="1"
+                                    Width="80"
+                                    Margin="0,3,0,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.ElectricMaxPower}" />
+
+                                <TextBox
+                                    x:Name="MaxTorqueNM"
+                                    Grid.Row="12"
+                                    Grid.Column="2"
+                                    Width="80"
+                                    Margin="0,3,0,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.MaxTorque}" />
+
+                                <TextBox
+                                    x:Name="Displacement"
+                                    Grid.Row="12"
+                                    Grid.Column="3"
+                                    Width="80"
+                                    Margin="0,3,0,5"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.Displacement}" />
+
+                                <!--  BUTTONS  -->
+                                <!--  compact view toggle  -->
+                                <ToggleButton
+                                    x:Name="EngineView_Switch"
+                                    Grid.Row="17"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Width="95"
+                                    Height="30"
+                                    Margin="-200,0,0,5"
+                                    VerticalContentAlignment="Center"
+                                    Background="{DynamicResource Mid}"
+                                    BorderThickness="0"
+                                    Checked="EngineView_Switch_Checked"
+                                    Content="Expand"
+                                    FontFamily="roboto"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Foreground="White"
+                                    IsChecked="True"
+                                    Style="{StaticResource dMASSbuttonToggle}"
+                                    Unchecked="EngineView_Switch_Unchecked" />
+                                <!--  Lock/unlock button  -->
+                                <Button
+                                    Grid.Row="17"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Width="95"
+                                    Margin="0,0,0,5"
+                                    Height="30"
+                                    VerticalContentAlignment="Center"
+                                    Background="{DynamicResource Mid}"
+                                    BorderThickness="0"
+                                    Click="Lock_Click"
+                                    ContentControl.Content="{Binding D.LockedText}"
+                                    FontFamily="roboto"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Foreground="White"
+                                    Style="{StaticResource dMASSbutton}" />
+                                <!--  Refresh button  -->
+                                <Button
+                                    Grid.Row="17"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Width="95"
+                                    Height="30"
+                                    Margin="200,0,0,5"
+                                    VerticalContentAlignment="Center"
+                                    Background="{DynamicResource Mid}"
+                                    BorderThickness="0"
+                                    Click="Refresh_Click"
+                                    FontFamily="roboto"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Foreground="White"
+                                    FrameworkElement.Name="Refresh"
+                                    Style="{StaticResource dMASSbutton}">
+                                    <TextBlock
+                                        Margin="0,0,4,0"
+                                        VerticalAlignment="Center"
                                         FontFamily="roboto"
                                         FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.ElectricMaxPower}" />
-                                    <!--  CC  -->
-                                    <TextBox
-                                        x:Name="Displacement"
-                                        MinWidth="80"
-                                        VerticalAlignment="top"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="Transparent"
-                                        BorderBrush="{DynamicResource Mid}"
-                                        BorderThickness="0,0,0,2"
-                                        CaretBrush="{DynamicResource Foreground}"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource Foreground}"
-                                        Text="{Binding S.Displacement}" />
-                                </StackPanel>
-
-
-                                <!--  Refresh & Lock  -->
-                                <StackPanel
-                                    Margin="0,15,0,4"
-                                    HorizontalAlignment="Right"
-                                    Orientation="Horizontal">
-
-                                    <!--  Lock/unlock button  -->
-                                    <StackPanel HorizontalAlignment="Right">
-                                        <Button
-                                            Width="150"
-                                            Height="35"
-                                            VerticalContentAlignment="Center"
-                                            Background="{DynamicResource Mid}"
-                                            BorderThickness="0"
-                                            Click="Lock_Click"
-                                            ContentControl.Content="{Binding D.LockedText}"
-                                            FontFamily="roboto"
-                                            FontSize="16"
-                                            FontWeight="SemiBold"
-                                            Foreground="White"
-                                            Style="{StaticResource dMASSbutton}" />
-
-
-
-
-                                    </StackPanel>
-                                    <!--  Refresh button  -->
-                                    <Button
-                                        Width="150"
-                                        Height="35"
-                                        Margin="10,0,0,5"
-                                        VerticalContentAlignment="Center"
-                                        Background="{DynamicResource Mid}"
-                                        BorderThickness="0"
-                                        Click="Refresh_Click"
-                                        FontFamily="roboto"
-                                        FontSize="16"
-                                        FontWeight="SemiBold"
-                                        Foreground="White"
-                                        FrameworkElement.Name="Refresh"
-                                        Style="{StaticResource dMASSbutton}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Width="31" Source="Resources\refresh50x50.png" />
-                                            <TextBlock
-                                                Margin="10,0,11,0"
-                                                VerticalAlignment="Center"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Text="Refresh" />
-                                        </StackPanel>
-
-                                    </Button>
-                                </StackPanel>
-                            </StackPanel>
+                                        Text="Refresh" />
+                                </Button>
+                            </Grid>
                         </Expander>
 
 
@@ -1241,7 +1322,7 @@
                                         </TextBlock>
                                     </StackPanel>
                                 </Expander.Header>
-                                <Grid Margin="0,5,0,0" HorizontalAlignment="Center">
+                                <Grid Margin="0,5,0,-1" HorizontalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="0" />
                                         <ColumnDefinition Width="0" />
@@ -1950,7 +2031,7 @@
 
                                     </StackPanel>
                                 </Expander.Header>
-                                <Grid Margin="0,9,0,0" HorizontalAlignment="Center">
+                                <Grid Margin="0,9,0,-6" HorizontalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="0" />
                                         <ColumnDefinition Width="49" />
@@ -1987,7 +2068,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
-										Click="F1_increment_Click"
+                                        Click="F1_increment_Click"
                                         FontFamily="roboto black"
                                         FontSize="32"
                                         Foreground="White"
@@ -2020,7 +2101,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
-										Click="F1_decrement_Click"
+                                        Click="F1_decrement_Click"
                                         FontFamily="roboto black"
                                         FontSize="45"
                                         Foreground="White"
@@ -2048,12 +2129,13 @@
                                     <!--  f2  -->
                                     <RepeatButton
                                         x:Name="F2_increment"
-                                        Grid.Row="0"
-                                        Grid.Column="2"
-                                        Margin="2"
-                                        Background="{DynamicResource Mid}"
+                                        Grid.Row="5"
+                                        Grid.Column="1"
+                                        Height="36"
+                                        Margin="2,10,0,0"
+                                        Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
-										Click="F2_increment_Click"
+                                        Click="F2_increment_Click"
                                         FontFamily="roboto black"
                                         FontSize="32"
                                         Foreground="White"
@@ -2063,10 +2145,10 @@
                                     </RepeatButton>
                                     <!--  value  -->
                                     <Border
-                                        Grid.Row="1"
-                                        Grid.Column="2"
+                                        Grid.Row="6"
+                                        Grid.Column="1"
                                         Margin="1.5,3,1.5,3"
-                                        BorderBrush="{DynamicResource Mid}"
+                                        BorderBrush="{DynamicResource Dark}"
                                         BorderThickness="3"
                                         CornerRadius="5">
                                         <TextBlock
@@ -2081,12 +2163,12 @@
                                     </Border>
                                     <RepeatButton
                                         x:Name="F2_decrement"
-                                        Grid.Row="2"
-                                        Grid.Column="2"
+                                        Grid.Row="7"
+                                        Grid.Column="1"
                                         Margin="2"
-                                        Background="{DynamicResource Mid}"
+                                        Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
-										Click="F2_decrement_Click"
+                                        Click="F2_decrement_Click"
                                         FontFamily="roboto black"
                                         FontSize="45"
                                         Foreground="White"
@@ -2095,10 +2177,10 @@
                                         <TextBlock Margin="0,-10,0,0" Text="-" />
                                     </RepeatButton>
                                     <Border
-                                        Grid.Row="4"
-                                        Grid.Column="2"
+                                        Grid.Row="9"
+                                        Grid.Column="1"
                                         Margin="3,0,3,10"
-                                        Background="{DynamicResource Mid}"
+                                        Background="{DynamicResource Dark}"
                                         BorderThickness="0"
                                         CornerRadius="5">
                                         <TextBlock
@@ -2118,7 +2200,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Light}"
                                         BorderBrush="Transparent"
-										Click="H1_increment_Click"
+                                        Click="H1_increment_Click"
                                         FontFamily="roboto black"
                                         FontSize="32"
                                         Foreground="White"
@@ -2151,7 +2233,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Light}"
                                         BorderBrush="Transparent"
-										Click="H1_decrement_Click"
+                                        Click="H1_decrement_Click"
                                         FontFamily="roboto black"
                                         FontSize="45"
                                         Foreground="White"
@@ -2185,7 +2267,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
-										Click="H2_increment_Click"
+                                        Click="H2_increment_Click"
                                         FontFamily="roboto black"
                                         FontSize="32"
                                         Foreground="White"
@@ -2218,7 +2300,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
-										Click="H2_decrement_Click"
+                                        Click="H2_decrement_Click"
                                         FontFamily="roboto black"
                                         FontSize="45"
                                         Foreground="White"
@@ -2247,13 +2329,13 @@
                                     <!--  H3  -->
                                     <RepeatButton
                                         x:Name="H3_increment"
-                                        Grid.Row="5"
-                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        Grid.Column="7"
                                         Height="36"
-                                        Margin="2,10,0,0"
+                                        Margin="2,0,0,0"
                                         Background="{DynamicResource Mid}"
                                         BorderBrush="Transparent"
-										Click="H3_increment_Click"
+                                        Click="H3_increment_Click"
                                         FontFamily="roboto black"
                                         FontSize="32"
                                         Foreground="White"
@@ -2263,8 +2345,8 @@
                                     </RepeatButton>
                                     <!--  value  -->
                                     <Border
-                                        Grid.Row="6"
-                                        Grid.Column="1"
+                                        Grid.Row="1"
+                                        Grid.Column="7"
                                         Margin="1.5,3,1.5,3"
                                         BorderBrush="{DynamicResource Mid}"
                                         BorderThickness="3"
@@ -2281,12 +2363,12 @@
                                     </Border>
                                     <RepeatButton
                                         x:Name="H3_decrement"
-                                        Grid.Row="7"
-                                        Grid.Column="1"
+                                        Grid.Row="2"
+                                        Grid.Column="7"
                                         Margin="2"
                                         Background="{DynamicResource Mid}"
                                         BorderBrush="Transparent"
-										Click="H3_decrement_Click"
+                                        Click="H3_decrement_Click"
                                         FontFamily="roboto black"
                                         FontSize="45"
                                         Foreground="White"
@@ -2295,8 +2377,8 @@
                                         <TextBlock Margin="0,-10,0,0" Text="-" />
                                     </RepeatButton>
                                     <Border
-                                        Grid.Row="9"
-                                        Grid.Column="1"
+                                        Grid.Row="4"
+                                        Grid.Column="7"
                                         Grid.ColumnSpan="2"
                                         Margin="3,0,3,10"
                                         Background="{DynamicResource Mid}"
@@ -2320,7 +2402,7 @@
                                         Margin="2,10,0,0"
                                         Background="{DynamicResource Light}"
                                         BorderBrush="Transparent"
-										Click="H4_increment_Click"
+                                        Click="H4_increment_Click"
                                         FontFamily="roboto black"
                                         FontSize="32"
                                         Foreground="White"
@@ -2353,7 +2435,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Light}"
                                         BorderBrush="Transparent"
-										Click="H4_decrement_Click"
+                                        Click="H4_decrement_Click"
                                         FontFamily="roboto black"
                                         FontSize="45"
                                         Foreground="White"
@@ -2387,7 +2469,7 @@
                                         Margin="2,10,0,0"
                                         Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
-										Click="H5_increment_Click"
+                                        Click="H5_increment_Click"
                                         FontFamily="roboto black"
                                         FontSize="32"
                                         Foreground="White"
@@ -2420,7 +2502,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Dark}"
                                         BorderBrush="Transparent"
-										Click="H5_decrement_Click"
+                                        Click="H5_decrement_Click"
                                         FontFamily="roboto black"
                                         FontSize="45"
                                         Foreground="White"
@@ -2455,7 +2537,7 @@
                                         Margin="2,10,0,0"
                                         Background="{DynamicResource Mid}"
                                         BorderBrush="Transparent"
-										Click="H6_increment_Click"
+                                        Click="H6_increment_Click"
                                         FontFamily="roboto black"
                                         FontSize="32"
                                         Foreground="White"
@@ -2488,7 +2570,7 @@
                                         Margin="2"
                                         Background="{DynamicResource Mid}"
                                         BorderBrush="Transparent"
-										Click="H6_decrement_Click"
+                                        Click="H6_decrement_Click"
                                         FontFamily="roboto black"
                                         FontSize="45"
                                         Foreground="White"
@@ -2565,8 +2647,8 @@
                                         Maximum="13"
                                         Minimum="2"
                                         Orientation="Vertical"
+                                        PreviewMouseUp="H1slider"
                                         TickFrequency="1"
-										PreviewMouseUp="H1slider"
                                         Value="2" />
 
                                     <!--  H2  -->
@@ -2580,25 +2662,25 @@
                                         Maximum="13"
                                         Minimum="2"
                                         Orientation="Vertical"
+                                        PreviewMouseUp="H2slider"
                                         TickFrequency="1"
-										PreviewMouseUp="H2slider"
                                         Value="2" />
 
 
                                     <!--  H3  -->
                                     <Slider
                                         x:Name="H3_factor"
-                                        Grid.Row="5"
+                                        Grid.Row="0"
                                         Grid.RowSpan="3"
-                                        Grid.Column="2"
+                                        Grid.Column="8"
                                         Height="125"
-                                        Margin="3,10,0,0"
+                                        Margin="3,0,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="13"
                                         Minimum="2"
                                         Orientation="Vertical"
+                                        PreviewMouseUp="H3slider"
                                         TickFrequency="1"
-										PreviewMouseUp="H3slider"
                                         Value="2" />
 
                                     <!--  H4  -->
@@ -2613,8 +2695,8 @@
                                         Maximum="13"
                                         Minimum="2"
                                         Orientation="Vertical"
+                                        PreviewMouseUp="H4slider"
                                         TickFrequency="1"
-										PreviewMouseUp="H4slider"
                                         Value="2" />
 
                                     <!--  H5  -->
@@ -2629,8 +2711,8 @@
                                         Maximum="13"
                                         Minimum="2"
                                         Orientation="Vertical"
+                                        PreviewMouseUp="H5slider"
                                         TickFrequency="1"
-										PreviewMouseUp="H5slider"
                                         Value="2" />
 
                                     <!--  H6  -->
@@ -2645,8 +2727,8 @@
                                         Maximum="13"
                                         Minimum="2"
                                         Orientation="Vertical"
+                                        PreviewMouseUp="H6slider"
                                         TickFrequency="1"
-										PreviewMouseUp="H6slider"
                                         Value="2" />
 
 
@@ -2690,10 +2772,10 @@
 
                                     <!--  F2  -->
                                     <Border
-                                        Grid.Row="3"
-                                        Grid.Column="2"
+                                        Grid.Row="8"
+                                        Grid.Column="1"
                                         Margin="3,8,3,5"
-                                        Background="{DynamicResource Mid}"
+                                        Background="{DynamicResource Dark}"
                                         BorderThickness="0"
                                         CornerRadius="5">
                                         <TextBlock
@@ -2790,8 +2872,8 @@
 
                                     <!--  H3  -->
                                     <Border
-                                        Grid.Row="8"
-                                        Grid.Column="1"
+                                        Grid.Row="3"
+                                        Grid.Column="7"
                                         Margin="3,8,3,5"
                                         Background="{DynamicResource Mid}"
                                         BorderThickness="0"
@@ -2805,8 +2887,8 @@
                                         </TextBlock>
                                     </Border>
                                     <Border
-                                        Grid.Row="8"
-                                        Grid.Column="2"
+                                        Grid.Row="3"
+                                        Grid.Column="8"
                                         Margin="3,8,3,5"
                                         Background="{DynamicResource Mid}"
                                         BorderThickness="0"
@@ -2931,7 +3013,7 @@
                         <StackPanel>
                             <!--  EXPANDER Suspension  -->
                             <Expander
-                                Margin="5,1,5,6"
+                                Margin="5,1,5,3"
                                 BorderThickness="2"
                                 FontFamily="roboto"
                                 FontSize="14"
@@ -2972,7 +3054,7 @@
                                     </StackPanel>
                                     <!--  Suspension all/current game slider and value labels  -->
                                     <StackPanel
-                                        Margin="0,8,0,0"
+                                        Margin="0,0,0,0"
                                         HorizontalAlignment="Center"
                                         Orientation="Horizontal">
                                         <Slider
@@ -3003,7 +3085,7 @@
 
                                     <!--  suspension all/current game gamma multi headers  -->
                                     <StackPanel
-                                        Margin="7,25,0,18"
+                                        Margin="7,25,0,12"
                                         HorizontalAlignment="Center"
                                         Orientation="Horizontal">
                                         <TextBlock FontFamily="roboto medium" Foreground="{DynamicResource Foreground}">
@@ -3051,9 +3133,9 @@
                                         <!--  Reset button  -->
                                         <Button
                                             x:Name="ButtonResetSuspension"
-                                            Width="150"
-                                            Height="35"
-                                            Margin="0,10,0,6"
+                                            Width="95"
+                                            Height="30"
+                                            Margin="0,0,0,4"
                                             Background="{DynamicResource Mid}"
                                             BorderThickness="0"
                                             Click="ButtonResetSuspension_Click"
@@ -3062,17 +3144,12 @@
                                             FontWeight="SemiBold"
                                             Foreground="White"
                                             Style="{StaticResource dMASSbutton}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Width="31" Source="Resources\refresh50x50.png" />
-                                                <TextBlock
-                                                    Margin="10,0,11,0"
-                                                    VerticalAlignment="Center"
-                                                    FontFamily="roboto"
-                                                    FontSize="16"
-                                                    Text="Reset" />
-                                            </StackPanel>
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontFamily="roboto"
+                                                FontSize="16"
+                                                Text="Reset" />
                                         </Button>
-
                                     </StackPanel>
                                 </StackPanel>
                             </Expander>
@@ -3083,7 +3160,7 @@
                         <StackPanel>
                             <!--  EXPANDER Gforce  -->
                             <Expander
-                                Margin="5,-2,5,0"
+                                Margin="5,1,5,0"
                                 HorizontalAlignment="Stretch"
                                 BorderThickness="2"
                                 FontFamily="roboto"

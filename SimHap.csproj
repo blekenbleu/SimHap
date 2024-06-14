@@ -252,5 +252,11 @@
   <ItemGroup>
     <Resource Include="Resources\gforcenew.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\unlocked50x50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\locked50x50.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

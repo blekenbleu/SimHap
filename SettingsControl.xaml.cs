@@ -285,5 +285,23 @@ namespace sierses.Sim
         {
             ChangeTheme("MagentaLightTheme.xaml");
         }
+
+        private void EngineView_Switch_Checked(object sender, RoutedEventArgs e)
+        {
+            EngineView_Switch.Content = "Expand";
+            EngView1.Height = new GridLength(0);
+            EngView2.Height = new GridLength(0);
+            EngView3.Height = new GridLength(0);
+            EngView4.Height = new GridLength(0);
+        }
+
+        private void EngineView_Switch_Unchecked(object sender, RoutedEventArgs e)
+        {
+            EngineView_Switch.Content = "Collapse";
+            EngView1.Height = GridLength.Auto;
+            EngView2.Height = GridLength.Auto;
+            EngView3.Height = GridLength.Auto;
+            EngView4.Height = GridLength.Auto;
+        }
     }
 }
