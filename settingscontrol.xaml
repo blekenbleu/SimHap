@@ -125,11 +125,40 @@
                 <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0,0,0,2" />
-                <Setter Property="BorderBrush" Value="{DynamicResource Mid}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource Dark}" />
                 <Setter Property="CaretBrush" Value="{DynamicResource Foreground}" />
                 <Setter Property="FontFamily" Value="roboto" />
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+
+                <!--  hover over and focus colors  -->
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                            <Border
+                                x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="True">
+                                <ScrollViewer
+                                    x:Name="PART_ContentHost"
+                                    Focusable="False"
+                                    HorizontalScrollBarVisibility="Hidden"
+                                    VerticalScrollBarVisibility="Hidden" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Light}" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Light}" />
+                                </Trigger>
+
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
 
@@ -570,17 +599,9 @@
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Style.Triggers>
                     <Trigger Property="Orientation" Value="Horizontal">
-                        <!--<Setter Property="MinWidth"
-                    Value="104" />
-            <Setter Property="MinHeight"
-                    Value="21" />-->
                         <Setter Property="Template" Value="{StaticResource HorizontalSlider}" />
                     </Trigger>
                     <Trigger Property="Orientation" Value="Vertical">
-                        <!--<Setter Property="MinWidth"
-                    Value="21" />
-            <Setter Property="MinHeight"
-                    Value="104" />-->
                         <Setter Property="Template" Value="{StaticResource VerticalSlider}" />
                     </Trigger>
                 </Style.Triggers>
@@ -1146,7 +1167,7 @@
                                     Height="30"
                                     Margin="-200,0,0,5"
                                     VerticalContentAlignment="Center"
-                                    Background="{DynamicResource Mid}"
+                                    Background="{DynamicResource Dark}"
                                     BorderThickness="0"
                                     Checked="EngineView_Switch_Checked"
                                     Content="Expand"
@@ -1166,7 +1187,7 @@
                                     Height="30"
                                     Margin="0,0,0,5"
                                     VerticalContentAlignment="Center"
-                                    Background="{DynamicResource Mid}"
+                                    Background="{DynamicResource Dark}"
                                     BorderThickness="0"
                                     Click="Lock_Click"
                                     ContentControl.Content="{Binding D.LockedText}"
@@ -1184,7 +1205,7 @@
                                     Height="30"
                                     Margin="200,0,0,5"
                                     VerticalContentAlignment="Center"
-                                    Background="{DynamicResource Mid}"
+                                    Background="{DynamicResource Dark}"
                                     BorderThickness="0"
                                     Click="Refresh_Click"
                                     FontFamily="roboto"
@@ -2511,7 +2532,7 @@
 
                                     <!--  F2
                                         <Slider
-                                            Name="F2_factor"
+                                            x:Name="F2_factor"
                                             Grid.Row="0"
                                             Grid.RowSpan="3"
                                             Grid.Column="4"
@@ -2930,7 +2951,7 @@
                                 <TextBlock
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    Margin="0,4,0,0"
+                                    Margin="-4,4,0,0"
                                     HorizontalAlignment="Center"
                                     FontFamily="roboto"
                                     Foreground="{DynamicResource Foreground}">
@@ -2939,7 +2960,7 @@
                                 <TextBlock
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    Margin="0,4,0,0"
+                                    Margin="-1,4,0,0"
                                     HorizontalAlignment="Center"
                                     FontFamily="roboto"
                                     Foreground="{DynamicResource Foreground}">
@@ -2986,8 +3007,8 @@
                                     x:Name="SuspensionMult"
                                     Grid.Row="2"
                                     Grid.Column="1"
-                                    Margin="5,0,0,0"
                                     Width="80"
+                                    Margin="5,0,0,0"
                                     HorizontalAlignment="Left"
                                     IsSnapToTickEnabled="True"
                                     Maximum="2"
@@ -3032,7 +3053,7 @@
                                     Grid.ColumnSpan="4"
                                     Width="95"
                                     Height="30"
-                                    Background="{DynamicResource Mid}"
+                                    Background="{DynamicResource Dark}"
                                     BorderThickness="0"
                                     Click="ButtonResetSuspension_Click"
                                     FontFamily="roboto"
@@ -3126,43 +3147,19 @@
                                                 Name="MotionPitchOffset"
                                                 Width="80"
                                                 Margin="70,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionPitchOffset}" />
                                             <TextBox
                                                 Name="MotionPitchMult"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionPitchMult, Mode=TwoWay}" />
                                             <TextBox
                                                 Name="MotionPitchGamma"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionPitchGamma, Mode=TwoWay}" />
                                         </StackPanel>
 
@@ -3206,44 +3203,19 @@
                                                 Name="MotionRollOffset"
                                                 Width="80"
                                                 Margin="70,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                Cursor=""
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionRollOffset}" />
                                             <TextBox
                                                 Name="MotionRollMult"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionRollMult}" />
                                             <TextBox
                                                 Name="MotionRollGamma"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionRollGamma}" />
                                         </StackPanel>
 
@@ -3288,43 +3260,19 @@
                                                 Name="MotionYawOffset"
                                                 Width="80"
                                                 Margin="70,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionYawOffset}" />
                                             <TextBox
                                                 Name="MotionYawMult"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionYawMult}" />
                                             <TextBox
                                                 Name="MotionYawGamma"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionYawGamma}" />
                                         </StackPanel>
 
@@ -3368,43 +3316,19 @@
                                                 Name="MotionHeaveOffset"
                                                 Width="80"
                                                 Margin="70,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                               Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionHeaveOffset}" />
                                             <TextBox
                                                 Name="MotionHeaveMult"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionHeaveMult}" />
                                             <TextBox
                                                 Name="MotionHeaveGamma"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionHeaveGamma}" />
                                         </StackPanel>
 
@@ -3448,43 +3372,19 @@
                                                 Name="MotionSurgeOffset"
                                                 Width="80"
                                                 Margin="70,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                          Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionSurgeOffset}" />
                                             <TextBox
                                                 Name="MotionSurgeMult"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                               Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionSurgeMult}" />
                                             <TextBox
                                                 Name="MotionSurgeGamma"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                               Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionSurgeGamma}" />
                                         </StackPanel>
 
@@ -3528,43 +3428,19 @@
                                                 Name="MotionSwayOffset"
                                                 Width="80"
                                                 Margin="70,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                                Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionSwayOffset}" />
                                             <TextBox
                                                 Name="MotionSwayMult"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                               Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionSwayMult}" />
                                             <TextBox
                                                 Name="MotionSwayGamma"
                                                 Width="80"
                                                 Margin="0,0,70,0"
-                                                HorizontalContentAlignment="Center"
-                                                VerticalContentAlignment="Center"
-                                                Background="Transparent"
-                                                BorderBrush="{DynamicResource Mid}"
-                                                BorderThickness="0,0,0,2"
-                                                CaretBrush="{DynamicResource Foreground}"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource Foreground}"
+                                               Style="{StaticResource EngineTBstyle}"
                                                 Text="{Binding D.MotionSwayGamma}" />
                                         </StackPanel>
                                     </StackPanel>
