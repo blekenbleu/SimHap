@@ -32,35 +32,34 @@ namespace sierses.Sim
 		// increment EQ high-/low-pass frequency
 		internal ushort[] Pincr(int s, bool up)
 		{	// Slider 0, 8 are min, max frequency
-			if (!up && Q[EQswitch].Slider[s] > (0 == s ? 10 : 100))
+			ushort bump = (ushort)(Q[EQswitch].Slider[s] >> 4);
+
+			if (0 == bump)
+				bump++;
+
+			if (!up && Q[EQswitch].Slider[s] > bump + (0 == s ? 9  : 100))
 			{
-				Q[EQswitch].Slider[s]--;
+				Q[EQswitch].Slider[s] -= bump;
 				Feedback = "decremented";
 				// interpolation over power-of-2 LUTs
 				// range >= 10 supports 8 == LUT.Length
-				if (Q[EQswitch].Slider[8] <= 10 * Q[EQswitch].Slider[0]
-				 && 10 < Q[EQswitch].Slider[0])
+				if (Q[EQswitch].Slider[8] <= 10 * Q[EQswitch].Slider[0])
 				{
-					Q[EQswitch].Slider[0]--;
+					Q[EQswitch].Slider[0] = (ushort)(0.5 + 0.1 * Q[EQswitch].Slider[8]);
 					Feedback = "High pass also decremented";
-				}
-				else
-				{
-					Q[EQswitch].Slider[8] =	(ushort)(10 * Q[EQswitch].Slider[0]);
-					Feedback = $"Low pass set to {Q[EQswitch].Slider[8]}";
 				}
 			}
 			else if(up)
 			{
 				Feedback = "limit imposed";
-				if (Q[EQswitch].Slider[s] < (8 == s ? 10000 : 1000))
+				if (Q[EQswitch].Slider[s] < (8 == s ? 9999 : 999) - bump)
 				{
-					Q[EQswitch].Slider[s]++;
+					Q[EQswitch].Slider[s] += bump;
 					Feedback = "incremented";
 				}
 				// interpolation over power-of-2 LUTs
 				// range >= 10 supports 8 == LUT.Length
-				if (0 == s && (Q[EQswitch].Slider[0] * 10) > Q[EQswitch].Slider[8])
+				if (Q[EQswitch].Slider[0] * 10 > Q[EQswitch].Slider[8])
 				{
 					Q[EQswitch].Slider[8] = (ushort)(10 * Q[EQswitch].Slider[0]);
 					Feedback = $"Low pass set to {Q[EQswitch].Slider[8]}";
