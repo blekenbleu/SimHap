@@ -194,8 +194,8 @@ namespace sierses.Sim
 					break;
 
 			ushort here = Lut[0][i - 1];
-			int range = Lut[0][i] - here;
-			int interval = (Lut[1][i] - Lut[1][i - 1]);
+			short range = (short)(Lut[0][i] - here);  // gains increase or decrease
+			ushort interval = (ushort)(Lut[1][i] - Lut[1][i - 1]); // monotonic frequencies
 
 			// linearly interpolate on non-linear frequency intervals.
 			return (ushort)(here + (interval + 2 * (freq - Lut[1][i - 1]) * range)
