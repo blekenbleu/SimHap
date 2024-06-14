@@ -25,9 +25,13 @@ namespace sierses.Sim
 		{
 			RepeatButton r = sender as RepeatButton;
 			string s = r.Name;
-			bool incr = "i" == s.Substring(3, 1);
-			int index = int.Parse(s.Substring(1, 1));
-			Plugin.E.Hval(1 + index, incr);
+			bool up = "i" == s.Substring(3, 1);	// increment/decrement
+			int index = 1 + int.Parse(s.Substring(1, 1));
+			if (up && 1000 > Plugin.E.Tones[1].Freq[index])
+				Plugin.E.Tones[1].Freq[index]++;
+			else if ((!up) && 0 < Plugin.E.Tones[1].Freq[index])
+				Plugin.E.Tones[1].Freq[index]--;
+
 		    InitHarmonics(Plugin.E.Tones);
 		}
 

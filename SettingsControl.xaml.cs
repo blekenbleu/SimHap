@@ -56,16 +56,17 @@ namespace sierses.Sim
 			EQ8_value.Text = S[8].ToString();
 		}
 
+		// see ToneControl.cs
 		internal void InitHarmonics(Tone[] harmonic)
 		{
-			F1_value.Value = harmonic[1].Freq[0];
-			F2_value.Value = harmonic[1].Freq[1];
 			H1_value.Text = harmonic[1].Freq[2].ToString();
 			H2_value.Text = harmonic[1].Freq[3].ToString();
 			H3_value.Text = harmonic[1].Freq[4].ToString();
 			H4_value.Text = harmonic[1].Freq[5].ToString();
 			H5_value.Text = harmonic[1].Freq[6].ToString();
 			H6_value.Text = harmonic[1].Freq[7].ToString();
+			F1_value.Value = harmonic[1].Freq[0];
+			F2_value.Value = harmonic[1].Freq[1];
 			H1_factor.Value = harmonic[0].Freq[2];
 			H2_factor.Value = harmonic[0].Freq[3];
 			H3_factor.Value = harmonic[0].Freq[4];

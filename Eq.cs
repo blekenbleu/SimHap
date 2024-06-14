@@ -109,14 +109,6 @@ namespace sierses.Sim
 			return;
 		}
 
-		internal string Hval(int index, bool up)
-		{
-			if (up && 1000 > Tones[1].Freq[index])
-				Tones[1].Freq[index]++;
-			else if ((!up) && 0 < Tones[1].Freq[index])
-				Tones[1].Freq[index]--;
-			return Tones[1].Freq[index].ToString();
-		}
 		private Eq NewEQ()
 		{
 			ushort s = 50, highpass = 20, lowpass = 900;
