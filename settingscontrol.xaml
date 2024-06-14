@@ -11,7 +11,6 @@
 
     <UserControl.Resources>
 
-        <!--  slider style for value label end vertical  -->
         <!--  corner radius textboxes
         <Style TargetType="{x:Type TextBox}">
             <Style.Resources>
@@ -24,8 +23,6 @@
             </Style.Resources>
         </Style>-->
 
-        <!--  corner radius expander end  -->
-
 
         <ResourceDictionary>
             <!--  needed for Designer debugging  -->
@@ -35,25 +32,6 @@
             <!--  gets overridden by ChangeTheme()  -->
 
 
-            <Style x:Key="IconRectangle" TargetType="{x:Type Rectangle}">
-                <Setter Property="Opacity" Value="0.9" />
-                <Setter Property="Fill" Value="White" />
-                <Setter Property="Height" Value="35" />
-                <Setter Property="Width" Value="35" />
-            </Style>
-            <Style x:Key="StatusCircle" TargetType="{x:Type Rectangle}">
-                <Setter Property="Opacity" Value="0.9" />
-                <Setter Property="Fill" Value="White" />
-                <Setter Property="Height" Value="10" />
-                <Setter Property="Width" Value="10" />
-            </Style>
-            <Style x:Key="TabVis" TargetType="{x:Type StackPanel}">
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="true">
-                        <Setter Property="Opacity" Value="0.6" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
 
 
 
@@ -82,6 +60,9 @@
             </Style>
 
 
+
+
+
             <!--  button style for other buttons curved and opacity  -->
             <Style x:Key="dMASSbutton" TargetType="{x:Type Button}">
                 <Setter Property="Template">
@@ -105,6 +86,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+
 
 
 
@@ -150,38 +133,6 @@
             </Style>
 
 
-            <!--  tab styling start
-            <Style TargetType="{x:Type TabItem}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Border>
-                                <Grid>
-                                    <Grid>
-                                        <Border
-                                            x:Name="border"
-                                            Background="{DynamicResource Dark}"
-                                            CornerRadius="12,12,0,0" />
-                                    </Grid>
-                                    <ContentPresenter
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        ContentSource="Header" />
-                                </Grid>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Light}" />
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Mid}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            tab styling end-->
 
 
 
@@ -204,6 +155,7 @@
                 </Style.Triggers>
 
             </Style>
+
 
 
 
@@ -237,20 +189,22 @@
                         Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
                         Fill="White" />
                 </Grid>
-                <!--<ControlTemplate.Triggers>
-            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
-                <Setter TargetName="Border" Property="Background" Value="#808080" />
-            </Trigger>
-            <Trigger Property="ToggleButton.IsChecked" Value="true">
-                <Setter TargetName="Border" Property="Background" Value="#E0E0E0" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
-                <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
-                <Setter Property="Foreground" Value="#888888"/>
-                <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
-            </Trigger>
-        </ControlTemplate.Triggers>-->
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource Light}" />
+                    </Trigger>
+                    <Trigger Property="ToggleButton.IsChecked" Value="true">
+                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource Light}" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                        <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                        <Setter Property="Foreground" Value="#888888" />
+                        <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+
             </ControlTemplate>
 
             <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
@@ -382,8 +336,8 @@
 
 
 
-            <!--  Button corner radius and styling  -->
 
+            <!--  Button corner radius and styling  -->
             <Style TargetType="{x:Type Button}">
                 <Style.Resources>
                     <Style TargetType="{x:Type Border}">
@@ -398,7 +352,6 @@
 
 
             <!--  slider style !!!NEW!!! horizontal and vertical  -->
-
             <Style x:Key="Style_SliderLeftButton" TargetType="{x:Type RepeatButton}">
                 <Setter Property="SnapsToDevicePixels" Value="True" />
                 <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -453,13 +406,6 @@
                                         Fill="{DynamicResource Mid}"
                                         Stroke="{DynamicResource Mid}"
                                         StrokeThickness="30" />
-
-
-
-
-
-
-
                                 </Grid>
 
                                 <!--  text label  -->
@@ -640,6 +586,10 @@
                 </Style.Triggers>
             </Style>
 
+
+
+
+
             <!--  corner radius expander start  -->
             <Style x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
                 <Setter Property="UseLayoutRounding" Value="True" />
@@ -714,7 +664,6 @@
                                                 TextBlock.FontSize="20"
                                                 TextBlock.Foreground="White" />
                                         </Border>
-
                                     </Grid>
                                 </Border>
                                 <Border
@@ -736,7 +685,6 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-
     <!--  end of resources  -->
 
 
@@ -744,7 +692,6 @@
 
 
     <!--  start  -->
-
     <Border
         BorderBrush="{DynamicResource Background}"
         BorderThickness="2"
@@ -754,38 +701,36 @@
                 <Grid.ContextMenu>
                     <ContextMenu Height="600">
                         <!--  dark themes  -->
-                        <MenuItem Click="GreenTheme" Header="Green" />
-                        <MenuItem Click="BlueTheme" Header="Blue" />
-                        <MenuItem Click="PurpleTheme" Header="Purple" />
-                        <MenuItem Click="OrangeTheme" Header="Orange" />
-                        <MenuItem Click="EmeraldTheme" Header="Emerald" />
-                        <MenuItem Click="TealTheme" Header="Teal" />
-                        <MenuItem Click="CobaltTheme" Header="Cobalt" />
-                        <MenuItem Click="MagentaTheme" Header="Magenta" />
-                        <MenuItem Click="CrimsonTheme" Header="Crimson" />
-                        <MenuItem Click="AmberTheme" Header="Amber" />
-                        <MenuItem Click="OliveTheme" Header="Olive" />
-                        <MenuItem Click="SteelTheme" Header="Steel" />
-                        <MenuItem Click="MauveTheme" Header="Mauve" />
-                        <MenuItem Click="TaupeTheme" Header="Taupe" />
-
+                        <MenuItem Click="MenuTheme" Header="Green" />
+                        <MenuItem Click="MenuTheme" Header="Blue" />
+                        <MenuItem Click="MenuTheme" Header="Purple" />
+                        <MenuItem Click="MenuTheme" Header="Orange" />
+                        <MenuItem Click="MenuTheme" Header="Emerald" />
+                        <MenuItem Click="MenuTheme" Header="Teal" />
+                        <MenuItem Click="MenuTheme" Header="Cobalt" />
+                        <MenuItem Click="MenuTheme" Header="Magenta" />
+                        <MenuItem Click="MenuTheme" Header="Crimson" />
+                        <MenuItem Click="MenuTheme" Header="Amber" />
+                        <MenuItem Click="MenuTheme" Header="Olive" />
+                        <MenuItem Click="MenuTheme" Header="Steel" />
+                        <MenuItem Click="MenuTheme" Header="Mauve" />
+                        <MenuItem Click="MenuTheme" Header="Taupe" />
                         <Separator />
-
                         <!--  light themes  -->
-                        <MenuItem Click="GreenLightTheme" Header="Green Light" />
-                        <MenuItem Click="BlueLightTheme" Header="Blue Light" />
-                        <MenuItem Click="PurpleLightTheme" Header="Purple Light" />
-                        <MenuItem Click="OrangeLightTheme" Header="Orange Light" />
-                        <MenuItem Click="EmeraldLightTheme" Header="Emerald Light" />
-                        <MenuItem Click="TealLightTheme" Header="Teal Light" />
-                        <MenuItem Click="CobaltLightTheme" Header="Cobalt Light" />
-                        <MenuItem Click="MagentaLightTheme" Header="Magenta Light" />
-                        <MenuItem Click="CrimsonLightTheme" Header="Crimson Light" />
-                        <MenuItem Click="AmberLightTheme" Header="Amber Light" />
-                        <MenuItem Click="OliveLightTheme" Header="Olive Light" />
-                        <MenuItem Click="SteelLightTheme" Header="Steel Light" />
-                        <MenuItem Click="MauveLightTheme" Header="Mauve Light" />
-                        <MenuItem Click="TaupeLightTheme" Header="Taupe Light" />
+                        <MenuItem Click="MenuTheme" Header="GreenLight" />
+                        <MenuItem Click="MenuTheme" Header="BlueLight" />
+                        <MenuItem Click="MenuTheme" Header="PurpleLight" />
+                        <MenuItem Click="MenuTheme" Header="OrangeLight" />
+                        <MenuItem Click="MenuTheme" Header="EmeraldLight" />
+                        <MenuItem Click="MenuTheme" Header="TealLight" />
+                        <MenuItem Click="MenuTheme" Header="CobaltLight" />
+                        <MenuItem Click="MenuTheme" Header="MagentaLight" />
+                        <MenuItem Click="MenuTheme" Header="CrimsonLight" />
+                        <MenuItem Click="MenuTheme" Header="AmberLight" />
+                        <MenuItem Click="MenuTheme" Header="OliveLight" />
+                        <MenuItem Click="MenuTheme" Header="SteelLight" />
+                        <MenuItem Click="MenuTheme" Header="MauveLight" />
+                        <MenuItem Click="MenuTheme" Header="TaupeLight" />
                     </ContextMenu>
                 </Grid.ContextMenu>
 
@@ -824,15 +769,12 @@
                                 </StackPanel>
                             </Expander.Header>
 
-
                             <Grid HorizontalAlignment="Center">
-
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="100" />
-
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
@@ -853,12 +795,9 @@
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="10" />
                                     <RowDefinition Height="*" />
-
                                 </Grid.RowDefinitions>
 
-
                                 <!--  CarName  -->
-
                                 <TextBlock
                                     Grid.Row="1"
                                     Grid.Column="0"
@@ -868,8 +807,6 @@
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Right"><Run Text="Name" /></TextBlock>
-
-
                                 <TextBox
                                     x:Name="CarName"
                                     Grid.Row="2"
@@ -879,9 +816,7 @@
                                     Style="{StaticResource EngineTBstyle}"
                                     Text="{Binding S.CarName}" />
 
-
                                 <!--  ID  -->
-
                                 <TextBlock
                                     Grid.Row="3"
                                     Grid.Column="0"
@@ -892,7 +827,6 @@
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Right"><Run Text="ID" /></TextBlock>
 
-
                                 <TextBox
                                     x:Name="CarID"
                                     Grid.Row="4"
@@ -902,9 +836,7 @@
                                     Style="{StaticResource EngineTBstyle}"
                                     Text="{Binding S.Id}" />
 
-
                                 <!--  Category  -->
-
                                 <TextBlock
                                     Grid.Row="5"
                                     Grid.Column="0"
@@ -914,8 +846,6 @@
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Right"><Run Text="Category" /></TextBlock>
-
-
                                 <TextBox
                                     x:Name="CarClass"
                                     Grid.Row="6"
@@ -925,10 +855,7 @@
                                     Style="{StaticResource EngineTBstyle}"
                                     Text="{Binding S.Category}" />
 
-
-
                                 <!--  Idle/Redline/MaxRPM/pergame gain headers  -->
-
                                 <TextBlock
                                     Grid.Row="7"
                                     Grid.Column="0"
@@ -963,12 +890,7 @@
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="PerGame Gain" /></TextBlock>
 
-
-
-
-
                                 <!--  Idle/Redline/MaxRPM textboxes  -->
-
                                 <TextBox
                                     x:Name="IdleRPM"
                                     Grid.Row="8"
@@ -1012,12 +934,7 @@
                                     ValueChanged="EngineMulti_ValueChanged"
                                     Value="{Binding D.EngineMult}" />
 
-
-
-
                                 <!--  Engine config/cylinders/drivetrain/location headers  -->
-
-
                                 <TextBlock
                                     Grid.Row="9"
                                     Grid.Column="0"
@@ -1057,8 +974,6 @@
 
 
                                 <!--  Engine config/cylinders/drivetrain comboboxes  -->
-
-
                                 <!--  engine config  -->
                                 <ComboBox
                                     Name="EngineConfig"
@@ -1142,12 +1057,7 @@
                                     <ComboBoxItem Content="RM" />
                                 </ComboBox>
 
-
-
                                 <!--  hp/ehp/nm/cc headers  -->
-
-
-
                                 <TextBlock
                                     Grid.Row="11"
                                     Grid.Column="0"
@@ -1189,9 +1099,6 @@
                                     TextAlignment="Center"><Run Text="CC" /></TextBlock>
 
                                 <!--  hp/ehp/nm/cc textboxes  -->
-
-
-
                                 <TextBox
                                     x:Name="MaxPowerHP"
                                     Grid.Row="12"
@@ -1256,8 +1163,8 @@
                                     Grid.Column="0"
                                     Grid.ColumnSpan="4"
                                     Width="95"
-                                    Margin="0,0,0,5"
                                     Height="30"
+                                    Margin="0,0,0,5"
                                     VerticalContentAlignment="Center"
                                     Background="{DynamicResource Mid}"
                                     BorderThickness="0"
@@ -1295,7 +1202,6 @@
                                 </Button>
                             </Grid>
                         </Expander>
-
 
                         <!--  EQ SECTION  -->
                         <!--  EQ container  -->
@@ -1410,8 +1316,6 @@
                                                 Text="PREV" />
                                         </StackPanel>
                                     </RepeatButton>
-
-
 
                                     <!--  eq slider0  -->
                                     <RepeatButton
@@ -1608,7 +1512,6 @@
                                         </TextBlock>
                                     </Border>
 
-
                                     <!--  eq slider3  -->
                                     <RepeatButton
                                         x:Name="EQ3_increment"
@@ -1673,7 +1576,6 @@
                                             3
                                         </TextBlock>
                                     </Border>
-
 
                                     <!--  eq slider4  -->
                                     <RepeatButton
@@ -2004,7 +1906,6 @@
                             </Expander>
                         </StackPanel>
 
-
                         <!--  tone calibration expander  -->
                         <StackPanel>
                             <Expander
@@ -2027,7 +1928,6 @@
                                             Foreground="White">
                                             Engine - Tone
                                         </TextBlock>
-
 
                                     </StackPanel>
                                 </Expander.Header>
@@ -2055,10 +1955,6 @@
                                         <RowDefinition Height="32" />
                                         <RowDefinition Height="32" />
                                     </Grid.RowDefinitions>
-
-
-
-
 
                                     <!--  f1  -->
                                     <RepeatButton
@@ -2124,7 +2020,6 @@
                                             RPM
                                         </TextBlock>
                                     </Border>
-
 
                                     <!--  f2  -->
                                     <RepeatButton
@@ -2257,7 +2152,6 @@
                                             H1
                                         </TextBlock>
                                     </Border>
-
 
                                     <!--  H2  -->
                                     <RepeatButton
@@ -2527,7 +2421,6 @@
                                         </TextBlock>
                                     </Border>
 
-
                                     <!--  H6  -->
                                     <RepeatButton
                                         x:Name="H6_increment"
@@ -2594,11 +2487,6 @@
                                             H6
                                         </TextBlock>
                                     </Border>
-
-
-
-
-
 
                                     <!--  factor sliders  -->
 
@@ -2731,9 +2619,6 @@
                                         TickFrequency="1"
                                         Value="2" />
 
-
-
-
                                     <!--  gain and factor headers)  -->
 
                                     <!--  F1  -->
@@ -2769,7 +2654,6 @@
                                             </TextBlock>
                                         </Border>	-->
 
-
                                     <!--  F2  -->
                                     <Border
                                         Grid.Row="8"
@@ -2803,7 +2687,6 @@
                                             </TextBlock>
                                         </Border>	-->
 
-
                                     <!--  H1  -->
                                     <Border
                                         Grid.Row="3"
@@ -2835,7 +2718,6 @@
                                             Factor
                                         </TextBlock>
                                     </Border>
-
 
                                     <!--  H2  -->
                                     <Border
@@ -2869,7 +2751,6 @@
                                         </TextBlock>
                                     </Border>
 
-
                                     <!--  H3  -->
                                     <Border
                                         Grid.Row="3"
@@ -2901,7 +2782,6 @@
                                             Factor
                                         </TextBlock>
                                     </Border>
-
 
                                     <!--  H4  -->
                                     <Border
@@ -2935,7 +2815,6 @@
                                         </TextBlock>
                                     </Border>
 
-
                                     <!--  H5  -->
                                     <Border
                                         Grid.Row="8"
@@ -2967,7 +2846,6 @@
                                             Factor
                                         </TextBlock>
                                     </Border>
-
 
                                     <!--  H6  -->
                                     <Border
@@ -3008,153 +2886,174 @@
 
 
 
-
                         <!--  Suspension Multi container start  -->
-                        <StackPanel>
-                            <!--  EXPANDER Suspension  -->
-                            <Expander
-                                Margin="5,1,5,3"
-                                BorderThickness="2"
-                                FontFamily="roboto"
-                                FontSize="14"
-                                IsExpanded="False">
-                                <Expander.Header>
-                                    <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
-                                        <Image
-                                            Width="29"
-                                            Margin="0,-3,10,0"
-                                            Source="Resources\suspension50x50.png" />
-                                        <TextBlock
-                                            Margin="-7,-5,0,0"
-                                            VerticalAlignment="Center"
-                                            FontFamily="roboto"
-                                            FontSize="20"
-                                            Foreground="White">
-                                            Suspension
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Expander.Header>
-                                <StackPanel>
-
-
-                                    <!--  Suspension all/current game multi headers  -->
-                                    <StackPanel
-                                        Margin="5,15,0,10"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock FontFamily="roboto medium" Foreground="{DynamicResource Foreground}">
-                                            All Games Gain
-                                        </TextBlock>
-                                        <TextBlock
-                                            Margin="90,0,0,0"
-                                            FontFamily="roboto medium"
-                                            Foreground="{DynamicResource Foreground}">
-                                            Current Game Gain
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <!--  Suspension all/current game slider and value labels  -->
-                                    <StackPanel
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <Slider
-                                            x:Name="SuspensionMultAll"
-                                            Width="175"
-                                            HorizontalAlignment="Center"
-                                            IsSnapToTickEnabled="True"
-                                            Maximum="5"
-                                            Minimum="0"
-                                            TickFrequency="0.1"
-                                            ValueChanged="SuspensionMultAll_ValueChanged"
-                                            Value="{Binding D.SuspensionMultAll}" />
-
-                                        <Slider
-                                            x:Name="SuspensionMult"
-                                            Width="175"
-                                            Margin="30,0,0,0"
-                                            IsSnapToTickEnabled="True"
-                                            Maximum="2"
-                                            Minimum="0"
-                                            TickFrequency="0.1"
-                                            ValueChanged="SuspensionMultAll_ValueChanged"
-                                            Value="{Binding D.SuspensionMult}" />
-                                    </StackPanel>
-
-
-
-
-                                    <!--  suspension all/current game gamma multi headers  -->
-                                    <StackPanel
-                                        Margin="7,25,0,12"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <TextBlock FontFamily="roboto medium" Foreground="{DynamicResource Foreground}">
-                                            All Games Gamma
-                                        </TextBlock>
-                                        <TextBlock
-                                            Margin="80,0,0,0"
-                                            FontFamily="roboto medium"
-                                            Foreground="{DynamicResource Foreground}">
-                                            Current Game Gamma
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Margin="0,0,0,15"
-                                        HorizontalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <!--  suspension all/current game gamma sliders and value labels  -->
-                                        <Slider
-                                            x:Name="SuspensionGammaAll"
-                                            Width="175"
-                                            HorizontalAlignment="Center"
-                                            IsSnapToTickEnabled="True"
-                                            Maximum="2"
-                                            Minimum="0"
-                                            TickFrequency="0.1"
-                                            ValueChanged="SuspensionGammaAll_ValueChanged"
-                                            Value="{Binding D.SuspensionGammaAll}" />
-
-
-                                        <Slider
-                                            x:Name="SuspensionGamma"
-                                            Width="175"
-                                            Margin="30,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            IsSnapToTickEnabled="True"
-                                            Maximum="2"
-                                            Minimum="0"
-                                            TickFrequency="0.1"
-                                            ValueChanged="SuspensionGamma_ValueChanged"
-                                            Value="{Binding D.SuspensionGamma}" />
-                                    </StackPanel>
-
-
-                                    <StackPanel HorizontalAlignment="Right">
-                                        <!--  Reset button  -->
-                                        <Button
-                                            x:Name="ButtonResetSuspension"
-                                            Width="95"
-                                            Height="30"
-                                            Margin="0,0,0,4"
-                                            Background="{DynamicResource Mid}"
-                                            BorderThickness="0"
-                                            Click="ButtonResetSuspension_Click"
-                                            FontFamily="roboto"
-                                            FontSize="16"
-                                            FontWeight="SemiBold"
-                                            Foreground="White"
-                                            Style="{StaticResource dMASSbutton}">
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                FontFamily="roboto"
-                                                FontSize="16"
-                                                Text="Reset" />
-                                        </Button>
-                                    </StackPanel>
+                        <!--  EXPANDER Suspension  -->
+                        <Expander
+                            Margin="5,1,5,3"
+                            BorderThickness="2"
+                            FontFamily="roboto"
+                            FontSize="14"
+                            IsExpanded="False">
+                            <Expander.Header>
+                                <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
+                                    <Image
+                                        Width="29"
+                                        Margin="0,-3,10,0"
+                                        Source="Resources\suspension50x50.png" />
+                                    <TextBlock
+                                        Margin="-7,-5,0,0"
+                                        VerticalAlignment="Center"
+                                        FontFamily="roboto"
+                                        FontSize="20"
+                                        Foreground="White">
+                                        Suspension
+                                    </TextBlock>
                                 </StackPanel>
-                            </Expander>
-                            <!--  Suspension Multi container end  -->
-                        </StackPanel>
+                            </Expander.Header>
+
+                            <Grid Margin="-12,0,0,0" HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="10" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="7" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!--  Suspension headers  -->
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="0,4,0,0"
+                                    HorizontalAlignment="Center"
+                                    FontFamily="roboto"
+                                    Foreground="{DynamicResource Foreground}">
+                                    All Gain
+                                </TextBlock>
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Margin="0,4,0,0"
+                                    HorizontalAlignment="Center"
+                                    FontFamily="roboto"
+                                    Foreground="{DynamicResource Foreground}">
+                                    Game Gain
+                                </TextBlock>
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Margin="0,4,0,0"
+                                    HorizontalAlignment="Center"
+                                    FontFamily="roboto"
+                                    Foreground="{DynamicResource Foreground}">
+                                    All Gamma
+                                </TextBlock>
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="3"
+                                    Margin="0,4,0,0"
+                                    HorizontalAlignment="Center"
+                                    FontFamily="roboto"
+                                    Foreground="{DynamicResource Foreground}">
+                                    Game Gamma
+                                </TextBlock>
+
+
+                                <!--  Suspension sliders  -->
+
+                                <!--  all gain  -->
+                                <Slider
+                                    x:Name="SuspensionMultAll"
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Width="80"
+                                    Margin="4,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="5"
+                                    Minimum="0"
+                                    TickFrequency="0.1"
+                                    ValueChanged="SuspensionMultAll_ValueChanged"
+                                    Value="{Binding D.SuspensionMultAll}" />
+                                <!--  game gain  -->
+                                <Slider
+                                    x:Name="SuspensionMult"
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="5,0,0,0"
+                                    Width="80"
+                                    HorizontalAlignment="Left"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="2"
+                                    Minimum="0"
+                                    TickFrequency="0.1"
+                                    ValueChanged="SuspensionMultAll_ValueChanged"
+                                    Value="{Binding D.SuspensionMult}" />
+                                <!--  all gamma  -->
+                                <Slider
+                                    x:Name="SuspensionGammaAll"
+                                    Grid.Row="2"
+                                    Grid.Column="2"
+                                    Width="80"
+                                    Margin="6,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="2"
+                                    Minimum="0"
+                                    TickFrequency="0.1"
+                                    ValueChanged="SuspensionGammaAll_ValueChanged"
+                                    Value="{Binding D.SuspensionGammaAll}" />
+                                <!--  game gamma  -->
+                                <Slider
+                                    x:Name="SuspensionGamma"
+                                    Grid.Row="2"
+                                    Grid.Column="3"
+                                    Width="80"
+                                    Margin="6,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    IsSnapToTickEnabled="True"
+                                    Maximum="2"
+                                    Minimum="0"
+                                    TickFrequency="0.1"
+                                    ValueChanged="SuspensionGamma_ValueChanged"
+                                    Value="{Binding D.SuspensionGamma}" />
+
+                                <!--  reset button  -->
+                                <Button
+                                    x:Name="ButtonResetSuspension"
+                                    Grid.Row="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
+                                    Width="95"
+                                    Height="30"
+                                    Background="{DynamicResource Mid}"
+                                    BorderThickness="0"
+                                    Click="ButtonResetSuspension_Click"
+                                    FontFamily="roboto"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Foreground="White"
+                                    Style="{StaticResource dMASSbutton}">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontFamily="roboto"
+                                        FontSize="16"
+                                        Text="Reset" />
+                                </Button>
+
+
+                            </Grid>
+                        </Expander>
+
+
+
+
 
                         <!--  gforce container start  -->
                         <StackPanel>
@@ -3183,7 +3082,6 @@
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel>
-
 
                                     <!--  GForce Settings  -->
                                     <StackPanel
@@ -3267,8 +3165,6 @@
                                                 Foreground="{DynamicResource Foreground}"
                                                 Text="{Binding D.MotionPitchGamma, Mode=TwoWay}" />
                                         </StackPanel>
-
-
 
                                         <!--  ROW2 Roll  -->
                                         <!--  Roll Offset/Multi/Gamma Headers  -->
@@ -3676,22 +3572,8 @@
                             </Expander>
                         </StackPanel>
                         <!--  gforce container end  -->
-
-
                     </StackPanel>
-
-
-
-
-
-
-
                 </ScrollViewer>
-
-
-
-
-
 
                 <!--  status bar  -->
                 <StatusBar
