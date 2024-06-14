@@ -189,18 +189,17 @@ namespace sierses.Sim
 				else break;
 			}
  */
-			for (i = 1; i <= L; i++)
+			for (i = 1; i < L; i++)
 				if (freq <= Lut[1][i])	// Lut interval for this Hz?
 					break;
 
 			ushort here = Lut[0][i - 1];
-			ushort range = (ushort)(Lut[0][i] - here);
+			int range = Lut[0][i] - here;
 			int interval = (Lut[1][i] - Lut[1][i - 1]);
 
-			return (ushort)(Tones[0].Freq[harmonic]	// amplitude
-					// linearly interpolate on non-linear frequency intervals.
-					* (here + (interval + 2 * (freq - Lut[1][i]) * range)
-							/ (interval * 2))); 
+			// linearly interpolate on non-linear frequency intervals.
+			return (ushort)(here + (interval + 2 * (freq - Lut[1][i - 1]) * range)
+							/ (interval * 2)); 
 		}	// Play()
 
 		// convert 7 slider values
