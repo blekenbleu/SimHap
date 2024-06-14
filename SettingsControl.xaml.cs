@@ -104,12 +104,11 @@ namespace sierses.Sim
 			// index 0 and 1 do not exist; those factors are fixed at one
 			// max factor is 13 for index 7 (6 harmonics)
 			// min factor is 2 for index 2
+			if (null == Plugin)
+				return;
+
 			Tone[] harmonic = Plugin.E.Tones;
 
-			if (factor < index)
-				factor = index;
-			else if (factor > (index + 6))
-				factor = index + 6;
 			harmonic[0].Freq[index] = Convert.ToUInt16(0.1 + factor);
 
 			for (int j = index - 1; j > 1; j--)
@@ -119,34 +118,6 @@ namespace sierses.Sim
 				if (harmonic[0].Freq[j] <= harmonic[0].Freq[j - 1])
 					harmonic[0].Freq[j] = (ushort)(1 + harmonic[0].Freq[j - 1]);
 			InitHarmonics(Plugin.E.Tones);
-		}
-
-		private void SuspensionMultAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-
-		}
-
-		private void SuspensionGammaAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-
-		}
-
-		private void SuspensionGamma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-
-		}
-
-		private void EngineMulti_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-
-		}
-
-		private void ButtonResetSuspension_Click(object sender, RoutedEventArgs e)
-		{
-			SuspensionMultAll.Value = 1.5;
-			SuspensionMult.Value = 1;
-			SuspensionGammaAll.Value = 1.7;
-			SuspensionGamma.Value = 1;
 		}
 
 		private void MenuTheme(object sender, RoutedEventArgs e)
@@ -171,6 +142,34 @@ namespace sierses.Sim
 			EngView2.Height = GridLength.Auto;
 			EngView3.Height = GridLength.Auto;
 			EngView4.Height = GridLength.Auto;
+		}
+
+		private void ButtonResetSuspension_Click(object sender, RoutedEventArgs e)
+		{
+			SuspensionMultAll.Value = 1.5;
+			SuspensionMult.Value = 1;
+			SuspensionGammaAll.Value = 1.7;
+			SuspensionGamma.Value = 1;
+		}
+
+		private void SuspensionMultAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+
+		}
+
+		private void SuspensionGammaAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+
+		}
+
+		private void SuspensionGamma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+
+		}
+
+		private void EngineMulti_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+
 		}
 	}
 }
