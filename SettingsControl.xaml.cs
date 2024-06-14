@@ -58,8 +58,8 @@ namespace sierses.Sim
 
 		internal void InitHarmonics(Tone[] harmonic)
 		{
-			F1_value.Value = harmonic[1].Freq[0];
-			F2_value.Value = harmonic[1].Freq[1];
+			F1_value.Value = harmonic[0].Freq[0];
+			F2_value.Value = harmonic[0].Freq[1];
 			H1_value.Text = harmonic[1].Freq[2].ToString();
 			H2_value.Text = harmonic[1].Freq[3].ToString();
 			H3_value.Text = harmonic[1].Freq[4].ToString();

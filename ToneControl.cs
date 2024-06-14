@@ -85,7 +85,7 @@ namespace sierses.Sim
 			Slider s = sender as Slider;
 			string h = s.Name.ToString();
 			int i = int.Parse(h.Substring(1, 1));
-			ReFactor(i, s.Value);
+			ReFactor(i - 1, s.Value);
 		}
 
 		private void HSlider(object sender, RoutedPropertyChangedEventArgs<double> e)

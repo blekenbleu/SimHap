@@ -1934,7 +1934,7 @@
                                 Expander.Expanded="TC_Expanded"
                                 FontFamily="roboto"
                                 FontSize="16"
-                                IsExpanded="True">
+                                IsExpanded="False">
                                 <Expander.Header>
                                     <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
                                         <Image
