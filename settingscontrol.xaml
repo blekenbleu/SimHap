@@ -2502,7 +2502,7 @@
                                             Minimum="0"
                                             Orientation="Vertical"
                                             TickFrequency="7"
-											PreviewMouseUp="F1slider"
+	                                        ValueChanged="HSlider"
                                             Value="500" />-->
 
 
@@ -2511,7 +2511,7 @@
 
                                     <!--  F2
                                         <Slider
-                                            x:Name="F2_factor"
+                                            Name="F2_factor"
                                             Grid.Row="0"
                                             Grid.RowSpan="3"
                                             Grid.Column="4"
@@ -2521,7 +2521,7 @@
                                             Minimum="0"
                                             Orientation="Vertical"
                                             TickFrequency="7"
-											PreviewMouseUp="F2slider"
+                                        	ValueChanged="HSlider"
                                             Value="500" />-->
 
                                     <!--  H1  -->
@@ -2532,12 +2532,12 @@
                                         Grid.Column="4"
                                         Margin="3,0,0,0"
                                         IsSnapToTickEnabled="True"
-                                        Maximum="13"
+                                        Maximum="8"
                                         Minimum="2"
                                         Orientation="Vertical"
-                                        PreviewMouseUp="H1slider"
+                                        ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="2" />
+                                        Value="5" />
 
                                     <!--  H2  -->
                                     <Slider
@@ -2547,12 +2547,12 @@
                                         Grid.Column="6"
                                         Margin="3,0,0,0"
                                         IsSnapToTickEnabled="True"
-                                        Maximum="13"
-                                        Minimum="2"
+                                        Maximum="9"
+                                        Minimum="3"
                                         Orientation="Vertical"
-                                        PreviewMouseUp="H2slider"
+                                        ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="2" />
+                                        Value="6" />
 
 
                                     <!--  H3  -->
@@ -2564,12 +2564,12 @@
                                         Height="125"
                                         Margin="3,0,0,0"
                                         IsSnapToTickEnabled="True"
-                                        Maximum="13"
-                                        Minimum="2"
+                                        Maximum="10"
+                                        Minimum="4"
                                         Orientation="Vertical"
-                                        PreviewMouseUp="H3slider"
+                                        ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="2" />
+                                        Value="7" />
 
                                     <!--  H4  -->
                                     <Slider
@@ -2580,12 +2580,12 @@
                                         Height="125"
                                         Margin="3,10,0,0"
                                         IsSnapToTickEnabled="True"
-                                        Maximum="13"
-                                        Minimum="2"
+                                        Maximum="11"
+                                        Minimum="5"
                                         Orientation="Vertical"
-                                        PreviewMouseUp="H4slider"
+                                        ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="2" />
+                                        Value="8" />
 
                                     <!--  H5  -->
                                     <Slider
@@ -2596,12 +2596,12 @@
                                         Height="125"
                                         Margin="3.5,10,0,0"
                                         IsSnapToTickEnabled="True"
-                                        Maximum="13"
-                                        Minimum="2"
+                                        Maximum="12"
+                                        Minimum="6"
                                         Orientation="Vertical"
-                                        PreviewMouseUp="H5slider"
+                                        ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="2" />
+                                        Value="9" />
 
                                     <!--  H6  -->
                                     <Slider
@@ -2613,11 +2613,11 @@
                                         Margin="3.5,10,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="13"
-                                        Minimum="2"
+                                        Minimum="7"
                                         Orientation="Vertical"
-                                        PreviewMouseUp="H6slider"
+                                        ValueChanged="HSlider"
                                         TickFrequency="1"
-                                        Value="2" />
+                                        Value="10" />
 
                                     <!--  gain and factor headers)  -->
 

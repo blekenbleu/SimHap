@@ -99,44 +99,13 @@ namespace sierses.Sim
 			H6_value.Text = Plugin.E.Hval(7, false);
 		}
 
-/*		private void F1slider(object sender, MouseButtonEventArgs e)
+		private void HSlider(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			ReFactor(0, F1_factor.Value);
-		}
+			Slider s = sender as Slider;
+			string h = s.Name.ToString();
+			int i = int.Parse(h.Substring(1, 1));
+            ReFactor(1 + i, s.Value);
+        }
 
-		private void F2slider(object sender, MouseButtonEventArgs e)
-		{
-			ReFactor(1, F2_factor.Value);
-		}
- */
-		private void H1slider(object sender, MouseButtonEventArgs e)
-		{
-			ReFactor(2, H1_factor.Value);
-		}
-
-		private void H2slider(object sender, MouseButtonEventArgs e)
-		{
-			ReFactor(3, H2_factor.Value);
-		}
-
-		private void H3slider(object sender, MouseButtonEventArgs e)
-		{
-			ReFactor(4, H3_factor.Value);
-		}
-
-		private void H4slider(object sender, MouseButtonEventArgs e)
-		{
-			ReFactor(5, H4_factor.Value);
-		}
-
-		private void H5slider(object sender, MouseButtonEventArgs e)
-		{
-			ReFactor(6, H5_factor.Value);
-		}
-
-		private void H6slider(object sender, MouseButtonEventArgs e)
-		{
-			ReFactor(7, H6_factor.Value);
-		}
     }
 }
