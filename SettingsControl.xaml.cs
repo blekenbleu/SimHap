@@ -5,6 +5,7 @@ using SimHub;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace sierses.Sim
 {
@@ -54,6 +55,17 @@ namespace sierses.Sim
 			EQ6_value.Text = S[6].ToString();
 			EQ7_value.Text = S[7].ToString();
 			EQ8_value.Text = S[8].ToString();
+		}
+
+		// invoked by UI Eq buttons
+		// should provoke equalizer property recalculations
+		private void EQ_Click(object sender, RoutedEventArgs e)
+		{
+			RepeatButton r = sender as RepeatButton;
+			string s = r.Name;
+            bool up = "i" == s.Substring(4, 1); // increment/decrement
+			int index = int.Parse(s.Substring(2, 1));
+			InitEq(0 == index % 8 ? Plugin.E.Pincr(index, up) : Plugin.E.Incr(index, up));
 		}
 
 		// see ToneControl.cs

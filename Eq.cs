@@ -30,7 +30,7 @@ namespace sierses.Sim
 		internal int EQswitch = 0;
 
 		// increment EQ high-/low-pass frequency
-		internal int Pincr(int s, bool up)
+		internal ushort[] Pincr(int s, bool up)
 		{	// Slider 0, 8 are min, max frequency
 			if (!up && Q[EQswitch].Slider[s] > (0 == s ? 10 : 100))
 			{
@@ -66,11 +66,11 @@ namespace sierses.Sim
 					Feedback = $"Low pass set to {Q[EQswitch].Slider[8]}";
 				}
 			}
-			return Q[EQswitch].Slider[s];
+			return Q[EQswitch].Slider;
 		}
 
 		// increment some EQ gain
-		internal void Incr(int s, bool up)
+		internal ushort[] Incr(int s, bool up)
 		{	// Slider 0, 8 are min, max frequency
 			int end = Q[EQswitch].Slider.Length - 1;
 			int sum = 0;
@@ -105,8 +105,7 @@ namespace sierses.Sim
 				Feedback = "decremented";
 			}
 			else Feedback = up ? "100 is max gain" : "0 is min gain";
-			H.SC.InitEq(Q[EQswitch].Slider);
-			return;
+			return Q[EQswitch].Slider;
 		}
 
 		private Eq NewEQ()
