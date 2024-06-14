@@ -58,8 +58,8 @@ namespace sierses.Sim
 
 		internal void InitHarmonics(Tone[] harmonic)
 		{
-			F1_value.Value = harmonic[0].Freq[0];
-			F2_value.Value = harmonic[0].Freq[1];
+			F1_value.Value = harmonic[1].Freq[0];
+			F2_value.Value = harmonic[1].Freq[1];
 			H1_value.Text = harmonic[1].Freq[2].ToString();
 			H2_value.Text = harmonic[1].Freq[3].ToString();
 			H3_value.Text = harmonic[1].Freq[4].ToString();
@@ -96,30 +96,6 @@ namespace sierses.Sim
 		{
 			Plugin.D.Unlocked = !Plugin.D.Unlocked;
 			Plugin.D.LockedText = Plugin.D.Unlocked ? "Lock" : "Unlock";
-		}
-
-		// limit check Engine Tone Factor sliders
-		private void ReFactor(int index, double factor)
-		{
-			// index 0 and 1 do not exist; those factors are fixed at one
-			// max factor is 13 for index 7 (6 harmonics)
-			// min factor is 2 for index 2
-			if (null == Plugin)
-				return;
-
-			Tone[] harmonic = Plugin.E.Tones;
-
-			harmonic[0].Freq[index] = Convert.ToUInt16(0.1 + factor);
-			if (1 < index)
-			{
-				for (int j = index - 1; j > 1; j--)
-					if (harmonic[0].Freq[j] >= harmonic[0].Freq[j + 1])
-						harmonic[0].Freq[j] = (ushort)(harmonic[0].Freq[j + 1] - 1);
-				for (int j = index + 1; j < 8; j++)
-					if (harmonic[0].Freq[j] <= harmonic[0].Freq[j - 1])
-						harmonic[0].Freq[j] = (ushort)(1 + harmonic[0].Freq[j - 1]);
-			}
-			InitHarmonics(Plugin.E.Tones);
 		}
 
 		private void MenuTheme(object sender, RoutedEventArgs e)

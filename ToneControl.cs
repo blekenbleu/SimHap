@@ -31,80 +31,34 @@ namespace sierses.Sim
 		    InitHarmonics(Plugin.E.Tones);
 		}
 
-		private void H1_increment_Click(object sender, RoutedEventArgs e)
-		{
-			H1_value.Text = Plugin.E.Hval(2, true);
-		}
-
-		private void H1_decrement_Click(object sender, RoutedEventArgs e)
-		{
-			H1_value.Text = Plugin.E.Hval(2, false);
-		}
-
-		private void H2_increment_Click(object sender, RoutedEventArgs e)
-		{
-			H2_value.Text = Plugin.E.Hval(3, true);
-		}
-
-		private void H2_decrement_Click(object sender, RoutedEventArgs e)
-		{
-			H2_value.Text = Plugin.E.Hval(3, false);
-		}
-
-		private void H3_increment_Click(object sender, RoutedEventArgs e)
-		{
-			H3_value.Text = Plugin.E.Hval(4, true);
-		}
-
-		private void H3_decrement_Click(object sender, RoutedEventArgs e)
-		{
-			H3_value.Text = Plugin.E.Hval(4, false);
-		}
-
-		private void H4_increment_Click(object sender, RoutedEventArgs e)
-		{
-			H4_value.Text = Plugin.E.Hval(5, true);
-		}
-
-		private void H4_decrement_Click(object sender, RoutedEventArgs e)
-		{
-			H4_value.Text = Plugin.E.Hval(5, false);
-		}
-
-		private void H5_increment_Click(object sender, RoutedEventArgs e)
-		{
-			H5_value.Text = Plugin.E.Hval(6, true);
-		}
-
-		private void H5_decrement_Click(object sender, RoutedEventArgs e)
-		{
-			H5_value.Text = Plugin.E.Hval(6, false);
-		}
-
-		private void H6_increment_Click(object sender, RoutedEventArgs e)
-		{
-			H6_value.Text = Plugin.E.Hval(7, true);
-		}
-
-		private void H6_decrement_Click(object sender, RoutedEventArgs e)
-		{
-			H6_value.Text = Plugin.E.Hval(7, false);
-		}
-
-		private void FSlider(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-			Slider s = sender as Slider;
-			string h = s.Name.ToString();
-			int i = int.Parse(h.Substring(1, 1));
-			ReFactor(i - 1, s.Value);
-		}
-
 		private void HSlider(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
+			if (null == Plugin)
+				return;
+
 			Slider s = sender as Slider;
-			string h = s.Name.ToString();
-			int i = int.Parse(h.Substring(1, 1));
-			ReFactor(1 + i, s.Value);
+			string h = s.Name.ToString();	// F[12] or H[1-6]
+			int i = int.Parse(h.Substring(1, 1)) + ("H" == h.Substring(0, 1) ? 1 : -1);
+
+			// limit check Engine Tone Factor sliders
+			// index 0 and 1 Factors are fixed at one
+			// max factor is 13 for index 7 (6 harmonics)
+			// min factor is 2 for index 2
+			Tone[] harmonic = Plugin.E.Tones;
+
+			if (1 < i)	// sliders [0-1] are fundamental peak amplitudes, not harmonic factors
+			{
+				harmonic[0].Freq[i] = Convert.ToUInt16(0.1 + s.Value);
+				for (int j = i - 1; j > 1; j--)
+					if (harmonic[0].Freq[j] >= harmonic[0].Freq[j + 1])
+						harmonic[0].Freq[j] = (ushort)(harmonic[0].Freq[j + 1] - 1);
+				for (int j = i + 1; j < 8; j++)
+					if (harmonic[0].Freq[j] <= harmonic[0].Freq[j - 1])
+						harmonic[0].Freq[j] = (ushort)(1 + harmonic[0].Freq[j - 1]);
+			}
+			else harmonic[1].Freq[i] = Convert.ToUInt16(0.1 + s.Value);
+
+			InitHarmonics(Plugin.E.Tones);
 		}
 	}
 }

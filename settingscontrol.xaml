@@ -2431,7 +2431,7 @@
                                             Minimum="0"
                                             Orientation="Vertical"
                                             TickFrequency="7"
-											ValueChanged="FSlider"
+											ValueChanged="HSlider"
                                             Value="500" />
                                     
 
@@ -2448,7 +2448,7 @@
                                             Minimum="0"
                                             Orientation="Vertical"
                                             TickFrequency="7"
-											ValueChanged="FSlider"
+											ValueChanged="HSlider"
                                             Value="500" />
 
                                     <!--  H1  -->
