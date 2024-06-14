@@ -65,6 +65,7 @@ namespace sierses.Sim
 					Feedback = $"Low pass set to {Q[EQswitch].Slider[8]}";
 				}
 			}
+			EqSpline(Q[EQswitch].Slider);
 			return Q[EQswitch].Slider;
 		}
 
@@ -104,6 +105,7 @@ namespace sierses.Sim
 				Feedback = "decremented";
 			}
 			else Feedback = up ? "100 is max gain" : "0 is min gain";
+			EqSpline(Q[EQswitch].Slider);
 			return Q[EQswitch].Slider;
 		}
 
