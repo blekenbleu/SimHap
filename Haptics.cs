@@ -98,8 +98,24 @@ namespace sierses.Sim
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
 			SC = new SettingsControl(this);
-			if (null != Settings.Engine && null != Settings.Engine.Theme)
-				SC.ChangeTheme(Settings.Engine.Theme);
+			if (null != Settings.Engine)
+			{
+				if (null != Settings.Engine.Theme)
+					SC.ChangeTheme(Settings.Engine.Theme);
+				if (null != Settings.Engine.Tones)
+				{
+					if (0 < Settings.Engine.Tones.Length)
+					{
+						if (8 == Settings.Engine.Tones[0].Freq.Count)
+							E.Tones = Settings.Engine.Tones;
+						else Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
+							+ Settings.Engine.Tones[0].Freq.Count.ToString());
+					} else Logging.Current.Info($"Haptics: zero Settings.Engine.Tones.Length");
+				}
+				else Logging.Current.Info($"Haptics:  null Settings.Engine.Tones");
+				if (null != Settings.Engine.Sliders)
+					E.Q	= Settings.Engine.Sliders;
+			}
 			return SC;
 		}
 

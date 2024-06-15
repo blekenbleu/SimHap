@@ -166,62 +166,27 @@ namespace sierses.Sim
 
         private void ExpanderEngine_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (ExpanderEngine.IsExpanded == false)
-            {
-                ExpanderEngine.IsExpanded = true;
-            }
-            else if (ExpanderEngine.IsExpanded == true)
-            {
-                ExpanderEngine.IsExpanded = false;
-            }
+            ExpanderEngine.IsExpanded = !ExpanderEngine.IsExpanded;
         }
 
         private void EQ_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (EQ.IsExpanded == false)
-            {
-                EQ.IsExpanded = true;
-            }
-            else if (EQ.IsExpanded == true)
-            {
-                EQ.IsExpanded = false;
-            }
+            EQ.IsExpanded = !EQ.IsExpanded;
         }
 
         private void ExpanderTone_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (ExpanderTone.IsExpanded == false)
-            {
-                ExpanderTone.IsExpanded = true;
-            }
-            else if (ExpanderTone.IsExpanded == true)
-            {
-                ExpanderTone.IsExpanded = false;
-            }
+            ExpanderTone.IsExpanded = !ExpanderTone.IsExpanded;
         }
 
         private void ExpanderSuspension_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (ExpanderSuspension.IsExpanded == false)
-            {
-                ExpanderSuspension.IsExpanded = true;
-            }
-            else if (ExpanderSuspension.IsExpanded == true)
-            {
-                ExpanderSuspension.IsExpanded = false;
-            }
+            ExpanderSuspension.IsExpanded = !ExpanderSuspension.IsExpanded;
         }
 
         private void ExpanderGforce_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (ExpanderGforce.IsExpanded == false)
-			{
-				ExpanderGforce.IsExpanded = true;
-            }
-            else if (ExpanderGforce.IsExpanded == true)
-            {
-                ExpanderGforce.IsExpanded = false;
-            }
+            ExpanderGforce.IsExpanded = !ExpanderGforce.IsExpanded;
         }
 	}
 }
