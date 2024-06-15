@@ -3,6 +3,7 @@
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 using SimHub;
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -162,5 +163,65 @@ namespace sierses.Sim
 		{
 
 		}
+
+        private void ExpanderEngine_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (ExpanderEngine.IsExpanded == false)
+            {
+                ExpanderEngine.IsExpanded = true;
+            }
+            else if (ExpanderEngine.IsExpanded == true)
+            {
+                ExpanderEngine.IsExpanded = false;
+            }
+        }
+
+        private void EQ_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (EQ.IsExpanded == false)
+            {
+                EQ.IsExpanded = true;
+            }
+            else if (EQ.IsExpanded == true)
+            {
+                EQ.IsExpanded = false;
+            }
+        }
+
+        private void ExpanderTone_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (ExpanderTone.IsExpanded == false)
+            {
+                ExpanderTone.IsExpanded = true;
+            }
+            else if (ExpanderTone.IsExpanded == true)
+            {
+                ExpanderTone.IsExpanded = false;
+            }
+        }
+
+        private void ExpanderSuspension_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (ExpanderSuspension.IsExpanded == false)
+            {
+                ExpanderSuspension.IsExpanded = true;
+            }
+            else if (ExpanderSuspension.IsExpanded == true)
+            {
+                ExpanderSuspension.IsExpanded = false;
+            }
+        }
+
+        private void ExpanderGforce_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (ExpanderGforce.IsExpanded == false)
+			{
+				ExpanderGforce.IsExpanded = true;
+            }
+            else if (ExpanderGforce.IsExpanded == true)
+            {
+                ExpanderGforce.IsExpanded = false;
+            }
+        }
 	}
 }

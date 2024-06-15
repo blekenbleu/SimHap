@@ -830,6 +830,8 @@
                         Orientation="vertical">
                         <!--  EXPANDER Engine RPM properties  -->
                         <Expander
+                            x:Name ="ExpanderEngine"
+                            MouseDoubleClick="ExpanderEngine_MouseDoubleClick"
                             Margin="5"
                             BorderThickness="2"
                             FontFamily="roboto"
@@ -1288,6 +1290,7 @@
                         <StackPanel>
                             <Expander
                                 x:Name="EQ"
+                                MouseDoubleClick="EQ_MouseDoubleClick"
                                 Margin="5,-1,5,3"
                                 Expander.Expanded="EQ_Expanded"
                                 FontFamily="roboto"
@@ -1969,6 +1972,8 @@
                         <!--  tone calibration expander  -->
                         <StackPanel>
                             <Expander
+                                x:Name ="ExpanderTone"
+                                MouseDoubleClick="ExpanderTone_MouseDoubleClick"
                                 Margin="5,1,5,3"
                                 Expander.Expanded="TC_Expanded"
                                 FontFamily="roboto"
@@ -2824,6 +2829,8 @@
                         <!--  Suspension Multi container start  -->
                         <!--  EXPANDER Suspension  -->
                         <Expander
+                            x:Name ="ExpanderSuspension"
+                            MouseDoubleClick="ExpanderSuspension_MouseDoubleClick"
                             Margin="5,1,5,3"
                             BorderThickness="2"
                             FontFamily="roboto"
@@ -2993,6 +3000,8 @@
                         <StackPanel>
                             <!--  EXPANDER Gforce  -->
                             <Expander
+                                x:Name ="ExpanderGforce"
+                                MouseDoubleClick="ExpanderGforce_MouseDoubleClick"
                                 Margin="5,1,5,0"
                                 HorizontalAlignment="Stretch"
                                 BorderThickness="2"
