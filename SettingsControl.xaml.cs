@@ -47,15 +47,25 @@ namespace sierses.Sim
 		// called when expanding EQ or Plugin.E.NextUp() 
 		internal void InitEq(ushort[] S)
 		{
-			EQ0_value.Text = S[0].ToString();
-			EQ1_value.Text = S[1].ToString();
-			EQ2_value.Text = S[2].ToString();
-			EQ3_value.Text = S[3].ToString();
-			EQ4_value.Text = S[4].ToString();
-			EQ5_value.Text = S[5].ToString();
-			EQ6_value.Text = S[6].ToString();
-			EQ7_value.Text = S[7].ToString();
-			EQ8_value.Text = S[8].ToString();
+			//writing to these values provokes recalculations
+			if (EQ0_value.Text != S[0].ToString())
+				EQ0_value.Text = S[0].ToString();
+			if (EQ1_value.Text != S[1].ToString())
+				EQ1_value.Text = S[1].ToString();
+			if (EQ2_value.Text != S[2].ToString())
+				EQ2_value.Text = S[2].ToString();
+			if (EQ3_value.Text != S[3].ToString())
+				EQ3_value.Text = S[3].ToString();
+			if (EQ4_value.Text != S[4].ToString())
+				EQ4_value.Text = S[4].ToString();
+			if (EQ5_value.Text != S[5].ToString())
+				EQ5_value.Text = S[5].ToString();
+			if (EQ6_value.Text != S[6].ToString())
+				EQ6_value.Text = S[6].ToString();
+			if (EQ7_value.Text != S[7].ToString())
+				EQ7_value.Text = S[7].ToString();
+			if (EQ8_value.Text != S[8].ToString())
+				EQ8_value.Text = S[8].ToString();
 		}
 
 		// invoked by UI Eq buttons
@@ -72,20 +82,35 @@ namespace sierses.Sim
 		// see ToneControl.cs
 		internal void InitHarmonics(Tone[] harmonic)
 		{
-			H1_value.Text = harmonic[1].Freq[2].ToString();
-			H2_value.Text = harmonic[1].Freq[3].ToString();
-			H3_value.Text = harmonic[1].Freq[4].ToString();
-			H4_value.Text = harmonic[1].Freq[5].ToString();
-			H5_value.Text = harmonic[1].Freq[6].ToString();
-			H6_value.Text = harmonic[1].Freq[7].ToString();
-			F1_value.Value = harmonic[1].Freq[0];
-			F2_value.Value = harmonic[1].Freq[1];
-			H1_factor.Value = harmonic[0].Freq[2];
-			H2_factor.Value = harmonic[0].Freq[3];
-			H3_factor.Value = harmonic[0].Freq[4];
-			H4_factor.Value = harmonic[0].Freq[5];
-			H5_factor.Value = harmonic[0].Freq[6];
-			H6_factor.Value = harmonic[0].Freq[7];
+			//writing to these values provokes recalculations
+			if (H1_value.Text != harmonic[1].Freq[2].ToString())
+				H1_value.Text = harmonic[1].Freq[2].ToString();
+			if (H2_value.Text != harmonic[1].Freq[3].ToString())
+				H2_value.Text = harmonic[1].Freq[3].ToString();
+			if (H3_value.Text != harmonic[1].Freq[4].ToString())
+				H3_value.Text = harmonic[1].Freq[4].ToString();
+			if (H4_value.Text != harmonic[1].Freq[5].ToString())
+				H4_value.Text = harmonic[1].Freq[5].ToString();
+			if (H5_value.Text != harmonic[1].Freq[6].ToString())
+				H5_value.Text = harmonic[1].Freq[6].ToString();
+			if (H6_value.Text != harmonic[1].Freq[7].ToString())
+				H6_value.Text = harmonic[1].Freq[7].ToString();
+			if (F1_value.Value != harmonic[1].Freq[0])
+				F1_value.Value = harmonic[1].Freq[0];
+			if (F2_value.Value != harmonic[1].Freq[1])
+				F2_value.Value = harmonic[1].Freq[1];
+			if (H1_factor.Value != harmonic[0].Freq[2])
+				H1_factor.Value = harmonic[0].Freq[2];
+			if (H2_factor.Value != harmonic[0].Freq[3])
+				H2_factor.Value = harmonic[0].Freq[3];
+			if (H3_factor.Value != harmonic[0].Freq[4])
+				H3_factor.Value = harmonic[0].Freq[4];
+			if (H4_factor.Value != harmonic[0].Freq[5])
+				H4_factor.Value = harmonic[0].Freq[5];
+			if (H5_factor.Value != harmonic[0].Freq[6])
+				H5_factor.Value = harmonic[0].Freq[6];
+			if (H6_factor.Value != harmonic[0].Freq[7])
+				H6_factor.Value = harmonic[0].Freq[7];
 		}
 
 		// this may provoke new equalizer creation

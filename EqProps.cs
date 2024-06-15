@@ -58,7 +58,7 @@ namespace sierses.Sim
 			AddProps(H, EqSpline(Q[0].Slider));
 		}
 
-		public string Broadcast(Haptics This, int L)
+		public void Broadcast(Haptics This, int L)
 		{
 			string s;
 			switch (L)
@@ -100,7 +100,7 @@ namespace sierses.Sim
 					s = "equalizer limit exceeded";
 					break;
 			}
-			return s;
+			H.D.LoadText = s;
 		}
 	}
 }

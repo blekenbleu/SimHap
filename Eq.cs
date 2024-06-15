@@ -26,7 +26,6 @@ namespace sierses.Sim
 	{
 		internal Haptics H;	// set in Init()
 		internal ObservableCollection<Eq> Q = new();	// EQ Slider array
-		internal string Feedback;
 		internal int EQswitch = 0;
 
 		// increment EQ high-/low-pass frequency
@@ -40,29 +39,29 @@ namespace sierses.Sim
 			if (!up && Q[EQswitch].Slider[s] > bump + (0 == s ? 9  : 100))
 			{
 				Q[EQswitch].Slider[s] -= bump;
-				Feedback = "decremented";
+				H.D.LoadText = "decremented";
 				// interpolation over power-of-2 LUTs
 				// range >= 10 supports 8 == LUT.Length
 				if (Q[EQswitch].Slider[8] <= 10 * Q[EQswitch].Slider[0])
 				{
 					Q[EQswitch].Slider[0] = (ushort)(0.5 + 0.1 * Q[EQswitch].Slider[8]);
-					Feedback = "High pass also decremented";
+					H.D.LoadText = "High pass also decremented";
 				}
 			}
 			else if(up)
 			{
-				Feedback = "limit imposed";
+				H.D.LoadText = "limit imposed";
 				if (Q[EQswitch].Slider[s] < (8 == s ? 9999 : 999) - bump)
 				{
 					Q[EQswitch].Slider[s] += bump;
-					Feedback = "incremented";
+					H.D.LoadText = "incremented";
 				}
 				// interpolation over power-of-2 LUTs
 				// range >= 10 supports 8 == LUT.Length
 				if (Q[EQswitch].Slider[0] * 10 > Q[EQswitch].Slider[8])
 				{
 					Q[EQswitch].Slider[8] = (ushort)(10 * Q[EQswitch].Slider[0]);
-					Feedback = $"Low pass set to {Q[EQswitch].Slider[8]}";
+					H.D.LoadText = $"Low pass set to {Q[EQswitch].Slider[8]}";
 				}
 			}
 			EqSpline(Q[EQswitch].Slider);
@@ -87,7 +86,7 @@ namespace sierses.Sim
 				}
 				Q[EQswitch].Slider[s] = (ushort)((350 < sum)
 						? 0 : (sum < 250) ? 100 : (350 - sum));
-				Feedback = "incremented";
+				H.D.LoadText = "incremented";
 			}
 			else if ((!up) & 0 < Q[EQswitch].Slider[s])
 			{
@@ -102,9 +101,9 @@ namespace sierses.Sim
 				
 				Q[EQswitch].Slider[s] = (ushort)((350 < sum)
 						? 0 : (sum < 250) ? 100 : (350 - sum));
-				Feedback = "decremented";
+				H.D.LoadText = "decremented";
 			}
-			else Feedback = up ? "100 is max gain" : "0 is min gain";
+			else H.D.LoadText = up ? "100 is max gain" : "0 is min gain";
 			EqSpline(Q[EQswitch].Slider);
 			return Q[EQswitch].Slider;
 		}
@@ -121,7 +120,7 @@ namespace sierses.Sim
 		{
 			if ((up && 2 == EQswitch) || (0 == EQswitch && !up))
 			{
-				Feedback = "limits are >= 0 and <= 2";
+				H.D.LoadText = "limits are >= 0 and <= 2";
 				return $"{EQswitch}";
 			}
 			EQswitch += up ? +1 : -1;
@@ -131,9 +130,9 @@ namespace sierses.Sim
 					Q.Add(NewEQ());
 				else Q[EQswitch] = NewEQ();
 				H.SC.InitEq(Q[EQswitch].Slider);
-				Feedback = "Initialized";
+				H.D.LoadText = "Initialized";
 			}
-			else Feedback = up ? "Incremented" : "Decremented";
+			else H.D.LoadText = up ? "Incremented" : "Decremented";
 			return $"{EQswitch}";
 		}
 
@@ -259,16 +258,21 @@ namespace sierses.Sim
 		// AddProps() should be called by UI to add equalizer instances,
 		// which are Tone components played thru Play() using that LUT
 		// e.g. AddProps(This, EqSpline(sliders[n]));
-		public string AddProps(Haptics This,  ushort[][] that)
+		public void AddProps(Haptics This,  ushort[][] that)
 		{
 			if (null != that)
 			{
 				if (3 <= LUT.Count)
-					return("already have 3 equalizers");
+				{
+					H.D.LoadText = "already have 3 equalizers";
+					return;
+				}
 				LUT.Add(that);
-				return Broadcast(This, LUT.Count);
+				Broadcast(This, LUT.Count);
+				return;
 			}
-			return "null LUT";
+			H.D.LoadText = "null LUT";
 		}
 	}
 }
+
