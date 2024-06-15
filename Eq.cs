@@ -6,7 +6,7 @@ namespace sierses.Sim
 {
 	public class Tone	// array of frequency component properties
 	{	// one for frequency harmonics, another for amplitudes
-		internal ObservableCollection<ushort> Freq = new();
+		internal ushort[] Freq = new ushort[8];
 	}
 
 	// array of 6 slider values, then min, max frequencies
@@ -17,15 +17,15 @@ namespace sierses.Sim
 
 	public class Engine
 	{
-		public Tone[] Tones;						// engine fundamental and harmonic
-		public ObservableCollection<Eq> Sliders;	// graphic equalizer
+		public Tone[] Tones;		// engine fundamental and harmonic
+		public List<Eq> Sliders;	// graphic equalizer
 		public string Theme;
 	}
 
 	public partial class Geq
 	{
 		internal Haptics H;	// set in Init()
-		internal ObservableCollection<Eq> Q = new();	// EQ Slider array
+		internal List<Eq> Q = new();	// EQ Slider array
 		internal int EQswitch = 0;
 
 		// increment EQ high-/low-pass frequency

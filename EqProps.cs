@@ -8,26 +8,19 @@ namespace sierses.Sim
 		{
 			H = h;
   			if (null == Engine || null == Engine.Tones
-			 || null == Engine.Tones[1].Freq || 0 == Engine.Tones[1].Freq.Count)
+			 || null == Engine.Tones[1].Freq || 8 != Engine.Tones[1].Freq.Length)
   			{
-				Tones[0] = new();
-				Tones[0].Freq.Add(1);	// engine RPM / 60
-				Tones[0].Freq.Add(1);	// power stroke: cylinders * engine RPM / 120
-				Tones[0].Freq.Add(3);	// first power stroke harmonic -default to odd
-				Tones[0].Freq.Add(5);
-				Tones[0].Freq.Add(7);
-				Tones[0].Freq.Add(9);
-				Tones[0].Freq.Add(11);
-				Tones[0].Freq.Add(13);	// sixth power stroke harmonic
-				Tones[1] = new();		// harmonic amplitudes
-				Tones[1].Freq.Add(1000);
-				Tones[1].Freq.Add(1000);
-				Tones[1].Freq.Add(333);	// default to square wave
-				Tones[1].Freq.Add(111);
-				Tones[1].Freq.Add(37);
-				Tones[1].Freq.Add(12);
-				Tones[1].Freq.Add(4);
-				Tones[1].Freq.Add(1);
+				Tones[0] = new()
+				{
+					Freq = new ushort[8] { 1,		// engine RPM / 60
+											1,		// power stroke: cylinders * engine RPM / 120
+											3,		// first power stroke harmonic - default to odd
+											5, 7, 9, 11,
+											13 }	// sixth power stroke harmonic
+				};
+				Tones[1].Freq = new ushort[8] {				// harmonic amplitudes
+												1000, 1000,
+												333, 111, 37, 12, 4, 1 };	// square wave
   			}
   			else Tones = Engine.Tones;
 			H.AttachDelegate("E.Fr0", () => Fr(0));
