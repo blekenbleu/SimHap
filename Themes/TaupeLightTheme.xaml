@@ -1,9 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="Light" Color="#8F8156" />
-    <SolidColorBrush x:Key="Mid" Color="#736845" />
-    <SolidColorBrush x:Key="Dark" Color="#4C4635" />
-    <SolidColorBrush x:Key="Foreground" Color="Black" />
-    <SolidColorBrush x:Key="Background" Color="White" />
-    <SolidColorBrush x:Key="Slider" Color="#736845" />
-    <SolidColorBrush x:Key="Tab" Color="White" />
-</ResourceDictionary>
