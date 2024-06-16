@@ -129,10 +129,10 @@ namespace sierses.Sim
 				if (EQswitch == Q.Count)
 					Q.Add(NewEQ());
 				else Q[EQswitch] = NewEQ();
-				H.SC.InitEq(Q[EQswitch].Slider);
-				H.D.LoadText = "Initialized";
+				H.D.LoadText = $"LUT {EQswitch} initialized";
 			}
 			else H.D.LoadText = up ? "Incremented" : "Decremented";
+			H.SC.ShowEq(Q[EQswitch].Slider);
 			return $"{EQswitch}";
 		}
 

@@ -8,11 +8,6 @@ namespace sierses.Sim
 	// these methods are invoked by UI Engine harmonic buttons and sliders
 	public partial class SettingsControl : UserControl
 	{
-		private void EQ_Expanded(object sender, RoutedEventArgs e)
-		{
-			InitEq(Plugin.E.Q[Plugin.E.EQswitch].Slider);
-		}
-
 		private void TC_Expanded(object sender, RoutedEventArgs e)
 		{
 			if (null != Plugin)

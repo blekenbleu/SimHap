@@ -63,7 +63,6 @@ namespace sierses.Sim
 
 		public void Broadcast(Haptics This, int L)
 		{
-			string s;
 			switch (L)
 			{
 				case 1:
@@ -75,7 +74,7 @@ namespace sierses.Sim
 					This.AttachDelegate("E.Q0.5", () => Play(This, 5));
 					This.AttachDelegate("E.Q0.6", () => Play(This, 6));
 					This.AttachDelegate("E.Q0.7", () => Play(This, 7));
-					s = "E.Q0 added";
+					H.D.LoadText += ";  E.Q0 added";
 					break;
 				case 2:
 					This.AttachDelegate("E.Q1.0", () => Play(This, 8));
@@ -86,7 +85,6 @@ namespace sierses.Sim
 					This.AttachDelegate("E.Q1.5", () => Play(This, 13));
 					This.AttachDelegate("E.Q1.6", () => Play(This, 14));
 					This.AttachDelegate("E.Q1.7", () => Play(This, 15));
-					s = "E.Q1 added";
 					break;
 				case 3:
 					This.AttachDelegate("E.Q2.0", () => Play(This, 16));
@@ -97,13 +95,10 @@ namespace sierses.Sim
 					This.AttachDelegate("E.Q2.5", () => Play(This, 21));
 					This.AttachDelegate("E.Q2.6", () => Play(This, 22));
 					This.AttachDelegate("E.Q2.7", () => Play(This, 23));
-					s = "E.Q2 added; max equalizer supported...";
 					break;
 				default:
-					s = "equalizer limit exceeded";
 					break;
 			}
-			H.D.LoadText = s;
 		}
 	}
 }

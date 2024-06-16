@@ -49,7 +49,7 @@ namespace sierses.Sim
 		}
 
 		// called when expanding EQ or Plugin.E.NextUp() 
-		internal void InitEq(ushort[] S)
+		internal void ShowEq(ushort[] S)
 		{
 			//writing to these values provokes recalculations
 			if (EQ0_value.Text != S[0].ToString())
@@ -72,6 +72,11 @@ namespace sierses.Sim
 				EQ8_value.Text = S[8].ToString();
 		}
 
+		private void EQ_Expanded(object sender, RoutedEventArgs e)
+		{
+			ShowEq(Plugin.E.Q[Plugin.E.EQswitch].Slider);
+		}
+
 		// invoked by UI Eq buttons
 		// should provoke equalizer property recalculations
 		private void EQ_Click(object sender, RoutedEventArgs e)
@@ -80,7 +85,7 @@ namespace sierses.Sim
 			string s = r.Name;
 			bool up = "i" == s.Substring(4, 1); // increment/decrement
 			int index = int.Parse(s.Substring(2, 1));
-			InitEq(0 == index % 8 ? Plugin.E.Pincr(index, up) : Plugin.E.Incr(index, up));
+			ShowEq(0 == index % 8 ? Plugin.E.Pincr(index, up) : Plugin.E.Incr(index, up));
 		}
 
 		// see ToneControl.cs
