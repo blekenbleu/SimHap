@@ -106,15 +106,19 @@ namespace sierses.Sim
 				{
 					if (0 < Settings.Engine.Tones.Length)
 					{
-						if (8 == Settings.Engine.Tones[0].Freq.Length)
-							E.Tones = Settings.Engine.Tones;
-						else Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
-							+ Settings.Engine.Tones[0].Freq.Length.ToString());
+						if (8 != Settings.Engine.Tones[0].Length)
+							Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
+							+ Settings.Engine.Tones[0].Length.ToString());
 					} else Logging.Current.Info($"Haptics: zero Settings.Engine.Tones.Length");
 				}
 				else Logging.Current.Info($"Haptics:  null Settings.Engine.Tones");
-				if (null != Settings.Engine.Sliders)
-					E.Q	= Settings.Engine.Sliders;
+				if (null == Settings.Engine.Sliders)
+					Logging.Current.Info($"Haptics:  null Settings.Engine.Sliders");
+				else if (1 > Settings.Engine.Sliders.Count)
+					Logging.Current.Info($"Haptics: zero Settings.Engine.Sliders.Count");
+				else if (9 != Settings.Engine.Sliders[0].Length)
+					Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
+					  + Settings.Engine.Sliders[0].Length.ToString());
 			}
 			return SC;
 		}
@@ -286,10 +290,18 @@ namespace sierses.Sim
 		{
 			if (null == Settings.Engine)
 				Settings.Engine = new();
+			if (null == Settings.Engine.Tones)
+			{ 
+				Settings.Engine.Tones = new ushort[2][];
+				Settings.Engine.Tones[0] = new ushort[8];
+				Settings.Engine.Tones[1] = new ushort[8];
+			}
 
 			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
-			Settings.Engine.Tones =  E.Tones;
-			Settings.Engine.Sliders = new() { E.Q[0] };
+			for (int i = 0; i < E.Tones.Length; i++)
+				for (int j = 0; j < E.Tones[i].Freq.Length; j++)
+					Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
+			Settings.Engine.Sliders = new() { E.Q[0].Slider };
 
 			if (Save || Loaded || Changed)		// End()
 			{
@@ -601,8 +613,8 @@ namespace sierses.Sim
 
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
 			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
-			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Slider.Length
-			 || 2 != Settings.Engine.Tones.Length || 8 != Settings.Engine.Tones[0].Freq.Length)
+			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
+			 || 2 != Settings.Engine.Tones.Length || 8 != Settings.Engine.Tones[0].Length)
 			{
 				if (null == Settings.Engine)
 					Logging.Current.Info($"Haptics.Init(): null Settings.Engine");
@@ -611,18 +623,18 @@ namespace sierses.Sim
 						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Sliders");
 					else if (1 > Settings.Engine.Sliders.Count)
 						Logging.Current.Info($"Haptics.Init(): 0 Settings.Engine.Sliders");
-					else if (9 != Settings.Engine.Sliders[0].Slider.Length)
+					else if (9 != Settings.Engine.Sliders[0].Length)
 						Logging.Current.Info($"Haptics.Init(): Settings.Engine.Sliders[0].Slider.Length = "
-								+ Settings.Engine.Sliders[0].Slider.Length.ToString());
+								+ Settings.Engine.Sliders[0].Length.ToString());
 					if (null == Settings.Engine.Tones)
 						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Tones");
 					else {
 						if (2 != Settings.Engine.Tones.Length)
 							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones.Length = "
 								+ Settings.Engine.Tones.Length.ToString());
-						if (8 != Settings.Engine.Tones[0].Freq.Length)
+						if (8 != Settings.Engine.Tones[0].Length)
 							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones[0].Freq.Length = "
-								+ Settings.Engine.Tones[0].Freq.Length.ToString()); 
+								+ Settings.Engine.Tones[0].Length.ToString()); 
 					}
 				}
 				Settings = new();

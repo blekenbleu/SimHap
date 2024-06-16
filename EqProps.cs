@@ -7,9 +7,10 @@ namespace sierses.Sim
 		internal void Init(Engine Engine, Haptics h)
 		{
 			H = h;
-  			if (null == Engine || null == Engine.Tones
-			 || null == Engine.Tones[1].Freq || 8 != Engine.Tones[1].Freq.Length)
-  			{
+			Tones = new Tone[2];
+			if (null == Engine || null == Engine.Tones
+		   || null == Engine.Tones[1] || 8 != Engine.Tones[1].Length)
+			{
 				Tones[0] = new()
 				{
 					Freq = new ushort[8] { 1,		// engine RPM / 60
@@ -18,11 +19,18 @@ namespace sierses.Sim
 											5, 7, 9, 11,
 											13 }	// sixth power stroke harmonic
 				};
-				Tones[1].Freq = new ushort[8] {				// harmonic amplitudes
+				Tones[1] = new()
+				{
+					Freq = new ushort[8] {				// harmonic amplitudes
 												1000, 1000,
-												333, 111, 37, 12, 4, 1 };	// square wave
-  			}
-  			else Tones = Engine.Tones;
+												333, 111, 37, 12, 4, 1 }   // square wave
+				};
+			}
+			else
+			{
+				Tones[0] = new() { Freq = Engine.Tones[0] };
+				Tones[1] = new() { Freq = Engine.Tones[1] };
+			}
 			H.AttachDelegate("E.Fr0", () => Fr(0));
 			H.AttachDelegate("E.Fr1", () => Fr(1));
 			H.AttachDelegate("E.Fr2", () => Fr(2));
@@ -40,16 +48,18 @@ namespace sierses.Sim
 			H.AttachDelegate("E.Fa6", () => Tones[1].Freq[6]);
 			H.AttachDelegate("E.Fa7", () => Tones[1].Freq[7]);
 
-			if (null != Engine && null != Engine.Sliders)
-				Q = Engine.Sliders;
-			if (1 > Q.Count || 9 != Q[0].Slider.Length || 0 == Q[0].Slider[0])
-			{
-				if (1 > Q.Count)
-					Q.Add(NewEQ());
-				else Q[0] = NewEQ();
+			Q = new();
+			if (null != Engine && null != Engine.Sliders && 0 < Engine.Sliders.Count)
+				for (int i = 0; i < Engine.Sliders.Count; i++)
+				{
+					Q.Add(new() { Slider = Engine.Sliders[i] });
+					AddProps(H, EqSpline(Q[i].Slider));
+				}
+			else {
+				Q.Add(NewEQ());
+				AddProps(H, EqSpline(Q[0].Slider));
 			}
-			AddProps(H, EqSpline(Q[0].Slider));
-		}
+		}	// Init()
 
 		public void Broadcast(Haptics This, int L)
 		{

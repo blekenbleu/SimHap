@@ -6,26 +6,26 @@ namespace sierses.Sim
 {
 	public class Tone	// array of frequency component properties
 	{	// one for frequency harmonics, another for amplitudes
-		internal ushort[] Freq = new ushort[8];
+		internal ushort[] Freq;
 	}
 
 	// array of 6 slider values, then min, max frequencies
 	public class Eq : NotifyPropertyChanged
 	{	// one for each slider + 2 for min and max frequency
-		internal ushort[] Slider = new ushort[9];
+		internal ushort[] Slider;
 	}
 
 	public class Engine
 	{
-		public Tone[] Tones;		// engine fundamental and harmonic
-		public List<Eq> Sliders;	// graphic equalizer
+		public ushort[][] Tones;		// engine fundamental and harmonic
+		public List<ushort[]> Sliders;	// graphic equalizer
 		public string Theme;
 	}
 
 	public partial class Geq
 	{
 		internal Haptics H;	// set in Init()
-		internal List<Eq> Q = new();	// EQ Slider array
+		internal List<Eq> Q;	// EQ Slider array
 		internal int EQswitch = 0;
 
 		// increment EQ high-/low-pass frequency
