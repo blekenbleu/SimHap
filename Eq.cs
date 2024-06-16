@@ -4,22 +4,18 @@ using System.Collections.ObjectModel;
 
 namespace sierses.Sim
 {
-	public class Tone	// array of frequency component properties
-	{	// one for frequency harmonics, another for amplitudes
-		internal ushort[] Freq;
+	// for Settings
+	public class Engine
+	{
+		public ushort[][] Tones;		// engine fundamental and harmonic
+		public List<ushort[]> Sliders;	// graphic equalizer
+		public string Theme;
 	}
 
 	// array of 6 slider values, then min, max frequencies
 	public class Eq : NotifyPropertyChanged
 	{	// one for each slider + 2 for min and max frequency
 		internal ushort[] Slider;
-	}
-
-	public class Engine
-	{
-		public ushort[][] Tones;		// engine fundamental and harmonic
-		public List<ushort[]> Sliders;	// graphic equalizer
-		public string Theme;
 	}
 
 	public partial class Geq
@@ -136,8 +132,6 @@ namespace sierses.Sim
 			return $"{EQswitch}";
 		}
 
-		public Tone[] Tones = new Tone[2];			// engine frequency harmonic, amplitude
-
 		/* an array of LUT[][s interpolated from Sliders
 		 ; 36 is the lowest frequency for which
 		 ; 1 <= the smallest step in 32 == LUT.Count with only an octave range
@@ -147,6 +141,8 @@ namespace sierses.Sim
 		public List<ushort[][]> LUT { get => lUT; set => lUT = value; }
 
 		/* EQ gains interpolated by rpm frequency harmonics
+		 ; executes at 60Hz for each frequency component and equalizer LUT combination
+		 ; used in EqProps.cs Publish()
 		 ; pitch is fundamental (rpm/60)
 		 ; or power stroke harmonic: (integer * rpm * cylinders) / 120)
 		 ; piecewise linear interpolation wants power-of-2 LUT.Length
@@ -167,7 +163,7 @@ namespace sierses.Sim
 			if (freq <= Lut[1][0] || freq > Lut[1][L])
 				return 0;
 			
-			// set a Tone harmonic amplitude for a Tone frequency
+			// set a amplitude for a harmonic frequency
 			int i;
 /* binary search increments
 	16/32 (8): 24 :  8
@@ -175,7 +171,7 @@ namespace sierses.Sim
 	28/32 (2): 30 : 26 : 22 : 18 : 14 : 10 : 6 : 2
 	23/24 (1): (odd values 31 to 1)
  */
-			// Luts have power-of-2 length
+			// LUTs have power-of-2 length
 			// Lut[0] has harmonic scaling values;
 			// Lut[1] has power-spaced frequency values
 /* binary search maybe faster?...
@@ -245,33 +241,6 @@ namespace sierses.Sim
 				f *= ff;			// geometric frequency progression
 			}
 			return lut;
-		}
-
-		// for properties
-		public ushort Fr(byte i)
-		{
-			int f = Tones[0].Freq[i] * H.D.Rpms;
-			return (ushort)((0 == i) ? ((30 + f) / 60)
-									 : ((60 + f * H.S.Car.cyl) / 120));
-		}
-
-		// AddProps() should be called by UI to add equalizer instances,
-		// which are Tone components played thru Play() using that LUT
-		// e.g. AddProps(This, EqSpline(sliders[n]));
-		public void AddProps(Haptics This,  ushort[][] that)
-		{
-			if (null != that)
-			{
-				if (3 <= LUT.Count)
-				{
-					H.D.LoadText = "already have 3 equalizers";
-					return;
-				}
-				LUT.Add(that);
-				Broadcast(This, LUT.Count);
-				return;
-			}
-			H.D.LoadText = "null LUT";
 		}
 	}
 }
