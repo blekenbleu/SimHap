@@ -1,10 +1,18 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="Light"  Color="#E86508"/>
-    <SolidColorBrush x:Key="Mid"  Color="#CF5A07"/>
-    <SolidColorBrush x:Key="Dark"  Color= "#7A4016"/>
+
+    <SolidColorBrush x:Key="Light" Color="#d97b39" />
+    <SolidColorBrush x:Key="LightMouse" Color="#cf5a07" />
+
+    <SolidColorBrush x:Key="Mid" Color="#cf5a07" />
+    <SolidColorBrush x:Key="MidMouse" Color="#a64806" />
+
+    <SolidColorBrush x:Key="Dark" Color="#913f05" />
+    <SolidColorBrush x:Key="DarkMouse" Color="#682d04" />
+
     <SolidColorBrush x:Key="Foreground" Color="White" />
     <SolidColorBrush x:Key="Background" Color="#252525" />
+    
     <SolidColorBrush x:Key="Slider" Color="White" />
-    <SolidColorBrush x:Key="Tab" Color="White" />
+    
 </ResourceDictionary>
