@@ -66,30 +66,6 @@ namespace sierses.Sim
 		{
 			get { return this.ToIcon(Resources._100x100_Traction_White); }
 		}
-/*
-		private List<string[]> Sling(DownloadData data)
-		{
-			return new List<string[]>
-			{
-				new string[] { "notes", data.notes },
-				new string[] { "cc", data.cc.ToString() },
-				new string[] { "nm", data.nm.ToString() },
-				new string[] { "ehp", data.ehp.ToString() },
-				new string[] { "hp", data.hp.ToString() },
-				new string[] { "drive", data.drive },
-				new string[] { "config", data.config },
-				new string[] { "cyl", data.cyl.ToString() },
-				new string[] { "loc", data.loc },
-				new string[] { "maxrpm", data.maxrpm.ToString() },
-				new string[] { "redline", data.redline.ToString() },
-				new string[] { "category", data.category },
-				new string[] { "defaults", data.defaults },
-				new string[] { "name", data.name },
-				new string[] { "id", data.id },
-				new string[] { "game", data.game }
-			};
-		}
- */
 
 		// boilerplate SimHub -------------------------------------------
 		public string LeftMenuTitle => "Haptics";
@@ -151,10 +127,12 @@ namespace sierses.Sim
 							? db.CarId.Substring(4) : db.CarId;
 				This.D.Index = This.S.SelectCar(sid, // set game RPM defaults
 													redlineFromGame, maxRPMFromGame, ushortIdleRPM);
+/*
 				Logging.Current.Info($"Haptics.SelectCar({sid}): "
 									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
 									+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
 									+ (Changed ? "Changed " : "") + $" Index = {This.D.Index}");
+ */
 				if (0 <= This.D.Index)
 					return;
 			}
@@ -186,8 +164,8 @@ namespace sierses.Sim
 						car.defaults = "DB";
 						This.S.Cache(car);					// FetchCarData(): Set(id) at the end of SetVehicle()
 						LoadFailCount = 1;
-						Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
-											+ $" CarInitCount = {This.D.CarInitCount}");
+					//	Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
+					//						+ $" CarInitCount = {This.D.CarInitCount}");
 						This.D.CarInitCount = 0;
 						This.D.Index = -4;
 						return;
@@ -227,14 +205,17 @@ namespace sierses.Sim
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
 			if (null == data.NewData)
+			{
+				E.UnitTest();
 				return;
+			}
 
 			Gdat = data;
 			PM = pluginManager;
-
+	
 			if (S.Id == data.NewData.CarId || !D.Unlocked)				// DataUpdate()
 			{
-				if ((data.GameRunning && null != data.OldData)
+				if (null != data.OldData && data.GameRunning
 					&& 1 == (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn"))
 					D.Refresh(ref data, this);
 				return;
@@ -251,9 +232,9 @@ namespace sierses.Sim
 
 				D.Index = -3;					   // disable FetchCarData(); enable Defaults()
 				D.CarInitCount = 0;
-				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
-									 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
-									+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
+			//	Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
+			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
+			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
 			}
 			else if (Loaded || Changed)		  // save before SetVehicle()

@@ -102,6 +102,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Themes.cs" />
     <Compile Include="ToneControl.cs" />
+    <Compile Include="UnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx" />
