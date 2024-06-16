@@ -876,12 +876,12 @@
                                         FontFamily="roboto"
                                         FontSize="20"
                                         Foreground="White"
-                                        Text=" - " />
+                                        Text=" " />
                                     <TextBlock
-                                        Margin="0,-3,0,0"
+                                        Margin="0,-1,0,0"
                                         VerticalAlignment="Center"
                                         FontFamily="roboto"
-                                        FontSize="20"
+                                        FontSize="16"
                                         Foreground="White"
                                         Text="{Binding S.CarName}" />
                                 </StackPanel>
