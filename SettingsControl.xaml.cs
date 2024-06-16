@@ -3,13 +3,9 @@
 // MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
 using SimHub;
 using System;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
 using System.Windows.Media;
 
 
