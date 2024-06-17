@@ -9,9 +9,9 @@ namespace sierses.Sim
         public void UnitTest()
         {
             // D.Refresh() updates D.Rpms when GameRunning
-            H.D.Rpms += 2;
+            H.D.Rpms += 5;
             if ((60 * Q[EQswitch].Slider[8]) < H.D.Rpms)
-				H.D.Rpms = (ushort)(0.5 + Q[EQswitch].Slider[0] / 60);
+				H.D.Rpms = (ushort)(0.5 + Q[EQswitch].Slider[0] * 60);
         }
     }
 }
