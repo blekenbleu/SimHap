@@ -198,47 +198,50 @@ namespace sierses.Sim
 		}	// Play()
 
 		// convert 7 slider values
-		// to (Eq.Slider.Length - 2) lookup table pairs for Play()
+		// to  8, 13 or 32 lookup table pairs for Play()
 		public ushort[][] EqSpline(ushort[] slider)
 		{
-			// slider.Length should be 9
-			int L = slider.Length;
-			double[] xdata = new double[L];
-			// ydata has slider values; 0 first and last entries
-			double[] ydata = new double[L];
-			xdata[0] = 1;	// frequency step
-			ydata[0] = 0;	// corresponding gain
-			for (int i = 1; i < L; i++)
+			int L = slider.Length;				// should be 9; first and last are min and max frequencies
+                                                // 7 slider gain values; 0 first and last entries for spline
+			int N = L - 1;							// should be 8
+			double[] xdata = new double[L + 1]; // linear steps for spline generation
+            double[] ydata = new double[L + 1]; // corresponding gains
+			int i;
+			xdata[0] = 1;
+			ydata[0] = 0;
+			for (i = 1; i < N; i++)
 			{
-				xdata[i] = i;			// equal increments
-				ydata[i] = slider[i];
+				xdata[i] = i + 1;			// equal steps
+				ydata[i] = slider[i];		// slider values
 			}
-			L--;
-			ydata[L] = 0;
-			var q = CubicSpline.InterpolateAkimaSorted(xdata, ydata);
+			xdata[i] = ++i;					// zero final 2 ydata[]
+            xdata[i] = ++i;
+            var q = CubicSpline.InterpolateAkimaSorted(xdata, ydata);
 
-			// now, generate an interpolation LUT with power-of-2 length
+			// sample interpolation LUT with power-of-2 length from spline
+			// interpolation lut[].Length depends on max - min range
 			ushort min = slider[0];
-			ushort max = slider[L];
-			ushort F;			// interpolation increment factor: 1, 2 or 4
+			double max = slider[N];
+			ushort F = 1;					// interpolation increment factor: 1, 2 or 4
+			for (double range = max - min; F < 4; F <<= 1)
+				if (20 > range / (8 * F))
+					break;
 
-			// interpolation lut[].Length depends on min value and max/min range 
-			double ff = System.Math.Log10(((double)max) / min);
-			double f = min;
+			N *= F;							// LUT lengths
 			ushort[][] lut = new ushort[2][];
-
-			// find largest F for which lut[1][1] > lut[1][0] by at least 1
-			for (F = 1; 4 >= F && min < (ushort)((f * ff) / (F * L)); F <<= 1);
-
-			lut[0] = new ushort[F*L];
-			lut[1] = new ushort[F*L];
-			double inc = 1.0;
-			inc /= F;
-			for (int i = 0; i < F*L; i++)
-			{	// equally spaced interpolated values
-				lut[0][i] = (ushort)(0.5 + q.Interpolate(1 + inc * i));
-				lut[1][i] = (ushort)(f);
-				f *= ff;			// geometric frequency progression
+			lut[0] = new ushort[N];
+			lut[1] = new ushort[N];
+			double ff = System.Math.Pow(max / min, 1.0 / (N - 1));
+			double f = min;
+			double inc = 1.0 /N;			// initial and final 0 sample offset
+			double d = 1 + inc;				// first sample just after 0 initial value
+			inc = 9.0 - inc;				// last sample just before 0 final value
+			inc /= (N + F - 1);
+			for (int j = 0; j < N; d += inc)
+			{								// equally spaced interpolated values
+				lut[0][j] = (ushort)(0.5 + q.Interpolate(d));
+				lut[1][j++] = (ushort)(0.5 + f);
+				f *= ff;					// geometric frequency progression
 			}
 			return lut;
 		}
