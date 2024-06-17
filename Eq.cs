@@ -165,16 +165,16 @@ namespace sierses.Sim
 			
 			// set a amplitude for a harmonic frequency
 			int i;
-/* binary search increments
-	16/32 (8): 24 :  8
-	24/32 (4): 28 : 20 : 12 : 4
-	28/32 (2): 30 : 26 : 22 : 18 : 14 : 10 : 6 : 2
-	23/24 (1): (odd values 31 to 1)
- */
+			/* binary search increments
+				16/32 (8): 24 :  8
+				24/32 (4): 28 : 20 : 12 : 4
+				28/32 (2): 30 : 26 : 22 : 18 : 14 : 10 : 6 : 2
+				23/24 (1): (odd values 31 to 1)
+			 */
 			// LUTs have power-of-2 length
 			// Lut[0] has harmonic scaling values;
 			// Lut[1] has power-spaced frequency values
-/* binary search maybe faster?...
+			L++;
 			for (int j = (i = L >> 1) >> 1 ; 0 < j; j >>= 1) 
 			{
 				if (freq < Lut[1][i - 1])
@@ -183,11 +183,12 @@ namespace sierses.Sim
 					i += j;
 				else break;
 			}
- */
+/* binary search maybe faster?...
 			for (i = 1; i < L; i++)
 				if (freq <= Lut[1][i])	// Lut interval for this Hz?
 					break;
 
+ */
 			ushort here = Lut[0][i - 1];
 			short range = (short)(Lut[0][i] - here);  // gains increase or decrease
 			ushort interval = (ushort)(Lut[1][i] - Lut[1][i - 1]); // monotonic frequencies
