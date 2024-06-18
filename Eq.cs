@@ -60,7 +60,7 @@ namespace sierses.Sim
 					H.D.LoadText = $"Low pass set to {Q[EQswitch].Slider[8]}";
 				}
 			}
-			EqSpline(Q[EQswitch].Slider);
+			EqSpline(EQswitch);
 			return Q[EQswitch].Slider;
 		}
 
@@ -100,7 +100,7 @@ namespace sierses.Sim
 				H.D.LoadText = "decremented";
 			}
 			else H.D.LoadText = up ? "100 is max gain" : "0 is min gain";
-			EqSpline(Q[EQswitch].Slider);
+			EqSpline(EQswitch);
 			return Q[EQswitch].Slider;
 		}
 
@@ -112,7 +112,7 @@ namespace sierses.Sim
 		}
 
 		// select another EQ Slider set
-		internal string NextUp(bool up)
+		internal ushort[] NextUp(bool up)
 		{
 			if ((up && 2 == EQswitch) || (0 == EQswitch && !up))
 			{
@@ -120,16 +120,18 @@ namespace sierses.Sim
 				return $"{EQswitch}";
 			}
 			EQswitch += up ? +1 : -1;
-			if (EQswitch == Q.Count || 0 == Q[EQswitch].Slider.Length || 0 == Q[EQswitch].Slider[0])
+			if (EQswitch == Q.Count || 9 != Q[EQswitch].Slider.Length || 0 == Q[EQswitch].Slider[0])
 			{
 				if (EQswitch == Q.Count)
-					Q.Add(NewEQ());
-				else Q[EQswitch] = NewEQ();
+					AddProps(H, -1)
+				else {
+					Q[EQswitch] = NewEQ();
+					EqSpline(EQswitch);
+				}
 				H.D.LoadText = $"LUT {EQswitch} initialized";
 			}
 			else H.D.LoadText = up ? "Incremented" : "Decremented";
-			H.SC.ShowEq(Q[EQswitch].Slider);
-			return $"{EQswitch}";
+			return Q[EQswitch].Slider;
 		}
 
 		/* an array of LUT[][s interpolated from Sliders
@@ -197,6 +199,11 @@ namespace sierses.Sim
 			return (ushort)(here + (interval + 2 * (freq - Lut[1][i - 1]) * range)
 							/ (interval * 2)); 
 		}	// Play()
+
+		internal void EqSpline(ushort index)
+		{
+			LUT[index] = EqSpline(Q[index].Slider);
+		}
 
 		// convert 7 slider values
 		// to  8, 13 or 32 lookup table pairs for Play()
