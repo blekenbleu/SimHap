@@ -104,7 +104,7 @@ namespace sierses.Sim
 			return Q[EQswitch].Slider;
 		}
 
-		private Eq NewEQ()
+        internal Eq NewEQ()
 		{
 			ushort s = 50, highpass = 20, lowpass = 900;
 			ushort[] S = { highpass, s, s, s, s, s, s, s, lowpass };
@@ -117,14 +117,15 @@ namespace sierses.Sim
 			if ((up && 2 == EQswitch) || (0 == EQswitch && !up))
 			{
 				H.D.LoadText = "limits are >= 0 and <= 2";
-				return $"{EQswitch}";
-			}
+				return Q[EQswitch].Slider;
+            }
 			EQswitch += up ? +1 : -1;
 			if (EQswitch == Q.Count || 9 != Q[EQswitch].Slider.Length || 0 == Q[EQswitch].Slider[0])
 			{
 				if (EQswitch == Q.Count)
-					AddProps(H, -1)
-				else {
+					AddProps(H, -1);
+				else
+				{
 					Q[EQswitch] = NewEQ();
 					EqSpline(EQswitch);
 				}
@@ -200,7 +201,7 @@ namespace sierses.Sim
 							/ (interval * 2)); 
 		}	// Play()
 
-		internal void EqSpline(ushort index)
+		internal void EqSpline(int index)
 		{
 			LUT[index] = EqSpline(Q[index].Slider);
 		}
