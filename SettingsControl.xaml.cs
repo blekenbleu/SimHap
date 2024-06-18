@@ -49,7 +49,7 @@ namespace sierses.Sim
 		}
 
 		// called when expanding EQ or Plugin.E.NextUp() 
-		internal void ShowEq(ushort[] S)
+		internal string ShowEq(ushort[] S)
 		{
 			//writing to these values provokes recalculations
 			if (EQ0_value.Text != S[0].ToString())
@@ -70,6 +70,7 @@ namespace sierses.Sim
 				EQ7_value.Text = S[7].ToString();
 			if (EQ8_value.Text != S[8].ToString())
 				EQ8_value.Text = S[8].ToString();
+			return Plugin.E.EQswitch.ToString();
 		}
 
 		private void EQ_Expanded(object sender, RoutedEventArgs e)
@@ -125,12 +126,30 @@ namespace sierses.Sim
 		// this may provoke new equalizer creation
 		private void EQswitch_increment_Click(object sender, RoutedEventArgs e)
 		{
-			EQswitch_value.Text = Plugin.E.NextUp(true);
+			EQswitch_value.Text = ShowEq(Plugin.E.NextUp(true));
 		}
 
 		private void EQswitch_decrement_Click(object sender, RoutedEventArgs e)
 		{
-			EQswitch_value.Text = Plugin.E.NextUp(false);
+			EQswitch_value.Text = ShowEq(Plugin.E.NextUp(false));
+		}
+
+		private void DeleteEQ_Click(object sender, RoutedEventArgs e)
+		{
+			if (2 > Plugin.E.Q.Count)
+				return;
+			Plugin.E.Q.RemoveAt(Plugin.E.EQswitch);
+			Plugin.E.LUT.RemoveAt(Plugin.E.EQswitch);
+			if (Plugin.E.EQswitch >= Plugin.E.Q.Count)
+				Plugin.E.EQswitch = Plugin.E.Q.Count - 1;
+			EQswitch_value.Text = ShowEq(Plugin.E.Q[Plugin.E.EQswitch].Slider);	
+		}
+
+		private void InitEQ_Click(object sender, RoutedEventArgs e)
+		{
+			Plugin.E.Q[Plugin.E.EQswitch] = Plugin.E.NewEQ();
+			ShowEq(Plugin.E.Q[Plugin.E.EQswitch].Slider);
+			Plugin.E.EqSpline(Plugin.E.EQswitch);
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)

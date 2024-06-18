@@ -210,10 +210,10 @@ namespace sierses.Sim
 		public ushort[][] EqSpline(ushort[] slider)
 		{
 			int L = slider.Length;				// should be 9; first and last are min and max frequencies
-                                                // 7 slider gain values; 0 first and last entries for spline
+												// 7 slider gain values; 0 first and last entries for spline
 			int N = L - 1;							// should be 8
 			double[] xdata = new double[L + 1]; // linear steps for spline generation
-            double[] ydata = new double[L + 1]; // corresponding gains
+			double[] ydata = new double[L + 1]; // corresponding gains
 			int i;
 			xdata[0] = 1;
 			ydata[0] = 0;
@@ -223,8 +223,8 @@ namespace sierses.Sim
 				ydata[i] = slider[i];		// slider values
 			}
 			xdata[i] = ++i;					// zero final 2 ydata[]
-            xdata[i] = ++i;
-            var q = CubicSpline.InterpolateAkimaSorted(xdata, ydata);
+			xdata[i] = ++i;
+			var q = CubicSpline.InterpolateAkimaSorted(xdata, ydata);
 
 			// sample interpolation LUT with power-of-2 length from spline
 			// interpolation lut[].Length depends on max - min range
