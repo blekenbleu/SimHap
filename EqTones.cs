@@ -51,23 +51,26 @@ namespace sierses.Sim
 			}
 		}	// Publish()
 
-		// AddProps() is called by UI to add equalizer LUT instances,
+		// called by UI to add equalizer LUT instances,
 		// which are frequency component gains from Play() using those LUTs
-		// e.g. AddProps(This, EqSpline(Q[i].Slider));
-		public void AddProps(Haptics This,  ushort[][] that)
+		public bool AddProps(Haptics This,  int i)
 		{
-			if (null != that)
+			if (3 <= LUT.Count)
 			{
-				if (3 <= LUT.Count)
-				{
-					H.D.LoadText = "already have 3 equalizers";
-					return;
-				}
-				LUT.Add(that);
-				Publish(This, LUT.Count);
-				return;
+				H.D.LoadText = "already have 3 equalizers";
+				return false;
 			}
-			H.D.LoadText = "null LUT";
+
+			if (-1 == i)
+			{
+				Q.Add(NewEQ());
+				i = Q.Count - 1;
+			}
+			
+			LUT.Add(EqSpline(Q[i].Slider));
+			Publish(This, LUT.Count);
+			H.D.LoadText = $"added LUT[{LUT.Count - 1}]";
+			return true;
 		}
 
 		// for Fr[0-7] properties in Init()
@@ -121,13 +124,11 @@ namespace sierses.Sim
 
 			Q = new();
 			if (null == Engine | null == Engine.Sliders || 1 > Engine.Sliders.Count)
-			{
-				Q.Add(NewEQ());
-				AddProps(H, EqSpline(Q[0].Slider));
-			} else for (int i = 0; i < Engine.Sliders.Count; i++)
+				AddProps(H, -1);
+			else for (int i = 0; i < Engine.Sliders.Count; i++)
 			{
 				Q.Add(new() { Slider = Engine.Sliders[i] });
-				AddProps(H, EqSpline(Q[i].Slider));
+				AddProps(H, i);
 			}
 		}	// Init()
 	}
