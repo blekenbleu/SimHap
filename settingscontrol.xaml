@@ -360,7 +360,7 @@
                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
                 <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
                 <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
-                <Setter Property="MinWidth" Value="80" />
+                <Setter Property="MinWidth" Value="50" />
                 <Setter Property="MinHeight" Value="20" />
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="Template">
@@ -922,6 +922,7 @@
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
@@ -949,7 +950,7 @@
                                     x:Name="EngNameLabel"
                                     Grid.Row="1"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -959,7 +960,7 @@
                                     x:Name="CarName"
                                     Grid.Row="2"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Margin="10,3,10,5"
                                     GotFocus="CarName_GotFocus"
                                     LostFocus="CarName_LostFocus"
@@ -970,8 +971,9 @@
                                 <TextBlock
                                     x:Name="EngIDLabel"
                                     Grid.Row="3"
+                                    
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -982,7 +984,7 @@
                                     x:Name="CarID"
                                     Grid.Row="4"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Margin="10,3"
                                     GotFocus="CarID_GotFocus"
                                     LostFocus="CarID_LostFocus"
@@ -994,7 +996,7 @@
                                     x:Name="EngCategoryLabel"
                                     Grid.Row="5"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -1004,7 +1006,7 @@
                                     x:Name="CarClass"
                                     Grid.Row="6"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Margin="10,3,10,5"
                                     GotFocus="CarClass_GotFocus"
                                     LostFocus="CarClass_LostFocus"
@@ -1017,7 +1019,7 @@
                                     Grid.Row="7"
                                     Grid.Column="0"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-20,3,0,0"
                                     HorizontalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Idle" /></TextBlock>
@@ -1027,7 +1029,7 @@
                                     Grid.Row="7"
                                     Grid.Column="1"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-50,3,0,0"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Redline" /></TextBlock>
 
@@ -1036,27 +1038,28 @@
                                     Grid.Row="7"
                                     Grid.Column="2"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-80,3,0,0"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Max" /></TextBlock>
 
                                 <TextBlock
-                                    x:Name="EngMultiLabel"
+                                    x:Name="FiringOrderLabel"
                                     Grid.Row="7"
                                     Grid.Column="3"
+                                    Grid.ColumnSpan="2"
                                     Width="100"
-                                    Margin="0,3"
+                                    Margin="-45,3,0,0"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
-                                    TextAlignment="Center"><Run Text="PerGame Gain" /></TextBlock>
+                                    TextAlignment="Center"><Run Text="Order" /></TextBlock>
 
                                 <!--  Idle/Redline/MaxRPM textboxes  -->
                                 <TextBox
                                     x:Name="IdleRPM"
                                     Grid.Row="8"
                                     Grid.Column="0"
-                                    Width="80"
-                                    Margin="0,3,0,5"
+                                    Width="60"
+                                    Margin="-20,3,0,5"
                                     GotFocus="IdleRPM_GotFocus"
                                     LostFocus="IdleRPM_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
@@ -1065,8 +1068,8 @@
                                     x:Name="Redline"
                                     Grid.Row="8"
                                     Grid.Column="1"
-                                    Width="80"
-                                    Margin="0,3,0,5"
+                                    Width="60"
+                                    Margin="-50,3,0,5"
                                     GotFocus="Redline_GotFocus"
                                     LostFocus="Redline_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
@@ -1076,14 +1079,14 @@
                                     x:Name="MaxRPM"
                                     Grid.Row="8"
                                     Grid.Column="2"
-                                    Width="80"
-                                    Margin="0,3,0,5"
+                                    Width="60"
+                                    Margin="-80,3,0,5"
                                     GotFocus="MaxRPM_GotFocus"
                                     LostFocus="MaxRPM_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
                                     Text="{Binding S.MaxRPM}" />
 
-                                <!--  slider for engine per game multi  -->
+                                <!--  slider for engine per game multi
                                 <Slider
                                     x:Name="EngineMulti"
                                     Grid.Row="8"
@@ -1100,15 +1103,29 @@
                                     Minimum="0.5"
                                     TickFrequency="0.1"
                                     ValueChanged="EngineMulti_ValueChanged"
-                                    Value="{Binding D.EngineMult}" />
+                                    Value="{Binding D.EngineMult}" /> -->
+
+                                <TextBox
+                                    x:Name="FiringOrder"
+                                    Grid.Row="8"
+                                    Grid.Column="3"
+                                    Grid.ColumnSpan="2"
+                                    Width="225"
+                                    Margin="-45,3,0,5"
+                                    GotFocus="FiringOrder_GotFocus"
+                                    LostFocus="FiringOrder_LostFocus"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.FiringOrder}" />
+
+
 
                                 <!--  Engine config/cylinders/drivetrain/location headers  -->
                                 <TextBlock
                                     x:Name="EngConfigLabel"
                                     Grid.Row="9"
-                                    Grid.Column="0"
+                                    Grid.Column="1"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-100,3,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
@@ -1116,9 +1133,9 @@
                                 <TextBlock
                                     x:Name="EngCylindersLabel"
                                     Grid.Row="9"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-100,3,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
@@ -1126,9 +1143,9 @@
                                 <TextBlock
                                     x:Name="EngDrivetrainLabel"
                                     Grid.Row="9"
-                                    Grid.Column="2"
+                                    Grid.Column="3"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-100,3,0,0"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Drivetrain" /></TextBlock>
@@ -1136,9 +1153,9 @@
                                 <TextBlock
                                     x:Name="EngLocationLabel"
                                     Grid.Row="9"
-                                    Grid.Column="3"
+                                    Grid.Column="4"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-100,3,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
@@ -1150,10 +1167,10 @@
                                 <ComboBox
                                     Name="EngineConfig"
                                     Grid.Row="10"
-                                    Grid.Column="0"
-                                    Width="80"
+                                    Grid.Column="1"
+                                    Width="60"
                                     Height="25.2"
-                                    Margin="0,3,0,5"
+                                    Margin="-100,3,0,5"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -1173,10 +1190,10 @@
                                 <ComboBox
                                     Name="EngineCylinders"
                                     Grid.Row="10"
-                                    Grid.Column="1"
-                                    Width="80"
+                                    Grid.Column="2"
+                                    Width="60"
                                     Height="25.2"
-                                    Margin="0,3,0,5"
+                                    Margin="-100,3,0,5"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -1199,10 +1216,10 @@
                                 <ComboBox
                                     Name="Drivetrain"
                                     Grid.Row="10"
-                                    Grid.Column="2"
-                                    Width="80"
+                                    Grid.Column="3"
+                                    Width="60"
                                     Height="25.2"
-                                    Margin="0,3,0,5"
+                                    Margin="-100,3,0,5"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -1218,10 +1235,10 @@
                                 <ComboBox
                                     Name="Englocation"
                                     Grid.Row="10"
-                                    Grid.Column="3"
-                                    Width="80"
+                                    Grid.Column="4"
+                                    Width="60"
                                     Height="25.2"
-                                    Margin="0,3,0,5"
+                                    Margin="-100,3,0,5"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -1241,9 +1258,9 @@
                                 <TextBlock
                                     x:Name="EngHPLabel"
                                     Grid.Row="11"
-                                    Grid.Column="0"
+                                    Grid.Column="1"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-100,3,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
@@ -1252,9 +1269,9 @@
                                 <TextBlock
                                     x:Name="EngEHPLabel"
                                     Grid.Row="11"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-100,3,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
@@ -1263,9 +1280,9 @@
                                 <TextBlock
                                     x:Name="EngNMLabel"
                                     Grid.Row="11"
-                                    Grid.Column="2"
+                                    Grid.Column="3"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-100,3,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
@@ -1274,9 +1291,9 @@
                                 <TextBlock
                                     x:Name="EngCCLabel"
                                     Grid.Row="11"
-                                    Grid.Column="3"
+                                    Grid.Column="4"
                                     Width="80"
-                                    Margin="0,3"
+                                    Margin="-100,3,0,5"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
@@ -1286,9 +1303,9 @@
                                 <TextBox
                                     x:Name="MaxPowerHP"
                                     Grid.Row="12"
-                                    Grid.Column="0"
-                                    Width="80"
-                                    Margin="0,3,0,5"
+                                    Grid.Column="1"
+                                    Width="60"
+                                    Margin="-100,3,0,5"
                                     GotFocus="MaxPowerHP_GotFocus"
                                     LostFocus="MaxPowerHP_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
@@ -1297,9 +1314,9 @@
                                 <TextBox
                                     x:Name="EMaxPowerHP"
                                     Grid.Row="12"
-                                    Grid.Column="1"
-                                    Width="80"
-                                    Margin="0,3,0,5"
+                                    Grid.Column="2"
+                                    Width="60"
+                                    Margin="-100,3,0,5"
                                     GotFocus="EMaxPowerHP_GotFocus"
                                     LostFocus="EMaxPowerHP_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
@@ -1308,9 +1325,9 @@
                                 <TextBox
                                     x:Name="MaxTorqueNM"
                                     Grid.Row="12"
-                                    Grid.Column="2"
-                                    Width="80"
-                                    Margin="0,3,0,5"
+                                    Grid.Column="3"
+                                    Width="60"
+                                    Margin="-100,3,0,5"
                                     GotFocus="MaxTorqueNM_GotFocus"
                                     LostFocus="MaxTorqueNM_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
@@ -1319,9 +1336,9 @@
                                 <TextBox
                                     x:Name="Displacement"
                                     Grid.Row="12"
-                                    Grid.Column="3"
-                                    Width="80"
-                                    Margin="0,3,0,5"
+                                    Grid.Column="4"
+                                    Width="60"
+                                    Margin="-100,3,0,5"
                                     GotFocus="Displacement_GotFocus"
                                     LostFocus="Displacement_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
@@ -1336,7 +1353,7 @@
                                     Grid.ColumnSpan="4"
                                     Width="95"
                                     Height="30"
-                                    Margin="-200,0,0,5"
+                                    Margin="-100,0,0,5"
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Checked="EngineView_Switch_Checked"
@@ -1355,7 +1372,7 @@
                                     Grid.ColumnSpan="4"
                                     Width="95"
                                     Height="30"
-                                    Margin="0,0,0,5"
+                                    Margin="100,0,0,5"
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Click="Lock_Click"
@@ -1372,7 +1389,7 @@
                                     Grid.ColumnSpan="4"
                                     Width="95"
                                     Height="30"
-                                    Margin="200,0,0,5"
+                                    Margin="300,0,0,5"
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Click="Refresh_Click"
@@ -2078,8 +2095,10 @@
                                         Grid.Row="0"
                                         Grid.Column="5"
                                         Margin="6,4.5,6,4.5">
-                                        <Button x:Name="RefreshEQ" Style="{StaticResource dMASSbuttonDelRefresh}"
-                                        	Click="DeleteEQ_Click">
+                                        <Button
+                                            x:Name="RefreshEQ"
+                                            Click="DeleteEQ_Click"
+                                            Style="{StaticResource dMASSbuttonDelRefresh}">
                                             <Image
                                                 Height="23"
                                                 Margin="-1,-0.5,0,0"
@@ -2092,8 +2111,10 @@
                                         Grid.Row="0"
                                         Grid.Column="7"
                                         Margin="6,4.5,6,4.5">
-                                        <Button x:Name="DeleteEQ" Style="{StaticResource dMASSbuttonDelRefresh}"
-                                        	Click="InitEQ_Click">
+                                        <Button
+                                            x:Name="DeleteEQ"
+                                            Click="InitEQ_Click"
+                                            Style="{StaticResource dMASSbuttonDelRefresh}">
                                             <Image Height="26" Source="Resources\refresh50X50.png" />
                                         </Button>
                                     </Border>
@@ -2132,9 +2153,9 @@
                                 </Expander.Header>
                                 <Grid Margin="0,9,0,-6" HorizontalAlignment="Center">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0" />
-                                        <ColumnDefinition Width="49" />
-                                        <ColumnDefinition Width="49" />
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="40" />
                                         <ColumnDefinition Width="49" />
                                         <ColumnDefinition Width="49" />
                                         <ColumnDefinition Width="49" />
@@ -2155,7 +2176,33 @@
                                         <RowDefinition Height="32" />
                                     </Grid.RowDefinitions>
 
-                                    <!--  rpm & fund  -->
+                                    <!--  modulation/rpm/fund  -->
+                                    <Border
+                                        Grid.Row="8"
+                                        Grid.Column="0"
+                                        Margin="3,8,3,5"
+                                        Background="{DynamicResource Dark}"
+                                        BorderThickness="0"
+                                        CornerRadius="5">
+                                        <TextBlock
+                                            Margin="0,2,0,0"
+                                            HorizontalAlignment="Center"
+                                            FontFamily="roboto medium"
+                                            FontSize="12">
+                                            Mod
+                                        </TextBlock>
+                                    </Border>
+
+                                    <!--  throttle load button  -->
+                                    <Border
+                                        Grid.Row="9"
+                                        Grid.Column="0"
+                                        Margin="3,0,3,10">
+                                        <Button x:Name="ThrottleLoadSwitch" Style="{StaticResource dMASSbuttonDelRefresh}">
+                                            <Image Height="24" Source="Resources\throttle50X50.png" />
+                                        </Button>
+                                    </Border>
+
                                     <Border
                                         Grid.Row="8"
                                         Grid.Column="1"
@@ -2596,7 +2643,22 @@
                                         </TextBlock>
                                     </Border>
 
-                                    <!--  factor sliders  -->
+                                    <!--  modulation and factor sliders  -->
+
+                                    <!--  Modulation  -->
+                                    <Slider
+                                        x:Name="Mod_value"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="8"
+                                        Grid.Column="0"
+                                        Margin="-1,0,0,0"
+                                        IsSnapToTickEnabled="True"
+                                        Maximum="120"
+                                        Minimum="1"
+                                        Orientation="Vertical"
+                                        TickFrequency="1"
+                                        ValueChanged="HSlider"
+                                        Value="120" />
 
                                     <!--  F1  -->
                                     <Slider
@@ -2604,7 +2666,7 @@
                                         Grid.Row="0"
                                         Grid.RowSpan="8"
                                         Grid.Column="1"
-                                        Margin="3,0,0,0"
+                                        Margin="-1,0,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="992"
                                         Minimum="0"
@@ -2621,7 +2683,7 @@
                                         Grid.Row="0"
                                         Grid.RowSpan="8"
                                         Grid.Column="2"
-                                        Margin="3,0,0,0"
+                                        Margin="-1,0,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="992"
                                         Minimum="0"

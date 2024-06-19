@@ -700,6 +700,7 @@ namespace sierses.Sim
 			this.AttachDelegate("EngineConfig", () => S.EngineConfiguration);
 			this.AttachDelegate("EngineCylinders", () => S.EngineCylinders);
 			this.AttachDelegate("EngineLocation", () => S.EngineLocation);
+			this.AttachDelegate("FiringOrder", () => S.FiringOrder);
 			this.AttachDelegate("PoweredWheels", () => S.PoweredWheels);
 			this.AttachDelegate("DisplacementCC", () => S.Displacement);
 			this.AttachDelegate("PowerTotalHP", () => S.MaxPower);

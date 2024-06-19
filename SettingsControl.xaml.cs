@@ -760,16 +760,16 @@ namespace sierses.Sim
 			EngLocationLabel.FontWeight = FontWeights.Regular;
 		}
 
-		private void EngineMulti_GotFocus(object sender, RoutedEventArgs e)
+		private void FiringOrder_GotFocus(object sender, RoutedEventArgs e)
 		{
-			EngMultiLabel.Foreground = (SolidColorBrush)this.FindResource("Light");
-			EngMultiLabel.FontWeight = FontWeights.Bold;
+			FiringOrderLabel.Foreground = (SolidColorBrush)this.FindResource("Light");
+			FiringOrderLabel.FontWeight = FontWeights.Bold;
 		}
 
-		private void EngineMulti_LostFocus(object sender, RoutedEventArgs e)
+		private void FiringOrder_LostFocus(object sender, RoutedEventArgs e)
 		{
-			EngMultiLabel.Foreground = (SolidColorBrush)this.FindResource("Foreground");
-			EngMultiLabel.FontWeight = FontWeights.Regular;
+			FiringOrderLabel.Foreground = (SolidColorBrush)this.FindResource("Foreground");
+			FiringOrderLabel.FontWeight = FontWeights.Regular;
 		}
 
 		private void SuspensionMultAll_GotFocus(object sender, RoutedEventArgs e)

@@ -253,5 +253,8 @@
   <ItemGroup>
     <Resource Include="Resources\delete50x50.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\throttle50x50.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
