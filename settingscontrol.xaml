@@ -2198,7 +2198,8 @@
                                         Grid.Row="9"
                                         Grid.Column="0"
                                         Margin="3,0,3,10">
-                                        <Button x:Name="ThrottleLoadSwitch" Style="{StaticResource dMASSbuttonDelRefresh}">
+                                        <Button x:Name="ThrottleLoadSwitch" Style="{StaticResource dMASSbuttonDelRefresh}"
+                                    	 Click="ThrottleLoadSwitch_Click">
                                             <Image Height="24" Source="Resources\throttle50X50.png" />
                                         </Button>
                                     </Border>
@@ -2647,18 +2648,18 @@
 
                                     <!--  Modulation  -->
                                     <Slider
-                                        x:Name="Mod_value"
+                                        x:Name="F0_value"
                                         Grid.Row="0"
                                         Grid.RowSpan="8"
                                         Grid.Column="0"
                                         Margin="-1,0,0,0"
                                         IsSnapToTickEnabled="True"
-                                        Maximum="120"
-                                        Minimum="1"
+                                        Maximum="100"
+                                        Minimum="0"
                                         Orientation="Vertical"
                                         TickFrequency="1"
                                         ValueChanged="HSlider"
-                                        Value="120" />
+                                        Value="50" />
 
                                     <!--  F1  -->
                                     <Slider

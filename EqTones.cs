@@ -84,25 +84,33 @@ namespace sierses.Sim
 		internal void Init(Engine Engine, Haptics h)
 		{
 			H = h;
-			Tones = new Tone[2];
-			if (null == Engine || null == Engine.Tones || 2 > Engine.Tones.Length
-				|| null == Engine.Tones[1] || 8 != Engine.Tones[1].Length)
+			Tones = new Tone[4];
+			if (null == Engine || null == Engine.Tones || 4 > Engine.Tones.Length
+				|| null == Engine.Tones[1] || 9 != Engine.Tones[1].Length)
 			{
 				Tones[0] = new()
 				{
-					Freq = new ushort[8] {	1,		// engine RPM / 60
+					Freq = new ushort[9] {	1,		// engine RPM / 60
 											1,		// power stroke: cylinders * engine RPM / 120
 											3,		// power stroke 1st harmonic, for square wave
 											5, 7, 9, 11,
-											13 }	// power stroke 6th harmonic
+											13,		// power stroke 6th harmonic
+											0 }	// which tone set: 0 or 2?
 				};
-				Tones[1] = new() { Freq = new ushort[8] {		// harmonic amplitudes
+				Tones[1] = new() { Freq = new ushort[9] {			// harmonic amplitudes
 									1000, 1000,
-									333, 111, 37, 12, 4, 1 }	// square wave
+									333, 200, 142, 111, 91, 77,		// square wave
+									50 }	// modulation: 0 - 100%
 				};
+				// full throttle tones?
+				Tones[2] = new() { Freq = new ushort[9] { 1, 1, 3, 5, 7, 9, 11, 13, 50 }};
+				// triangle wave
+				Tones[3] = new() { Freq = new ushort[9] { 1000, 1000, 111, 40, 20, 12, 8, 6, 0 }};
 			} else {
 				Tones[0] = new() { Freq = Engine.Tones[0] };
 				Tones[1] = new() { Freq = Engine.Tones[1] };
+				Tones[2] = new() { Freq = Engine.Tones[2] };
+				Tones[3] = new() { Freq = Engine.Tones[3] };
 			}
 
 			H.AttachDelegate("E.Fr0", () => Fr(0));
@@ -123,7 +131,7 @@ namespace sierses.Sim
 			H.AttachDelegate("E.Fa7", () => Tones[1].Freq[7]);
 
 			Q = new();
-			if (null == Engine | null == Engine.Sliders || 1 > Engine.Sliders.Count)
+			if (null == Engine || null == Engine.Sliders || 1 > Engine.Sliders.Count)
 				AddProps(H, -1);
 			else for (int i = 0; i < Engine.Sliders.Count; i++)
 			{

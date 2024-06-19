@@ -274,9 +274,11 @@ namespace sierses.Sim
 				Settings.Engine = new();
 			if (null == Settings.Engine.Tones)
 			{ 
-				Settings.Engine.Tones = new ushort[2][];
-				Settings.Engine.Tones[0] = new ushort[8];
-				Settings.Engine.Tones[1] = new ushort[8];
+				Settings.Engine.Tones = new ushort[4][];
+				Settings.Engine.Tones[0] = new ushort[9]; // 2 fundamentals, 6 harmonics, 1 modulator
+				Settings.Engine.Tones[1] = new ushort[9];
+				Settings.Engine.Tones[2] = new ushort[9]; // second pair: full throttle
+				Settings.Engine.Tones[3] = new ushort[9];
 			}
 
 			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
@@ -300,8 +302,6 @@ namespace sierses.Sim
 						+ $"{S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
 				}
 			}
-			if (!Save)
-				Logging.Current.Info("Haptics.End():  JSON not saved");
 
 			// Remove default values from Settings per-game dictionaries
 			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
@@ -596,7 +596,7 @@ namespace sierses.Sim
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
 			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
 			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
-			 || 2 != Settings.Engine.Tones.Length || 8 != Settings.Engine.Tones[0].Length)
+			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
 			{
 				if (null == Settings.Engine)
 					Logging.Current.Info($"Haptics.Init(): null Settings.Engine");
@@ -611,15 +611,15 @@ namespace sierses.Sim
 					if (null == Settings.Engine.Tones)
 						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Tones");
 					else {
-						if (2 != Settings.Engine.Tones.Length)
+						if (4 != Settings.Engine.Tones.Length)
 							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones.Length = "
 								+ Settings.Engine.Tones.Length.ToString());
-						if (8 != Settings.Engine.Tones[0].Length)
+						if (9 != Settings.Engine.Tones[0].Length)
 							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones[0].Freq.Length = "
 								+ Settings.Engine.Tones[0].Length.ToString()); 
 					}
 				}
-				Settings = new();
+				Settings = new();	// Settings.Engine will be initialized in End()
 				Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
 			}
 

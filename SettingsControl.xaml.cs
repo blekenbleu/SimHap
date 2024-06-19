@@ -93,34 +93,44 @@ namespace sierses.Sim
 		internal void InitHarmonics(Tone[] harmonic)
 		{
 			//writing to these values provokes recalculations
-			if (H1_value.Text != harmonic[1].Freq[2].ToString())
-				H1_value.Text = harmonic[1].Freq[2].ToString();
-			if (H2_value.Text != harmonic[1].Freq[3].ToString())
-				H2_value.Text = harmonic[1].Freq[3].ToString();
-			if (H3_value.Text != harmonic[1].Freq[4].ToString())
-				H3_value.Text = harmonic[1].Freq[4].ToString();
-			if (H4_value.Text != harmonic[1].Freq[5].ToString())
-				H4_value.Text = harmonic[1].Freq[5].ToString();
-			if (H5_value.Text != harmonic[1].Freq[6].ToString())
-				H5_value.Text = harmonic[1].Freq[6].ToString();
-			if (H6_value.Text != harmonic[1].Freq[7].ToString())
-				H6_value.Text = harmonic[1].Freq[7].ToString();
-			if (F1_value.Value != harmonic[1].Freq[0])
-				F1_value.Value = harmonic[1].Freq[0];
-			if (F2_value.Value != harmonic[1].Freq[1])
-				F2_value.Value = harmonic[1].Freq[1];
-			if (H1_factor.Value != harmonic[0].Freq[2])
-				H1_factor.Value = harmonic[0].Freq[2];
-			if (H2_factor.Value != harmonic[0].Freq[3])
-				H2_factor.Value = harmonic[0].Freq[3];
-			if (H3_factor.Value != harmonic[0].Freq[4])
-				H3_factor.Value = harmonic[0].Freq[4];
-			if (H4_factor.Value != harmonic[0].Freq[5])
-				H4_factor.Value = harmonic[0].Freq[5];
-			if (H5_factor.Value != harmonic[0].Freq[6])
-				H5_factor.Value = harmonic[0].Freq[6];
-			if (H6_factor.Value != harmonic[0].Freq[7])
-				H6_factor.Value = harmonic[0].Freq[7];
+			int a = harmonic[0].Freq[8];
+			int b = 1 + a;
+			if (H1_value.Text != harmonic[b].Freq[2].ToString())
+				H1_value.Text = harmonic[b].Freq[2].ToString();
+			if (H2_value.Text != harmonic[b].Freq[3].ToString())
+				H2_value.Text = harmonic[b].Freq[3].ToString();
+			if (H3_value.Text != harmonic[b].Freq[4].ToString())
+				H3_value.Text = harmonic[b].Freq[4].ToString();
+			if (H4_value.Text != harmonic[b].Freq[5].ToString())
+				H4_value.Text = harmonic[b].Freq[5].ToString();
+			if (H5_value.Text != harmonic[b].Freq[6].ToString())
+				H5_value.Text = harmonic[b].Freq[6].ToString();
+			if (H6_value.Text != harmonic[b].Freq[7].ToString())
+				H6_value.Text = harmonic[b].Freq[7].ToString();
+			if (F0_value.Value != harmonic[b].Freq[8])
+				F0_value.Value = harmonic[b].Freq[8];
+			if (F1_value.Value != harmonic[b].Freq[0])
+				F1_value.Value = harmonic[b].Freq[0];
+			if (F2_value.Value != harmonic[b].Freq[1])
+				F2_value.Value = harmonic[b].Freq[1];
+			if (H1_factor.Value != harmonic[a].Freq[2])
+				H1_factor.Value = harmonic[a].Freq[2];
+			if (H2_factor.Value != harmonic[a].Freq[3])
+				H2_factor.Value = harmonic[a].Freq[3];
+			if (H3_factor.Value != harmonic[a].Freq[4])
+				H3_factor.Value = harmonic[a].Freq[4];
+			if (H4_factor.Value != harmonic[a].Freq[5])
+				H4_factor.Value = harmonic[a].Freq[5];
+			if (H5_factor.Value != harmonic[a].Freq[6])
+				H5_factor.Value = harmonic[a].Freq[6];
+			if (H6_factor.Value != harmonic[a].Freq[7])
+				H6_factor.Value = harmonic[a].Freq[7];
+		}
+
+		private void ThrottleLoadSwitch_Click(object sender, RoutedEventArgs e)
+		{
+			Plugin.E.Tones[0].Freq[8] = (ushort)(2 - Plugin.E.Tones[0].Freq[8]);	// switch tone sets
+			InitHarmonics(Plugin.E.Tones);
 		}
 
 		// this may provoke new equalizer creation
