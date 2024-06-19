@@ -55,7 +55,8 @@ namespace sierses.Sim
 		public ushort nm;
 		public ushort redline;
 		public ushort maxrpm;
-		public ushort idlerpm;							  // CarSpec element
+		public ushort idlerpm;							// CarSpec element
+		public string order;							// firing order added 19 Jun 2024
 		public string category;
 		public string notes;
 		public string defaults;
@@ -159,6 +160,7 @@ namespace sierses.Sim
 				redline = c.redline,
 				maxrpm = c.maxrpm,
 				idlerpm = c.idlerpm,							  // CarSpec element
+				order = c.order,
 				category = c.category,
 				notes = c.notes,
 				defaults = c.defaults,
@@ -192,6 +194,7 @@ namespace sierses.Sim
 			Redline = c.redline;
 			MaxRPM = c.maxrpm;
 			IdleRPM = c.idlerpm;
+			FiringOrder = c.order;
 	  		Category = c.category;
 			Notes = c.notes;
 			Default = c.defaults;
@@ -348,6 +351,11 @@ namespace sierses.Sim
 			{
 				tf = true;
 				Lcars[Index].idlerpm = Private_Car.idlerpm;			// Add(): Yes, value has changed
+			}
+			if (Lcars[Index].order != Private_Car.order)
+			{
+				tf = true;
+				Lcars[Index].order = Private_Car.order;
 			}
 			if (Lcars[Index].defaults != Private_Car.defaults)
 			{
@@ -528,10 +536,17 @@ namespace sierses.Sim
 			get => Private_Car.maxrpm;
 			set { SetCarSpec(ref Private_Car.maxrpm, value, nameof(MaxRPM)); }
 		}
+
 		public ushort IdleRPM								// public for Private_Car.idlerpm
 		{
 			get => Private_Car.idlerpm;						// IdleRPM
 			set { SetCarSpec(ref Private_Car.idlerpm, value, nameof(IdleRPM)); }	// IdleRPM
+		}
+
+		public string FiringOrder								// public for Private_Car.order
+		{
+			get => Private_Car.order;						// FiringOrder
+			set { SetCarSpec(ref Private_Car.order, value, nameof(FiringOrder)); }
 		}
 
 		public string EngineConfiguration

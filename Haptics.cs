@@ -33,7 +33,8 @@ namespace sierses.Sim
 		internal static bool Loaded, Waiting, Save, Set, Changed;
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
-		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
+//		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
+		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.json_with_orders.json";
 		internal static List<CarSpec> Atlas;
 		internal static int AtlasCt;		// use this to force Atlas
 		public Spec S { get; } = new() { };
