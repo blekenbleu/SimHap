@@ -1407,7 +1407,7 @@
                                 Expander.Expanded="EQ_Expanded"
                                 FontFamily="roboto"
                                 FontSize="16"
-                                IsExpanded="False"
+                                IsExpanded="True"
                                 MouseDown="EQ_MouseDown">
                                 <Expander.Header>
                                     <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
@@ -2121,7 +2121,7 @@
                                 Expander.Expanded="TC_Expanded"
                                 FontFamily="roboto"
                                 FontSize="16"
-                                IsExpanded="False"
+                                IsExpanded="True"
                                 MouseDown="ExpanderTone_MouseDown">
                                 <Expander.Header>
                                     <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
@@ -2646,7 +2646,7 @@
 
                                     <!--  Modulation  -->
                                     <Slider
-                                        x:Name="F0_value"
+                                        x:Name="F2"
                                         Grid.Row="0"
                                         Grid.RowSpan="8"
                                         Grid.Column="0"
@@ -2661,7 +2661,7 @@
 
                                     <!--  F1  -->
                                     <Slider
-                                        x:Name="F1_value"
+                                        x:Name="F0"
                                         Grid.Row="0"
                                         Grid.RowSpan="8"
                                         Grid.Column="1"
@@ -2678,7 +2678,7 @@
 
                                     <!--  F2  -->
                                     <Slider
-                                        x:Name="F2_value"
+                                        x:Name="F1"
                                         Grid.Row="0"
                                         Grid.RowSpan="8"
                                         Grid.Column="2"
@@ -3029,7 +3029,7 @@
                             BorderThickness="2"
                             FontFamily="roboto"
                             FontSize="14"
-                            IsExpanded="False"
+                            IsExpanded="True"
                             MouseDown="ExpanderSuspension_MouseDown">
                             <Expander.Header>
                                 <StackPanel Margin="-4,-2,0,0" Orientation="Horizontal">
@@ -3213,7 +3213,7 @@
                                 BorderThickness="2"
                                 FontFamily="roboto"
                                 FontSize="14"
-                                IsExpanded="False"
+                                IsExpanded="True"
                                 MouseDown="ExpanderGforce_MouseDown">
                                 <Expander.Header>
                                     <StackPanel Margin="-6,-2,0,0" Orientation="Horizontal">

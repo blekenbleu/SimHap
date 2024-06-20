@@ -78,6 +78,7 @@ namespace sierses.Sim
 		{
 			int f = Tones[0].Freq[i] * H.D.Rpms;
 			return (ushort)((0 == i) ? ((30 + f) / 60)					// RPM Hz
+									 : 2 == i ? (60 + H.D.Rpms) / 120   // power stroke subharmonic for imbalance
 									 : ((60 + f * H.S.Car.cyl) / 120));	// power stroke harmonic Hz
 		}
 
@@ -92,25 +93,28 @@ namespace sierses.Sim
 				{
 					Freq = new ushort[9] {	1,		// engine RPM / 60
 											1,		// power stroke: cylinders * engine RPM / 120
+											0, 		// which tone set: 0 or 2?
 											3,		// power stroke 1st harmonic, for square wave
 											5, 7, 9, 11,
-											13,		// power stroke 6th harmonic
-											0 }	// which tone set: 0 or 2?
+											13		// power stroke 6th harmonic
+										 }
 				};
 				Tones[1] = new() { Freq = new ushort[9] {			// harmonic amplitudes
 									1000, 1000,
-									333, 200, 142, 111, 91, 77,		// square wave
-									50 }	// modulation: 0 - 100%
+									50,								// modulation: 0 - 100%
+									333, 200, 142, 111, 91, 77		// square wave
+								 }
 				};
 				// full throttle tones?
-				Tones[2] = new() { Freq = new ushort[9] { 1, 1, 3, 5, 7, 9, 11, 13, 50 }};
+				Tones[2] = new() { Freq = new ushort[9] { 1, 1, 0, 3, 5, 7, 9, 11, 13 }};
 				// triangle wave
-				Tones[3] = new() { Freq = new ushort[9] { 1000, 1000, 111, 40, 20, 12, 8, 6, 0 }};
+				Tones[3] = new() { Freq = new ushort[9] { 1000, 1000, 50, 111, 40, 20, 12, 8, 6 }};
 			} else {
 				Tones[0] = new() { Freq = Engine.Tones[0] };
 				Tones[1] = new() { Freq = Engine.Tones[1] };
 				Tones[2] = new() { Freq = Engine.Tones[2] };
 				Tones[3] = new() { Freq = Engine.Tones[3] };
+				Tones[0].Freq[2] = 0; // start on bank 0
 			}
 
 			H.AttachDelegate("E.Fr0", () => Fr(0));
@@ -121,14 +125,16 @@ namespace sierses.Sim
 			H.AttachDelegate("E.Fr5", () => Fr(5));
 			H.AttachDelegate("E.Fr6", () => Fr(6));
 			H.AttachDelegate("E.Fr7", () => Fr(7));
-			H.AttachDelegate("E.Fa0", () => Tones[1].Freq[0]);
-			H.AttachDelegate("E.Fa1", () => Tones[1].Freq[1]);
-			H.AttachDelegate("E.Fa2", () => Tones[1].Freq[2]);
-			H.AttachDelegate("E.Fa3", () => Tones[1].Freq[3]);
-			H.AttachDelegate("E.Fa4", () => Tones[1].Freq[4]);
-			H.AttachDelegate("E.Fa5", () => Tones[1].Freq[5]);
-			H.AttachDelegate("E.Fa6", () => Tones[1].Freq[6]);
-			H.AttachDelegate("E.Fa7", () => Tones[1].Freq[7]);
+			H.AttachDelegate("E.Fr7", () => Fr(8));
+			H.AttachDelegate("E.Fa0", () => Tones[1 + Tones[0].Freq[2]].Freq[0]);
+			H.AttachDelegate("E.Fa1", () => Tones[1 + Tones[0].Freq[2]].Freq[1]);
+			H.AttachDelegate("E.Fa2", () => Tones[1 + Tones[0].Freq[2]].Freq[2]);
+			H.AttachDelegate("E.Fa3", () => Tones[1 + Tones[0].Freq[2]].Freq[3]);
+			H.AttachDelegate("E.Fa4", () => Tones[1 + Tones[0].Freq[2]].Freq[4]);
+			H.AttachDelegate("E.Fa5", () => Tones[1 + Tones[0].Freq[2]].Freq[5]);
+			H.AttachDelegate("E.Fa6", () => Tones[1 + Tones[0].Freq[2]].Freq[6]);
+			H.AttachDelegate("E.Fa7", () => Tones[1 + Tones[0].Freq[2]].Freq[7]);
+			H.AttachDelegate("E.Fa8", () => Tones[1 + Tones[0].Freq[2]].Freq[8]);
 
 			Q = new();
 			if (null == Engine || null == Engine.Sliders || 1 > Engine.Sliders.Count)
