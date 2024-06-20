@@ -918,16 +918,18 @@
 
                             <Grid HorizontalAlignment="Center">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
                                     <RowDefinition x:Name="EngView1" Height="*" />
                                     <RowDefinition x:Name="EngView2" Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition x:Name="EngView3" Height="*" />
@@ -971,7 +973,6 @@
                                 <TextBlock
                                     x:Name="EngIDLabel"
                                     Grid.Row="3"
-                                    
                                     Grid.Column="0"
                                     Grid.ColumnSpan="5"
                                     Margin="0,3"
@@ -991,12 +992,49 @@
                                     Style="{StaticResource EngineTBstyle}"
                                     Text="{Binding S.Id}" />
 
-                                <!--  Category  -->
-                                <TextBlock
-                                    x:Name="EngCategoryLabel"
+                                <!--  Firing Order  -->
+                                <StackPanel
                                     Grid.Row="5"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="5"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        x:Name="FiringOrderLabel1"
+                                        Foreground="{DynamicResource Foreground}"
+                                        Text="Order ( "
+                                        />
+                                    <TextBlock
+                                        x:Name="FiringOrderLabel2"
+                                        Foreground="{DynamicResource Foreground}"
+                                        ><Run Text="{Binding S.EngineCylinders}" /></TextBlock>
+                                    <TextBlock
+                                        x:Name="FiringOrderLabel3"
+                                        Foreground="{DynamicResource Foreground}"
+                                        Text=" )"
+                                        />
+                                </StackPanel>
+
+
+                                <TextBox
+                                    x:Name="FiringOrder"
+                                    Grid.Row="6"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="5"
+                                    Margin="10,3"
+                                    GotFocus="FiringOrder_GotFocus"
+                                    LostFocus="FiringOrder_LostFocus"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.FiringOrder}" />
+
+                                <!--  Category & EHP  -->
+                                <TextBlock
+                                    x:Name="EngCategoryLabel"
+                                    Grid.Row="7"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="4"
                                     Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -1004,72 +1042,104 @@
                                     TextAlignment="Right"><Run Text="Category" /></TextBlock>
                                 <TextBox
                                     x:Name="CarClass"
-                                    Grid.Row="6"
+                                    Grid.Row="8"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="5"
+                                    Grid.ColumnSpan="4"
                                     Margin="10,3,10,5"
                                     GotFocus="CarClass_GotFocus"
                                     LostFocus="CarClass_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
                                     Text="{Binding S.Category}" />
 
-                                <!--  Idle/Redline/MaxRPM/pergame gain headers  -->
+                                <TextBlock
+                                    x:Name="EngEHPLabel"
+                                    Grid.Row="7"
+                                    Grid.Column="5"
+                                    Width="80"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="EHP" /></TextBlock>
+                                <TextBox
+                                    x:Name="EMaxPowerHP"
+                                    Grid.Row="8"
+                                    Grid.Column="5"
+                                    Width="60"
+                                    Margin="0,3,0,5"
+                                    GotFocus="EMaxPowerHP_GotFocus"
+                                    LostFocus="EMaxPowerHP_LostFocus"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.ElectricMaxPower}" />
+
+                                <!--  Idle/Redline/MaxRPM/HP/NM Headers  -->
                                 <TextBlock
                                     x:Name="EngIdleLabel"
-                                    Grid.Row="7"
+                                    Grid.Row="9"
                                     Grid.Column="0"
                                     Width="80"
-                                    Margin="-20,3,0,0"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Idle" /></TextBlock>
 
                                 <TextBlock
                                     x:Name="EngRedlineLabel"
-                                    Grid.Row="7"
+                                    Grid.Row="9"
                                     Grid.Column="1"
                                     Width="80"
-                                    Margin="-50,3,0,0"
+                                    Margin="0,3"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Redline" /></TextBlock>
 
                                 <TextBlock
                                     x:Name="EngMaxLabel"
-                                    Grid.Row="7"
+                                    Grid.Row="9"
                                     Grid.Column="2"
                                     Width="80"
-                                    Margin="-80,3,0,0"
+                                    Margin="0,3"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Max" /></TextBlock>
 
                                 <TextBlock
-                                    x:Name="FiringOrderLabel"
-                                    Grid.Row="7"
+                                    x:Name="EngHPLabel"
+                                    Grid.Row="9"
                                     Grid.Column="3"
-                                    Grid.ColumnSpan="2"
-                                    Width="100"
-                                    Margin="-45,3,0,0"
+                                    Width="65"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
-                                    TextAlignment="Center"><Run Text="Order" /></TextBlock>
+                                    TextAlignment="Center"><Run Text="HP" /></TextBlock>
 
-                                <!--  Idle/Redline/MaxRPM textboxes  -->
+                                <TextBlock
+                                    x:Name="EngNMLabel"
+                                    Grid.Row="9"
+                                    Grid.Column="4"
+                                    Width="80"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="NM" /></TextBlock>
+
+                                <!--  Idle/Redline/MaxRPM/HP/NM textboxes  -->
                                 <TextBox
                                     x:Name="IdleRPM"
-                                    Grid.Row="8"
+                                    Grid.Row="10"
                                     Grid.Column="0"
-                                    Width="60"
-                                    Margin="-20,3,0,5"
+                                    Width="65"
+                                    Margin="0,3,0,5"
                                     GotFocus="IdleRPM_GotFocus"
                                     LostFocus="IdleRPM_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
                                     Text="{Binding S.IdleRPM}" />
                                 <TextBox
                                     x:Name="Redline"
-                                    Grid.Row="8"
+                                    Grid.Row="10"
                                     Grid.Column="1"
-                                    Width="60"
-                                    Margin="-50,3,0,5"
+                                    Width="65"
+                                    Margin="0,3,0,5"
                                     GotFocus="Redline_GotFocus"
                                     LostFocus="Redline_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
@@ -1077,85 +1147,84 @@
 
                                 <TextBox
                                     x:Name="MaxRPM"
-                                    Grid.Row="8"
+                                    Grid.Row="10"
                                     Grid.Column="2"
-                                    Width="60"
-                                    Margin="-80,3,0,5"
+                                    Width="65"
+                                    Margin="0,3,0,5"
                                     GotFocus="MaxRPM_GotFocus"
                                     LostFocus="MaxRPM_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
                                     Text="{Binding S.MaxRPM}" />
 
-                                <!--  slider for engine per game multi
-                                <Slider
-                                    x:Name="EngineMulti"
-                                    Grid.Row="8"
+                                <TextBox
+                                    x:Name="MaxPowerHP"
+                                    Grid.Row="10"
                                     Grid.Column="3"
-                                    Width="88"
-                                    Margin="0,3,8,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Bottom"
-                                    VerticalContentAlignment="Bottom"
-                                    GotFocus="EngineMulti_GotFocus"
-                                    IsSnapToTickEnabled="True"
-                                    LostFocus="EngineMulti_LostFocus"
-                                    Maximum="1.5"
-                                    Minimum="0.5"
-                                    TickFrequency="0.1"
-                                    ValueChanged="EngineMulti_ValueChanged"
-                                    Value="{Binding D.EngineMult}" /> -->
+                                    Width="65"
+                                    Margin="0,3,0,5"
+                                    GotFocus="MaxPowerHP_GotFocus"
+                                    LostFocus="MaxPowerHP_LostFocus"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.MaxPower}" />
 
                                 <TextBox
-                                    x:Name="FiringOrder"
-                                    Grid.Row="8"
-                                    Grid.Column="3"
-                                    Grid.ColumnSpan="2"
-                                    Width="225"
-                                    Margin="-45,3,0,5"
-                                    GotFocus="FiringOrder_GotFocus"
-                                    LostFocus="FiringOrder_LostFocus"
+                                    x:Name="MaxTorqueNM"
+                                    Grid.Row="10"
+                                    Grid.Column="4"
+                                    Width="65"
+                                    Margin="0,3,0,5"
+                                    GotFocus="MaxTorqueNM_GotFocus"
+                                    LostFocus="MaxTorqueNM_LostFocus"
                                     Style="{StaticResource EngineTBstyle}"
-                                    Text="{Binding S.FiringOrder}" />
+                                    Text="{Binding S.MaxTorque}" />
 
-
-
-                                <!--  Engine config/cylinders/drivetrain/location headers  -->
+                                <!--  Engine config/cylinders/CC/drivetrain/location headers  -->
                                 <TextBlock
                                     x:Name="EngConfigLabel"
-                                    Grid.Row="9"
-                                    Grid.Column="1"
+                                    Grid.Row="11"
+                                    Grid.Column="0"
                                     Width="80"
-                                    Margin="-100,3,0,0"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Config" /></TextBlock>
                                 <TextBlock
                                     x:Name="EngCylindersLabel"
-                                    Grid.Row="9"
-                                    Grid.Column="2"
+                                    Grid.Row="11"
+                                    Grid.Column="1"
                                     Width="80"
-                                    Margin="-100,3,0,0"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Cylinders" /></TextBlock>
                                 <TextBlock
+                                    x:Name="EngCCLabel"
+                                    Grid.Row="11"
+                                    Grid.Column="2"
+                                    Width="80"
+                                    Margin="0,3"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource Foreground}"
+                                    TextAlignment="Center"><Run Text="CC" /></TextBlock>
+                                <TextBlock
                                     x:Name="EngDrivetrainLabel"
-                                    Grid.Row="9"
+                                    Grid.Row="11"
                                     Grid.Column="3"
                                     Width="80"
-                                    Margin="-100,3,0,0"
+                                    Margin="0,3"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
                                     TextAlignment="Center"><Run Text="Drivetrain" /></TextBlock>
 
                                 <TextBlock
                                     x:Name="EngLocationLabel"
-                                    Grid.Row="9"
+                                    Grid.Row="11"
                                     Grid.Column="4"
                                     Width="80"
-                                    Margin="-100,3,0,0"
+                                    Margin="0,3"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource Foreground}"
@@ -1166,11 +1235,11 @@
                                 <!--  engine config  -->
                                 <ComboBox
                                     Name="EngineConfig"
-                                    Grid.Row="10"
-                                    Grid.Column="1"
-                                    Width="60"
+                                    Grid.Row="12"
+                                    Grid.Column="0"
+                                    Width="65"
                                     Height="25.2"
-                                    Margin="-100,3,0,5"
+                                    Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -1189,11 +1258,11 @@
                                 <!--  Cylinders  -->
                                 <ComboBox
                                     Name="EngineCylinders"
-                                    Grid.Row="10"
-                                    Grid.Column="2"
-                                    Width="60"
+                                    Grid.Row="12"
+                                    Grid.Column="1"
+                                    Width="65"
                                     Height="25.2"
-                                    Margin="-100,3,0,5"
+                                    Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -1213,13 +1282,23 @@
                                     <ComboBoxItem Content="12" />
                                     <ComboBoxItem Content="16" />
                                 </ComboBox>
+                                <TextBox
+                                    x:Name="Displacement"
+                                    Grid.Row="12"
+                                    Grid.Column="2"
+                                    Width="65"
+                                    Margin="0,3,0,5"
+                                    GotFocus="Displacement_GotFocus"
+                                    LostFocus="Displacement_LostFocus"
+                                    Style="{StaticResource EngineTBstyle}"
+                                    Text="{Binding S.Displacement}" />
                                 <ComboBox
                                     Name="Drivetrain"
-                                    Grid.Row="10"
+                                    Grid.Row="12"
                                     Grid.Column="3"
-                                    Width="60"
+                                    Width="65"
                                     Height="25.2"
-                                    Margin="-100,3,0,5"
+                                    Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -1234,11 +1313,11 @@
                                 </ComboBox>
                                 <ComboBox
                                     Name="Englocation"
-                                    Grid.Row="10"
+                                    Grid.Row="12"
                                     Grid.Column="4"
-                                    Width="60"
+                                    Width="65"
                                     Height="25.2"
-                                    Margin="-100,3,0,5"
+                                    Margin="0,3,0,5"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
@@ -1254,106 +1333,16 @@
                                     <ComboBoxItem Content="RM" />
                                 </ComboBox>
 
-                                <!--  hp/ehp/nm/cc headers  -->
-                                <TextBlock
-                                    x:Name="EngHPLabel"
-                                    Grid.Row="11"
-                                    Grid.Column="1"
-                                    Width="80"
-                                    Margin="-100,3,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="{DynamicResource Foreground}"
-                                    TextAlignment="Center"><Run Text="HP" /></TextBlock>
-
-                                <TextBlock
-                                    x:Name="EngEHPLabel"
-                                    Grid.Row="11"
-                                    Grid.Column="2"
-                                    Width="80"
-                                    Margin="-100,3,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="{DynamicResource Foreground}"
-                                    TextAlignment="Center"><Run Text="EHP" /></TextBlock>
-
-                                <TextBlock
-                                    x:Name="EngNMLabel"
-                                    Grid.Row="11"
-                                    Grid.Column="3"
-                                    Width="80"
-                                    Margin="-100,3,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="{DynamicResource Foreground}"
-                                    TextAlignment="Center"><Run Text="NM" /></TextBlock>
-
-                                <TextBlock
-                                    x:Name="EngCCLabel"
-                                    Grid.Row="11"
-                                    Grid.Column="4"
-                                    Width="80"
-                                    Margin="-100,3,0,5"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="{DynamicResource Foreground}"
-                                    TextAlignment="Center"><Run Text="CC" /></TextBlock>
-
-                                <!--  hp/ehp/nm/cc textboxes  -->
-                                <TextBox
-                                    x:Name="MaxPowerHP"
-                                    Grid.Row="12"
-                                    Grid.Column="1"
-                                    Width="60"
-                                    Margin="-100,3,0,5"
-                                    GotFocus="MaxPowerHP_GotFocus"
-                                    LostFocus="MaxPowerHP_LostFocus"
-                                    Style="{StaticResource EngineTBstyle}"
-                                    Text="{Binding S.MaxPower}" />
-
-                                <TextBox
-                                    x:Name="EMaxPowerHP"
-                                    Grid.Row="12"
-                                    Grid.Column="2"
-                                    Width="60"
-                                    Margin="-100,3,0,5"
-                                    GotFocus="EMaxPowerHP_GotFocus"
-                                    LostFocus="EMaxPowerHP_LostFocus"
-                                    Style="{StaticResource EngineTBstyle}"
-                                    Text="{Binding S.ElectricMaxPower}" />
-
-                                <TextBox
-                                    x:Name="MaxTorqueNM"
-                                    Grid.Row="12"
-                                    Grid.Column="3"
-                                    Width="60"
-                                    Margin="-100,3,0,5"
-                                    GotFocus="MaxTorqueNM_GotFocus"
-                                    LostFocus="MaxTorqueNM_LostFocus"
-                                    Style="{StaticResource EngineTBstyle}"
-                                    Text="{Binding S.MaxTorque}" />
-
-                                <TextBox
-                                    x:Name="Displacement"
-                                    Grid.Row="12"
-                                    Grid.Column="4"
-                                    Width="60"
-                                    Margin="-100,3,0,5"
-                                    GotFocus="Displacement_GotFocus"
-                                    LostFocus="Displacement_LostFocus"
-                                    Style="{StaticResource EngineTBstyle}"
-                                    Text="{Binding S.Displacement}" />
-
                                 <!--  BUTTONS  -->
                                 <!--  compact view toggle  -->
                                 <ToggleButton
                                     x:Name="EngineView_Switch"
-                                    Grid.Row="17"
+                                    Grid.Row="19"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Width="95"
                                     Height="30"
-                                    Margin="-100,0,0,5"
+                                    Margin="-200,0,0,5"
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Checked="EngineView_Switch_Checked"
@@ -1367,12 +1356,12 @@
                                     Unchecked="EngineView_Switch_Unchecked" />
                                 <!--  Lock/unlock button  -->
                                 <Button
-                                    Grid.Row="17"
+                                    Grid.Row="19"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Width="95"
                                     Height="30"
-                                    Margin="100,0,0,5"
+                                    Margin="0,0,0,5"
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Click="Lock_Click"
@@ -1384,12 +1373,12 @@
                                     Style="{StaticResource dMASSbutton}" />
                                 <!--  Refresh button  -->
                                 <Button
-                                    Grid.Row="17"
+                                    Grid.Row="19"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="5"
                                     Width="95"
                                     Height="30"
-                                    Margin="300,0,0,5"
+                                    Margin="200,0,0,5"
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Click="Refresh_Click"
@@ -2148,7 +2137,14 @@
                                             Foreground="White">
                                             Engine - Tone
                                         </TextBlock>
-
+                                        <TextBlock
+	                                        x:Name="ToneMode"
+    	                                    Margin="0,-1,0,0"
+        	                                VerticalAlignment="Center"
+            	                            FontFamily="roboto"
+                	                        FontSize="16"
+                    	                    Foreground="White"
+                        	            />
                                     </StackPanel>
                                 </Expander.Header>
                                 <Grid Margin="0,9,0,-6" HorizontalAlignment="Center">
@@ -2198,8 +2194,10 @@
                                         Grid.Row="9"
                                         Grid.Column="0"
                                         Margin="3,0,3,10">
-                                        <Button x:Name="ThrottleLoadSwitch" Style="{StaticResource dMASSbuttonDelRefresh}"
-                                    	 Click="ThrottleLoadSwitch_Click">
+                                        <Button
+                                            x:Name="ThrottleLoadSwitch"
+                                            Click="ThrottleLoadSwitch_Click"
+                                            Style="{StaticResource dMASSbuttonDelRefresh}">
                                             <Image Height="24" Source="Resources\throttle50X50.png" />
                                         </Button>
                                     </Border>

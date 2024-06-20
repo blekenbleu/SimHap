@@ -125,6 +125,7 @@ namespace sierses.Sim
 				H5_factor.Value = harmonic[a].Freq[6];
 			if (H6_factor.Value != harmonic[a].Freq[7])
 				H6_factor.Value = harmonic[a].Freq[7];
+			ToneMode.Text = (2 == Plugin.E.Tones[0].Freq[8]) ? "  Full Throttle" : "";
 		}
 
 		private void ThrottleLoadSwitch_Click(object sender, RoutedEventArgs e)
@@ -772,15 +773,23 @@ namespace sierses.Sim
 
 		private void FiringOrder_GotFocus(object sender, RoutedEventArgs e)
 		{
-			FiringOrderLabel.Foreground = (SolidColorBrush)this.FindResource("Light");
-			FiringOrderLabel.FontWeight = FontWeights.Bold;
-		}
+			FiringOrderLabel1.Foreground = (SolidColorBrush)this.FindResource("Light");
+			FiringOrderLabel1.FontWeight = FontWeights.Bold;
+            FiringOrderLabel2.Foreground = (SolidColorBrush)this.FindResource("Light");
+            FiringOrderLabel2.FontWeight = FontWeights.Bold;
+            FiringOrderLabel3.Foreground = (SolidColorBrush)this.FindResource("Light");
+            FiringOrderLabel3.FontWeight = FontWeights.Bold;
+        }
 
 		private void FiringOrder_LostFocus(object sender, RoutedEventArgs e)
 		{
-			FiringOrderLabel.Foreground = (SolidColorBrush)this.FindResource("Foreground");
-			FiringOrderLabel.FontWeight = FontWeights.Regular;
-		}
+			FiringOrderLabel1.Foreground = (SolidColorBrush)this.FindResource("Foreground");
+			FiringOrderLabel1.FontWeight = FontWeights.Regular;
+            FiringOrderLabel2.Foreground = (SolidColorBrush)this.FindResource("Foreground");
+            FiringOrderLabel2.FontWeight = FontWeights.Regular;
+            FiringOrderLabel3.Foreground = (SolidColorBrush)this.FindResource("Foreground");
+            FiringOrderLabel3.FontWeight = FontWeights.Regular;
+        }
 
 		private void SuspensionMultAll_GotFocus(object sender, RoutedEventArgs e)
 		{
