@@ -2356,7 +2356,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
-                                            H1
+                                            H3
                                         </TextBlock>
                                     </Border>
 
@@ -2420,7 +2420,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
-                                            H2
+                                            H4
                                         </TextBlock>
                                     </Border>
 
@@ -2486,7 +2486,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
-                                            H3
+                                            H5
                                         </TextBlock>
                                     </Border>
 
@@ -2551,7 +2551,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
-                                            H4
+                                            H6
                                         </TextBlock>
                                     </Border>
 
@@ -2616,7 +2616,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
-                                            H5
+                                            H7
                                         </TextBlock>
                                     </Border>
 
@@ -2681,7 +2681,7 @@
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
-                                            H6
+                                            H8
                                         </TextBlock>
                                     </Border>
 

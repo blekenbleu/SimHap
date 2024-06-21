@@ -126,15 +126,15 @@ namespace sierses.Sim
 			H.AttachDelegate("E.Fr6", () => Fr(6));
 			H.AttachDelegate("E.Fr7", () => Fr(7));
 			H.AttachDelegate("E.Fr8", () => Fr(8));
-			H.AttachDelegate("E.Fa0", () => Tones[1 + Tones[0].Freq[2]].Freq[0]);
-			H.AttachDelegate("E.Fa1", () => Tones[1 + Tones[0].Freq[2]].Freq[1]);
-			H.AttachDelegate("E.Fa2", () => Tones[1 + Tones[0].Freq[2]].Freq[2]);
-			H.AttachDelegate("E.Fa3", () => Tones[1 + Tones[0].Freq[2]].Freq[3]);
-			H.AttachDelegate("E.Fa4", () => Tones[1 + Tones[0].Freq[2]].Freq[4]);
-			H.AttachDelegate("E.Fa5", () => Tones[1 + Tones[0].Freq[2]].Freq[5]);
-			H.AttachDelegate("E.Fa6", () => Tones[1 + Tones[0].Freq[2]].Freq[6]);
-			H.AttachDelegate("E.Fa7", () => Tones[1 + Tones[0].Freq[2]].Freq[7]);
-			H.AttachDelegate("E.Fa8", () => Tones[1 + Tones[0].Freq[2]].Freq[8]);
+			H.AttachDelegate("E.FH0", () => Tones[1 + Tones[0].Freq[2]].Freq[0]);
+			H.AttachDelegate("E.FH1", () => Tones[1 + Tones[0].Freq[2]].Freq[1]);
+			H.AttachDelegate("E.FH2", () => Tones[1 + Tones[0].Freq[2]].Freq[2]);
+			H.AttachDelegate("E.FH3", () => Tones[1 + Tones[0].Freq[2]].Freq[3]);
+			H.AttachDelegate("E.FH4", () => Tones[1 + Tones[0].Freq[2]].Freq[4]);
+			H.AttachDelegate("E.FH5", () => Tones[1 + Tones[0].Freq[2]].Freq[5]);
+			H.AttachDelegate("E.FH6", () => Tones[1 + Tones[0].Freq[2]].Freq[6]);
+			H.AttachDelegate("E.FH7", () => Tones[1 + Tones[0].Freq[2]].Freq[7]);
+			H.AttachDelegate("E.FH8", () => Tones[1 + Tones[0].Freq[2]].Freq[8]);
 
 			Q = new();
 			if (null == Engine || null == Engine.Sliders || 1 > Engine.Sliders.Count)
