@@ -2747,7 +2747,7 @@
                                         Orientation="Vertical"
                                         TickFrequency="1"
                                         ValueChanged="HSlider"
-                                        Value="2" />
+                                        Value="5" />
 
                                     <!--  H2  -->
                                     <Slider
@@ -2758,11 +2758,11 @@
                                         Margin="3,6,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="9"
-                                        Minimum="2"
+                                        Minimum="3"
                                         Orientation="Vertical"
                                         TickFrequency="1"
                                         ValueChanged="HSlider"
-                                        Value="2" />
+                                        Value="6" />
 
 
                                     <!--  H3  -->
@@ -2774,11 +2774,11 @@
                                         Margin="3,6,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="10"
-                                        Minimum="3"
+                                        Minimum="4"
                                         Orientation="Vertical"
                                         TickFrequency="1"
                                         ValueChanged="HSlider"
-                                        Value="2" />
+                                        Value="7" />
 
                                     <!--  H4  -->
                                     <Slider
@@ -2789,11 +2789,11 @@
                                         Margin="3,6,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="11"
-                                        Minimum="4"
+                                        Minimum="5"
                                         Orientation="Vertical"
                                         TickFrequency="1"
                                         ValueChanged="HSlider"
-                                        Value="2" />
+                                        Value="8" />
 
                                     <!--  H5  -->
                                     <Slider
@@ -2804,11 +2804,11 @@
                                         Margin="3.5,6,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="12"
-                                        Minimum="5"
+                                        Minimum="6"
                                         Orientation="Vertical"
                                         TickFrequency="1"
                                         ValueChanged="HSlider"
-                                        Value="2" />
+                                        Value="9" />
 
                                     <!--  H6  -->
                                     <Slider
@@ -2819,11 +2819,11 @@
                                         Margin="3.5,6,0,0"
                                         IsSnapToTickEnabled="True"
                                         Maximum="13"
-                                        Minimum="6"
+                                        Minimum="7"
                                         Orientation="Vertical"
                                         TickFrequency="1"
                                         ValueChanged="HSlider"
-                                        Value="2" />
+                                        Value="10" />
 
                                     <!--  gain and factor headers)  -->
 

@@ -45,17 +45,17 @@ namespace sierses.Sim
 			// min factor is 2 for index 2
 			Tone[] harmonic = Plugin.E.Tones;
 
-			if (2 < i)	// sliders [<2] are modulation and fundamental peak amplitudes, not harmonic factors
+			if (2 < i)	// sliders [<2] are modulation and fundamental peak amplitudes, NOT harmonic factors
 			{
 				harmonic[a].Freq[i] = Convert.ToUInt16(0.1 + s.Value);
-				for (int j = i - 1; j > 1; j--)
+				for (int j = i - 1; j > 2; j--)
 					if (harmonic[a].Freq[j] >= harmonic[a].Freq[j + 1])
 						harmonic[a].Freq[j] = (ushort)(harmonic[a].Freq[j + 1] - 1);
 				for (int j = i + 1; j < 9; j++)
 					if (harmonic[a].Freq[j] <= harmonic[a].Freq[j - 1])
 						harmonic[a].Freq[j] = (ushort)(1 + harmonic[a].Freq[j - 1]);
 			}
-			else harmonic[a + 1].Freq[i] = Convert.ToUInt16(0.1 + s.Value);
+			else harmonic[a + 1].Freq[i] = Convert.ToUInt16(0.1 + s.Value);	// Mod, RPM or Fund Peak value
 			InitHarmonics(Plugin.E.Tones);
 		}
 	}
