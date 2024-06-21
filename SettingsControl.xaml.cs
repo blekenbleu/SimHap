@@ -12,6 +12,7 @@ using System.Windows.Media;
 
 namespace sierses.Sim
 {
+	// see also ToneControl.cs
 
 	public partial class SettingsControl : UserControl //, IComponentConnector
 	{
@@ -88,51 +89,6 @@ namespace sierses.Sim
 			bool up = "i" == s.Substring(4, 1); // increment/decrement
 			int index = int.Parse(s.Substring(2, 1));
 			ShowEq(0 == index % 8 ? Plugin.E.Pincr(index, up) : Plugin.E.Incr(index, up));
-		}
-
-		// see ToneControl.cs
-		internal void InitHarmonics(Tone[] harmonic)
-		{
-			//writing to these values provokes recalculations
-			int a = harmonic[0].Freq[2];			// Tone bank selector
-			int b = 1 + a;
-			if (F0.Value != harmonic[b].Freq[0])
-				F0.Value = harmonic[b].Freq[0];		// RPM / 60
-			if (F1.Value != harmonic[b].Freq[1])   
-				F1.Value = harmonic[b].Freq[1];		// RPM * cyl / 120
-			if (F2.Value != harmonic[b].Freq[2])	// RPM / 120 modulation
-				F2.Value = harmonic[b].Freq[2];
-			if (H1_value.Text != harmonic[b].Freq[3].ToString())
-				H1_value.Text = harmonic[b].Freq[3].ToString();
-			if (H2_value.Text != harmonic[b].Freq[4].ToString())
-				H2_value.Text = harmonic[b].Freq[4].ToString();
-			if (H3_value.Text != harmonic[b].Freq[5].ToString())
-				H3_value.Text = harmonic[b].Freq[5].ToString();
-			if (H4_value.Text != harmonic[b].Freq[6].ToString())
-				H4_value.Text = harmonic[b].Freq[6].ToString();
-			if (H5_value.Text != harmonic[b].Freq[7].ToString())
-				H5_value.Text = harmonic[b].Freq[7].ToString();
-			if (H6_value.Text != harmonic[b].Freq[8].ToString())
-				H6_value.Text = harmonic[b].Freq[8].ToString();
-			if (H1_factor.Value != harmonic[a].Freq[3])	// first harmonic of F1
-				H1_factor.Value = harmonic[a].Freq[3];
-			if (H2_factor.Value != harmonic[a].Freq[4])
-				H2_factor.Value = harmonic[a].Freq[4];
-			if (H3_factor.Value != harmonic[a].Freq[5])
-				H3_factor.Value = harmonic[a].Freq[5];
-			if (H4_factor.Value != harmonic[a].Freq[6])
-				H4_factor.Value = harmonic[a].Freq[6];
-			if (H5_factor.Value != harmonic[a].Freq[7])
-				H5_factor.Value = harmonic[a].Freq[7];
-			if (H6_factor.Value != harmonic[a].Freq[8])
-				H6_factor.Value = harmonic[a].Freq[8];
-			ToneMode.Text = (2 == Plugin.E.Tones[0].Freq[2]) ? "  Full Throttle" : "";
-		}
-
-		private void ThrottleLoadSwitch_Click(object sender, RoutedEventArgs e)
-		{
-			Plugin.E.Tones[0].Freq[2] = (ushort)(2 == Plugin.E.Tones[0].Freq[2] ? 0 : 2);	// switch tone sets
-			InitHarmonics(Plugin.E.Tones);
 		}
 
 		// this may provoke new equalizer creation

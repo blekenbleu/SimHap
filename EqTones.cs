@@ -74,12 +74,23 @@ namespace sierses.Sim
 		}
 
 		// for Fr[0-7] properties in Init()
+		// interpolate between harmonic frequencies based on throttle %
 		public ushort Fr(byte i)
 		{
-			int f = Tones[0].Freq[i] * H.D.Rpms;
+			double d = 100 - H.D.Accelerator;
+			double a = H.D.Accelerator;
+			int f = (int)(0.5 + (d * Tones[0].Freq[i] + a * Tones[0].Freq[i]) * 0.01 * H.D.Rpms);
 			return (ushort)((0 == i) ? ((30 + f) / 60)					// RPM Hz
 									 : 2 == i ? (60 + H.D.Rpms) / 120   // power stroke subharmonic for imbalance
 									 : ((60 + f * H.S.Car.cyl) / 120));	// power stroke harmonic Hz
+		}
+
+		// interpolate between harmonic amplitudes based on throttle %
+		public ushort Throttle(byte i)
+		{
+			double d = 100 - H.D.Accelerator;
+			return (ushort)(0.01 * (50 + H.D.Accelerator * Tones[3].Freq[i]
+									   + d * Tones[1].Freq[i]));
 		}
 
 		internal void Init(Engine Engine, Haptics h)
@@ -126,15 +137,15 @@ namespace sierses.Sim
 			H.AttachDelegate("E.Fr6", () => Fr(6));
 			H.AttachDelegate("E.Fr7", () => Fr(7));
 			H.AttachDelegate("E.Fr8", () => Fr(8));
-			H.AttachDelegate("E.FH0", () => Tones[1 + Tones[0].Freq[2]].Freq[0]);
-			H.AttachDelegate("E.FH1", () => Tones[1 + Tones[0].Freq[2]].Freq[1]);
-			H.AttachDelegate("E.FH2", () => Tones[1 + Tones[0].Freq[2]].Freq[2]);
-			H.AttachDelegate("E.FH3", () => Tones[1 + Tones[0].Freq[2]].Freq[3]);
-			H.AttachDelegate("E.FH4", () => Tones[1 + Tones[0].Freq[2]].Freq[4]);
-			H.AttachDelegate("E.FH5", () => Tones[1 + Tones[0].Freq[2]].Freq[5]);
-			H.AttachDelegate("E.FH6", () => Tones[1 + Tones[0].Freq[2]].Freq[6]);
-			H.AttachDelegate("E.FH7", () => Tones[1 + Tones[0].Freq[2]].Freq[7]);
-			H.AttachDelegate("E.FH8", () => Tones[1 + Tones[0].Freq[2]].Freq[8]);
+			H.AttachDelegate("E.FH0", () => Throttle(0));
+			H.AttachDelegate("E.FH1", () => Throttle(1));
+			H.AttachDelegate("E.FH2", () => Throttle(2));
+			H.AttachDelegate("E.FH3", () => Throttle(3));
+			H.AttachDelegate("E.FH4", () => Throttle(4));
+			H.AttachDelegate("E.FH5", () => Throttle(5));
+			H.AttachDelegate("E.FH6", () => Throttle(6));
+			H.AttachDelegate("E.FH7", () => Throttle(7));
+			H.AttachDelegate("E.FH8", () => Throttle(8));
 
 			Q = new();
 			if (null == Engine || null == Engine.Sliders || 1 > Engine.Sliders.Count)
