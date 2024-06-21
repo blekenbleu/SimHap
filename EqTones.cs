@@ -125,7 +125,7 @@ namespace sierses.Sim
 			H.AttachDelegate("E.Fr5", () => Fr(5));
 			H.AttachDelegate("E.Fr6", () => Fr(6));
 			H.AttachDelegate("E.Fr7", () => Fr(7));
-			H.AttachDelegate("E.Fr7", () => Fr(8));
+			H.AttachDelegate("E.Fr8", () => Fr(8));
 			H.AttachDelegate("E.Fa0", () => Tones[1 + Tones[0].Freq[2]].Freq[0]);
 			H.AttachDelegate("E.Fa1", () => Tones[1 + Tones[0].Freq[2]].Freq[1]);
 			H.AttachDelegate("E.Fa2", () => Tones[1 + Tones[0].Freq[2]].Freq[2]);
