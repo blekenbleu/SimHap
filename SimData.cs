@@ -1236,7 +1236,7 @@ namespace sierses.Sim
 			SlipYRL *= SpeedMs * 0.333;
 			SlipYRR *= SpeedMs * 0.333;
 		}
-		internal ushort Rpms;
+		internal ushort Rpms, Denominator = 1;	// BS
 
 		// called from DataUpdate()
 		internal void Refresh(ref GameData Gdat, Haptics shp)
@@ -1244,7 +1244,7 @@ namespace sierses.Sim
 			SHP = shp;
 			data = Gdat;
 			FPS = (double) SHP.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
-			Rpms = Convert.ToUInt16(0.5 + data.NewData.Rpms);
+			Rpms = Convert.ToUInt16(0.5 + data.NewData.Rpms / Denominator);	// BS
 			RPMPercent = data.NewData.Rpms * InvMaxRPM;
 			SpeedMs = data.NewData.SpeedKmh * 0.277778;
 			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;

@@ -287,6 +287,10 @@ namespace sierses.Sim
 					Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
 			Settings.Engine.Sliders = new() { E.Q[0].Slider };
 
+			bool tBS = Changed;
+			S.EngineCylinders = D.BS;
+			Changed = tBS;
+
 			if (Save || Loaded || Changed)		// End()
 			{
 				if (Loaded || Changed)

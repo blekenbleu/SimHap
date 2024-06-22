@@ -11,6 +11,16 @@ namespace sierses.Sim
 		private long FrameCountTicks;
 		internal Haptics SHP;
 		private ushort idleRPM;						 // for sniffing in Refresh()
+		internal ushort BS;			/*	if you could make me a version where you change ratios so its' 
+2/4/8/16 cyl to 2:1
+3/6/12 to 3:2
+5/10 to 5:4
+and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
+  I have an idea to stack main harmonic instead with slight freq shift and delay on each one
+ to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
+Hopefully you don't need to change code in a million places
+22 Jun 2024 BS
+*/
 		internal string raw = "DataCorePlugin.GameRawData.";
 
 		public SimData()
@@ -235,6 +245,32 @@ namespace sierses.Sim
 			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) ending: "
 									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
 									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
+			BS = SHP.S.EngineCylinders;
+			bool tbs = Haptics.Changed;
+			Denominator = 1;
+			switch (BS)
+			{
+				case 2:
+				case 4:
+				case 8:
+				case 16:
+					SHP.S.EngineCylinders = 2;
+					break;
+				case 3:
+				case 6:
+				case 12:
+					SHP.S.EngineCylinders = 3;
+					Denominator = 2;
+					break;
+				case 5:
+				case 10:
+					SHP.S.EngineCylinders = 5;
+					Denominator = 4;
+					break;
+				default:
+					break;
+			}
+			Haptics.Changed = tbs;
 		}	// SetVehicle()
 	}
 }
