@@ -73,16 +73,25 @@ namespace sierses.Sim
 			return true;
 		}
 
-		// for Fr[0-7] properties in Init()
+		// for Fr[0-8] properties in Init()
 		// interpolate between harmonic frequencies based on throttle %
+		// see SimDataMethods.cs" line 249 for BS
+		private double F(byte i)
+		{
+			// throttle interpolation factors
+			double d = 0.01 * (100 - H.D.Accelerator);
+			double a = 0.01 * H.D.Accelerator;
+
+			// interpolate between Tones[0] (no throttle) and Tones[2] (full throttle)
+			// H.SC.Ratio is either cylinders or BS;  SettingsControl.xaml.cs line 87
+			return ((d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.SC.Ratio) / 120;
+		}
+
 		public ushort Fr(byte i)
 		{
-			double d = 100 - H.D.Accelerator;
-			double a = H.D.Accelerator;
-			int f = (int)(0.5 + (d * Tones[0].Freq[i] + a * Tones[0].Freq[i]) * 0.01 * H.D.Rpms);
-			return (ushort)((0 == i) ? ((30 + f) / 60)					// RPM Hz
-									 : 2 == i ? (60 + H.D.Rpms) / 120   // power stroke subharmonic for imbalance
-									 : ((60 + f * H.SC.Ratio) / 120));	// power stroke harmonic Hz
+			return (ushort)(  0 == i ? (30 + H.D.Rpms) / 60		// RPM Hz
+							: 2 == i ? (60 + H.D.Rpms) / 120	// power stroke subharmonic for imbalance
+							: 0.5 + F(i));						// power stroke components
 		}
 
 		// interpolate between harmonic amplitudes based on throttle %
