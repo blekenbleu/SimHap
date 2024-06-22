@@ -31,7 +31,8 @@ namespace sierses.Sim
 			Plugin = plugin;
 			DataContext = Plugin;
 			Version.Text = Plugin.PluginVersion;
-			SetTheme();
+			Ratio = Plugin.S.EngineCylinders;		// BS
+            SetTheme();
 		}
 
 		internal string Theme = "SteelLightTheme.xaml";
@@ -78,6 +79,18 @@ namespace sierses.Sim
 		{
 			if (null != Plugin)
 				ShowEq(Plugin.E.Q[Plugin.E.EQswitch].Slider);
+		}
+
+		double Ratio;									// BS
+		private void SimpleRatioToggle_Click(object sender, RoutedEventArgs e)
+		{
+			if (Ratio == Plugin.S.EngineCylinders)
+			{
+				Ratio = Plugin.D.BS;
+			}
+			else Ratio = Plugin.S.EngineCylinders;
+			ToneMode.Text = ((2 == Plugin.E.Tones[0].Freq[2]) ? "  Full Throttle " : " ")
+							+ Ratio.ToString();
 		}
 
 		// invoked by UI Eq buttons

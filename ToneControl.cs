@@ -43,7 +43,8 @@ namespace sierses.Sim
 				H5_factor.Value = harmonic[a].Freq[7];
 			if (H6_factor.Value != harmonic[a].Freq[8])
 				H6_factor.Value = harmonic[a].Freq[8];
-			ToneMode.Text = (2 == Plugin.E.Tones[0].Freq[2]) ? "  Full Throttle" : "";
+			ToneMode.Text = ((2 == Plugin.E.Tones[0].Freq[2]) ? "  Full Throttle " : " ")
+							 + Ratio.ToString();		// BS
 		}
 
 		private void ThrottleLoadSwitch_Click(object sender, RoutedEventArgs e)
@@ -54,8 +55,11 @@ namespace sierses.Sim
 
 		private void TC_Expanded(object sender, RoutedEventArgs e)
 		{
-			if (null != Plugin)
+			if (null != Plugin) {
 				InitHarmonics(Plugin.E.Tones);
+				ToneMode.Text = ((2 == Plugin.E.Tones[0].Freq[2]) ? "  Full Throttle " : " ")
+                             + Ratio.ToString();        // BS
+			}
 		}
 
 		private void H_Click(object sender, RoutedEventArgs e)

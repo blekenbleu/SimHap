@@ -2245,6 +2245,21 @@
                                         </ToggleButton>
                                     </Border>
 
+                                    <!--  ratio toggle button  -->
+                                    <Border
+                                        Grid.Row="9"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        Margin="3,0,3,10">
+                                        <ToggleButton
+                                            x:Name="SimpleRatioToggle"
+                                            Click="SimpleRatioToggle_Click"
+                                            IsChecked="False"
+                                            Style="{StaticResource dMASSbuttonToggleThrottle}">
+                                            Ratio
+                                        </ToggleButton>
+                                    </Border>
+
                                     <Border
                                         Grid.Row="8"
                                         Grid.Column="1"
@@ -2278,15 +2293,15 @@
                                     </Border>
 
                                     <Border
-                                        Grid.Row="9"
-                                        Grid.Column="1"
-                                        Grid.ColumnSpan="2"
-                                        Margin="3,0,3,10"
+                                        Grid.Row="7"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="3"
+                                        Margin="3,22,3,-3"
                                         Background="{DynamicResource Dark}"
                                         BorderThickness="0"
                                         CornerRadius="5">
                                         <TextBlock
-                                            Margin="0,2,0,0"
+                                            Margin="0,1,0,0"
                                             HorizontalAlignment="Center"
                                             FontFamily="roboto medium"
                                             FontSize="15">
@@ -2691,9 +2706,9 @@
                                     <Slider
                                         x:Name="F2"
                                         Grid.Row="0"
-                                        Grid.RowSpan="8"
+                                        Grid.RowSpan="7"
                                         Grid.Column="0"
-                                        Margin="-1,6,0,0"
+                                        Margin="-1,6,0,-12"
                                         IsSnapToTickEnabled="True"
                                         Maximum="100"
                                         Minimum="0"
@@ -2706,9 +2721,9 @@
                                     <Slider
                                         x:Name="F0"
                                         Grid.Row="0"
-                                        Grid.RowSpan="8"
+                                        Grid.RowSpan="7"
                                         Grid.Column="1"
-                                        Margin="-1,6,0,0"
+                                        Margin="-1,6,0,-12"
                                         IsSnapToTickEnabled="True"
                                         Maximum="992"
                                         Minimum="0"
@@ -2723,9 +2738,9 @@
                                     <Slider
                                         x:Name="F1"
                                         Grid.Row="0"
-                                        Grid.RowSpan="8"
+                                        Grid.RowSpan="7"
                                         Grid.Column="2"
-                                        Margin="-1,6,0,0"
+                                        Margin="-1,6,0,-12"
                                         IsSnapToTickEnabled="True"
                                         Maximum="992"
                                         Minimum="0"
