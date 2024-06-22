@@ -268,6 +268,7 @@ Hopefully you don't need to change code in a million places
 				default:
 					break;
 			}
+			SHP.SC.Ratio = SHP.S.EngineCylinders;
 		}	// SetVehicle()
 	}
 }

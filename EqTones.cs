@@ -82,7 +82,7 @@ namespace sierses.Sim
 			int f = (int)(0.5 + (d * Tones[0].Freq[i] + a * Tones[0].Freq[i]) * 0.01 * H.D.Rpms);
 			return (ushort)((0 == i) ? ((30 + f) / 60)					// RPM Hz
 									 : 2 == i ? (60 + H.D.Rpms) / 120   // power stroke subharmonic for imbalance
-									 : ((60 + f * H.S.Car.cyl) / 120));	// power stroke harmonic Hz
+									 : ((60 + f * H.SC.Ratio) / 120));	// power stroke harmonic Hz
 		}
 
 		// interpolate between harmonic amplitudes based on throttle %

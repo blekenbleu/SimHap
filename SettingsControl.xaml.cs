@@ -81,7 +81,7 @@ namespace sierses.Sim
 				ShowEq(Plugin.E.Q[Plugin.E.EQswitch].Slider);
 		}
 
-		double Ratio;									// BS
+		internal double Ratio;									// BS
 		private void SimpleRatioToggle_Click(object sender, RoutedEventArgs e)
 		{
 			if (Ratio == Plugin.S.EngineCylinders)
