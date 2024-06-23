@@ -97,6 +97,9 @@ namespace sierses.Sim
 		// interpolate between harmonic amplitudes based on throttle %
 		public ushort Throttle(byte i)
 		{
+			if (1 != H.On)
+				return 0;
+
 			double d = 100 - H.D.Accelerator;
 			return (ushort)(0.01 * (50 + H.D.Accelerator * Tones[3].Freq[i]
 									   + d * Tones[1].Freq[i]));
