@@ -286,6 +286,8 @@ namespace sierses.Sim
 				for (int j = 0; j < E.Tones[i].Freq.Length; j++)
 					Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
 			Settings.Engine.Sliders = new() { E.Q[0].Slider };
+			for (int i = 1; i < E.Q.Count; i++)
+				Settings.Engine.Sliders.Add(E.Q[i].Slider);
 
 			if (Save || Loaded || Changed)		// End()
 			{
