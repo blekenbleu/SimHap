@@ -203,11 +203,12 @@ namespace sierses.Sim
 		/// <param name="data">Current game data, including present and previous data frames.</param> 
 		internal GameData Gdat;
 		internal PluginManager PM;
+		internal int On;
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
 			if (null == data.NewData)
 			{
-				E.UnitTest();
+				On = 0;
 				return;
 			}
 
@@ -217,10 +218,12 @@ namespace sierses.Sim
 			if (S.Id == data.NewData.CarId || !D.Unlocked)				// DataUpdate()
 			{
 				if (null != data.OldData && data.GameRunning
-					&& 1 == (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn"))
+					&& 1 == (On = (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
 					D.Refresh(ref data, this);
 				return;
 			}
+
+			On = 0;
 
 			if (Waiting)
 			{
@@ -286,6 +289,8 @@ namespace sierses.Sim
 				for (int j = 0; j < E.Tones[i].Freq.Length; j++)
 					Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
 			Settings.Engine.Sliders = new() { E.Q[0].Slider };
+			for (int i = 1; i < E.Q.Count; i++)
+				Settings.Engine.Sliders.Add(E.Q[i].Slider);
 
 			if (Save || Loaded || Changed)		// End()
 			{

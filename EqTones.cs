@@ -73,7 +73,12 @@ namespace sierses.Sim
 			return true;
 		}
 
-		// for Fr[0-7] properties in Init()
+		public ushort Fr0()
+		{
+			return (ushort)((30 + H.D.Rpms) / 60);     // RPM Hz
+		}
+
+		// for Fr[0-8] properties in Init()
 		// interpolate between harmonic frequencies based on throttle %
 		public ushort Fr(byte i)
 		{
@@ -81,16 +86,16 @@ namespace sierses.Sim
 			double a = 0.01 * H.D.Accelerator;
 			double d = 1.0 - a;
 
-			return (ushort)(  0 == i ? (30 + H.D.Rpms) / 60		// RPM Hz
-							: 2 == i ? (60 + H.D.Rpms) / 120	// power stroke subharmonic for imbalance
-
-							// interpolate between Tones[0] (no throttle) and Tones[2] (full throttle)
-							: (60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.S.Car.cyl * H.D.Rpms) / 120);		// power stroke harmonic Hz
+			// interpolate between Tones[0] (no throttle) and Tones[2] (full throttle)
+			return (ushort)((60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.S.Car.cyl * H.D.Rpms) / 120);		// power stroke harmonic Hz
 		}
 
 		// interpolate between harmonic amplitudes based on throttle %
 		public ushort Throttle(byte i)
 		{
+			if (1 != H.On)
+				return 0;
+
 			double d = 100 - H.D.Accelerator;
 			return (ushort)(0.01 * (50 + H.D.Accelerator * Tones[3].Freq[i]
 									   + d * Tones[1].Freq[i]));
@@ -131,9 +136,9 @@ namespace sierses.Sim
 				Tones[0].Freq[2] = 0; // start on bank 0
 			}
 
-			H.AttachDelegate("E.Fr0", () => Fr(0));
+			H.AttachDelegate("E.Fr0", () => Fr0());
 			H.AttachDelegate("E.Fr1", () => Fr(1));
-			H.AttachDelegate("E.Fr2", () => Fr(2));
+			H.AttachDelegate("E.Fr2", () => Fr0() / 2);
 			H.AttachDelegate("E.Fr3", () => Fr(3));
 			H.AttachDelegate("E.Fr4", () => Fr(4));
 			H.AttachDelegate("E.Fr5", () => Fr(5));
