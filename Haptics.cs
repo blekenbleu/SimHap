@@ -208,7 +208,7 @@ namespace sierses.Sim
 		{
 			if (null == data.NewData)
 			{
-				E.UnitTest();
+				On = 0;
 				return;
 			}
 
