@@ -448,7 +448,6 @@ namespace blekenbleu.Haptic
 					break;
 				case "RBR":
 					CurrentGame = GameId.RBR;
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "RFactor1":
 					CurrentGame = GameId.RF1;
@@ -486,7 +485,6 @@ namespace blekenbleu.Haptic
 				case "CodemastersDirtRally2":
 					CurrentGame = GameId.DR2;
 					GameDBText = "DR2";
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "CodemastersDirt2":
 				case "CodemastersDirt3":
@@ -494,13 +492,11 @@ namespace blekenbleu.Haptic
 				case "CodemastersDirt4":
 					CurrentGame = GameId.D4;
 					GameDBText = "D4";
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "EAWRC23":
 					CurrentGame = GameId.WRC23;
 					GameDBText = "WRC23";
 					D.AccSamples = 32;
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12012":
 				case "F12013":
@@ -512,7 +508,6 @@ namespace blekenbleu.Haptic
 					break;
 				case "F12017":
 					CurrentGame = GameId.F12017;
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12018":
 				case "F12019":
@@ -521,7 +516,6 @@ namespace blekenbleu.Haptic
 				case "F12022":
 					CurrentGame = GameId.F12022;
 					GameDBText = "F12022";
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12023":
 				case "F12024":
@@ -529,7 +523,6 @@ namespace blekenbleu.Haptic
 				case "F12026":
 					CurrentGame = GameId.F12023;
 					GameDBText = "F12022";
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "CodemastersGrid2":
 				case "CodemastersGrid2019":
@@ -537,25 +530,20 @@ namespace blekenbleu.Haptic
 				case "CodemastersGridLegends":
 					CurrentGame = GameId.GLegends;
 					GameDBText = "Grid";
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "BeamNgDrive":
 					CurrentGame = GameId.BeamNG;
 					GameDBText = "BeamNG";
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "GPBikes":
 					CurrentGame = GameId.GPBikes;
 					D.RumbleFromPlugin = true;
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "MXBikes":
 					CurrentGame = GameId.MXBikes;
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "WRCGenerations":
 					CurrentGame = GameId.WRCGen;
-//					D.TireDiameterSampleCount = -1;
 					break;
 				case "WRCX":
 					CurrentGame = GameId.WRCX;
@@ -573,7 +561,6 @@ namespace blekenbleu.Haptic
 				case "GranTurismoSport":
 					CurrentGame = GameId.GranTurismo7;
 					GameDBText = "GranTurismo7";
-//					D.TireDiameterSampleCount = -1;
 					break;
 				default:
 					CurrentGame = GameId.Other;
@@ -712,66 +699,7 @@ namespace blekenbleu.Haptic
 			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
 			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
 			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
-/*
-if (ShowFreq) {
-			this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
-			this.AttachDelegate("FreqOctave", () => D.FreqOctave);
-			this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
-			this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
-			this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
-			this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
-			this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
-			this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
-			this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
-			this.AttachDelegate("Gain1H", () => D.Gain1H);
-			this.AttachDelegate("Gain1H2", () => D.Gain1H2);
-			this.AttachDelegate("Gain2H", () => D.Gain2H);
-			this.AttachDelegate("Gain4H", () => D.Gain4H);
-			this.AttachDelegate("GainOctave", () => D.GainOctave);
-			this.AttachDelegate("GainIntervalA1", () => D.GainIntervalA1);
-			this.AttachDelegate("GainIntervalA2", () => D.GainIntervalA2);
-			this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
-			this.AttachDelegate("GainPeakA1Middle", () => D.GainPeakA1);
-			this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
-			this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
-			this.AttachDelegate("GainPeakA2Middle", () => D.GainPeakA2);
-			this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
-			this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
-			this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
-			this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
-			this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
-			this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
-			this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
-}
-if (ShowTire) {
-			this.AttachDelegate("SlipXFL", () => D.SlipXFL);
-			this.AttachDelegate("SlipXFR", () => D.SlipXFR);
-			this.AttachDelegate("SlipXRL", () => D.SlipXRL);
-			this.AttachDelegate("SlipXRR", () => D.SlipXRR);
-			this.AttachDelegate("SlipXAll", () => D.SlipXAll);
-			this.AttachDelegate("SlipYFL", () => D.SlipYFL);
-			this.AttachDelegate("SlipYFR", () => D.SlipYFR);
-			this.AttachDelegate("SlipYRL", () => D.SlipYRL);
-			this.AttachDelegate("SlipYRR", () => D.SlipYRR);
-			this.AttachDelegate("SlipYAll", () => D.SlipYAll);
-			this.AttachDelegate("WheelLockAll", () => D.WheelLockAll);
-			this.AttachDelegate("WheelSpinAll", () => D.WheelSpinAll);
-			this.AttachDelegate("TireDiameterFL", () => D.TireDiameterFL);
-			this.AttachDelegate("TireDiameterFR", () => D.TireDiameterFR);
-			this.AttachDelegate("TireDiameterRL", () => D.TireDiameterRL);
-			this.AttachDelegate("TireDiameterRR", () => D.TireDiameterRR);
-			this.AttachDelegate("TireSpeedFL", () => D.WheelSpeedFL);
-			this.AttachDelegate("TireSpeedFR", () => D.WheelSpeedFR);
-			this.AttachDelegate("TireSpeedRL", () => D.WheelSpeedRL);
-			this.AttachDelegate("TireSpeedRR", () => D.WheelSpeedRR);
-			this.AttachDelegate("SpeedMs", () => D.SpeedMs);
-			this.AttachDelegate("TireLoadFL", () => D.WheelLoadFL);
-			this.AttachDelegate("TireLoadFR", () => D.WheelLoadFR);
-			this.AttachDelegate("TireLoadRL", () => D.WheelLoadRL);
-			this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
-			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
-}
-*/
+
 if (ShowSusp) {
 			this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
 			this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
@@ -818,6 +746,7 @@ if (ShowSusp) {
 			this.AttachDelegate("ShiftDown", () => D.Downshift);
 			this.AttachDelegate("ShiftUp", () => D.Upshift);
 			this.AttachDelegate("WiperStatus", () => D.WiperStatus);
+
 if (ShowPhysics) {
 			this.AttachDelegate("Airborne", () => D.Airborne);
 			this.AttachDelegate("YawRate", () => D.YawRate);
@@ -841,7 +770,6 @@ if (ShowPhysics) {
 			this.AttachDelegate("MHeave", () => D.MotionHeave);
 			this.AttachDelegate("MSurge", () => D.MotionSurge);
 			this.AttachDelegate("MSway", () => D.MotionSway);
-//			this.AttachDelegate("VelocityX", () => D.VelocityX);
 }
 			FrameTimeTicks = DateTime.Now.Ticks;
 		}

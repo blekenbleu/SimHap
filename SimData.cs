@@ -112,41 +112,6 @@ namespace blekenbleu.Haptic
 		public double AccHeaveAbs;
 		public double InvAccSurgeAvg;
 		public bool Airborne;
-        /*
-                public double SlipXFL;
-                public double SlipXFR;
-                public double SlipXRL;
-                public double SlipXRR;
-                public double SlipXAll;
-                public double SlipYFL;
-                public double SlipYFR;
-                public double SlipYRL;
-                public double SlipYRR;
-                public double SlipYAll;
-                private double SlipXGammaBaseMult;
-                public double SlipYGammaBaseMult;
-                public double TireDiameterFL;
-                public double TireDiameterFR;
-                public double TireDiameterRL;
-                public double TireDiameterRR;
-                public double TireDiameterSampleFL;
-                public double TireDiameterSampleFR;
-                public double TireDiameterSampleRL;
-                public double TireDiameterSampleRR;
-                public int TireDiameterSampleCount;
-                public int TireDiameterSampleMax;
-                public double VelocityX;
-                public double WheelSpeedFL;
-                public double WheelSpeedFR;
-                public double WheelSpeedRL;
-                public double WheelSpeedRR;
-                public double WheelRotationFL;
-                public double WheelRotationFR;
-                public double WheelRotationRL;
-                public double WheelRotationRR;
-                public double WheelSpinAll;
-                public double WheelLockAll;
-        */
         public double WheelLoadFL;
         public double WheelLoadFR;
         public double WheelLoadRL;
@@ -503,25 +468,6 @@ namespace blekenbleu.Haptic
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
 					WiperStatus = (int) SHP.PM.GetPropertyValue(raw+"Graphics.WiperLV");
-/*
-					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
-					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
-					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
-					WheelRotationRR = Math.Abs(Physics("WheelAngularSpeed04"));
-					SlipFromRPS();
-					SlipXFL = Math.Max(Physics("WheelSlip01") - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max(Physics("WheelSlip02") - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max(Physics("WheelSlip03") - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max(Physics("WheelSlip04") - Math.Abs(SlipYRR) * 2.0, 0.0);
-					if (TireDiameterFL == 0.0)
-					{
-						SlipXFL *= 0.5;
-						SlipXFR *= 0.5;
-						SlipXRL *= 0.5;
-						SlipXRR *= 0.5;
-						break;
-					}
- */
 					break;
 				case GameId.AMS1:
 					SuspensionDistFL = Data("wheel01.suspensionDeflection");
@@ -530,113 +476,24 @@ namespace blekenbleu.Haptic
 					SuspensionDistRR = Data("wheel04.suspensionDeflection");
 					SpeedMs = Raw("CurrentPlayer.speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
-/*
-					WheelRotationFL = Math.Abs(Data("wheel01.rotation"));
-					WheelRotationFR = Math.Abs(Data("wheel02.rotation"));
-					WheelRotationRL = Math.Abs(Data("wheel03.rotation"));
-					WheelRotationRR = Math.Abs(Data("wheel04.rotation"));
-					SlipFromRPS();
-					SlipXFL = Math.Max(1.0 - (double) Data("wheel01.gripFract") - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max(1.0 - (double) Data("wheel02.gripFract") - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max(1.0 - (double) Data("wheel03.gripFract") - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max(1.0 - (double) Data("wheel04.gripFract") - Math.Abs(SlipYRR) * 1.0, 0.0);
-					if (TireDiameterFL == 0.0)
-					{
-						SlipXFL *= 0.5;
-						SlipXFR *= 0.5;
-						SlipXRL *= 0.5;
-						SlipXRR *= 0.5;
-						break;
-					}
- */
 					break;
 				case GameId.AMS2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
 					SuspensionDistFR = Raw("mSuspensionTravel02");
 					SuspensionDistRL = Raw("mSuspensionTravel03");
 					SuspensionDistRR = Raw("mSuspensionTravel04");
-/*
-					WheelRotationFL = Math.Abs(Raw("mTyreRPS01"));
-					WheelRotationFR = Math.Abs(Raw("mTyreRPS02"));
-					WheelRotationRL = Math.Abs(Raw("mTyreRPS03"));
-					WheelRotationRR = Math.Abs(Raw("mTyreRPS04"));
-					SlipFromRPS();
-					SlipXFL = Math.Max(Raw("mTyreSlipSpeed01") * 0.1 - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max(Raw("mTyreSlipSpeed02") * 0.1 - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max(Raw("mTyreSlipSpeed03") * 0.1 - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max(Raw("mTyreSlipSpeed04") * 0.1 - Math.Abs(SlipYRR) * 1.0, 0.0);
-					if (TireDiameterFL == 0.0)
-					{
-						SlipXFL *= 0.5;
-						SlipXFR *= 0.5;
-						SlipXRL *= 0.5;
-						SlipXRR *= 0.5;
-						break;
-					}
- */
 					break;
 				case GameId.D4:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
-/*
-					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
-					SlipFromWheelSpeed();
- */
 					break;
 				case GameId.DR2:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
-/*
-					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
-					SlipFromWheelSpeed();
-					VelocityX = Raw("WorldSpeedX") * Math.Sin(Raw("XR"));
-					YawRate = data.NewData.OrientationYawAcceleration;
-					if (VelocityX < 0.0)
-					{
-						if (YawRate < 0.0)
-						{
-							SlipXFL = -VelocityX * WheelLoadFL * YawRate * 0.5;
-							SlipXFR = -VelocityX * WheelLoadFR * YawRate * 0.5;
-							SlipXRL = -VelocityX * WheelLoadRL * YawRate * 1.0;
-							SlipXRR = -VelocityX * WheelLoadRR * YawRate * 1.0;
-						}
-						else
-						{
-							SlipXFL = -VelocityX * WheelLoadFL * YawRate * 1.0;
-							SlipXFR = -VelocityX * WheelLoadFR * YawRate * 1.0;
-							SlipXRL = -VelocityX * WheelLoadRL * YawRate * 0.5;
-							SlipXRR = -VelocityX * WheelLoadRR * YawRate * 0.5;
-						}
-					}
-					else if (YawRate < 0.0)
-					{
-						SlipXFL = VelocityX * WheelLoadFL * -YawRate * 1.0;
-						SlipXFR = VelocityX * WheelLoadFR * -YawRate * 1.0;
-						SlipXRL = VelocityX * WheelLoadRL * -YawRate * 0.5;
-						SlipXRR = VelocityX * WheelLoadRR * -YawRate * 0.5;
-					}
-					else
-					{
-						SlipXFL = VelocityX * WheelLoadFL * -YawRate * 0.5;
-						SlipXFR = VelocityX * WheelLoadFR * -YawRate * 0.5;
-						SlipXRL = VelocityX * WheelLoadRL * -YawRate * 1.0;
-						SlipXRR = VelocityX * WheelLoadRR * -YawRate * 1.0;
-					}
-					SlipXFL = Math.Max(SlipXFL, 0.0);
-					SlipXFR = Math.Max(SlipXFL, 0.0);
-					SlipXRL = Math.Max(SlipXFL, 0.0);
-					SlipXRR = Math.Max(SlipXFL, 0.0);
- */
 					break;
 				case GameId.WRC23:
 					SuspensionDistFL = Raw("SessionUpdate.vehicle_hub_position_fl");
@@ -645,109 +502,24 @@ namespace blekenbleu.Haptic
 					SuspensionDistRR = Raw("SessionUpdate.vehicle_hub_position_br");
 					SpeedMs = Raw("SessionUpdate.vehicle_speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
-/*
-					WheelSpeedFL = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_fl"));
-					WheelSpeedFR = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_fr"));
-					WheelSpeedRL = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_bl"));
-					WheelSpeedRR = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_br"));
-					SlipFromWheelSpeed();
-					VelocityX = Raw("SessionUpdateLocalVelocity.X");
-					YawRate = data.NewData.OrientationYawAcceleration;
-					if (VelocityX < 0.0)
-					{
-						if (YawRate < 0.0)
-						{
-							SlipXFL = -VelocityX * WheelLoadFL * YawRate * 0.5;
-							SlipXFR = -VelocityX * WheelLoadFR * YawRate * 0.5;
-							SlipXRL = -VelocityX * WheelLoadRL * YawRate * 1.0;
-							SlipXRR = -VelocityX * WheelLoadRR * YawRate * 1.0;
-						}
-						else
-						{
-							SlipXFL = -VelocityX * WheelLoadFL * YawRate * 1.0;
-							SlipXFR = -VelocityX * WheelLoadFR * YawRate * 1.0;
-							SlipXRL = -VelocityX * WheelLoadRL * YawRate * 0.5;
-							SlipXRR = -VelocityX * WheelLoadRR * YawRate * 0.5;
-						}
-					}
-					else if (YawRate < 0.0)
-					{
-						SlipXFL = VelocityX * WheelLoadFL * -YawRate * 1.0;
-						SlipXFR = VelocityX * WheelLoadFR * -YawRate * 1.0;
-						SlipXRL = VelocityX * WheelLoadRL * -YawRate * 0.5;
-						SlipXRR = VelocityX * WheelLoadRR * -YawRate * 0.5;
-					}
-					else
-					{
-						SlipXFL = VelocityX * WheelLoadFL * -YawRate * 0.5;
-						SlipXFR = VelocityX * WheelLoadFR * -YawRate * 0.5;
-						SlipXRL = VelocityX * WheelLoadRL * -YawRate * 1.0;
-						SlipXRR = VelocityX * WheelLoadRR * -YawRate * 1.0;
-					}
-					SlipXFL = Math.Max(SlipXFL, 0.0);
-					SlipXFR = Math.Max(SlipXFL, 0.0);
-					SlipXRL = Math.Max(SlipXFL, 0.0);
-					SlipXRR = Math.Max(SlipXFL, 0.0);
- */
 					break;
 				case GameId.F12022:
 					SuspensionDistFL = Raw("PlayerMotionData.m_suspensionPosition01") * 0.001;
 					SuspensionDistFR = Raw("PlayerMotionData.m_suspensionPosition02") * 0.001;
 					SuspensionDistRL = Raw("PlayerMotionData.m_suspensionPosition03") * 0.001;
 					SuspensionDistRR = Raw("PlayerMotionData.m_suspensionPosition04") * 0.001;
-/*
-					WheelSpeedFL = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed03"));
-					WheelSpeedFR = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed04"));
-					WheelSpeedRL = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed01"));
-					WheelSpeedRR = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed02"));
-					SlipFromWheelSpeed();
-					SlipXFL = Math.Max(Raw("PlayerMotionData.m_wheelSlip03") - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max(Raw("PlayerMotionData.m_wheelSlip04") - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max(Raw("PlayerMotionData.m_wheelSlip01") - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max(Raw("PlayerMotionData.m_wheelSlip02") - Math.Abs(SlipYRR) * 2.0, 0.0);
- */
 					break;
 				case GameId.F12023:
 					SuspensionDistFL = Raw("PacketMotionExData.m_suspensionPosition01") * 0.001;
 					SuspensionDistFR = Raw("PacketMotionExData.m_suspensionPosition02") * 0.001;
 					SuspensionDistRL = Raw("PacketMotionExData.m_suspensionPosition03") * 0.001;
 					SuspensionDistRR = Raw("PacketMotionExData.m_suspensionPosition04") * 0.001;
-/*
-					WheelSpeedFL = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed03"));
-					WheelSpeedFR = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed04"));
-					WheelSpeedRL = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed01"));
-					WheelSpeedRR = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed02"));
-					SlipFromWheelSpeed();
-					SlipXFL = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio01")) * 5.0 - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio02")) * 5.0 - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio03")) * 5.0 - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio04")) * 5.0 - Math.Abs(SlipYRR) * 1.0, 0.0);
- */
 					break;
 				case GameId.Forza:
 					SuspensionDistFL = Raw("SuspensionTravelMetersFrontLeft");
 					SuspensionDistFR = Raw("SuspensionTravelMetersFrontRight");
 					SuspensionDistRL = Raw("SuspensionTravelMetersRearLeft");
 					SuspensionDistRR = Raw("SuspensionTravelMetersRearRight");
-/*
-					WheelRotationFL = Math.Abs(Raw("WheelRotationSpeedFrontLeft"));
-					WheelRotationFR = Math.Abs(Raw("WheelRotationSpeedFrontRight"));
-					WheelRotationRL = Math.Abs(Raw("WheelRotationSpeedRearLeft"));
-					WheelRotationRR = Math.Abs(Raw("WheelRotationSpeedRearRight"));
-					SlipFromRPS();
-					SlipXFL = Math.Max(Raw("TireCombinedSlipFrontLeft") - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max(Raw("TireCombinedSlipFrontRight") - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max(Raw("TireCombinedSlipRearLeft") - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max(Raw("TireCombinedSlipRearRight") - Math.Abs(SlipYRR) * 2.0, 0.0);
-					if (TireDiameterFL == 0.0)
-					{
-						SlipXFL *= 0.5;
-						SlipXFR *= 0.5;
-						SlipXRL *= 0.5;
-						SlipXRR *= 0.5;
-						break;
-					}
- */
 					break;
 				case GameId.GTR2:
 				case GameId.GSCE:
@@ -758,25 +530,6 @@ namespace blekenbleu.Haptic
 					SuspensionDistRR = Data("wheel04.suspensionDeflection");
 					SpeedMs = Raw("CurrentPlayer.speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
-/*
-					WheelRotationFL = Math.Abs(Data("wheel01.rotation"));
-					WheelRotationFR = Math.Abs(Data("wheel02.rotation"));
-					WheelRotationRL = Math.Abs(Data("wheel03.rotation"));
-					WheelRotationRR = Math.Abs(Data("wheel04.rotation"));
-					SlipFromRPS();
-					SlipXFL = Math.Max(1.0 - Data("wheel01.gripFract") - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max(1.0 - Data("wheel02.gripFract") - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max(1.0 - Data("wheel03.gripFract") - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max(1.0 - Data("wheel04.gripFract") - Math.Abs(SlipYRR) * 1.0, 0.0);
-					if (TireDiameterFL == 0.0)
-					{
-						SlipXFL *= 0.5;
-						SlipXFR *= 0.5;
-						SlipXRL *= 0.5;
-						SlipXRR *= 0.5;
-						break;
-					}
- */
 					break;
 				case GameId.IRacing:
 					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
@@ -814,142 +567,24 @@ namespace blekenbleu.Haptic
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
 					}
-/*
-					VelocityX = Raw("Telemetry.VelocityY") * 10.0;
-					if (VelocityX < 0.0)
-					{
-						if (YawRate < 0.0)
-						{
-							SlipXFL = -VelocityX * WheelLoadFL * YawRate * 0.1;
-							SlipXFR = -VelocityX * WheelLoadFR * YawRate * 0.1;
-							SlipXRL = -VelocityX * WheelLoadRL * YawRate * 0.2;
-							SlipXRR = -VelocityX * WheelLoadRR * YawRate * 0.2;
-						}
-						else
-						{
-							SlipXFL = -VelocityX * WheelLoadFL * YawRate * 0.2;
-							SlipXFR = -VelocityX * WheelLoadFR * YawRate * 0.2;
-							SlipXRL = -VelocityX * WheelLoadRL * YawRate * 0.1;
-							SlipXRR = -VelocityX * WheelLoadRR * YawRate * 0.1;
-						}
-					}
-					else if (YawRate < 0.0)
-					{
-						SlipXFL = VelocityX * WheelLoadFL * -YawRate * 0.2;
-						SlipXFR = VelocityX * WheelLoadFR * -YawRate * 0.2;
-						SlipXRL = VelocityX * WheelLoadRL * -YawRate * 0.1;
-						SlipXRR = VelocityX * WheelLoadRR * -YawRate * 0.1;
-					}
-					else
-					{
-						SlipXFL = VelocityX * WheelLoadFL * -YawRate * 0.1;
-						SlipXFR = VelocityX * WheelLoadFR * -YawRate * 0.1;
-						SlipXRL = VelocityX * WheelLoadRL * -YawRate * 0.2;
-						SlipXRR = VelocityX * WheelLoadRR * -YawRate * 0.2;
-					}
-					if (Brake > 0.0)
-					{
-						SlipYFL = BrakeF * SpeedMs * WheelLoadFL * InvAccSurgeAvg * 0.04;
-						SlipYFR = BrakeF * SpeedMs * WheelLoadFR * InvAccSurgeAvg * 0.04;
-						SlipYRL = (BrakeR + Handbrake) * SpeedMs * WheelLoadRL * InvAccSurgeAvg * 0.04;
-						SlipYRR = (BrakeR + Handbrake) * SpeedMs * WheelLoadRR * InvAccSurgeAvg * 0.04;
-					}
-					else if (Accelerator > 10.0 && SpeedMs > 0.0 && AccSurgeAvg < 0.0)
-					{
-						if (SHP.S.PoweredWheels == "F")
-						{
-							SlipYFL = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.2;
-							SlipYFR = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.2;
-							SlipYRL = 0.0;
-							SlipYRR = 0.0;
-						}
-						else if (SHP.S.PoweredWheels == "R")
-						{
-							SlipYFL = 0.0;
-							SlipYFR = 0.0;
-							SlipYRL = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.2;
-							SlipYRR = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.2;
-						}
-						else
-						{
-							SlipYFL = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.15;
-							SlipYFR = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.15;
-							SlipYRL = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.15;
-							SlipYRR = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.15;
-						}
-					}
-					SlipXFL = 0.0;
-					SlipXFR = 0.0;
-					SlipXRL = 0.0;
-					SlipXRR = 0.0;
-					SlipYFL = 0.0;
-					SlipYFR = 0.0;
-					SlipYRL = 0.0;
-					SlipYRR = 0.0;
- */
 					break;
 				case GameId.PC2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
 					SuspensionDistFR = Raw("mSuspensionTravel02");
 					SuspensionDistRL = Raw("mSuspensionTravel03");
 					SuspensionDistRR = Raw("mSuspensionTravel04");
-/*
-					WheelRotationFL = Math.Abs(Raw("mTyreRPS01"));
-					WheelRotationFR = Math.Abs(Raw("mTyreRPS02"));
-					WheelRotationRL = Math.Abs(Raw("mTyreRPS03"));
-					WheelRotationRR = Math.Abs(Raw("mTyreRPS04"));
-					SlipFromRPS();
-					SlipXFL = Math.Max(Raw("mTyreSlipSpeed01") * 0.1 - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max(Raw("mTyreSlipSpeed02") * 0.1 - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max(Raw("mTyreSlipSpeed03") * 0.1 - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max(Raw("mTyreSlipSpeed04") * 0.1 - Math.Abs(SlipYRR) * 1.0, 0.0);
-					if (TireDiameterFL == 0.0)
-					{
-						SlipXFL *= 0.5;
-						SlipXFR *= 0.5;
-						SlipXRL *= 0.5;
-						SlipXRR *= 0.5;
-						break;
-					}
- */
 					break;
 				case GameId.RBR:
 					SuspensionDistFL = Raw("NGPTelemetry.car.suspensionLF.springDeflection");
 					SuspensionDistFR = Raw("NGPTelemetry.car.suspensionRF.springDeflection");
 					SuspensionDistRL = Raw("NGPTelemetry.car.suspensionLB.springDeflection");
 					SuspensionDistRR = Raw("NGPTelemetry.car.suspensionRB.springDeflection");
-/*
-					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFL"));
-					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFR"));
-					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRL"));
-					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRR"));
-					SlipFromWheelSpeed();
- */
 					break;
 				case GameId.RF2:
 					SuspensionDistFL = Raw("CurrentPlayerTelemetry.mWheels01.mSuspensionDeflection");
 					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
 					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
 					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
-/*
-					WheelRotationFL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels01.mRotation"));
-					WheelRotationFR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels02.mRotation"));
-					WheelRotationRL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels03.mRotation"));
-					WheelRotationRR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels04.mRotation"));
-					SlipFromRPS();
-					SlipXFL = Raw("CurrentPlayerTelemetry.mWheels01.mLateralGroundVel");
-					SlipXFL = SlipXFL == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels01.mLateralPatchVel") / SlipXFL;
-					SlipXFR = Raw("CurrentPlayerTelemetry.mWheels02.mLateralGroundVel");
-					SlipXFR = SlipXFR == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels02.mLateralPatchVel") / SlipXFR;
-					SlipXRL = Raw("CurrentPlayerTelemetry.mWheels03.mLateralGroundVel");
-					SlipXRL = SlipXRL == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels03.mLateralPatchVel") / SlipXRL;
-					SlipXRR = Raw("CurrentPlayerTelemetry.mWheels04.mLateralGroundVel");
-					SlipXRR = SlipXRR == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels04.mLateralPatchVel") / SlipXRR;
-					SlipXFL *= 0.5;
-					SlipXFR *= 0.5;
-					SlipXRL *= 0.5;
-					SlipXRR *= 0.5;
- */
 					if (data.NewData.Brake > 90.0)
 					{
 						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
@@ -978,13 +613,6 @@ namespace blekenbleu.Haptic
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 					}
-/*
-					WheelRotationFL = Math.Abs(Raw("TireRps.FrontLeft"));
-					WheelRotationFR = Math.Abs(Raw("TireRps.FrontRight"));
-					WheelRotationRL = Math.Abs(Raw("TireRps.RearLeft"));
-					WheelRotationRR = Math.Abs(Raw("TireRps.RearRight"));
-					SlipFromRPS();
- */
 					break;
 				case GameId.GTL:
 				case GameId.RACE07:
@@ -1013,66 +641,27 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight");
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft");
 					SuspensionDistRR = Raw("SuspensionPositionRearRight");
-/*
-					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
-					SlipFromWheelSpeed();
- */
 					break;
 				case GameId.F12016:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionFrontLeft") * 0.001;
-/*
-					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
-					SlipFromWheelSpeed();
- */
 					break;
 				case GameId.F12017:
 					SuspensionDistFL = Raw("m_susp_pos01") * 0.001;
 					SuspensionDistFR = Raw("m_susp_pos02") * 0.001;
 					SuspensionDistRL = Raw("m_susp_pos03") * 0.001;
 					SuspensionDistRR = Raw("m_susp_pos04") * 0.001;
-/*
-					WheelSpeedFL = Math.Abs(Raw("m_wheelSpeed03"));
-					WheelSpeedFR = Math.Abs(Raw("m_wheelSpeed04"));
-					WheelSpeedRL = Math.Abs(Raw("m_wheelSpeed01"));
-					WheelSpeedRR = Math.Abs(Raw("m_wheelSpeed02"));
-					SlipFromWheelSpeed();
- */
 					break;
 				case GameId.GLegends:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
-/*
-					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
-					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
-					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
-					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
-					SlipFromWheelSpeed();
- */
 					break;
 				case GameId.KK:
 					flag = false;
-/*
-					double propertyValue = Raw("Motion.VelocityZ");
-					if (VelocityZAvg == 0.0)
-						VelocityZAvg = propertyValue;
-					VelocityZAvg = (VelocityZAvg + propertyValue) * 0.5;
-					double num2 = (propertyValue / VelocityZAvg - 1.0) * 0.5;
-					SuspensionVelFL = num2 * WheelLoadFL;
-					SuspensionVelFR = num2 * WheelLoadFR;
-					SuspensionVelRL = num2 * WheelLoadRL;
-					SuspensionVelRR = num2 * WheelLoadRR;
- */
 					break;
 				case GameId.ATS:
 				case GameId.ETS2:
@@ -1092,17 +681,6 @@ namespace blekenbleu.Haptic
 					SuspensionVelFR = Raw("suspension_velocity_fr") * 0.05;
 					SuspensionVelRL = Raw("suspension_velocity_rl") * 0.05;
 					SuspensionVelRR = Raw("suspension_velocity_rr") * 0.05;
-/*
-					WheelSpeedFL = Raw("wheel_speed_fl");
-					WheelSpeedFR = Raw("wheel_speed_fr");
-					WheelSpeedRL = Raw("wheel_speed_rl");
-					WheelSpeedRR = Raw("wheel_speed_rr");
-					SlipFromWheelSpeed();
-					SlipXFL = Math.Max(Raw("wheel_slip_fl") * 0.1 - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max(Raw("wheel_slip_fr") * 0.1 - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max(Raw("wheel_slip_rl") * 0.1 - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max(Raw("wheel_slip_rr") * 0.1 - Math.Abs(SlipYRR) * 2.0, 0.0);
- */
 					break;
 				case GameId.GPBikes:
 				case GameId.MXBikes:
@@ -1115,13 +693,6 @@ namespace blekenbleu.Haptic
 					SuspensionVelFR = Raw("m_sData.m_afSuspVelocity01");
 					SuspensionVelRL = Raw("m_sData.m_afSuspVelocity02");
 					SuspensionVelRR = Raw("m_sData.m_afSuspVelocity02");
-/*
-					WheelSpeedFL = Math.Abs(Raw("m_sData.m_afWheelSpeed01"));
-					WheelSpeedFR = Math.Abs(Raw("m_sData.m_afWheelSpeed01"));
-					WheelSpeedRL = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
-					WheelSpeedRR = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
-					SlipFromWheelSpeed();
- */
 					if ((int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
 					 || (int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
 					{
@@ -1137,25 +708,6 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
 					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
 					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
-/*
-					WheelRotationFL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels01.mRotation"));
-					WheelRotationFR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels02.mRotation"));
-					WheelRotationRL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels03.mRotation"));
-					WheelRotationRR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels04.mRotation"));
-					SlipFromRPS();
-					SlipXFL = Raw("CurrentPlayerTelemetry.mWheels01.mLateralGroundVel");
-					SlipXFL = SlipXFL == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels01.mLateralPatchVel") / SlipXFL;
-					SlipXFR = Raw("CurrentPlayerTelemetry.mWheels02.mLateralGroundVel");
-					SlipXFR = SlipXFR == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels02.mLateralPatchVel") / SlipXFR;
-					SlipXRL = Raw("CurrentPlayerTelemetry.mWheels03.mLateralGroundVel");
-					SlipXRL = SlipXRL == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels03.mLateralPatchVel") / SlipXRL;
-					SlipXRR = Raw("CurrentPlayerTelemetry.mWheels04.mLateralGroundVel");
-					SlipXRR = SlipXRR == 0.0 ? 0.0 : Raw("CurrentPlayerTelemetry.mWheels04.mLateralPatchVel") / SlipXRR;
-					SlipXFL = Math.Abs(SlipXFL - 1.0);
-					SlipXFR = Math.Abs(SlipXFR - 1.0);
-					SlipXRL = Math.Abs(SlipXRL - 1.0);
-					SlipXRR = Math.Abs(SlipXRR - 1.0);
- */
 					if (data.NewData.Brake > 80.0)
 					{
 						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
@@ -1169,17 +721,6 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Raw("Tire_SusHeight02");
 					SuspensionDistRL = Raw("Tire_SusHeight03");
 					SuspensionDistRR = Raw("Tire_SusHeight04");
-/*
-					WheelSpeedFL = (double) Math.Abs(Raw("Wheel_Speed01")) * 0.277778;
-					WheelSpeedFR = (double) Math.Abs(Raw("Wheel_Speed02")) * 0.277778;
-					WheelSpeedRL = (double) Math.Abs(Raw("Wheel_Speed03")) * 0.277778;
-					WheelSpeedRR = (double) Math.Abs(Raw("Wheel_Speed04")) * 0.277778;
-					SlipFromWheelSpeed();
-					SlipXFL = Math.Max(Raw("Wheel_Slip01") - Math.Abs(SlipYFL) * 2.0, 0.0);
-					SlipXFR = Math.Max(Raw("Wheel_Slip02") - Math.Abs(SlipYFR) * 2.0, 0.0);
-					SlipXRL = Math.Max(Raw("Wheel_Slip03") - Math.Abs(SlipYRL) * 2.0, 0.0);
-					SlipXRR = Math.Max(Raw("Wheel_Slip04") - Math.Abs(SlipYRR) * 2.0, 0.0);
- */
 					break;
 			}
 			if (!flag)
@@ -1190,105 +731,6 @@ namespace blekenbleu.Haptic
 			SuspensionVelRR = (SuspensionDistRR - SuspensionDistRRP) * FPS;
 		}
 
-/*
-		private void SlipFromRPS()
-		{
-			if (TireDiameterSampleCount < TireDiameterSampleMax
-			 && Accelerator < 60.0 && SpeedMs > 5.0 && Math.Abs(AccHeave2S) < 0.1
-			 && Math.Abs(AccSurge2S) < 0.01 && Math.Abs(AccSway2S) < 0.08)
-			{
-				TireDiameterSampleFL = 2.0 * SpeedMs / WheelRotationFL;
-				TireDiameterSampleFR = 2.0 * SpeedMs / WheelRotationFR;
-				TireDiameterSampleRL = 2.0 * SpeedMs / WheelRotationRL;
-				TireDiameterSampleRR = 2.0 * SpeedMs / WheelRotationRR;
-				if (TireDiameterSampleFL > 1.0)
-				{
-					if (TireDiameterSampleFL > 3.0)
-						TireDiameterSampleFL = 0.66;
-					else if (TireDiameterSampleCount > 0 && Math.Abs(TireDiameterSampleFL - TireDiameterFL) > 0.2 * TireDiameterFL)
-						TireDiameterSampleFL = TireDiameterFL * 0.9 + TireDiameterSampleFL * 0.1;
-				}
-				if (TireDiameterSampleFR > 1.0)
-				{
-					if (TireDiameterSampleFR > 3.0)
-						TireDiameterSampleFR = 0.66;
-					else if (TireDiameterSampleCount > 0 && Math.Abs(TireDiameterSampleFR - TireDiameterFR) > 0.2 * TireDiameterFR)
-						TireDiameterSampleFR = TireDiameterFR * 0.9 + TireDiameterSampleFR * 0.1;
-				}
-				if (TireDiameterSampleRL > 1.0)
-				{
-					if (TireDiameterSampleRL > 3.0)
-						TireDiameterSampleRL = 0.66;
-					else if (TireDiameterSampleCount > 0 && Math.Abs(TireDiameterSampleRL - TireDiameterRL) > 0.2 * TireDiameterRL)
-						TireDiameterSampleRL = TireDiameterRL * 0.9 + TireDiameterSampleRL * 0.1;
-				}
-				if (TireDiameterSampleRR > 1.0)
-				{
-					if (TireDiameterSampleRR > 3.0)
-						TireDiameterSampleRR = 0.66;
-					else if (TireDiameterSampleCount > 0 && Math.Abs(TireDiameterSampleRR - TireDiameterRR) > 0.2 * TireDiameterRR)
-						TireDiameterSampleRR = TireDiameterRR * 0.9 + TireDiameterSampleRR * 0.1;
-				}
-				double num1 = Math.Min(Math.Abs(YawRate) * 0.1, 1.0);
-				if (YawRate < 0.0)
-					TireDiameterSampleFR = TireDiameterSampleFL * num1 + TireDiameterSampleFR * (1.0 - num1);
-				else
-					TireDiameterSampleFL = TireDiameterSampleFR * num1 + TireDiameterSampleFL * (1.0 - num1);
-				if (TireDiameterSampleCount == 0)
-				{
-					TireDiameterFL = TireDiameterSampleFL;
-					TireDiameterFR = TireDiameterSampleFR;
-					TireDiameterRL = TireDiameterSampleRL;
-					TireDiameterRR = TireDiameterSampleRR;
-				}
-				else
-				{
-					double num2 = (0.5 * TireDiameterSampleMax + TireDiameterSampleCount) / (2 * TireDiameterSampleMax);
-					TireDiameterFL = TireDiameterFL * num2 + TireDiameterSampleFL * (1.0 - num2);
-					TireDiameterFR = TireDiameterFR * num2 + TireDiameterSampleFR * (1.0 - num2);
-					TireDiameterRL = TireDiameterRL * num2 + TireDiameterSampleRL * (1.0 - num2);
-					TireDiameterRR = TireDiameterRR * num2 + TireDiameterSampleRR * (1.0 - num2);
-				}
-				++TireDiameterSampleCount;
-				if (TireDiameterSampleCount == TireDiameterSampleMax)
-				{
-					if (Math.Abs(TireDiameterFL - TireDiameterFR) < 0.1)
-					{
-						TireDiameterFL = (TireDiameterFL + TireDiameterFR) * 0.5;
-						TireDiameterFR = TireDiameterFL;
-					}
-					if (Math.Abs(TireDiameterRL - TireDiameterRR) < 0.1)
-					{
-						TireDiameterRL = (TireDiameterRL + TireDiameterRR) * 0.5;
-						TireDiameterRR = TireDiameterRL;
-					}
-				}
-			}
-			if (TireDiameterFL <= 0.0)
-				return;
-			WheelSpeedFL = TireDiameterFL * WheelRotationFL * 0.5;
-			WheelSpeedFR = TireDiameterFR * WheelRotationFR * 0.5;
-			WheelSpeedRL = TireDiameterRL * WheelRotationRL * 0.5;
-			WheelSpeedRR = TireDiameterRR * WheelRotationRR * 0.5;
-			SlipFromWheelSpeed();
-		}
-
-		private void SlipFromWheelSpeed()
-		{
-			if (SpeedMs <= 0.05)
-				return;
-			SlipYFL = (SpeedMs - WheelSpeedFL) * InvSpeedMs;
-			SlipYFR = (SpeedMs - WheelSpeedFR) * InvSpeedMs;
-			SlipYRL = (SpeedMs - WheelSpeedRL) * InvSpeedMs;
-			SlipYRR = (SpeedMs - WheelSpeedRR) * InvSpeedMs;
-			if (SpeedMs >= 3.0)
-				return;
-			SlipYFL *= SpeedMs * 0.333;
-			SlipYFR *= SpeedMs * 0.333;
-			SlipYRL *= SpeedMs * 0.333;
-			SlipYRR *= SpeedMs * 0.333;
-		}
- */
 		internal ushort Rpms;
 
 		// called from DataUpdate()
@@ -1388,71 +830,10 @@ namespace blekenbleu.Haptic
 				MotionYaw = -MotionYaw;
 			if (AccHeave[Acc0] < 0.0)
 				MotionHeave = -MotionHeave;
-/*
-			WheelLoadFL = ((100.0 + AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
-			WheelLoadFR = ((100.0 + AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
-			WheelLoadRL = ((100.0 - AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
-			WheelLoadRR = ((100.0 - AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
- */
+
 			UpdateVehicle(ref data);
 			Airborne = AccHeave2S < -2.0 || Math.Abs(data.NewData.OrientationRoll) > 60.0;
-/*
-			if (Airborne && SuspensionFL < 0.1)
-				SlipXFL = SlipYFL = 0.0;
-			else
-			{
-				SlipXFL = SlipXMultAll * 100.0 * Math.Pow(Math.Max(SlipXFL, 0.0), 1.0 / (SlipXGammaBaseMult * SlipXGamma * SlipXGammaAll));
-				SlipYFL = SlipYFL < 0.0
-							 ? SlipYMultAll * -100.0 * Math.Pow(-SlipYFL, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll))
-							 : SlipYMultAll * 100.0 * Math.Pow(SlipYFL, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll));
-			}
-			if (Airborne && SuspensionFR < 0.1)
-				SlipXFR = SlipYFR = 0.0;
-			else
-			{
-				SlipXFR = SlipXMultAll * 100.0 * Math.Pow(Math.Max(SlipXFR, 0.0), 1.0 / (SlipXGammaBaseMult * SlipXGamma * SlipXGammaAll));
-				SlipYFR = SlipYFR < 0.0
-							 ? SlipYMultAll * -100.0 * Math.Pow(-SlipYFR, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll))
-							 : SlipYMultAll * 100.0 * Math.Pow(SlipYFR, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll));
-			}
-			if (Airborne && SuspensionRL < 0.1)
-				SlipXRL = SlipYRL = 0.0;
-			else
-			{
-				SlipXRL = SlipXMultAll * 100.0 * Math.Pow(Math.Max(SlipXRL, 0.0), 1.0 / (SlipXGammaBaseMult * SlipXGamma * SlipXGammaAll));
-				SlipYRL = SlipYRL < 0.0
-							 ? SlipYMultAll * -100.0 * Math.Pow(-SlipYRL, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll))
-							 : SlipYMultAll * 100.0 * Math.Pow(SlipYRL, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll));
-			}
-			if (Airborne && SuspensionRR < 0.1)
-				SlipXRR = SlipYRR = 0.0;
-			else
-			{
-				SlipXRR = SlipXMultAll * 100.0 * Math.Pow(Math.Max(SlipXRR, 0.0), 1.0 / (SlipXGammaBaseMult * SlipXGamma * SlipXGammaAll));
-				SlipYRR = SlipYRR < 0.0
-							 ? SlipYMultAll * -100.0 * Math.Pow(-SlipYRR, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll))
-							 : SlipYMultAll * 100.0 * Math.Pow(SlipYRR, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll));
-			}
- */
 			Airborne = Airborne && SuspensionAll < 0.1;
-/*
-			SlipXAll = (SlipXFL + SlipXFR + SlipXRL + SlipXRR) * 0.5;
-			SlipYAll = (SlipYFL + SlipYFR + SlipYRL + SlipYRR) * 0.5;
-			WheelSpinAll = !(SHP.S.PoweredWheels == "F")
-				? (!(SHP.S.PoweredWheels == "R")
-					? (Math.Max(-SlipYFL, 0.0) + Math.Max(-SlipYFR, 0.0) + Math.Max(-SlipYRL, 0.0) + Math.Max(-SlipYRR, 0.0)) * 0.25
-					: (Math.Max(-SlipYRL, 0.0) + Math.Max(-SlipYRR, 0.0)) * 0.5)
-				: (Math.Max(-SlipYFL, 0.0) + Math.Max(-SlipYFR, 0.0)) * 0.5;
-			WheelLockAll = 0.0;
-			if (SlipYFL > 50.0)
-				WheelLockAll += SlipYFL - 50.0;
-			if (SlipYFR > 50.0)
-				WheelLockAll += SlipYFR - 50.0;
-			if (SlipYRL > 50.0)
-				WheelLockAll += SlipYRL - 50.0;
-			if (SlipYRR > 50.0)
-				WheelLockAll += SlipYRR - 50.0;
- */
 			if (DateTime.Now.Ticks < FrameTimeTicks)	// long rollover?
 				FrameCountTicks += (long.MaxValue - FrameTimeTicks) + DateTime.Now.Ticks;	// rollover
 			else FrameCountTicks += DateTime.Now.Ticks - FrameTimeTicks;
@@ -1485,11 +866,6 @@ namespace blekenbleu.Haptic
 					else Upshift = true;
 				}
 			}
-/*
-			ABSPauseInterval = SlipYAll <= 0.0
-								? (long) (1166667.0 - 666667.0 * ((data.NewData.SpeedKmh - 20.0) * 0.003333333).Clamp(0.0, 1.0))
-								: (long) (1250000.0 - 666667.0 * SlipYAll.Clamp(0.0, 1.0));
- */
 			ABSPulseInterval = 166666L * SHP.Settings.ABSPulseLength;
 			if (ABSActive)
 			{
