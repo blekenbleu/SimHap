@@ -13,7 +13,7 @@ namespace blekenbleu.Haptic
 
 	public partial class SettingsControl : UserControl //, IComponentConnector
 	{
-		public readonly Haptics Plugin;
+		public readonly BlekHapt Plugin;
 		readonly ResourceDictionary Tres;
 		public SettingsControl()
 		{
@@ -23,7 +23,7 @@ namespace blekenbleu.Haptic
 		}
 
 
-		public SettingsControl(Haptics plugin) : this()
+		public SettingsControl(BlekHapt plugin) : this()
 		{
 			Plugin = plugin;
 			DataContext = Plugin;
@@ -121,7 +121,7 @@ namespace blekenbleu.Haptic
 		{
 			Plugin.S.Id = "";		   // Refresh_Click() force a mismatch
 			Logging.Current.Info($"Haptics.Refresh_Click()");
-			Haptics.LoadFailCount = 1;
+			BlekHapt.LoadFailCount = 1;
 		}
 
 		private void Lock_Click(object sender, RoutedEventArgs e)

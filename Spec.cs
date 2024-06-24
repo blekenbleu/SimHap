@@ -31,7 +31,7 @@ namespace blekenbleu.Haptic
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return;
 			field = value;
-			Haptics.Changed = Haptics.Set;				// SetCarSpec()
+			BlekHapt.Changed = BlekHapt.Set;				// SetCarSpec()
 			OnPropertyChanged(propertyname);
 		}
 	}
@@ -74,7 +74,7 @@ namespace blekenbleu.Haptic
 		internal string Set(Dictionary<string, List<CarSpec>> json)
 		{
 			inDict = json;
-			return $"{inDict.Count} games and {inDict[Haptics.GameDBText].Count} {Haptics.GameDBText} cars in ";
+			return $"{inDict.Count} games and {inDict[BlekHapt.GameDBText].Count} {BlekHapt.GameDBText} cars in ";
 		}
 
 		internal void Add(CarSpec car)			// ListDictionary: S.LD.Add; update Save
@@ -82,7 +82,7 @@ namespace blekenbleu.Haptic
 			if (null == car || null == car.id)
 				return;
 
-			string g = Haptics.GameDBText;
+			string g = BlekHapt.GameDBText;
 
 			if (inDict.ContainsKey(g))
 			{
@@ -93,13 +93,13 @@ namespace blekenbleu.Haptic
 				else inDict[g].Add(car);				// ListDictionary:  add car to current dictionary
 			}
 			else inDict.Add(g, new() { car } );			// ListDictionary:  add new dictionary with car
-			Haptics.Save = true;
+			BlekHapt.Save = true;
 			return;
 		}
 
 		internal CarSpec FindCar(string cn)
 		{
-			string g = Haptics.GameDBText;
+			string g = BlekHapt.GameDBText;
 			int i;
 
 			if (inDict.ContainsKey(g) && 0 <= (i = inDict[g].FindIndex(x => x.id == cn)))
@@ -168,7 +168,7 @@ namespace blekenbleu.Haptic
 		{
 			int i = Lcars.FindIndex(x => x.id == Car.id);
 			IdleRPM = Lcars[i].idlerpm = rpm;
-			Haptics.Changed = false;
+			BlekHapt.Changed = false;
 		}
 
 		internal bool Set(string along)				// S.Set
@@ -195,8 +195,8 @@ namespace blekenbleu.Haptic
 			Notes = c.notes;
 			Default = c.defaults;
 			Property = c.properties;
-			Haptics.Set = true;			// subsequent value changes set Changed = true
-			Haptics.Changed = false;
+			BlekHapt.Set = true;			// subsequent value changes set Changed = true
+			BlekHapt.Changed = false;
 			return true;
 		}
 
@@ -212,7 +212,7 @@ namespace blekenbleu.Haptic
 			int Idx = 0 < Lcars.Count ? Lcars.FindIndex(x => x.id == c.id) : -1;
 			if (0 > Idx)
 			{
-				c.game = Haptics.GameDBText;
+				c.game = BlekHapt.GameDBText;
 				c.redline =	0 < c.redline ? c.redline : redlineFromGame;
 				c.maxrpm  =	0 < c.maxrpm ? c.maxrpm : maxRPMFromGame;
 				c.idlerpm =	0 < c.idlerpm ? c.idlerpm : ushortIdleRPM;
@@ -244,11 +244,11 @@ namespace blekenbleu.Haptic
 				return 0;
 			}
 
-			if (0 <= (i = 0 < Haptics.AtlasCt ? Haptics.Atlas.FindIndex(x => x.id == along) : -1))
+			if (0 <= (i = 0 < BlekHapt.AtlasCt ? BlekHapt.Atlas.FindIndex(x => x.id == along) : -1))
 			{
 				Src = "Atlas match";
 				Default = "Atlas";
-				Cache(Haptics.Atlas[i]);						// SelectCar()
+				Cache(BlekHapt.Atlas[i]);						// SelectCar()
 			}
 			return i;
 		}
@@ -256,7 +256,7 @@ namespace blekenbleu.Haptic
 		// create inDict or Haptics.Atlas
 		public int Extract(Dictionary<string, List<CarSpec>> json, string game)
 		{
-			return Haptics.AtlasCt = (null != json && json.ContainsKey(game)) ? (Haptics.Atlas = json[game]).Count : 0;
+			return BlekHapt.AtlasCt = (null != json && json.ContainsKey(game)) ? (BlekHapt.Atlas = json[game]).Count : 0;
 		}
 
 		internal bool Add(string cId)				// S.Add():  add or update Car in Cars
@@ -374,7 +374,7 @@ namespace blekenbleu.Haptic
 		private CarSpec DfltCar;
 		internal void Defaults(StatusDataBase db)
 		{
-			if (null == Haptics.GameDBText)
+			if (null == BlekHapt.GameDBText)
 			{
 				Src = $"Haptics.Defaults({db.CarId}):  null GameDBText";
 				return;
@@ -396,7 +396,7 @@ namespace blekenbleu.Haptic
 					nm = 250
 				};
 
-				switch (Haptics.CurrentGame)
+				switch (BlekHapt.CurrentGame)
 				{
 					case GameId.RRRE:
 					case GameId.AC:
@@ -463,7 +463,7 @@ namespace blekenbleu.Haptic
 						DfltCar.nm = 400;
 						break;
 					default:
-						StatusText += $"specs unavailable for {Haptics.CurrentGame}";
+						StatusText += $"specs unavailable for {BlekHapt.CurrentGame}";
 						break;
 				}
 				DfltCar.notes = StatusText;
@@ -471,9 +471,9 @@ namespace blekenbleu.Haptic
 			else StatusText = DfltCar.notes;
 			DfltCar.name = db.CarModel;
 			DfltCar.category = string.IsNullOrEmpty(db.CarClass) ? "street" : db.CarClass;
-			DfltCar.id = ( GameId.RRRE == Haptics.CurrentGame			// Defaults()
-						|| GameId.D4   == Haptics.CurrentGame
-						|| GameId.DR2  == Haptics.CurrentGame )
+			DfltCar.id = ( GameId.RRRE == BlekHapt.CurrentGame			// Defaults()
+						|| GameId.D4   == BlekHapt.CurrentGame
+						|| GameId.DR2  == BlekHapt.CurrentGame )
 						 ? db.CarModel : db.CarId;
 			Cache(DfltCar);
 			Src = StatusText;

@@ -11,4 +11,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: AssemblyVersion("1.0.0.0")]
 // appears on Engine page
-[assembly: AssemblyFileVersion("6.4.0.2")]
+[assembly: AssemblyFileVersion("6.4.0.3")]

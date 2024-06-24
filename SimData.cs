@@ -461,7 +461,7 @@ namespace blekenbleu.Haptic
  */
 			ABSActive = data.NewData.ABSActive == 1;
 			bool flag = true;
-			switch (Haptics.CurrentGame)
+			switch (BlekHapt.CurrentGame)
 			{
 				case GameId.AC:
 					SuspensionDistFL = Physics("SuspensionTravel01");
@@ -1292,7 +1292,7 @@ namespace blekenbleu.Haptic
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Refresh(ref GameData Gdat, Haptics shp)
+		internal void Refresh(ref GameData Gdat, BlekHapt shp)
 		{
 			SHP = shp;
 			data = Gdat;

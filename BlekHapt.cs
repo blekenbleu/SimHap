@@ -17,7 +17,7 @@ namespace blekenbleu.Haptic
 	[PluginDescription("Car-specific haptic properties")]
 	[PluginAuthor("blekenbleu")]
 	[PluginName("blekHapt")]
-	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
+	public class BlekHapt : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(
 			Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
@@ -28,9 +28,9 @@ namespace blekenbleu.Haptic
 		public static string GameDBText;
 		internal static bool Loaded, Waiting, Save, Set, Changed;
 		private static readonly HttpClient client = new();
-		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
+		private readonly string myfile = $"PluginsData/{nameof(BlekHapt)}.{Environment.UserName}.json";
 //		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
-		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.json_with_orders.json";
+		private readonly string Atlasfile = $"PluginsData/{nameof(BlekHapt)}.json_with_orders.json";
 		internal static List<CarSpec> Atlas;
 		internal static int AtlasCt;		// use this to force Atlas
 		public Spec S { get; } = new() { };
@@ -102,7 +102,7 @@ namespace blekenbleu.Haptic
 		// ----------------------------------------------------------------
 
 		// must be void and static;  invoked by D.SetVehicle()
-		private static Haptics This;
+		private static BlekHapt This;
 
 		internal static async void FetchCarData(	// called from SetVehicle() switch
 			string id,
