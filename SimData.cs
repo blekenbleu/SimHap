@@ -7,11 +7,7 @@ namespace blekenbleu.Haptic
 	public partial class SimData
 	{
 		public double FPS;
-//		public double InvMaxRPM;
-//		public double InvSpeedKmh;
-//		public double InvMaxSpeedKmh;
 		public double SpeedMs;
-//		public double InvSpeedMs;
 		public double Accelerator;
 		public double Brake;
 		public double BrakeF;
@@ -39,61 +35,6 @@ namespace blekenbleu.Haptic
 		public int WiperStatus;
 		public int CarInitCount;
 		public int IdleSampleCount;			// used in Refresh()
-//		public double IdlePercent;
-/*
-		public double RedlinePercent;
-		public double RPMPercent;
-		public double IntervalOctave;
-		public double IntervalA;
-		public double IntervalB;
-		public double IntervalPeakA;
-		public double IntervalPeakB;
-		public double MixCylinder;
-		public double MixDisplacement;
-		public double MixPower;
-		public double MixTorque;
-		public double MixFront;
-		public double MixMiddle;
-		public double MixRear;
-		public double PeakA1Start;
-		public double PeakA2Start;
-		public double PeakB1Start;
-		public double PeakB2Start;
-		public double PeakA1Modifier;
-		public double PeakA2Modifier;
-		public double PeakB1Modifier;
-		public double PeakB2Modifier;
-		public double FrequencyMultiplier;
-		public double FreqHarmonic;
-		public double FreqOctave;
-		public double FreqLFEAdaptive;
-		public double FreqIntervalA1;
-		public double FreqIntervalA2;
-		public double FreqPeakA1;
-		public double FreqPeakA2;
-		public double FreqPeakB1;
-		public double FreqPeakB2;
-		public double Gain1H;
-		public double Gain1H2;
-		public double Gain2H;
-		public double Gain4H;
-		public double GainOctave;
-		public double GainLFEAdaptive;
-		public double GainIntervalA1;
-		public double GainIntervalA2;
-		public double GainPeakA1;
-		public double GainPeakA1Front;
-		public double GainPeakA1Rear;
-		public double GainPeakA2;
-		public double GainPeakA2Front;
-		public double GainPeakA2Rear;
-		public double GainPeakB1;
-		public double GainPeakB1Front;
-		public double GainPeakB1Rear;
-		public double GainPeakB2;
-		public double GainPeakB2Front;
-		public double GainPeakB2Rear;
-*/
 		public int AccSamples;
 		public int Acc0;
 		public int Acc1;
@@ -207,171 +148,6 @@ namespace blekenbleu.Haptic
 		public double SuspensionRumbleMultR4;
 		public double SuspensionRumbleMultR5;
 
-/*
-		private void SetRPMIntervals()
-		{
-			if (SHP.S.EngineCylinders == 1.0)
-			{
-				IntervalOctave = 4.0;
-				IntervalA = 0.0;
-				IntervalB = 0.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 2.0)
-			{
-				IntervalOctave = 4.0;
-				IntervalA = 6.0;
-				IntervalB = 0.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 4.0)
-			{
-				IntervalOctave = 8.0;
-				IntervalA = 4.0;
-				IntervalB = 5.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 8.0)
-			{
-				IntervalOctave = 16.0;
-				IntervalA = 6.0;
-				IntervalB = 10.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 16.0)
-			{
-				IntervalOctave = 16.0;
-				IntervalA = 12.0;
-				IntervalB = 20.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 3.0)
-			{
-				IntervalOctave = 6.0;
-				IntervalA = 4.0;
-				IntervalB = 0.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 6.0)
-			{
-				IntervalOctave = 12.0;
-				IntervalA = 8.0;
-				IntervalB = 10.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 12.0)
-			{
-				IntervalOctave = 12.0;
-				IntervalA = 16.0;
-				IntervalB = 20.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 5.0)
-			{
-				IntervalOctave = 10.0;
-				IntervalA = 6.0;
-				IntervalB = 9.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineCylinders == 10.0)
-			{
-				IntervalOctave = 10.0;
-				IntervalA = 12.0;
-				IntervalB = 18.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else if (SHP.S.EngineConfiguration == "R")
-			{
-				IntervalOctave = 12.0;
-				IntervalA = 9.0;
-				IntervalB = 15.0;
-				IntervalPeakA = 8.0;
-				IntervalPeakB = 4.0;
-			}
-			else
-			{
-				IntervalOctave = 0.0;
-				IntervalA = 0.0;
-				IntervalB = 0.0;
-				IntervalPeakA = 0.0;
-				IntervalPeakB = 0.0;
-			}
-		}
-
-		private void SetRPMMix()
-		{
-			InvMaxRPM = SHP.S.MaxRPM > 0.0 ? 1.0 / SHP.S.MaxRPM : 0.0001;
-			IdlePercent = SHP.S.IdleRPM * InvMaxRPM;
-			RedlinePercent = SHP.S.Redline * InvMaxRPM;
-			if (SHP.S.Displacement > 0.0)
-			{
-				CylinderDisplacement = SHP.S.Displacement / SHP.S.EngineCylinders;
-				MixCylinder = 1.0 - Math.Max(2000.0 - CylinderDisplacement, 0.0)
-									 * Math.Max(2000.0 - CylinderDisplacement, 0.0) * 2.5E-07;
-				MixDisplacement = 1.0 - Math.Max(10000.0 - SHP.S.Displacement, 0.0)
-										 * Math.Max(10000.0 - SHP.S.Displacement, 0.0) * 1E-08;
-			}
-			else
-			{
-				MixCylinder = 0.0;
-				MixDisplacement = 0.0;
-			}
-			MixPower = 1.0 - Math.Max(2000.0 - (SHP.S.MaxPower - SHP.S.ElectricMaxPower), 0.0)
-							 * Math.Max(2000.0 - (SHP.S.MaxPower - SHP.S.ElectricMaxPower), 0.0) * 2.5E-07;
-			MixTorque = 1.0 - Math.Max(2000.0 - SHP.S.MaxTorque, 0.0) * Math.Max(2000.0 - SHP.S.MaxTorque, 0.0) * 2.5E-07;
-			MixFront = !(SHP.S.EngineLocation == "F")
-						 ? (!(SHP.S.EngineLocation == "FM")
-							 ? (!(SHP.S.EngineLocation == "M")
-								 ? (!(SHP.S.EngineLocation == "RM")
-									 ? (!(SHP.S.PoweredWheels == "F")
-										 ? (!(SHP.S.PoweredWheels == "R")
-											 ? 0.2
-											 : 0.1)
-										 : 0.3)
-									 : (!(SHP.S.PoweredWheels == "F")
-									 ? (!(SHP.S.PoweredWheels == "R")
-										 ? 0.3
-										 : 0.2)
-									 : 0.4)
-								   )
-								 : (!(SHP.S.PoweredWheels == "F")
-								 	? (!(SHP.S.PoweredWheels == "R")
-									 	? 0.5
-									 	: 0.4
-									  )
-									 : 0.6
-								   )
-							   )
-						 : (!(SHP.S.PoweredWheels == "F")
-							 ? (!(SHP.S.PoweredWheels == "R")
-								 ? 0.7
-								 : 0.6
-							   )
-							 : 0.8
-						   )
-						)
-					 : (!(SHP.S.PoweredWheels == "F")
-					 	? (!(SHP.S.PoweredWheels == "R")
-							 ? 0.8
-					 	 	: 0.7
-							)
-					 	: 0.9
-					   );
-			MixMiddle = Math.Abs(MixFront - 0.5) * 2.0;
-			MixRear = 1.0 - MixFront;
-		}
-*/
-
 		static PluginManager PM;
 		static GameData data;
 		private float Data(string prop)
@@ -418,16 +194,6 @@ namespace blekenbleu.Haptic
 			SuspensionVelFR = 0.0;
 			SuspensionVelRL = 0.0;
 			SuspensionVelRR = 0.0;
-/*
-			SlipXFL = 0.0;
-			SlipXFR = 0.0;
-			SlipXRL = 0.0;
-			SlipXRR = 0.0;
-			SlipYFL = 0.0;
-			SlipYFR = 0.0;
-			SlipYRL = 0.0;
-			SlipYRR = 0.0;
- */
 			ABSActive = data.NewData.ABSActive == 1;
 			bool flag = true;
 			switch (BlekHapt.CurrentGame)
@@ -437,24 +203,7 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
-/*
-					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
-					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
-					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
-					WheelRotationRR = Math.Abs(Physics("WheelAngularSpeed04"));
-					SlipFromRPS();
-					SlipXFL = Math.Max(Physics("WheelSlip01") - Math.Abs(SlipYFL) * 1.0, 0.0);
-					SlipXFR = Math.Max(Physics("WheelSlip02") - Math.Abs(SlipYFR) * 1.0, 0.0);
-					SlipXRL = Math.Max(Physics("WheelSlip03") - Math.Abs(SlipYRL) * 1.0, 0.0);
-					SlipXRR = Math.Max(Physics("WheelSlip04") - Math.Abs(SlipYRR) * 1.0, 0.0);
-					if (TireDiameterFL == 0.0)
-					{
-						SlipXFL *= 0.5;
-						SlipXFR *= 0.5;
-						SlipXRL *= 0.5;
-						SlipXRR *= 0.5;
-					}
- */
+
 					TiresLeft = 1.0 + (double) Math.Max(Physics("TyreContactHeading01.Y"), Physics("TyreContactHeading03.Y"));
 					TiresRight = 1.0 + (double) Math.Max(Physics("TyreContactHeading02.Y"), Physics("TyreContactHeading04.Y"));
 					if (RumbleLeftAvg == 0.0)
@@ -479,7 +228,6 @@ namespace blekenbleu.Haptic
 					SuspensionDistRL = Data("wheel03.suspensionDeflection");
 					SuspensionDistRR = Data("wheel04.suspensionDeflection");
 					SpeedMs = Raw("CurrentPlayer.speed");
-//					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 					break;
 				case GameId.AMS2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
@@ -505,7 +253,6 @@ namespace blekenbleu.Haptic
 					SuspensionDistRL = Raw("SessionUpdate.vehicle_hub_position_bl");
 					SuspensionDistRR = Raw("SessionUpdate.vehicle_hub_position_br");
 					SpeedMs = Raw("SessionUpdate.vehicle_speed");
-//					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 					break;
 				case GameId.F12022:
 					SuspensionDistFL = Raw("PlayerMotionData.m_suspensionPosition01") * 0.001;
@@ -533,7 +280,6 @@ namespace blekenbleu.Haptic
 					SuspensionDistRL = Data("wheel03.suspensionDeflection");
 					SuspensionDistRR = Data("wheel04.suspensionDeflection");
 					SpeedMs = Raw("CurrentPlayer.speed");
-//					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 					break;
 				case GameId.IRacing:
 					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
@@ -744,9 +490,7 @@ namespace blekenbleu.Haptic
 			data = Gdat;
 			FPS = (double) SHP.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			Rpms = Convert.ToUInt16(0.5 + data.NewData.Rpms);
-//			RPMPercent = data.NewData.Rpms * InvMaxRPM;
 			SpeedMs = data.NewData.SpeedKmh * 0.277778;
-//			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 			Accelerator = data.NewData.Throttle;
 			Brake = data.NewData.Brake;
 			Clutch = data.NewData.Clutch;
@@ -1258,188 +1002,18 @@ namespace blekenbleu.Haptic
 				SuspensionRumbleMultR4 = num18 * 1.5;
 				SuspensionRumbleMultR5 = num18 * 0.0;
 			}
-/* 			EngineLoad = data.NewData.CarSettings_CurrentDisplayedRPMPercent * 0.5;
-			EngineLoad += data.NewData.SpeedKmh * data.NewData.SpeedKmh * 0.0003;
-			EngineLoad += data.NewData.SpeedKmh * 0.02;
-			if (Math.Abs(SuspensionAccAll) > 0.5)
-				EngineLoad += 200.0 * Math.Sin(data.NewData.OrientationPitch * 0.0174533);
-			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
-			EngineLoad *= data.NewData.Throttle * 0.01 * 0.01;
- */
-			if (IdleSampleCount < 20) //&& FrameCountTicks % 2500000L <= 150000L	// Refresh()sniff: ignore FrameCountTicks .. for now
-				if (data.NewData.Rpms > 300 && data.NewData.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
-			{
-				double num19 = Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS;
-
-				if (num19 < 40.0)
-				{
-					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1); // Refresh(): averaging with previous average
+ 
+			// idle sniff
+			if (20 > IdleSampleCount && 300 < data.NewData.Rpms && data.NewData.Rpms <= idleRPM * 1.1)
+			{	// Refresh(): supposes that idleRPM is somewhat valid..??
+				if (40.0 > Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS)
+				{	// Refresh(): averaging with previous average
+					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1);
 					++IdleSampleCount;								// Refresh(): increment if difference < 40
-//					double num20 = idleRPM * 0.008333333;		// Refresh(): some FrequencyMultiplier magic
-//					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
 				if (20 == IdleSampleCount && 0 == SHP.S.IdleRPM)	// Refresh(): change SHP.S.IdleRPM?
-					SHP.S.Idle(idleRPM);			// Refresh() sniff: only if it was 0
+					SHP.S.Idle(idleRPM);							// Refresh() sniff: only if it was 0
 			}
-/*
-			if (FrameCountTicks % 5000000L <= 150000L)
-			{
-				SetRPMIntervals();
-				SetRPMMix();
-			}
-			FreqHarmonic = data.NewData.Rpms * 0.008333333;
-			FreqOctave = FreqHarmonic * (1.0 + IntervalOctave * 0.08333333);
-			FreqLFEAdaptive = FreqHarmonic * FrequencyMultiplier;
-			FreqIntervalA1 = FreqHarmonic * (1.0 + IntervalA * 0.08333333);
-			FreqIntervalA2 = FreqHarmonic * 0.5 * (1.0 + IntervalA * 0.08333333);
-			FreqPeakA1 = FreqHarmonic * (1.0 + IntervalPeakA * 0.08333333);
-			FreqPeakB1 = FreqHarmonic * (1.0 + IntervalPeakB * 0.08333333);
-			FreqPeakA2 = FreqHarmonic * 0.5 * (1.0 + IntervalPeakA * 0.08333333);
-			FreqPeakB2 = FreqHarmonic * 0.5 * (1.0 + IntervalPeakB * 0.08333333);
-			double num21 = 1.0;
-			double num22 = 1.0;
-			if (Gear > 0)
-			{
-				num21 -= AccSurge2S.Clamp(0.0, 15.0) * 0.01;
-				if (Accelerator < 20.0 && AccSurgeAvg < 0.0)
-					num22 += Math.Max(0.0, Math.Max(0.0, RPMPercent - IdlePercent * (1.0 + Gear * 0.2))
-											* (0.2 + 0.6 * MixDisplacement) - Accelerator * 0.05 * (0.2 + 0.6 * MixDisplacement));
-			}
-			Gain1H = FreqHarmonic >= 25.0
-					? (FreqHarmonic >= 40.0
-						? (FreqHarmonic >= 65.0
-							? (FreqHarmonic >= 95.0
-								? (FreqHarmonic >= 125.0
-									? 75.0 - (FreqHarmonic - 125.0)
-									: 95.0 - (FreqHarmonic - 95.0) * 0.667)
-								: 65.0 + (FreqHarmonic - 65.0) * 1.0)
-							: 52.5 + (FreqHarmonic - 40.0) * 0.5)
-						: 40.0 + (FreqHarmonic - 25.0) * 0.834)
-					: 30.0 + (FreqHarmonic - 15.0) * 1.0;
-			Gain1H = Math.Max(Gain1H, 0.0) * num21 * num22 * (0.8 + 0.2 * MixPower + 0.2 * MixCylinder);
-			Gain1H = Math.Floor(Gain1H.Clamp(0.0, sbyte.MaxValue));
-			Gain1H2 = FreqHarmonic >= 25.0 ? (FreqHarmonic >= 40.0
-												 ? (FreqHarmonic >= 65.0
-													 ? (FreqHarmonic >= 95.0
-														 ? (FreqHarmonic >= 125.0
-															 ? 75.0 - (FreqHarmonic - 125.0)
-															 : 95.0 - (FreqHarmonic - 95.0) * 0.667)
-														 : 65.0 + (FreqHarmonic - 65.0) * 1.0)
-													 : 52.5 + (FreqHarmonic - 40.0) * 0.5)
-												 : 40.0 + (FreqHarmonic - 25.0) * 0.834)
-											 : 30.0 + (FreqHarmonic - 15.0) * 1.0;
-			Gain1H2 = Math.Max(Gain1H2, 0.0) * num21 * num22 * (0.8 + 0.1 * MixDisplacement + 0.3 * MixCylinder);
-			Gain1H2 = Math.Floor(Gain1H2.Clamp(0.0, sbyte.MaxValue));
-			Gain2H = FreqHarmonic >= 25.0 ? (FreqHarmonic >= 40.0
-												 ? (FreqHarmonic >= 65.0
-													 ? (FreqHarmonic >= 95.0
-														 ? (FreqHarmonic >= 125.0
-															 ? 75.0 - (FreqHarmonic - 125.0)
-															 : 95.0 - (FreqHarmonic - 95.0) * 0.667)
-														 : 65.0 + (FreqHarmonic - 65.0) * 1.0)
-													 : 52.5 + (FreqHarmonic - 40.0) * 0.5)
-												 : 40.0 + (FreqHarmonic - 25.0) * 0.834)
-											 : 30.0 + (FreqHarmonic - 15.0) * 1.0;
-			Gain2H = Math.Max(Gain2H, 0.0) * num21 * num22 * (0.8 + 0.3 * MixPower + 0.1 * MixCylinder);
-			Gain2H = Math.Floor(Gain2H.Clamp(0.0, sbyte.MaxValue));
-			Gain4H = FreqHarmonic >= 25.0 ? (FreqHarmonic >= 40.0
-												 ? (FreqHarmonic >= 65.0
-													 ? (FreqHarmonic >= 95.0
-														 ? (FreqHarmonic >= 125.0
-															 ? 75.0 - (FreqHarmonic - 125.0)
-															 : 95.0 - (FreqHarmonic - 95.0) * 0.667)
-														 : 66.0 + (FreqHarmonic - 65.0) * 1.0)
-													 : 52.5 + (FreqHarmonic - 40.0) * 0.5)
-												 : 40.0 + (FreqHarmonic - 25.0) * 0.834)
-											 : 30.0 + (FreqHarmonic - 15.0) * 1.0;
-			Gain4H = Math.Max(Gain4H, 0.0) * num21 * num22 * (0.8 + 0.2 * MixPower + 0.2 * MixDisplacement);
-			Gain4H = Math.Floor(Gain4H.Clamp(0.0, sbyte.MaxValue));
-			GainOctave = FreqOctave >= 55.0 ? (FreqOctave >= 80.0 ? 75.0 - (FreqOctave - 80.0) * 0.75 : 30.0 + (FreqOctave - 55.0) * 1.8) : (FreqOctave - 30.0) * 1.2;
-			GainOctave = Math.Max(GainOctave, 0.0) * num21 * (0.3 * MixPower + 0.3 * MixCylinder + 0.6 * EngineLoad);
-			GainOctave = Math.Floor(GainOctave.Clamp(0.0, sbyte.MaxValue));
-			GainIntervalA1 = FreqIntervalA1 >= 70.0 ? (FreqIntervalA1 >= 85.0 ? 75.0 - (FreqIntervalA1 - 85.0) * 0.85 : 45.0 + (FreqIntervalA1 - 70.0) * 2.0) : (FreqIntervalA1 - 40.0) * 1.5;
-			GainIntervalA1 = Math.Max(GainIntervalA1, 0.0) * num21 * (0.2 * MixPower + 1.0 * EngineLoad);
-			GainIntervalA1 = Math.Floor(GainIntervalA1.Clamp(0.0, sbyte.MaxValue));
-			GainIntervalA2 = FreqIntervalA2 >= 70.0 ? (FreqIntervalA2 >= 85.0 ? 75.0 - (FreqIntervalA2 - 85.0) * 0.85 : 45.0 + (FreqIntervalA2 - 70.0) * 2.0) : (FreqIntervalA2 - 40.0) * 1.5;
-			GainIntervalA2 = Math.Max(GainIntervalA2, 0.0) * num21 * (0.1 * MixPower + 0.3 * MixCylinder + 0.8 * EngineLoad);
-			GainIntervalA2 = Math.Floor(GainIntervalA2.Clamp(0.0, sbyte.MaxValue));
-			PeakA1Start = RedlinePercent * (0.96 + GearInterval * Gear * 0.04);
-			PeakB1Start = RedlinePercent * (0.92 + GearInterval * Gear * 0.04);
-			PeakA2Start = RedlinePercent * (0.9 + MixPower * GearInterval * Gear * 0.06);
-			PeakB2Start = RedlinePercent * (0.98 - MixTorque * 0.08);
-			PeakA1Modifier = ((RPMPercent - PeakA1Start) / (RedlinePercent - PeakA1Start + (1.0 - RedlinePercent) * (0.75 + MixCylinder * 0.75))).Clamp(0.0, 1.0);
-			PeakB1Modifier = ((RPMPercent - PeakB1Start) / (RedlinePercent - PeakB1Start + (1.0 - RedlinePercent) * (0.0 + MixCylinder))).Clamp(0.0, 1.0);
-			PeakA2Modifier = ((RPMPercent - PeakA2Start) / (RedlinePercent - PeakA2Start)).Clamp(0.0, 1.0);
-			PeakB2Modifier = ((RPMPercent - PeakB2Start) / (RedlinePercent - PeakB2Start + (1.0 - RedlinePercent) * (1.0 - MixDisplacement))).Clamp(0.0, 1.0);
-			GainPeakA1 = FreqPeakA1 >= 55.0 ? (FreqPeakA1 >= 75.0 ? (FreqPeakA1 >= 105.0 ? 90.0 - (FreqPeakA1 - 105.0) * 0.75 : 60.0 + (FreqPeakA1 - 75.0) * 1.0) : 30.0 + (FreqPeakA1 - 55.0) * 1.5) : (FreqPeakA1 - 45.0) * 3.0;
-			GainPeakA1 = Math.Max(GainPeakA1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
-			GainPeakA1Front = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakA1Rear = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakA1 = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB1 = FreqPeakB1 >= 55.0 ? (FreqPeakB1 >= 75.0 ? (FreqPeakB1 >= 105.0 ? 90.0 - (FreqPeakB1 - 105.0) * 0.75 : 60.0 + (FreqPeakB1 - 75.0) * 1.0) : 30.0 + (FreqPeakB1 - 55.0) * 1.5) : (FreqPeakB1 - 45.0) * 3.0;
-			GainPeakB1 = Math.Max(GainPeakB1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
-			GainPeakB1Front = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB1Rear = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB1 = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakA2 = FreqPeakA2 >= 55.0 ? (FreqPeakA2 >= 75.0 ? (FreqPeakA2 >= 105.0 ? 90.0 - (FreqPeakA2 - 105.0) * 0.75 : 60.0 + (FreqPeakA2 - 75.0) * 1.0) : 30.0 + (FreqPeakA2 - 55.0) * 1.5) : (FreqPeakA2 - 45.0) * 3.0;
-			GainPeakA2 = Math.Max(GainPeakA2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
-			GainPeakA2Front = Math.Floor((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakA2Rear = Math.Floor((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakA2 = Math.Floor((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB2 = FreqPeakB2 >= 60.0 ? (FreqPeakB2 >= 100.0 ? 100.0 - (FreqPeakB2 - 100.0) * 0.85 : 30.0 + (FreqPeakB2 - 60.0) * 1.75) : (FreqPeakB2 - 30.0) * 1.0;
-			GainPeakB2 = Math.Max(GainPeakB2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
-			GainPeakB2Front = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB2Rear = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB2 = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-			if (SHP.S.EngineCylinders < 1.0)
-			{
-				GainLFEAdaptive = 0.0;
-				Gain1H = Math.Floor(Gain1H * 0.7);
-				Gain1H2 = 0.0;
-				Gain2H = 0.0;
-				Gain4H = 0.0;
-				GainOctave = 0.0;
-				GainIntervalA1 = 0.0;
-				GainIntervalA2 = 0.0;
-				GainPeakA1Front = 0.0;
-				GainPeakA1Rear = 0.0;
-				GainPeakA1 = 0.0;
-				GainPeakA2Front = 0.0;
-				GainPeakA2Rear = 0.0;
-				GainPeakA2 = 0.0;
-				GainPeakB1Front = 0.0;
-				GainPeakB1Rear = 0.0;
-				GainPeakB1 = 0.0;
-				GainPeakB2Front = 0.0;
-				GainPeakB2Rear = 0.0;
-				GainPeakB2 = 0.0;
-			}
-			else if (SHP.S.EngineCylinders < 2.0)
-				Gain4H = 0.0;
-			if (EngineMult == 1.0)
-				return;
-			GainLFEAdaptive *= EngineMult * EngineMultAll;
-			Gain1H *= EngineMult * EngineMultAll;
-			Gain1H2 *= EngineMult * EngineMultAll;
-			Gain2H *= EngineMult * EngineMultAll;
-			Gain4H *= EngineMult * EngineMultAll;
-			GainOctave *= EngineMult * EngineMultAll;
-			GainIntervalA1 *= EngineMult * EngineMultAll;
-			GainIntervalA2 *= EngineMult * EngineMultAll;
-			GainPeakA1Front *= EngineMult * EngineMultAll;
-			GainPeakA1Rear *= EngineMult * EngineMultAll;
-			GainPeakA1 *= EngineMult * EngineMultAll;
-			GainPeakA2Front *= EngineMult * EngineMultAll;
-			GainPeakA2Rear *= EngineMult * EngineMultAll;
-			GainPeakA2 *= EngineMult * EngineMultAll;
-			GainPeakB1Front *= EngineMult * EngineMultAll;
-			GainPeakB1Rear *= EngineMult * EngineMultAll;
-			GainPeakB1 *= EngineMult * EngineMultAll;
-			GainPeakB2Front *= EngineMult * EngineMultAll;
-			GainPeakB2Rear *= EngineMult * EngineMultAll;
-			GainPeakB2 *= EngineMult * EngineMultAll;
- */
-		}
-
+		}	// Refresh()
 	}
 }

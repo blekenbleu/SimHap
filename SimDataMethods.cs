@@ -219,8 +219,6 @@ namespace blekenbleu.Haptic
 			RumbleRightAvg = 0.0;
 			IdleSampleCount = 0;
 			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
-//			SetRPMIntervals();
-//			SetRPMMix();
 			SHP.S.Set(db.CarId);						// set from Cache() AKA Lcars
 			CarInitCount = 0;
 			Index = -2;	// for next time

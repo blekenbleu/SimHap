@@ -7,8 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("blekHapt")]
+[assembly: AssemblyCopyright("© 2022 Sassja Ceballos aka. sierses")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 [assembly: AssemblyVersion("1.0.0.0")]
 // appears on Engine page
-[assembly: AssemblyFileVersion("6.4.0.4")]
+[assembly: AssemblyFileVersion("6.4.0.5")]
