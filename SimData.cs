@@ -7,11 +7,11 @@ namespace blekenbleu.Haptic
 	public partial class SimData
 	{
 		public double FPS;
-		public double InvMaxRPM;
-		public double InvSpeedKmh;
-		public double InvMaxSpeedKmh;
+//		public double InvMaxRPM;
+//		public double InvSpeedKmh;
+//		public double InvMaxSpeedKmh;
 		public double SpeedMs;
-		public double InvSpeedMs;
+//		public double InvSpeedMs;
 		public double Accelerator;
 		public double Brake;
 		public double BrakeF;
@@ -39,7 +39,8 @@ namespace blekenbleu.Haptic
 		public int WiperStatus;
 		public int CarInitCount;
 		public int IdleSampleCount;			// used in Refresh()
-		public double IdlePercent;
+//		public double IdlePercent;
+/*
 		public double RedlinePercent;
 		public double RPMPercent;
 		public double IntervalOctave;
@@ -92,6 +93,7 @@ namespace blekenbleu.Haptic
 		public double GainPeakB2;
 		public double GainPeakB2Front;
 		public double GainPeakB2Rear;
+*/
 		public int AccSamples;
 		public int Acc0;
 		public int Acc1;
@@ -112,11 +114,11 @@ namespace blekenbleu.Haptic
 		public double AccHeaveAbs;
 		public double InvAccSurgeAvg;
 		public bool Airborne;
-        public double WheelLoadFL;
-        public double WheelLoadFR;
-        public double WheelLoadRL;
-        public double WheelLoadRR;
-        public double Yaw;
+		public double WheelLoadFL;
+		public double WheelLoadFR;
+		public double WheelLoadRL;
+		public double WheelLoadRR;
+		public double Yaw;
 		public double YawPrev;
 		public double YawRate;
 		public double YawRateAvg;
@@ -205,6 +207,7 @@ namespace blekenbleu.Haptic
 		public double SuspensionRumbleMultR4;
 		public double SuspensionRumbleMultR5;
 
+/*
 		private void SetRPMIntervals()
 		{
 			if (SHP.S.EngineCylinders == 1.0)
@@ -367,6 +370,7 @@ namespace blekenbleu.Haptic
 			MixMiddle = Math.Abs(MixFront - 0.5) * 2.0;
 			MixRear = 1.0 - MixFront;
 		}
+*/
 
 		static PluginManager PM;
 		static GameData data;
@@ -475,7 +479,7 @@ namespace blekenbleu.Haptic
 					SuspensionDistRL = Data("wheel03.suspensionDeflection");
 					SuspensionDistRR = Data("wheel04.suspensionDeflection");
 					SpeedMs = Raw("CurrentPlayer.speed");
-					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+//					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 					break;
 				case GameId.AMS2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
@@ -501,7 +505,7 @@ namespace blekenbleu.Haptic
 					SuspensionDistRL = Raw("SessionUpdate.vehicle_hub_position_bl");
 					SuspensionDistRR = Raw("SessionUpdate.vehicle_hub_position_br");
 					SpeedMs = Raw("SessionUpdate.vehicle_speed");
-					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+//					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 					break;
 				case GameId.F12022:
 					SuspensionDistFL = Raw("PlayerMotionData.m_suspensionPosition01") * 0.001;
@@ -529,7 +533,7 @@ namespace blekenbleu.Haptic
 					SuspensionDistRL = Data("wheel03.suspensionDeflection");
 					SuspensionDistRR = Data("wheel04.suspensionDeflection");
 					SpeedMs = Raw("CurrentPlayer.speed");
-					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+//					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 					break;
 				case GameId.IRacing:
 					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
@@ -740,9 +744,9 @@ namespace blekenbleu.Haptic
 			data = Gdat;
 			FPS = (double) SHP.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			Rpms = Convert.ToUInt16(0.5 + data.NewData.Rpms);
-			RPMPercent = data.NewData.Rpms * InvMaxRPM;
+//			RPMPercent = data.NewData.Rpms * InvMaxRPM;
 			SpeedMs = data.NewData.SpeedKmh * 0.277778;
-			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+//			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 			Accelerator = data.NewData.Throttle;
 			Brake = data.NewData.Brake;
 			Clutch = data.NewData.Clutch;
@@ -1254,15 +1258,15 @@ namespace blekenbleu.Haptic
 				SuspensionRumbleMultR4 = num18 * 1.5;
 				SuspensionRumbleMultR5 = num18 * 0.0;
 			}
-			EngineLoad = data.NewData.CarSettings_CurrentDisplayedRPMPercent * 0.5;
+/* 			EngineLoad = data.NewData.CarSettings_CurrentDisplayedRPMPercent * 0.5;
 			EngineLoad += data.NewData.SpeedKmh * data.NewData.SpeedKmh * 0.0003;
 			EngineLoad += data.NewData.SpeedKmh * 0.02;
 			if (Math.Abs(SuspensionAccAll) > 0.5)
 				EngineLoad += 200.0 * Math.Sin(data.NewData.OrientationPitch * 0.0174533);
 			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
 			EngineLoad *= data.NewData.Throttle * 0.01 * 0.01;
-
-			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh()sniff: ignore FrameCountTicks .. for now
+ */
+			if (IdleSampleCount < 20) //&& FrameCountTicks % 2500000L <= 150000L	// Refresh()sniff: ignore FrameCountTicks .. for now
 				if (data.NewData.Rpms > 300 && data.NewData.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
 			{
 				double num19 = Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS;
@@ -1271,13 +1275,13 @@ namespace blekenbleu.Haptic
 				{
 					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1); // Refresh(): averaging with previous average
 					++IdleSampleCount;								// Refresh(): increment if difference < 40
-					double num20 = idleRPM * 0.008333333;		// Refresh(): some FrequencyMultiplier magic
-					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
+//					double num20 = idleRPM * 0.008333333;		// Refresh(): some FrequencyMultiplier magic
+//					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
 				if (20 == IdleSampleCount && 0 == SHP.S.IdleRPM)	// Refresh(): change SHP.S.IdleRPM?
 					SHP.S.Idle(idleRPM);			// Refresh() sniff: only if it was 0
 			}
-
+/*
 			if (FrameCountTicks % 5000000L <= 150000L)
 			{
 				SetRPMIntervals();
@@ -1434,6 +1438,7 @@ namespace blekenbleu.Haptic
 			GainPeakB2Front *= EngineMult * EngineMultAll;
 			GainPeakB2Rear *= EngineMult * EngineMultAll;
 			GainPeakB2 *= EngineMult * EngineMultAll;
+ */
 		}
 
 	}

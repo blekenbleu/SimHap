@@ -74,7 +74,9 @@ namespace blekenbleu.Haptic
 		internal string Set(Dictionary<string, List<CarSpec>> json)
 		{
 			inDict = json;
-			return $"{inDict.Count} games and {inDict[BlekHapt.GameDBText].Count} {BlekHapt.GameDBText} cars in ";
+			int ct = inDict.ContainsKey(BlekHapt.GameDBText) ? inDict[BlekHapt.GameDBText].Count : 0;
+
+            return $"{inDict.Count} games and {ct} {BlekHapt.GameDBText} cars in ";
 		}
 
 		internal void Add(CarSpec car)			// ListDictionary: S.LD.Add; update Save
@@ -205,7 +207,7 @@ namespace blekenbleu.Haptic
 		{
 			if (null == c)
 			{
-				Logging.Current.Info("Haptics.S.Cache(CarSpec Car):  null Car");
+				Logging.Current.Info("blekHapt.S.Cache(CarSpec Car):  null Car");
 				return -1;
 			}
 			// wtf FindIndex returns 0 for 0 == Lcars.count ??!!
@@ -222,7 +224,7 @@ namespace blekenbleu.Haptic
 				c.category = string.IsNullOrEmpty(c.category) ? "street" : c.category;
 				Lcars.Add(NewCar(c));
 			}
-			else Logging.Current.Info($"Haptics.S.Cache({c.name}): Car {Idx} of {Lcars.Count}");
+			else Logging.Current.Info($"blekHapt.S.Cache({c.name}): Car {Idx} of {Lcars.Count}");
 			return Lcars.FindIndex(x => x.id == c.id);
 		}
 
@@ -272,11 +274,11 @@ namespace blekenbleu.Haptic
 			if (0 > Index)
 			{
 				Lcars.Add(Private_Car);		// generic List<CarSpec>.Add()
-				Logging.Current.Info($"\tHaptics.S.Add({cId}) : {Cars.Count} {Car.game} cars");
+				Logging.Current.Info($"\tblekHapt.S.Add({cId}) : {Cars.Count} {Car.game} cars");
 				return true;
 			}
 
-			Logging.Current.Info($"\tHaptics.S.Add({cId}) : {Car.id} Index = {Index}/{Cars.Count}");
+			Logging.Current.Info($"\tblekHapt.S.Add({cId}) : {Car.id} Index = {Index}/{Cars.Count}");
 			bool tf = false;
 			if (Lcars[Index].id != Private_Car.id)
 			{
@@ -376,11 +378,11 @@ namespace blekenbleu.Haptic
 		{
 			if (null == BlekHapt.GameDBText)
 			{
-				Src = $"Haptics.Defaults({db.CarId}):  null GameDBText";
+				Src = $"blekHapt.Defaults({db.CarId}):  null GameDBText";
 				return;
 			}
 
-			string StatusText = "Haptics.Defaults:  ";
+			string StatusText = "blekHapt.Defaults:  ";
 
 			if (null == DfltCar)
 			{

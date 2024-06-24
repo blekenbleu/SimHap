@@ -92,9 +92,9 @@ namespace blekenbleu.Haptic
 			SHP = shp;
 			StatusDataBase db = SHP.Gdat.NewData;
 /*
-			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}): " +
-								(Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "")
-								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
+			Logging.Current.Info($"blekHapt.SetVehicle({shp.Gdat.NewData.CarId}): " +
+								(BlekHapt.Save ? " Save" : "") + (BlekHapt.Loaded ? " Loaded" : "") + (BlekHapt.Waiting ? " Waiting" : "")
+								+ (BlekHapt.Set ? " Set": "") + (BlekHapt.Changed ? "Changed " : "") + $" Index = {Index}");
  */
 			if (-2 == Index || -1 == Index) switch (BlekHapt.CurrentGame)
 			{
@@ -174,7 +174,7 @@ namespace blekenbleu.Haptic
 
 			if (BlekHapt.Waiting)	// still hoping for online match?
 			{
-				Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) Waiting return: "
+				Logging.Current.Info($"blekHapt.SetVehicle({db.CarId}) Waiting return: "
 									+ (BlekHapt.Save ? " Save" : "") + (BlekHapt.Loaded ? " Loaded" : "")
 									+ (BlekHapt.Set ? " Set": "") + (BlekHapt.Changed ? " Changed" : "") + $" Index = {Index}");
 				return;				// FetchCarData() DB accesses run SetVehicle() at least twice.
@@ -185,7 +185,7 @@ namespace blekenbleu.Haptic
 			else if(0 > Index)
 				SHP.S.Defaults(db);	// SetVehicle()
 
-			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}/{SHP.S.Id}): "
+			Logging.Current.Info($"blekHapt.SetVehicle({db.CarId}/{SHP.S.Id}): "
 								+ (BlekHapt.Save ? " Save" : "") + (BlekHapt.Loaded ? " Loaded" : "")
 								+ (BlekHapt.Set ? " Set": "") + (BlekHapt.Changed ? "Changed " : "")
 								+ $" {db.CarModel}; "
@@ -219,12 +219,12 @@ namespace blekenbleu.Haptic
 			RumbleRightAvg = 0.0;
 			IdleSampleCount = 0;
 			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
-			SetRPMIntervals();
-			SetRPMMix();
+//			SetRPMIntervals();
+//			SetRPMMix();
 			SHP.S.Set(db.CarId);						// set from Cache() AKA Lcars
 			CarInitCount = 0;
 			Index = -2;	// for next time
-			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) ending: "
+			Logging.Current.Info($"blekHapt.SetVehicle({db.CarId}) ending: "
 									+ (BlekHapt.Save ? " Save" : "") + (BlekHapt.Loaded ? " Loaded" : "")
 									+ (BlekHapt.Set ? " Set": "") + (BlekHapt.Changed ? "Changed " : "") + $" Index = {Index}");
 		}	// SetVehicle()

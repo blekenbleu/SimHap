@@ -80,17 +80,17 @@ namespace blekenbleu.Haptic
 					if (0 < Settings.Engine.Tones.Length)
 					{
 						if (8 != Settings.Engine.Tones[0].Length)
-							Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
+							Logging.Current.Info($"blekHapt: Settings.Engine.Tones[0].Freq.Count = "
 							+ Settings.Engine.Tones[0].Length.ToString());
-					} else Logging.Current.Info($"Haptics: zero Settings.Engine.Tones.Length");
+					} else Logging.Current.Info($"blekHapt: zero Settings.Engine.Tones.Length");
 				}
-				else Logging.Current.Info($"Haptics:  null Settings.Engine.Tones");
+				else Logging.Current.Info($"blekHapt:  null Settings.Engine.Tones");
 				if (null == Settings.Engine.Sliders)
-					Logging.Current.Info($"Haptics:  null Settings.Engine.Sliders");
+					Logging.Current.Info($"blekHapt:  null Settings.Engine.Sliders");
 				else if (1 > Settings.Engine.Sliders.Count)
-					Logging.Current.Info($"Haptics: zero Settings.Engine.Sliders.Count");
+					Logging.Current.Info($"blekHapt: zero Settings.Engine.Sliders.Count");
 				else if (9 != Settings.Engine.Sliders[0].Length)
-					Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
+					Logging.Current.Info($"blekHapt: Settings.Engine.Sliders[0].Length = "
 					  + Settings.Engine.Sliders[0].Length.ToString());
 			}
 			return SC;
@@ -111,7 +111,7 @@ namespace blekenbleu.Haptic
 			ushort maxRPMFromGame,
 			ushort ushortIdleRPM)							// FetchCarData() argument
 		{
-			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  Index = {This.D.Index}," +
+			Logging.Current.Info($"blekHapt.FetchCarData({id}/{category}):  Index = {This.D.Index}," +
 							   (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
 								+ (Set ? " Set": "") + (Changed ? "Changed " : ""));
 
@@ -125,7 +125,7 @@ namespace blekenbleu.Haptic
 				This.D.Index = This.S.SelectCar(sid, // set game RPM defaults
 													redlineFromGame, maxRPMFromGame, ushortIdleRPM);
 /*
-				Logging.Current.Info($"Haptics.SelectCar({sid}): "
+				Logging.Current.Info($"blekHapt.SelectCar({sid}): "
 									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
 									+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
 									+ (Changed ? "Changed " : "") + $" Index = {This.D.Index}");
@@ -161,7 +161,7 @@ namespace blekenbleu.Haptic
 						car.defaults = "DB";
 						This.S.Cache(car);					// FetchCarData(): Set(id) at the end of SetVehicle()
 						LoadFailCount = 1;
-					//	Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
+					//	Logging.Current.Info($"blekHapt.FetchCarData({car.name}): Successfully loaded; "
 					//						+ $" CarInitCount = {This.D.CarInitCount}");
 						This.D.CarInitCount = 0;
 						This.D.Index = -4;
@@ -175,9 +175,9 @@ namespace blekenbleu.Haptic
 					if (11 == dls.Length)
 						Waiting = false;
 /*
-						Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
+						Logging.Current.Info($"blekHapt.FetchCarData({id}): not in DB");
 					else if (0 < dls.Length)
-						Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  length {dls.Length}: "
+						Logging.Current.Info($"blekHapt.FetchCarData({id}): JsonConvert fail;  length {dls.Length}: "
 											+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
  */
 				}
@@ -185,7 +185,7 @@ namespace blekenbleu.Haptic
 			}
 			catch (HttpRequestException ex)	//  treat it like not in DB
 			{
-				Logging.Current.Error("Haptics.FetchCarData() Error: " + ex.Message);
+				Logging.Current.Error("blekHapt.FetchCarData() Error: " + ex.Message);
 				Waiting = false;
 			}
 		}		// FetchCarData()
@@ -232,7 +232,7 @@ namespace blekenbleu.Haptic
 
 				D.Index = -3;					   // disable FetchCarData(); enable Defaults()
 				D.CarInitCount = 0;
-			//	Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
+			//	Logging.Current.Info($"blekHapt.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
 			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
 			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
@@ -240,7 +240,7 @@ namespace blekenbleu.Haptic
 			else if (Loaded || Changed)		  // save before SetVehicle()
 			{
 				if (null == S.Car.name)
-					Logging.Current.Info($"Haptics.S.Add({S.Id}) : missing car name");
+					Logging.Current.Info($"blekHapt.S.Add({S.Id}) : missing car name");
 				else if (S.Add(S.Id))		// DataUpdate():  add or update S.Car in Cars list
 					S.LD.Add(S.Car);		// DataUpdate()
 				Loaded = false;
@@ -251,7 +251,7 @@ namespace blekenbleu.Haptic
 			{
 				if (-2 == D.Index)
 					Set = Changed = false;
-				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}): "
+				Logging.Current.Info($"blekHapt.DataUpdate({data.NewData.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
 				D.SetVehicle(this);
@@ -294,12 +294,12 @@ namespace blekenbleu.Haptic
 					S.LD.Add(S.Car);			// End()
 				string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
 				if (0 == sjs.Length || "{}" == sjs)
-					Logging.Current.Info( $"Haptics.End(): JSON Serializer failure: "
+					Logging.Current.Info( $"blekHapt.End(): JSON Serializer failure: "
 									+ $"{S.LD.Count} games, {S.Cars.Count} {S.Car.game} cars;  "
 									+ (Save ? "changes made.." : "(no changes)"));
 				else if (Save) { 
 					File.WriteAllText(myfile, sjs);
-					Logging.Current.Info( $"Haptics.End(): {S.LD.Count} games, including "
+					Logging.Current.Info( $"blekHapt.End(): {S.LD.Count} games, including "
 						+ $"{S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
 				}
 			}
@@ -589,28 +589,28 @@ namespace blekenbleu.Haptic
 			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
 			{
 				if (null == Settings.Engine)
-					Logging.Current.Info($"Haptics.Init(): null Settings.Engine");
+					Logging.Current.Info($"blekHapt.Init(): null Settings.Engine");
 				else {
 					if (null == Settings.Engine.Sliders)
-						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Sliders");
+						Logging.Current.Info($"blekHapt.Init(): null Settings.Engine.Sliders");
 					else if (1 > Settings.Engine.Sliders.Count)
-						Logging.Current.Info($"Haptics.Init(): 0 Settings.Engine.Sliders");
+						Logging.Current.Info($"blekHapt.Init(): 0 Settings.Engine.Sliders");
 					else if (9 != Settings.Engine.Sliders[0].Length)
-						Logging.Current.Info($"Haptics.Init(): Settings.Engine.Sliders[0].Slider.Length = "
+						Logging.Current.Info($"blekHapt.Init(): Settings.Engine.Sliders[0].Slider.Length = "
 								+ Settings.Engine.Sliders[0].Length.ToString());
 					if (null == Settings.Engine.Tones)
-						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Tones");
+						Logging.Current.Info($"blekHapt.Init(): null Settings.Engine.Tones");
 					else {
 						if (4 != Settings.Engine.Tones.Length)
-							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones.Length = "
+							Logging.Current.Info($"blekHapt.Init():  Settings.Engine.Tones.Length = "
 								+ Settings.Engine.Tones.Length.ToString());
 						if (9 != Settings.Engine.Tones[0].Length)
-							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones[0].Freq.Length = "
+							Logging.Current.Info($"blekHapt.Init():  Settings.Engine.Tones[0].Freq.Length = "
 								+ Settings.Engine.Tones[0].Length.ToString()); 
 					}
 				}
 				Settings = new();	// Settings.Engine will be initialized in End()
-				Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
+				Logging.Current.Info($"blekHapt.Init(): re-initializing Settings");
 			}
 
 			if (1 > Settings.ABSPulseLength)
@@ -661,12 +661,12 @@ namespace blekenbleu.Haptic
 				S.Extract(JsonConvert.DeserializeObject<Dictionary<string,
 							List<CarSpec>>>(File.ReadAllText(Atlasfile)), GameDBText);  // to Atlas
 				AtlasCt = Atlas.Count;
-//				Logging.Current.Info($"Haptics.Init():  {Atlas.Count} games and "
+//				Logging.Current.Info($"blekHapt.Init():  {Atlas.Count} games and "
 //								   + $"{AtlasCt} {GameDBText} cars in " + Atlasfile);
 				if (0 < AtlasCt)
 					Atlasst = $" and {AtlasCt} cars in Atlas";
 				else
-					Logging.Current.Info($"Haptics.Init(): {Atlasfile} load failure");
+					Logging.Current.Info($"blekHapt.Init(): {Atlasfile} load failure");
 			}
 			else AtlasCt = 0;			// S.Extract() will attempt setting LD = json
 			if (File.Exists(myfile))
@@ -674,9 +674,9 @@ namespace blekenbleu.Haptic
 				string text = File.ReadAllText(myfile);
 				Dictionary<string, List<CarSpec>> json =
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
-				Logging.Current.Info("Haptics.Init():  " + S.LD.Set(json) + myfile + Atlasst);
+				Logging.Current.Info("blekHapt.Init():  " + S.LD.Set(json) + myfile + Atlasst);
 			}
-			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found" + Atlasst);
+			else Logging.Current.Info("blekHapt.Init():  "+myfile+" not found" + Atlasst);
 
 			D.Init(Settings, this);
 			E.Init(Settings.Engine, this);
