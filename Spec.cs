@@ -78,7 +78,8 @@ namespace sierses.Sim
 		internal string Set(Dictionary<string, List<CarSpec>> json)
 		{
 			inDict = json;
-			return $"{inDict.Count} games and {inDict[Haptics.GameDBText].Count} {Haptics.GameDBText} cars in ";
+			int ct = inDict.ContainsKey(BlekHapt.GameDBText) ? inDict[BlekHapt.GameDBText].Count : 0;
+			return $"{inDict.Count} games with {ct} {Haptics.GameDBText} cars in ";
 		}
 
 		internal void Add(CarSpec car)			// ListDictionary: S.LD.Add; update Save
