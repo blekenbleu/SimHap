@@ -1,12 +1,8 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.SimData
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using GameReaderCommon;		// for GameData
+﻿using GameReaderCommon;		// for GameData
 using SimHub.Plugins;		// PluginManager
 using System;				// for Math
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
 	public partial class SimData
 	{

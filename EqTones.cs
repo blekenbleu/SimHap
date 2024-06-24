@@ -1,6 +1,6 @@
 using SimHub.Plugins;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
 	public class Tone	// array of frequency component properties
 	{	// one for frequency harmonics, another for amplitudes

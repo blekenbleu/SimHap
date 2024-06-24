@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
 	// these methods are invoked by UI Engine harmonic buttons and sliders
 	public partial class SettingsControl : UserControl

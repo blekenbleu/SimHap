@@ -1,10 +1,6 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.SimHapticsPlugin
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using GameReaderCommon;
+﻿using GameReaderCommon;
 using Newtonsoft.Json;
-using sierses.Sim.Properties;
+using blekenbleu.Haptic.Properties;
 using SimHub;
 using SimHub.Plugins;
 using System;
@@ -16,11 +12,11 @@ using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
-	[PluginDescription("Properties for haptic feedback and more")]
-	[PluginAuthor("sierses")]
-	[PluginName("Haptics")]
+	[PluginDescription("Car-specific haptic properties")]
+	[PluginAuthor("blekenbleu")]
+	[PluginName("blekHapt")]
 	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(
@@ -69,7 +65,7 @@ namespace sierses.Sim
 		}
 
 		// boilerplate SimHub -------------------------------------------
-		public string LeftMenuTitle => "Haptics";
+		public string LeftMenuTitle => "blekHapt";
 
 		internal SettingsControl SC;
 		public Control GetWPFSettingsControl(PluginManager pluginManager)

@@ -2,15 +2,13 @@
 using System.Runtime.InteropServices;
 
 //[assembly: Extension]
-[assembly: AssemblyTitle("Haptics")]
-[assembly: AssemblyDescription("Haptic data properties")]
+[assembly: AssemblyTitle("blekHapt")]
+[assembly: AssemblyDescription("Car-specific Haptic properties")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Haptics")]
-[assembly: AssemblyCopyright("© 2022 Sassja Ceballos aka. sierses")]
+[assembly: AssemblyProduct("blekHapt")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
-[assembly: Guid("5F884FC9-8DE6-4931-98E8-C3A038B8D260")]
 [assembly: AssemblyVersion("1.0.0.0")]
 // appears on Engine page
-[assembly: AssemblyFileVersion("6.4.0.1")]
+[assembly: AssemblyFileVersion("6.4.0.2")]

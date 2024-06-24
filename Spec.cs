@@ -1,14 +1,10 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.Spec
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using GameReaderCommon;
+﻿using GameReaderCommon;
 using Newtonsoft.Json;
 using SimHub;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
 	/// <summary>
 	/// Abstract base class to implement INotifyPropertyChanged interface

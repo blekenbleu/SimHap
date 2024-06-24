@@ -4,7 +4,7 @@
 
 using System;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
   internal static class Helpers
   {

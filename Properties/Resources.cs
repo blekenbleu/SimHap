@@ -1,8 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: sierses.Haptics.Properties.Resources
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using System.CodeDom.Compiler;
+﻿using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,7 +6,7 @@ using System.Globalization;
 using System.Resources;
 using System.Runtime.CompilerServices;
 
-namespace sierses.Sim.Properties
+namespace blekenbleu.Haptic.Properties
 {
   [GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
   [DebuggerNonUserCode]
@@ -29,24 +25,24 @@ namespace sierses.Sim.Properties
     {
       get
       {
-        if (sierses.Sim.Properties.Resources.resourceMan == null)
-          sierses.Sim.Properties.Resources.resourceMan = new ResourceManager("sierses.Sim.Properties.Resources", typeof (sierses.Sim.Properties.Resources).Assembly);
-        return sierses.Sim.Properties.Resources.resourceMan;
+        if (blekenbleu.Haptic.Properties.Resources.resourceMan == null)
+          blekenbleu.Haptic.Properties.Resources.resourceMan = new ResourceManager("blekenbleu.Haptic.Properties.Resources", typeof (blekenbleu.Haptic.Properties.Resources).Assembly);
+        return blekenbleu.Haptic.Properties.Resources.resourceMan;
       }
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     internal static CultureInfo Culture
     {
-      get => sierses.Sim.Properties.Resources.resourceCulture;
-      set => sierses.Sim.Properties.Resources.resourceCulture = value;
+      get => blekenbleu.Haptic.Properties.Resources.resourceCulture;
+      set => blekenbleu.Haptic.Properties.Resources.resourceCulture = value;
     }
 
     internal static Bitmap _100x100_Impacts_White
     {
       get
       {
-        return (Bitmap) sierses.Sim.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Impacts_White), sierses.Sim.Properties.Resources.resourceCulture);
+        return (Bitmap) blekenbleu.Haptic.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Impacts_White), blekenbleu.Haptic.Properties.Resources.resourceCulture);
       }
     }
 
@@ -54,7 +50,7 @@ namespace sierses.Sim.Properties
     {
       get
       {
-        return (Bitmap) sierses.Sim.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_RPM_White), sierses.Sim.Properties.Resources.resourceCulture);
+        return (Bitmap) blekenbleu.Haptic.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_RPM_White), blekenbleu.Haptic.Properties.Resources.resourceCulture);
       }
     }
 
@@ -62,7 +58,7 @@ namespace sierses.Sim.Properties
     {
       get
       {
-        return (Bitmap) sierses.Sim.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Suspension_White), sierses.Sim.Properties.Resources.resourceCulture);
+        return (Bitmap) blekenbleu.Haptic.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Suspension_White), blekenbleu.Haptic.Properties.Resources.resourceCulture);
       }
     }
 
@@ -70,7 +66,7 @@ namespace sierses.Sim.Properties
     {
       get
       {
-        return (Bitmap) sierses.Sim.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Traction_White), sierses.Sim.Properties.Resources.resourceCulture);
+        return (Bitmap) blekenbleu.Haptic.Properties.Resources.ResourceManager.GetObject(nameof (_100x100_Traction_White), blekenbleu.Haptic.Properties.Resources.resourceCulture);
       }
     }
 
@@ -78,7 +74,7 @@ namespace sierses.Sim.Properties
     {
       get
       {
-        return (Bitmap) sierses.Sim.Properties.Resources.ResourceManager.GetObject(nameof (SimHapticsShakerStyleIcon_alt012), sierses.Sim.Properties.Resources.resourceCulture);
+        return (Bitmap) blekenbleu.Haptic.Properties.Resources.ResourceManager.GetObject(nameof (SimHapticsShakerStyleIcon_alt012), blekenbleu.Haptic.Properties.Resources.resourceCulture);
       }
     }
   }

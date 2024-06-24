@@ -2,7 +2,7 @@ using GameReaderCommon;
 using SimHub;
 using System;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
 
 	public partial class SimData

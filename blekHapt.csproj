@@ -4,18 +4,17 @@
   <PropertyGroup>
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
-  <!--Project was exported from assembly: C:\Users\demas\Downloads\dnSpy-net-win64\SimHaptics.dll-->
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{19133D8C-01DC-4DDB-89ED-668A90978AFE}</ProjectGuid>
+    <ProjectGuid>{BC3ACE5C-8F3F-46A2-9A8C-0140682FAFB8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>sierses.Sim</AssemblyName>
+    <AssemblyName>blekenbleu.Haptic</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <FileAlignment>512</FileAlignment>
-    <RootNamespace>sierses.Sim</RootNamespace>
+    <RootNamespace>blekenbleu.Haptic</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -102,7 +101,6 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Themes.cs" />
     <Compile Include="ToneControl.cs" />
-    <Compile Include="UnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx" />

@@ -2,7 +2,7 @@ using MathNet.Numerics.Interpolation;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
 	// for Settings
 	public class Engine

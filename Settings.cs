@@ -1,11 +1,7 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.Settings
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
 	public class Settings : INotifyPropertyChanged
 	{

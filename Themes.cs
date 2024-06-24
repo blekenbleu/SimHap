@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
     internal class Themes
     {

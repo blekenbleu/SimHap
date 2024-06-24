@@ -1,7 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: sierses.Haptics.SettingsControl
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-using SimHub;
+﻿using SimHub;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,7 +7,7 @@ using System.Windows.Media;
 
 
 
-namespace sierses.Sim
+namespace blekenbleu.Haptic
 {
 	// see also ToneControl.cs
 
@@ -43,7 +40,7 @@ namespace sierses.Sim
 
 		internal void SetTheme()
 		{
-			Tres.Source = new Uri("/sierses.Sim;component/Themes/" + Theme, UriKind.Relative);
+			Tres.Source = new Uri("/blekenbleu.Haptic;component/Themes/" + Theme, UriKind.Relative);
 			//			Resources.MergedDictionaries.Clear();
 			//			Resources.MergedDictionaries.Add(Tres);
 			Resources.MergedDictionaries[0] = Tres;
