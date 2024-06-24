@@ -32,11 +32,6 @@ namespace blekenbleu.Haptic
 			SuspensionDistRRP = 0.0;
 			AccSamples = 16;
 			Acc1 = 0;
-/*
-			TireDiameterSampleMax = 100;
-			SlipXGammaBaseMult = 1.0;
-			SlipYGammaBaseMult = 1.0;
- */
 			idleRPM = 2500;							// default value; seems high IMO
 		}
 
@@ -220,13 +215,6 @@ namespace blekenbleu.Haptic
 			Array.Clear(AccSurge, 0, AccSurge.Length);
 			Array.Clear(AccSway, 0, AccSway.Length);
 			Acc1 = 0;
-/*
-			TireDiameterSampleCount = TireDiameterSampleCount == -1 ? -1 : 0;
-			TireDiameterFL = 0.0;
-			TireDiameterFR = 0.0;
-			TireDiameterRL = 0.0;
-			TireDiameterRR = 0.0;
- */
 			RumbleLeftAvg = 0.0;
 			RumbleRightAvg = 0.0;
 			IdleSampleCount = 0;
