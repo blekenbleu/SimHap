@@ -116,44 +116,46 @@ namespace sierses.Sim
 		public double AccHeaveAbs;
 		public double InvAccSurgeAvg;
 		public bool Airborne;
-		public double SlipXFL;
-		public double SlipXFR;
-		public double SlipXRL;
-		public double SlipXRR;
-		public double SlipXAll;
-		public double SlipYFL;
-		public double SlipYFR;
-		public double SlipYRL;
-		public double SlipYRR;
-		public double SlipYAll;
-		private double SlipXGammaBaseMult;
-		public double SlipYGammaBaseMult;
-		public double TireDiameterFL;
-		public double TireDiameterFR;
-		public double TireDiameterRL;
-		public double TireDiameterRR;
-		public double TireDiameterSampleFL;
-		public double TireDiameterSampleFR;
-		public double TireDiameterSampleRL;
-		public double TireDiameterSampleRR;
-		public int TireDiameterSampleCount;
-		public int TireDiameterSampleMax;
-		public double VelocityX;
-		public double WheelLoadFL;
-		public double WheelLoadFR;
-		public double WheelLoadRL;
-		public double WheelLoadRR;
-		public double WheelSpeedFL;
-		public double WheelSpeedFR;
-		public double WheelSpeedRL;
-		public double WheelSpeedRR;
-		public double WheelRotationFL;
-		public double WheelRotationFR;
-		public double WheelRotationRL;
-		public double WheelRotationRR;
-		public double WheelSpinAll;
-		public double WheelLockAll;
-		public double Yaw;
+        /*
+                public double SlipXFL;
+                public double SlipXFR;
+                public double SlipXRL;
+                public double SlipXRR;
+                public double SlipXAll;
+                public double SlipYFL;
+                public double SlipYFR;
+                public double SlipYRL;
+                public double SlipYRR;
+                public double SlipYAll;
+                private double SlipXGammaBaseMult;
+                public double SlipYGammaBaseMult;
+                public double TireDiameterFL;
+                public double TireDiameterFR;
+                public double TireDiameterRL;
+                public double TireDiameterRR;
+                public double TireDiameterSampleFL;
+                public double TireDiameterSampleFR;
+                public double TireDiameterSampleRL;
+                public double TireDiameterSampleRR;
+                public int TireDiameterSampleCount;
+                public int TireDiameterSampleMax;
+                public double VelocityX;
+                public double WheelSpeedFL;
+                public double WheelSpeedFR;
+                public double WheelSpeedRL;
+                public double WheelSpeedRR;
+                public double WheelRotationFL;
+                public double WheelRotationFR;
+                public double WheelRotationRL;
+                public double WheelRotationRR;
+                public double WheelSpinAll;
+                public double WheelLockAll;
+        */
+        public double WheelLoadFL;
+        public double WheelLoadFR;
+        public double WheelLoadRL;
+        public double WheelLoadRR;
+        public double Yaw;
 		public double YawPrev;
 		public double YawRate;
 		public double YawRateAvg;
@@ -451,6 +453,7 @@ namespace sierses.Sim
 			SuspensionVelFR = 0.0;
 			SuspensionVelRL = 0.0;
 			SuspensionVelRR = 0.0;
+/*
 			SlipXFL = 0.0;
 			SlipXFR = 0.0;
 			SlipXRL = 0.0;
@@ -459,6 +462,7 @@ namespace sierses.Sim
 			SlipYFR = 0.0;
 			SlipYRL = 0.0;
 			SlipYRR = 0.0;
+ */
 			ABSActive = data.NewData.ABSActive == 1;
 			bool flag = true;
 			switch (Haptics.CurrentGame)
@@ -468,6 +472,7 @@ namespace sierses.Sim
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
+/*
 					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
 					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
 					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
@@ -484,6 +489,7 @@ namespace sierses.Sim
 						SlipXRL *= 0.5;
 						SlipXRR *= 0.5;
 					}
+ */
 					TiresLeft = 1.0 + (double) Math.Max(Physics("TyreContactHeading01.Y"), Physics("TyreContactHeading03.Y"));
 					TiresRight = 1.0 + (double) Math.Max(Physics("TyreContactHeading02.Y"), Physics("TyreContactHeading04.Y"));
 					if (RumbleLeftAvg == 0.0)
@@ -501,6 +507,7 @@ namespace sierses.Sim
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
 					WiperStatus = (int) SHP.PM.GetPropertyValue(raw+"Graphics.WiperLV");
+/*
 					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
 					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
 					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
@@ -518,6 +525,7 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+ */
 					break;
 				case GameId.AMS1:
 					SuspensionDistFL = Data("wheel01.suspensionDeflection");
@@ -526,6 +534,7 @@ namespace sierses.Sim
 					SuspensionDistRR = Data("wheel04.suspensionDeflection");
 					SpeedMs = Raw("CurrentPlayer.speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+/*
 					WheelRotationFL = Math.Abs(Data("wheel01.rotation"));
 					WheelRotationFR = Math.Abs(Data("wheel02.rotation"));
 					WheelRotationRL = Math.Abs(Data("wheel03.rotation"));
@@ -543,12 +552,14 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+ */
 					break;
 				case GameId.AMS2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
 					SuspensionDistFR = Raw("mSuspensionTravel02");
 					SuspensionDistRL = Raw("mSuspensionTravel03");
 					SuspensionDistRR = Raw("mSuspensionTravel04");
+/*
 					WheelRotationFL = Math.Abs(Raw("mTyreRPS01"));
 					WheelRotationFR = Math.Abs(Raw("mTyreRPS02"));
 					WheelRotationRL = Math.Abs(Raw("mTyreRPS03"));
@@ -566,23 +577,27 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+ */
 					break;
 				case GameId.D4:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
+/*
 					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
 					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
 					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
 					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
+ */
 					break;
 				case GameId.DR2:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
+/*
 					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
 					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
 					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
@@ -625,6 +640,7 @@ namespace sierses.Sim
 					SlipXFR = Math.Max(SlipXFL, 0.0);
 					SlipXRL = Math.Max(SlipXFL, 0.0);
 					SlipXRR = Math.Max(SlipXFL, 0.0);
+ */
 					break;
 				case GameId.WRC23:
 					SuspensionDistFL = Raw("SessionUpdate.vehicle_hub_position_fl");
@@ -633,6 +649,7 @@ namespace sierses.Sim
 					SuspensionDistRR = Raw("SessionUpdate.vehicle_hub_position_br");
 					SpeedMs = Raw("SessionUpdate.vehicle_speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+/*
 					WheelSpeedFL = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_fl"));
 					WheelSpeedFR = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_fr"));
 					WheelSpeedRL = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_bl"));
@@ -675,12 +692,14 @@ namespace sierses.Sim
 					SlipXFR = Math.Max(SlipXFL, 0.0);
 					SlipXRL = Math.Max(SlipXFL, 0.0);
 					SlipXRR = Math.Max(SlipXFL, 0.0);
+ */
 					break;
 				case GameId.F12022:
 					SuspensionDistFL = Raw("PlayerMotionData.m_suspensionPosition01") * 0.001;
 					SuspensionDistFR = Raw("PlayerMotionData.m_suspensionPosition02") * 0.001;
 					SuspensionDistRL = Raw("PlayerMotionData.m_suspensionPosition03") * 0.001;
 					SuspensionDistRR = Raw("PlayerMotionData.m_suspensionPosition04") * 0.001;
+/*
 					WheelSpeedFL = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed03"));
 					WheelSpeedFR = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed04"));
 					WheelSpeedRL = Math.Abs(Raw("PlayerMotionData.m_wheelSpeed01"));
@@ -690,12 +709,14 @@ namespace sierses.Sim
 					SlipXFR = Math.Max(Raw("PlayerMotionData.m_wheelSlip04") - Math.Abs(SlipYFR) * 2.0, 0.0);
 					SlipXRL = Math.Max(Raw("PlayerMotionData.m_wheelSlip01") - Math.Abs(SlipYRL) * 2.0, 0.0);
 					SlipXRR = Math.Max(Raw("PlayerMotionData.m_wheelSlip02") - Math.Abs(SlipYRR) * 2.0, 0.0);
+ */
 					break;
 				case GameId.F12023:
 					SuspensionDistFL = Raw("PacketMotionExData.m_suspensionPosition01") * 0.001;
 					SuspensionDistFR = Raw("PacketMotionExData.m_suspensionPosition02") * 0.001;
 					SuspensionDistRL = Raw("PacketMotionExData.m_suspensionPosition03") * 0.001;
 					SuspensionDistRR = Raw("PacketMotionExData.m_suspensionPosition04") * 0.001;
+/*
 					WheelSpeedFL = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed03"));
 					WheelSpeedFR = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed04"));
 					WheelSpeedRL = Math.Abs(Raw("PacketMotionExData.m_wheelSpeed01"));
@@ -705,12 +726,14 @@ namespace sierses.Sim
 					SlipXFR = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio02")) * 5.0 - Math.Abs(SlipYFR) * 1.0, 0.0);
 					SlipXRL = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio03")) * 5.0 - Math.Abs(SlipYRL) * 1.0, 0.0);
 					SlipXRR = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio04")) * 5.0 - Math.Abs(SlipYRR) * 1.0, 0.0);
+ */
 					break;
 				case GameId.Forza:
 					SuspensionDistFL = Raw("SuspensionTravelMetersFrontLeft");
 					SuspensionDistFR = Raw("SuspensionTravelMetersFrontRight");
 					SuspensionDistRL = Raw("SuspensionTravelMetersRearLeft");
 					SuspensionDistRR = Raw("SuspensionTravelMetersRearRight");
+/*
 					WheelRotationFL = Math.Abs(Raw("WheelRotationSpeedFrontLeft"));
 					WheelRotationFR = Math.Abs(Raw("WheelRotationSpeedFrontRight"));
 					WheelRotationRL = Math.Abs(Raw("WheelRotationSpeedRearLeft"));
@@ -728,6 +751,7 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+ */
 					break;
 				case GameId.GTR2:
 				case GameId.GSCE:
@@ -738,6 +762,7 @@ namespace sierses.Sim
 					SuspensionDistRR = Data("wheel04.suspensionDeflection");
 					SpeedMs = Raw("CurrentPlayer.speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+/*
 					WheelRotationFL = Math.Abs(Data("wheel01.rotation"));
 					WheelRotationFR = Math.Abs(Data("wheel02.rotation"));
 					WheelRotationRL = Math.Abs(Data("wheel03.rotation"));
@@ -755,6 +780,7 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+ */
 					break;
 				case GameId.IRacing:
 					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
@@ -792,6 +818,7 @@ namespace sierses.Sim
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
 					}
+/*
 					VelocityX = Raw("Telemetry.VelocityY") * 10.0;
 					if (VelocityX < 0.0)
 					{
@@ -863,12 +890,14 @@ namespace sierses.Sim
 					SlipYFR = 0.0;
 					SlipYRL = 0.0;
 					SlipYRR = 0.0;
+ */
 					break;
 				case GameId.PC2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
 					SuspensionDistFR = Raw("mSuspensionTravel02");
 					SuspensionDistRL = Raw("mSuspensionTravel03");
 					SuspensionDistRR = Raw("mSuspensionTravel04");
+/*
 					WheelRotationFL = Math.Abs(Raw("mTyreRPS01"));
 					WheelRotationFR = Math.Abs(Raw("mTyreRPS02"));
 					WheelRotationRL = Math.Abs(Raw("mTyreRPS03"));
@@ -886,23 +915,27 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+ */
 					break;
 				case GameId.RBR:
 					SuspensionDistFL = Raw("NGPTelemetry.car.suspensionLF.springDeflection");
 					SuspensionDistFR = Raw("NGPTelemetry.car.suspensionRF.springDeflection");
 					SuspensionDistRL = Raw("NGPTelemetry.car.suspensionLB.springDeflection");
 					SuspensionDistRR = Raw("NGPTelemetry.car.suspensionRB.springDeflection");
+/*
 					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFL"));
 					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFR"));
 					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRL"));
 					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRR"));
 					SlipFromWheelSpeed();
+ */
 					break;
 				case GameId.RF2:
 					SuspensionDistFL = Raw("CurrentPlayerTelemetry.mWheels01.mSuspensionDeflection");
 					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
 					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
 					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
+/*
 					WheelRotationFL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels01.mRotation"));
 					WheelRotationFR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels02.mRotation"));
 					WheelRotationRL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels03.mRotation"));
@@ -920,6 +953,7 @@ namespace sierses.Sim
 					SlipXFR *= 0.5;
 					SlipXRL *= 0.5;
 					SlipXRR *= 0.5;
+ */
 					if (data.NewData.Brake > 90.0)
 					{
 						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
@@ -948,15 +982,18 @@ namespace sierses.Sim
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 					}
+/*
 					WheelRotationFL = Math.Abs(Raw("TireRps.FrontLeft"));
 					WheelRotationFR = Math.Abs(Raw("TireRps.FrontRight"));
 					WheelRotationRL = Math.Abs(Raw("TireRps.RearLeft"));
 					WheelRotationRR = Math.Abs(Raw("TireRps.RearRight"));
 					SlipFromRPS();
+ */
 					break;
 				case GameId.GTL:
 				case GameId.RACE07:
 					double num1 = Raw("carCGLocY") * 0.2;
+
 					SuspensionDistFL = num1 * WheelLoadFL;
 					SuspensionDistFR = num1 * WheelLoadFR;
 					SuspensionDistRL = num1 * WheelLoadRL;
@@ -980,47 +1017,56 @@ namespace sierses.Sim
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight");
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft");
 					SuspensionDistRR = Raw("SuspensionPositionRearRight");
+/*
 					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
 					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
 					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
 					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
+ */
 					break;
 				case GameId.F12016:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionFrontLeft") * 0.001;
+/*
 					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
 					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
 					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
 					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
+ */
 					break;
 				case GameId.F12017:
 					SuspensionDistFL = Raw("m_susp_pos01") * 0.001;
 					SuspensionDistFR = Raw("m_susp_pos02") * 0.001;
 					SuspensionDistRL = Raw("m_susp_pos03") * 0.001;
 					SuspensionDistRR = Raw("m_susp_pos04") * 0.001;
+/*
 					WheelSpeedFL = Math.Abs(Raw("m_wheelSpeed03"));
 					WheelSpeedFR = Math.Abs(Raw("m_wheelSpeed04"));
 					WheelSpeedRL = Math.Abs(Raw("m_wheelSpeed01"));
 					WheelSpeedRR = Math.Abs(Raw("m_wheelSpeed02"));
 					SlipFromWheelSpeed();
+ */
 					break;
 				case GameId.GLegends:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
+/*
 					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
 					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
 					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
 					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
+ */
 					break;
 				case GameId.KK:
 					flag = false;
+/*
 					double propertyValue = Raw("Motion.VelocityZ");
 					if (VelocityZAvg == 0.0)
 						VelocityZAvg = propertyValue;
@@ -1030,6 +1076,7 @@ namespace sierses.Sim
 					SuspensionVelFR = num2 * WheelLoadFR;
 					SuspensionVelRL = num2 * WheelLoadRL;
 					SuspensionVelRR = num2 * WheelLoadRR;
+ */
 					break;
 				case GameId.ATS:
 				case GameId.ETS2:
@@ -1049,6 +1096,7 @@ namespace sierses.Sim
 					SuspensionVelFR = Raw("suspension_velocity_fr") * 0.05;
 					SuspensionVelRL = Raw("suspension_velocity_rl") * 0.05;
 					SuspensionVelRR = Raw("suspension_velocity_rr") * 0.05;
+/*
 					WheelSpeedFL = Raw("wheel_speed_fl");
 					WheelSpeedFR = Raw("wheel_speed_fr");
 					WheelSpeedRL = Raw("wheel_speed_rl");
@@ -1058,6 +1106,7 @@ namespace sierses.Sim
 					SlipXFR = Math.Max(Raw("wheel_slip_fr") * 0.1 - Math.Abs(SlipYFR) * 2.0, 0.0);
 					SlipXRL = Math.Max(Raw("wheel_slip_rl") * 0.1 - Math.Abs(SlipYRL) * 2.0, 0.0);
 					SlipXRR = Math.Max(Raw("wheel_slip_rr") * 0.1 - Math.Abs(SlipYRR) * 2.0, 0.0);
+ */
 					break;
 				case GameId.GPBikes:
 				case GameId.MXBikes:
@@ -1070,11 +1119,13 @@ namespace sierses.Sim
 					SuspensionVelFR = Raw("m_sData.m_afSuspVelocity01");
 					SuspensionVelRL = Raw("m_sData.m_afSuspVelocity02");
 					SuspensionVelRR = Raw("m_sData.m_afSuspVelocity02");
+/*
 					WheelSpeedFL = Math.Abs(Raw("m_sData.m_afWheelSpeed01"));
 					WheelSpeedFR = Math.Abs(Raw("m_sData.m_afWheelSpeed01"));
 					WheelSpeedRL = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					WheelSpeedRR = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					SlipFromWheelSpeed();
+ */
 					if ((int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
 					 || (int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
 					{
@@ -1090,6 +1141,7 @@ namespace sierses.Sim
 					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
 					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
 					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
+/*
 					WheelRotationFL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels01.mRotation"));
 					WheelRotationFR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels02.mRotation"));
 					WheelRotationRL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels03.mRotation"));
@@ -1107,6 +1159,7 @@ namespace sierses.Sim
 					SlipXFR = Math.Abs(SlipXFR - 1.0);
 					SlipXRL = Math.Abs(SlipXRL - 1.0);
 					SlipXRR = Math.Abs(SlipXRR - 1.0);
+ */
 					if (data.NewData.Brake > 80.0)
 					{
 						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
@@ -1120,6 +1173,7 @@ namespace sierses.Sim
 					SuspensionDistFR = Raw("Tire_SusHeight02");
 					SuspensionDistRL = Raw("Tire_SusHeight03");
 					SuspensionDistRR = Raw("Tire_SusHeight04");
+/*
 					WheelSpeedFL = (double) Math.Abs(Raw("Wheel_Speed01")) * 0.277778;
 					WheelSpeedFR = (double) Math.Abs(Raw("Wheel_Speed02")) * 0.277778;
 					WheelSpeedRL = (double) Math.Abs(Raw("Wheel_Speed03")) * 0.277778;
@@ -1129,6 +1183,7 @@ namespace sierses.Sim
 					SlipXFR = Math.Max(Raw("Wheel_Slip02") - Math.Abs(SlipYFR) * 2.0, 0.0);
 					SlipXRL = Math.Max(Raw("Wheel_Slip03") - Math.Abs(SlipYRL) * 2.0, 0.0);
 					SlipXRR = Math.Max(Raw("Wheel_Slip04") - Math.Abs(SlipYRR) * 2.0, 0.0);
+ */
 					break;
 			}
 			if (!flag)
@@ -1139,6 +1194,7 @@ namespace sierses.Sim
 			SuspensionVelRR = (SuspensionDistRR - SuspensionDistRRP) * FPS;
 		}
 
+/*
 		private void SlipFromRPS()
 		{
 			if (TireDiameterSampleCount < TireDiameterSampleMax
@@ -1236,6 +1292,7 @@ namespace sierses.Sim
 			SlipYRL *= SpeedMs * 0.333;
 			SlipYRR *= SpeedMs * 0.333;
 		}
+ */
 		internal ushort Rpms;
 
 		// called from DataUpdate()
@@ -1335,12 +1392,15 @@ namespace sierses.Sim
 				MotionYaw = -MotionYaw;
 			if (AccHeave[Acc0] < 0.0)
 				MotionHeave = -MotionHeave;
+/*
 			WheelLoadFL = ((100.0 + AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadFR = ((100.0 + AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRL = ((100.0 - AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRR = ((100.0 - AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
+ */
 			UpdateVehicle(ref data);
 			Airborne = AccHeave2S < -2.0 || Math.Abs(data.NewData.OrientationRoll) > 60.0;
+/*
 			if (Airborne && SuspensionFL < 0.1)
 				SlipXFL = SlipYFL = 0.0;
 			else
@@ -1377,7 +1437,9 @@ namespace sierses.Sim
 							 ? SlipYMultAll * -100.0 * Math.Pow(-SlipYRR, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll))
 							 : SlipYMultAll * 100.0 * Math.Pow(SlipYRR, 1.0 / (SlipYGammaBaseMult * SlipYGamma * SlipYGammaAll));
 			}
+ */
 			Airborne = Airborne && SuspensionAll < 0.1;
+/*
 			SlipXAll = (SlipXFL + SlipXFR + SlipXRL + SlipXRR) * 0.5;
 			SlipYAll = (SlipYFL + SlipYFR + SlipYRL + SlipYRR) * 0.5;
 			WheelSpinAll = !(SHP.S.PoweredWheels == "F")
@@ -1394,7 +1456,7 @@ namespace sierses.Sim
 				WheelLockAll += SlipYRL - 50.0;
 			if (SlipYRR > 50.0)
 				WheelLockAll += SlipYRR - 50.0;
-
+ */
 			if (DateTime.Now.Ticks < FrameTimeTicks)	// long rollover?
 				FrameCountTicks += (long.MaxValue - FrameTimeTicks) + DateTime.Now.Ticks;	// rollover
 			else FrameCountTicks += DateTime.Now.Ticks - FrameTimeTicks;
@@ -1427,9 +1489,11 @@ namespace sierses.Sim
 					else Upshift = true;
 				}
 			}
+/*
 			ABSPauseInterval = SlipYAll <= 0.0
 								? (long) (1166667.0 - 666667.0 * ((data.NewData.SpeedKmh - 20.0) * 0.003333333).Clamp(0.0, 1.0))
 								: (long) (1250000.0 - 666667.0 * SlipYAll.Clamp(0.0, 1.0));
+ */
 			ABSPulseInterval = 166666L * SHP.Settings.ABSPulseLength;
 			if (ABSActive)
 			{

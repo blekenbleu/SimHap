@@ -452,7 +452,7 @@ namespace sierses.Sim
 					break;
 				case "RBR":
 					CurrentGame = GameId.RBR;
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "RFactor1":
 					CurrentGame = GameId.RF1;
@@ -490,7 +490,7 @@ namespace sierses.Sim
 				case "CodemastersDirtRally2":
 					CurrentGame = GameId.DR2;
 					GameDBText = "DR2";
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "CodemastersDirt2":
 				case "CodemastersDirt3":
@@ -498,13 +498,13 @@ namespace sierses.Sim
 				case "CodemastersDirt4":
 					CurrentGame = GameId.D4;
 					GameDBText = "D4";
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "EAWRC23":
 					CurrentGame = GameId.WRC23;
 					GameDBText = "WRC23";
 					D.AccSamples = 32;
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12012":
 				case "F12013":
@@ -516,7 +516,7 @@ namespace sierses.Sim
 					break;
 				case "F12017":
 					CurrentGame = GameId.F12017;
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12018":
 				case "F12019":
@@ -525,7 +525,7 @@ namespace sierses.Sim
 				case "F12022":
 					CurrentGame = GameId.F12022;
 					GameDBText = "F12022";
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12023":
 				case "F12024":
@@ -533,7 +533,7 @@ namespace sierses.Sim
 				case "F12026":
 					CurrentGame = GameId.F12023;
 					GameDBText = "F12022";
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "CodemastersGrid2":
 				case "CodemastersGrid2019":
@@ -541,25 +541,25 @@ namespace sierses.Sim
 				case "CodemastersGridLegends":
 					CurrentGame = GameId.GLegends;
 					GameDBText = "Grid";
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "BeamNgDrive":
 					CurrentGame = GameId.BeamNG;
 					GameDBText = "BeamNG";
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "GPBikes":
 					CurrentGame = GameId.GPBikes;
 					D.RumbleFromPlugin = true;
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "MXBikes":
 					CurrentGame = GameId.MXBikes;
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "WRCGenerations":
 					CurrentGame = GameId.WRCGen;
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				case "WRCX":
 					CurrentGame = GameId.WRCX;
@@ -577,7 +577,7 @@ namespace sierses.Sim
 				case "GranTurismoSport":
 					CurrentGame = GameId.GranTurismo7;
 					GameDBText = "GranTurismo7";
-					D.TireDiameterSampleCount = -1;
+//					D.TireDiameterSampleCount = -1;
 					break;
 				default:
 					CurrentGame = GameId.Other;
@@ -587,15 +587,17 @@ namespace sierses.Sim
 			D.AccHeave = new double[D.AccSamples];
 			D.AccSurge = new double[D.AccSamples];
 			D.AccSway = new double[D.AccSamples];
-		}	// SetGame()
+		}   // SetGame()
 
-		public void Init(PluginManager pluginManager)
+		bool ShowSusp, ShowPhysics;
+
+        public void Init(PluginManager pluginManager)
 		{
 			This = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
 			E = new();
-			bool ShowFreq = false, ShowSusp = true, ShowTire = false, ShowPhysics = true;
+			ShowSusp = ShowPhysics = true;
 			SetGame(pluginManager);
 
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
@@ -714,6 +716,7 @@ namespace sierses.Sim
 			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
 			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
 			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
+/*
 if (ShowFreq) {
 			this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
 			this.AttachDelegate("FreqOctave", () => D.FreqOctave);
@@ -772,6 +775,7 @@ if (ShowTire) {
 			this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
 			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
 }
+*/
 if (ShowSusp) {
 			this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
 			this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
@@ -841,7 +845,7 @@ if (ShowPhysics) {
 			this.AttachDelegate("MHeave", () => D.MotionHeave);
 			this.AttachDelegate("MSurge", () => D.MotionSurge);
 			this.AttachDelegate("MSway", () => D.MotionSway);
-			this.AttachDelegate("VelocityX", () => D.VelocityX);
+//			this.AttachDelegate("VelocityX", () => D.VelocityX);
 }
 			FrameTimeTicks = DateTime.Now.Ticks;
 		}
