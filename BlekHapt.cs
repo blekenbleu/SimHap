@@ -339,45 +339,11 @@ namespace blekenbleu.Haptic
 			}
 			else if (D.SuspensionGamma != 1.0)
 				Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
-			if (Settings.SlipXMult.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SlipXMult == 1.0)
-					Settings.SlipXMult.Remove(GameDBText);
-				else Settings.SlipXMult[GameDBText] = D.SlipXMult;
-			}
-			else if (D.SlipXMult != 1.0)
-				Settings.SlipXMult.Add(GameDBText, D.SlipXMult);
-			if (Settings.SlipYMult.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SlipYMult == 1.0)
-					Settings.SlipYMult.Remove(GameDBText);
-				else Settings.SlipYMult[GameDBText] = D.SlipYMult;
-			}
-			else if (D.SlipYMult != 1.0)
-				Settings.SlipYMult.Add(GameDBText, D.SlipYMult);
-			if (Settings.SlipXGamma.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SlipXGamma == 1.0)
-					Settings.SlipXGamma.Remove(GameDBText);
-				else Settings.SlipXGamma[GameDBText] = D.SlipXGamma;
-			}
-			else if (D.SlipXGamma != 1.0)
-				Settings.SlipXGamma.Add(GameDBText, D.SlipXGamma);
-			if (Settings.SlipYGamma.TryGetValue(GameDBText, out double _))
-			{
-				if (D.SlipYGamma == 1.0)
-					Settings.SlipYGamma.Remove(GameDBText);
-				else Settings.SlipYGamma[GameDBText] = D.SlipYGamma;
-			}
-			else if (D.SlipYGamma != 1.0)
-				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
 
 			// unconditionally save some
 			Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
 			Settings.SuspensionGamma["AllGames"] = D.SuspensionGammaAll;
 			Settings.SuspensionMult["AllGames"] = D.SuspensionMultAll;
-			Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
-			Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
 			Settings.Motion["MotionPitchOffset"] = D.MotionPitchOffset;
 			Settings.Motion["MotionPitchMult"] = D.MotionPitchMult;
 			Settings.Motion["MotionPitchGamma"] = D.MotionPitchGamma;
@@ -678,7 +644,7 @@ namespace blekenbleu.Haptic
 			}
 			else Logging.Current.Info("blekHapt.Init():  "+myfile+" not found" + Atlasst);
 
-			D.Init(Settings, this);
+			D.Init(this);
 			E.Init(Settings.Engine, this);
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
