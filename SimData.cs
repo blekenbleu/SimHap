@@ -134,7 +134,6 @@ namespace blekenbleu.Haptic
 		public double SuspensionRumbleMultR5;
 
 		static PluginManager PM;
-		static GameData data;
 		private float Data(string prop)
 		{
 			var foo = PM.GetPropertyValue(raw+"Data."+prop);
@@ -159,10 +158,9 @@ namespace blekenbleu.Haptic
 			return 0;
 		}
 
-		private void UpdateVehicle(ref GameData Gdat)
+		private void UpdateVehicle()
 		{
 			PM = H.PM;
-			data = Gdat;
 			SuspensionDistFLP = SuspensionDistFL;
 			SuspensionDistFRP = SuspensionDistFR;
 			SuspensionDistRLP = SuspensionDistRL;
@@ -556,7 +554,7 @@ namespace blekenbleu.Haptic
 			if (AccHeave[Acc0] < 0.0)
 				MotionHeave = -MotionHeave;
 
-			UpdateVehicle(ref data);
+			UpdateVehicle();
 			Airborne = AccHeave2S < -2.0 || Math.Abs(H.N.OrientationRoll) > 60.0;
 			Airborne = Airborne && SuspensionAll < 0.1;
 			if (DateTime.Now.Ticks < FrameTimeTicks)	// long rollover?
@@ -573,7 +571,7 @@ namespace blekenbleu.Haptic
 			if (DateTime.Now.Ticks - ShiftTicks > H.Settings.UpshiftDurationMs * 10000)
 				Upshift = false;
 			DateTime now;
-			if (data.OldData.Gear != H.N.Gear)
+			if (H.Gdat.OldData.Gear != H.N.Gear)
 			{
 				if (Gear != 0)
 					GearPrevious = Gear;
@@ -983,7 +981,7 @@ namespace blekenbleu.Haptic
 			// idle sniff
 			if (20 > IdleSampleCount && 300 < H.N.Rpms && H.N.Rpms <= idleRPM * 1.1)
 			{	// Refresh(): supposes that idleRPM is somewhat valid..??
-				if (40.0 > Math.Abs(data.OldData.Rpms - H.N.Rpms) * FPS)
+				if (40.0 > Math.Abs(H.Gdat.OldData.Rpms - H.N.Rpms) * FPS)
 				{	// Refresh(): averaging with previous average
 					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)H.N.Rpms) >> 1);
 					++IdleSampleCount;								// Refresh(): increment if difference < 40
