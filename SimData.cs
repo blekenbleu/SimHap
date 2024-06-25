@@ -9,15 +9,8 @@ namespace blekenbleu.Haptic
 		public double FPS;
 		public double SpeedMs;
 		public double Accelerator;
-		public double Brake;
-		public double BrakeF;
-		public double BrakeR;
 		public double Clutch;
 		public double Handbrake;
-		public double BrakeBias;
-		public double BrakeVel;
-		public double BrakeVelP;
-		public double BrakeAcc;
 		public bool ABSActive;
 		public double ABSPulse;
 		public long ABSPauseInterval;
@@ -114,14 +107,6 @@ namespace blekenbleu.Haptic
 		public double RumbleRightAvg;
 		public double RumbleLeft;
 		public double RumbleRight;
-		public int SurfaceMaterial;
-		public double VelocityZAvg;
-		public double GainSuspensionFront;
-		public double GainSuspensionRear;
-		public double GainSuspensionLeft;
-		public double GainSuspensionRight;
-		public double GainSuspensionAll;
-		public int SuspensionMainOutput;
 		public double SuspensionFreq;
 		public double SuspensionFreqRa;
 		public double SuspensionFreqRb;
@@ -176,7 +161,7 @@ namespace blekenbleu.Haptic
 
 		private void UpdateVehicle(ref GameData Gdat)
 		{
-			PM = SHP.PM;
+			PM = H.PM;
 			data = Gdat;
 			SuspensionDistFLP = SuspensionDistFL;
 			SuspensionDistFRP = SuspensionDistFR;
@@ -194,7 +179,7 @@ namespace blekenbleu.Haptic
 			SuspensionVelFR = 0.0;
 			SuspensionVelRL = 0.0;
 			SuspensionVelRR = 0.0;
-			ABSActive = data.NewData.ABSActive == 1;
+			ABSActive = H.N.ABSActive == 1;
 			bool flag = true;
 			switch (BlekHapt.CurrentGame)
 			{
@@ -220,7 +205,7 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
-					WiperStatus = (int) SHP.PM.GetPropertyValue(raw+"Graphics.WiperLV");
+					WiperStatus = (int) H.PM.GetPropertyValue(raw+"Graphics.WiperLV");
 					break;
 				case GameId.AMS1:
 					SuspensionDistFL = Data("wheel01.suspensionDeflection");
@@ -282,37 +267,37 @@ namespace blekenbleu.Haptic
 					SpeedMs = Raw("CurrentPlayer.speed");
 					break;
 				case GameId.IRacing:
-					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
+					if (H.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
+					else if (H.PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFSHshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFSHshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
+					if (H.PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
+					else if (H.PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRSHshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRSHshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
+					if (H.PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.CFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.CFshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
+					else if (H.PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.HFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.HFshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
+					if (H.PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
@@ -335,30 +320,30 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
 					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
 					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
-					if (data.NewData.Brake > 90.0)
+					if (H.N.Brake > 90.0)
 					{
 						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
-								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
+								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < H.N.Brake - 1.0;
 						break;
 					}
 					break;
 				case GameId.RRRE:
-					if (SHP.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.FrontLeft") != null)
+					if (H.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.FrontLeft") != null)
 					{
 						SuspensionDistFL = Raw("Player.SuspensionDeflection.FrontLeft");
 						SuspensionDistFR = Raw("Player.SuspensionDeflection.FrontRight");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.RearLeft") != null)
+					if (H.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.RearLeft") != null)
 					{
 						SuspensionDistRL = Raw("Player.SuspensionDeflection.RearLeft");
 						SuspensionDistRR = Raw("Player.SuspensionDeflection.RearRight");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionFront") != null)
+					if (H.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionFront") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionRear") != null)
+					if (H.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionRear") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Player.ThirdSpringSuspensionDeflectionRear");
@@ -419,7 +404,7 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection02");
 					SuspensionDistRL = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection03");
 					SuspensionDistRR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection04");
-					WiperStatus = (bool) SHP.PM.GetPropertyValue(raw+"TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
+					WiperStatus = (bool) H.PM.GetPropertyValue(raw+"TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
 					break;
 				case GameId.BeamNG:
 					flag = false;
@@ -443,8 +428,8 @@ namespace blekenbleu.Haptic
 					SuspensionVelFR = Raw("m_sData.m_afSuspVelocity01");
 					SuspensionVelRL = Raw("m_sData.m_afSuspVelocity02");
 					SuspensionVelRR = Raw("m_sData.m_afSuspVelocity02");
-					if ((int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
-					 || (int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
+					if ((int) H.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
+					 || (int) H.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
 					{
 						RumbleLeft = 50.0;
 						RumbleRight = 50.0;
@@ -458,10 +443,10 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
 					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
 					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
-					if (data.NewData.Brake > 80.0)
+					if (H.N.Brake > 80.0)
 					{
 						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
-								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
+								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < H.N.Brake - 1.0;
 						break;
 					}
 					break;
@@ -484,36 +469,28 @@ namespace blekenbleu.Haptic
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Refresh(ref GameData Gdat, BlekHapt shp)
+		internal void Refresh(BlekHapt shp)
 		{
-			SHP = shp;
-			data = Gdat;
-			FPS = (double) SHP.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
-			Rpms = Convert.ToUInt16(0.5 + data.NewData.Rpms);
-			SpeedMs = data.NewData.SpeedKmh * 0.277778;
-			Accelerator = data.NewData.Throttle;
-			Brake = data.NewData.Brake;
-			Clutch = data.NewData.Clutch;
-			Handbrake = data.NewData.Handbrake;
-			BrakeBias = data.NewData.BrakeBias;
-			BrakeF = Brake * (2.0 * BrakeBias) * 0.01;
-			BrakeR = Brake * (200.0 - 2.0 * BrakeBias) * 0.01;
-			BrakeVelP = BrakeVel;
-			BrakeVel = (Brake - data.OldData.Brake) * FPS;
-			BrakeAcc = (BrakeVel - BrakeVelP) * FPS;
+			H = shp;
+			FPS = (double) H.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
+			Rpms = Convert.ToUInt16(0.5 + H.N.Rpms);
+			SpeedMs = H.N.SpeedKmh * 0.277778;
+			Accelerator = H.N.Throttle;
+			Clutch = H.N.Clutch;
+			Handbrake = H.N.Handbrake;
 			if (CarInitCount < 2)
 			{
 				SuspensionDistFLP = SuspensionDistFL;
 				SuspensionDistFRP = SuspensionDistFR;
 				SuspensionDistRLP = SuspensionDistRL;
 				SuspensionDistRRP = SuspensionDistRR;
-				YawPrev = data.NewData.OrientationYaw;
-				Yaw = data.NewData.OrientationYaw;
+				YawPrev = H.N.OrientationYaw;
+				Yaw = H.N.OrientationYaw;
 				RumbleLeftAvg = 0.0;
 				RumbleRightAvg = 0.0;
 			}
 			YawPrev = Yaw;
-			Yaw = -data.NewData.OrientationYaw;
+			Yaw = -H.N.OrientationYaw;
 			if (Yaw > 100.0 && YawPrev < -100.0)
 				YawPrev += 360.0;
 			else if (Yaw < -100.0 && YawPrev > 100.0)
@@ -534,10 +511,10 @@ namespace blekenbleu.Haptic
 				Acc0 = 0;
 				Acc1 = AccSamples - 1;
 			}
-			AccHeave[Acc0] = data.NewData.AccelerationHeave.GetValueOrDefault();
-			AccSurge[Acc0] = data.NewData.AccelerationSurge.GetValueOrDefault();
-			AccSway[Acc0] = data.NewData.AccelerationSway.GetValueOrDefault();
-			if (!data.NewData.AccelerationHeave.HasValue)
+			AccHeave[Acc0] = H.N.AccelerationHeave.GetValueOrDefault();
+			AccSurge[Acc0] = H.N.AccelerationSurge.GetValueOrDefault();
+			AccSway[Acc0] = H.N.AccelerationSway.GetValueOrDefault();
+			if (!H.N.AccelerationHeave.HasValue)
 			{
 				AccHeave[Acc0] = Raw("WorldSpeedY");
 				AccHeave[Acc0] = (AccHeave[Acc0] - WorldSpeedY) * FPS;
@@ -566,13 +543,13 @@ namespace blekenbleu.Haptic
 			JerkYAvg = (AccSurgeAvg - accSurgeAvg) * FPS;
 			AccHeaveAbs = Math.Abs(AccHeave[Acc0]);
 			InvAccSurgeAvg = AccSurgeAvg != 0.0 ? 1.0 / AccSurgeAvg : 0.0;
-			MotionPitch = MotionPitchOffset + 100.0 * Math.Pow(Math.Abs(MotionPitchMult * data.NewData.OrientationPitch) * 0.01, 1.0 / MotionPitchGamma);
-			MotionRoll = MotionRollOffset + 100.0 * Math.Pow(Math.Abs(MotionRollMult * data.NewData.OrientationRoll) * 0.01, 1.0 / MotionRollGamma);
+			MotionPitch = MotionPitchOffset + 100.0 * Math.Pow(Math.Abs(MotionPitchMult * H.N.OrientationPitch) * 0.01, 1.0 / MotionPitchGamma);
+			MotionRoll = MotionRollOffset + 100.0 * Math.Pow(Math.Abs(MotionRollMult * H.N.OrientationRoll) * 0.01, 1.0 / MotionRollGamma);
 			MotionYaw = MotionYawOffset + 100.0 * Math.Pow(Math.Abs(MotionYawMult * YawRateAvg) * 0.01, 1.0 / MotionYawGamma);
 			MotionHeave = MotionHeaveOffset + 100.0 * Math.Pow(Math.Abs(MotionHeaveMult * AccHeave[Acc0]) * 0.01, 1.0 / MotionHeaveGamma);
-			if (data.NewData.OrientationPitch < 0.0)
+			if (H.N.OrientationPitch < 0.0)
 				MotionPitch = -MotionPitch;
-			if (data.NewData.OrientationRoll < 0.0)
+			if (H.N.OrientationRoll < 0.0)
 				MotionRoll = -MotionRoll;
 			if (YawRateAvg < 0.0)
 				MotionYaw = -MotionYaw;
@@ -580,7 +557,7 @@ namespace blekenbleu.Haptic
 				MotionHeave = -MotionHeave;
 
 			UpdateVehicle(ref data);
-			Airborne = AccHeave2S < -2.0 || Math.Abs(data.NewData.OrientationRoll) > 60.0;
+			Airborne = AccHeave2S < -2.0 || Math.Abs(H.N.OrientationRoll) > 60.0;
 			Airborne = Airborne && SuspensionAll < 0.1;
 			if (DateTime.Now.Ticks < FrameTimeTicks)	// long rollover?
 				FrameCountTicks += (long.MaxValue - FrameTimeTicks) + DateTime.Now.Ticks;	// rollover
@@ -591,18 +568,18 @@ namespace blekenbleu.Haptic
 
 			if (DateTime.Now.Ticks < ShiftTicks)	// long rollover?
 				ShiftTicks = - (DateTime.Now.Ticks + (long.MaxValue - ShiftTicks));
-			if (DateTime.Now.Ticks - ShiftTicks > SHP.Settings.DownshiftDurationMs * 10000)
+			if (DateTime.Now.Ticks - ShiftTicks > H.Settings.DownshiftDurationMs * 10000)
 				Downshift = false;
-			if (DateTime.Now.Ticks - ShiftTicks > SHP.Settings.UpshiftDurationMs * 10000)
+			if (DateTime.Now.Ticks - ShiftTicks > H.Settings.UpshiftDurationMs * 10000)
 				Upshift = false;
 			DateTime now;
-			if (data.OldData.Gear != data.NewData.Gear)
+			if (data.OldData.Gear != H.N.Gear)
 			{
 				if (Gear != 0)
 					GearPrevious = Gear;
-				Gear = !(data.NewData.Gear == "N")
-						? (!(data.NewData.Gear == "R")
-							? Convert.ToInt32(data.NewData.Gear)
+				Gear = !(H.N.Gear == "N")
+						? (!(H.N.Gear == "R")
+							? Convert.ToInt32(H.N.Gear)
 							: -1)
 						: 0;
 				if (Gear != 0 && Gear != GearPrevious)
@@ -614,7 +591,7 @@ namespace blekenbleu.Haptic
 					else Upshift = true;
 				}
 			}
-			ABSPulseInterval = 166666L * SHP.Settings.ABSPulseLength;
+			ABSPulseInterval = 166666L * H.Settings.ABSPulseLength;
 			if (ABSActive)
 			{
 				now = DateTime.Now;
@@ -661,7 +638,7 @@ namespace blekenbleu.Haptic
 				SuspensionRR *= 0.1 * CarInitCount;
 				++CarInitCount;
 			}
-			SuspensionFreq = data.NewData.SpeedKmh * (3.0 / 16.0);
+			SuspensionFreq = H.N.SpeedKmh * (3.0 / 16.0);
 			double num2 = 94.0 + 0.4 * SpeedMs;
 			double num3 = 76.0 + 0.45 * SpeedMs;
 			double num4 = 60.0 + 0.5 * SpeedMs;
@@ -1004,15 +981,15 @@ namespace blekenbleu.Haptic
 			}
  
 			// idle sniff
-			if (20 > IdleSampleCount && 300 < data.NewData.Rpms && data.NewData.Rpms <= idleRPM * 1.1)
+			if (20 > IdleSampleCount && 300 < H.N.Rpms && H.N.Rpms <= idleRPM * 1.1)
 			{	// Refresh(): supposes that idleRPM is somewhat valid..??
-				if (40.0 > Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS)
+				if (40.0 > Math.Abs(data.OldData.Rpms - H.N.Rpms) * FPS)
 				{	// Refresh(): averaging with previous average
-					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1);
+					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)H.N.Rpms) >> 1);
 					++IdleSampleCount;								// Refresh(): increment if difference < 40
 				}
-				if (20 == IdleSampleCount && 0 == SHP.S.IdleRPM)	// Refresh(): change SHP.S.IdleRPM?
-					SHP.S.Idle(idleRPM);							// Refresh() sniff: only if it was 0
+				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Refresh(): change H.S.IdleRPM?
+					H.S.Idle(idleRPM);							// Refresh() sniff: only if it was 0
 			}
 		}	// Refresh()
 	}

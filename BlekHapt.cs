@@ -102,7 +102,7 @@ namespace blekenbleu.Haptic
 		// ----------------------------------------------------------------
 
 		// must be void and static;  invoked by D.SetVehicle()
-		private static BlekHapt This;
+		private static BlekHapt H;
 
 		internal static async void FetchCarData(	// called from SetVehicle() switch
 			string id,
@@ -111,26 +111,25 @@ namespace blekenbleu.Haptic
 			ushort maxRPMFromGame,
 			ushort ushortIdleRPM)							// FetchCarData() argument
 		{
-			Logging.Current.Info($"blekHapt.FetchCarData({id}/{category}):  Index = {This.D.Index}," +
+			Logging.Current.Info($"blekHapt.FetchCarData({id}/{category}):  Index = {H.D.Index}," +
 							   (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
 								+ (Set ? " Set": "") + (Changed ? "Changed " : ""));
 
-			if (-2 == This.D.Index)	// first time for this CarId change?  Also called for retries with Index = -1
+			if (-2 == H.D.Index)	// first time for this CarId change?  Also called for retries with Index = -1
 			{
-				This.S.Notes = "";
+				H.S.Notes = "";
 				Set = false;
-				StatusDataBase db = This.Gdat.NewData;
-				string sid = (GameId.Forza == CurrentGame && "Car_" == db.CarId.Substring(0,4))
-							? db.CarId.Substring(4) : db.CarId;
-				This.D.Index = This.S.SelectCar(sid, // set game RPM defaults
+				string sid = (GameId.Forza == CurrentGame && "Car_" == H.N.CarId.Substring(0,4))
+							? H.N.CarId.Substring(4) : H.N.CarId;
+				H.D.Index = H.S.SelectCar(sid, // set game RPM defaults
 													redlineFromGame, maxRPMFromGame, ushortIdleRPM);
 /*
 				Logging.Current.Info($"blekHapt.SelectCar({sid}): "
 									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
 									+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
-									+ (Changed ? "Changed " : "") + $" Index = {This.D.Index}");
+									+ (Changed ? "Changed " : "") + $" Index = {H.D.Index}");
  */
-				if (0 <= This.D.Index)
+				if (0 <= H.D.Index)
 					return;
 			}
 			// Index should be -1; non-negative values returned
@@ -159,19 +158,19 @@ namespace blekenbleu.Haptic
 					{
 						CarSpec car = dljc.data[0];
 						car.defaults = "DB";
-						This.S.Cache(car);					// FetchCarData(): Set(id) at the end of SetVehicle()
+						H.S.Cache(car);					// FetchCarData(): Set(id) at the end of SetVehicle()
 						LoadFailCount = 1;
 					//	Logging.Current.Info($"blekHapt.FetchCarData({car.name}): Successfully loaded; "
-					//						+ $" CarInitCount = {This.D.CarInitCount}");
-						This.D.CarInitCount = 0;
-						This.D.Index = -4;
+					//						+ $" CarInitCount = {H.D.CarInitCount}");
+						H.D.CarInitCount = 0;
+						H.D.Index = -4;
 						return;
 					}
 				}
 				else if (null != dls)
 				{
-					if (-1 == This.D.Index)			// delayed dls? things may have moved on...
-						This.D.Index = -3;			// disable self until other code decides otherwise
+					if (-1 == H.D.Index)			// delayed dls? things may have moved on...
+						H.D.Index = -3;			// disable self until other code decides otherwise
 					if (11 == dls.Length)
 						Waiting = false;
 /*
@@ -193,16 +192,17 @@ namespace blekenbleu.Haptic
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data.
 		/// Raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
-		/// This method is on the critical path, must execute as fast as possible and avoid throwing any error
+		/// H method is on the critical path, must execute as fast as possible and avoid throwing any error
 		/// </summary>
 		/// <param name="pluginManager"></param>
 		/// <param name="data">Current game data, including present and previous data frames.</param> 
 		internal GameData Gdat;
 		internal PluginManager PM;
 		internal int On;
-		public void DataUpdate(PluginManager pluginManager, ref GameData data)
+		internal StatusDataBase N;
+        public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
-			if (null == data.NewData)
+			if (null == (N = data.NewData))
 			{
 				On = 0;
 				return;
@@ -211,11 +211,11 @@ namespace blekenbleu.Haptic
 			Gdat = data;
 			PM = pluginManager;
 	
-			if (S.Id == data.NewData.CarId || !D.Unlocked)				// DataUpdate()
+			if (S.Id == N.CarId || !D.Unlocked)				// DataUpdate()
 			{
 				if (null != data.OldData && data.GameRunning
 					&& 1 == (On = (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
-					D.Refresh(ref data, this);
+					D.Refresh(this);
 				return;
 			}
 
@@ -232,7 +232,7 @@ namespace blekenbleu.Haptic
 
 				D.Index = -3;					   // disable FetchCarData(); enable Defaults()
 				D.CarInitCount = 0;
-			//	Logging.Current.Info($"blekHapt.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
+			//	Logging.Current.Info($"blekHapt.DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
 			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
 			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
@@ -251,7 +251,7 @@ namespace blekenbleu.Haptic
 			{
 				if (-2 == D.Index)
 					Set = Changed = false;
-				Logging.Current.Info($"blekHapt.DataUpdate({data.NewData.CarId}/{S.Id}): "
+				Logging.Current.Info($"blekHapt.DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
 				D.SetVehicle(this);
@@ -576,7 +576,7 @@ namespace blekenbleu.Haptic
 
         public void Init(PluginManager pluginManager)
 		{
-			This = this;								// static pointer to current instance
+			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
 			E = new();
