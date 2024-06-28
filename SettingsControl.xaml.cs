@@ -808,5 +808,37 @@ namespace sierses.Sim
 			SusGammaLabel.Foreground = (SolidColorBrush)this.FindResource("Foreground");
 			SusGammaLabel.FontWeight = FontWeights.Regular;
 		}
-	}
+
+        private void ExpanderMIDI_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        }
+
+		private void ButtonMIDI_Click(object sender, RoutedEventArgs e)
+		{
+			if (0 != Plugin.On)
+			{
+				Plugin.D.LoadText = "MIDI Learn disabled during game or replay";
+				return;
+			}
+			Button r = sender as Button;
+			string s = r.Name;
+			switch (s.Substring(4, 1))
+			{
+				case "0":	// throttle
+					Plugin.D.Accelerator = (30 == Plugin.D.Accelerator) ? 60 : 30;
+					break;
+				case "1":	// idle
+				case "2":	// redline
+				case "3":	// config
+				case "4":	// cylinders
+					break;
+				case "5":	// rpm
+					Plugin.D.Rpms = (ushort)(600 == Plugin.D.Rpms ? 3333 : 600);
+					break;
+				default:
+					Plugin.D.LoadText = "MIDI Learn:  no such control";
+					break;
+			}
+        }
+    }
 }

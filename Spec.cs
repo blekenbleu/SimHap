@@ -78,7 +78,7 @@ namespace sierses.Sim
 		internal string Set(Dictionary<string, List<CarSpec>> json)
 		{
 			inDict = json;
-			int ct = inDict.ContainsKey(BlekHapt.GameDBText) ? inDict[BlekHapt.GameDBText].Count : 0;
+			int ct = inDict.ContainsKey(Haptics.GameDBText) ? inDict[Haptics.GameDBText].Count : 0;
 			return $"{inDict.Count} games with {ct} {Haptics.GameDBText} cars in ";
 		}
 

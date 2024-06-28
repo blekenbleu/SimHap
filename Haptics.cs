@@ -841,6 +841,7 @@ if (ShowPhysics) {
 			this.AttachDelegate("MHeave", () => D.MotionHeave);
 			this.AttachDelegate("MSurge", () => D.MotionSurge);
 			this.AttachDelegate("MSway", () => D.MotionSway);
+			this.AttachDelegate("Throttle", () => D.Accelerator);
 			this.AttachDelegate("VelocityX", () => D.VelocityX);
 }
 			FrameTimeTicks = DateTime.Now.Ticks;
