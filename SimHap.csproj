@@ -4,7 +4,6 @@
   <PropertyGroup>
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
-  <!--Project was exported from assembly: C:\Users\demas\Downloads\dnSpy-net-win64\SimHaptics.dll-->
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
