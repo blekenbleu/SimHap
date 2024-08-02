@@ -41,7 +41,7 @@ namespace sierses.Sim
 
 		public SimData D { get; set; }
 
-		public Geq E { get; set; } 
+//		public Geq E { get; set; } 
 
 		public ImageSource PictureIcon
 		{
@@ -75,7 +75,7 @@ namespace sierses.Sim
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
 			SC = new SettingsControl(this);
-			if (null != Settings.Engine)
+/*			if (null != Settings.Engine)
 			{
 				if (null != Settings.Engine.Theme)
 					SC.ChangeTheme(Settings.Engine.Theme);
@@ -96,7 +96,7 @@ namespace sierses.Sim
 				else if (9 != Settings.Engine.Sliders[0].Length)
 					Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
 					  + Settings.Engine.Sliders[0].Length.ToString());
-			}
+			} */
 			return SC;
 		}
 
@@ -273,7 +273,7 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
-			if (null == Settings.Engine)
+/*			if (null == Settings.Engine)
 				Settings.Engine = new();
 			if (null == Settings.Engine.Tones)
 			{ 
@@ -291,7 +291,7 @@ namespace sierses.Sim
 			Settings.Engine.Sliders = new() { E.Q[0].Slider };
 			for (int i = 1; i < E.Q.Count; i++)
 				Settings.Engine.Sliders.Add(E.Q[i].Slider);
-
+ */
 			if (Save || Loaded || Changed)		// End()
 			{
 				if (Loaded || Changed)
@@ -465,11 +465,12 @@ namespace sierses.Sim
 			This = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
-			E = new();
+//			E = new();
 			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
 
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
+/*
 			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
 			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
 			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
@@ -498,7 +499,7 @@ namespace sierses.Sim
 				Settings = new();	// Settings.Engine will be initialized in End()
 				Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
 			}
-
+ */
 			if (1 > Settings.DownshiftDurationMs)
 				Settings.DownshiftDurationMs = 400;
 			if (1 > Settings.UpshiftDurationMs)
@@ -547,7 +548,7 @@ namespace sierses.Sim
 			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found" + Atlasst);
 
 			D.Init(Settings, this);
-			E.Init(Settings.Engine, this);
+//			E.Init(Settings.Engine, this);
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
 			this.AttachDelegate("CarId", () => S.Id);
