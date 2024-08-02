@@ -32,9 +32,6 @@ namespace sierses.Sim
 			SuspensionDistRRP = 0.0;
 			AccSamples = 16;
 			Acc1 = 0;
-			TireDiameterSampleMax = 100;
-			SlipXGammaBaseMult = 1.0;
-			SlipYGammaBaseMult = 1.0;
 			idleRPM = 2500;							// default value; seems high IMO
 		}
 
@@ -113,14 +110,9 @@ Hopefully you don't need to change code in a million places
 			{
 				case GameId.AC:
 				case GameId.ACC:
-				case GameId.PC2:
-				case GameId.RBR:
-				case GameId.GTR2:
 					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
 					break;
-				case GameId.AMS1:
 				case GameId.LMU:
-				case GameId.RF2:
 					Haptics.FetchCarData(db.CarId, db.CarClass, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
 					break;
 				case GameId.AMS2:
@@ -128,7 +120,6 @@ Hopefully you don't need to change code in a million places
 					SHP.S.CarName = db.CarModel;
 					SHP.S.Category = db.CarClass;
 					break;
-				case GameId.D4:
 				case GameId.DR2:
 					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
 										 Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue(raw+"IdleRpm"))));	// SetVehicle(DR2)
@@ -136,11 +127,6 @@ Hopefully you don't need to change code in a million places
 				case GameId.WRC23:
 					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(Math.Floor(db.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(db.MaxRpm),
 										 Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
-					break;
-				case GameId.F12022:
-				case GameId.F12023:
-					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
-										 Convert.ToUInt16(10 * Convert.ToInt32(SHP.PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetVehicle(F12023): to FetchCarData()
 					break;
 				case GameId.Forza:
 					Haptics.FetchCarData(db.CarId.Substring(4), null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
@@ -152,9 +138,6 @@ Hopefully you don't need to change code in a million places
 										 Convert.ToUInt16(db.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 					GameAltText = SHP.PM.GameName + (string)SHP.PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 					break;
-				case GameId.RRRE:
-						Haptics.FetchCarData(db.CarModel, null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
-					break;
 				case GameId.BeamNG:
 					Haptics.FetchCarData(db.CarId, null, Convert.ToUInt16(0.5 + db.MaxRpm),
 							Convert.ToUInt16((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
@@ -162,26 +145,6 @@ Hopefully you don't need to change code in a million places
 								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0),
 							Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"idle_rpm"))
 						);
-					break;
-				case GameId.GPBikes:
-				case GameId.MXBikes:
-					if (SHP.S.Id != db.CarId)	// SetVehicle() Switch case: Bikes
-					{
-						SHP.S.Id = db.CarId;	// SetVehicle() Switch: Bikes not in database
-						SHP.S.MaxRPM = Convert.ToUInt16(0.5 + db.MaxRpm);
-						SHP.S.Redline = Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"m_sEvent.m_iShiftRPM"));
-					}
-					break;
-				case GameId.GranTurismo7:
-				case GameId.GranTurismoSport:
-					Haptics.FetchCarData(db.CarId, null,
-										 Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"MinAlertRPM")),
-										 Convert.ToUInt16(SHP.PM.GetPropertyValue(raw+"MaxAlertRPM")), 0);
-					break;
-				default:
-					SHP.S.Redline = Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM);
-					SHP.S.MaxRPM  = Convert.ToUInt16(db.MaxRpm);
-					SHP.S.IdleRPM = Convert.ToUInt16(SHP.PM.GetPropertyValue("DataCorePlugin.IdleRPM"));		// SetVehicle(default game)
 					break;
 			}
 
@@ -228,16 +191,10 @@ Hopefully you don't need to change code in a million places
 			Array.Clear(AccSurge, 0, AccSurge.Length);
 			Array.Clear(AccSway, 0, AccSway.Length);
 			Acc1 = 0;
-			TireDiameterSampleCount = TireDiameterSampleCount == -1 ? -1 : 0;
-			TireDiameterFL = 0.0;
-			TireDiameterFR = 0.0;
-			TireDiameterRL = 0.0;
-			TireDiameterRR = 0.0;
 			RumbleLeftAvg = 0.0;
 			RumbleRightAvg = 0.0;
 			IdleSampleCount = 0;
 			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
-			SetRPMIntervals();
 			SetRPMMix();
 			SHP.S.Set(db.CarId);						// set from Cache() AKA Lcars
 			CarInitCount = 0;
@@ -268,7 +225,6 @@ Hopefully you don't need to change code in a million places
 				default:
 					break;
 			}
-			SHP.SC.Ratio = SHP.S.EngineCylinders;
 		}	// SetVehicle()
 	}
 }

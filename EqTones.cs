@@ -84,7 +84,7 @@ namespace sierses.Sim
 
 			// interpolate between Tones[0] (no throttle) and Tones[2] (full throttle)
 			// H.SC.Ratio is either cylinders or BS;  SettingsControl.xaml.cs line 87
-			return ((d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.SC.Ratio) / 120;
+			return ((d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms) / 120;
 		}
 
 		public ushort Fr(byte i)

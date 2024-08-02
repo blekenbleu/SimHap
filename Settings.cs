@@ -20,15 +20,9 @@ namespace sierses.Sim
 		public Dictionary<string, double> SlipXGamma;
 		public Dictionary<string, double> SlipYGamma;
 		public Dictionary<string, double> Motion;
-		private int absPulseLength;
 		private int downshiftDurationMs;
 		private int upshiftDurationMs;
 
-		public int ABSPulseLength
-		{
-			get => absPulseLength;
-			set { SetProp(ref absPulseLength, value, nameof(ABSPulseLength)); }
-		}
 
 		public int DownshiftDurationMs
 		{

@@ -418,10 +418,6 @@ namespace sierses.Sim
 					CurrentGame = GameId.ACC;
 					GameDBText = "ACC";
 					break;
-				case "Automobilista":
-					CurrentGame = GameId.AMS1;
-					GameDBText = "AMS1";
-					break;
 				case "Automobilista2":
 					CurrentGame = GameId.AMS2;
 					GameDBText = "AMS2";
@@ -437,147 +433,22 @@ namespace sierses.Sim
 					CurrentGame = GameId.IRacing;
 					D.GameAltText += (string) pm.GetPropertyValue(D.raw+"SessionData.WeekendInfo.Category");
 					break;
-				case "KartKraft":
-					CurrentGame = GameId.KK;
-					GameDBText = "KK";
-					break;
-				case "LFS":
-					CurrentGame = GameId.LFS;
-					break;
-				case "PCars1":
-				case "PCars2":
-				case "PCars3":
-					CurrentGame = GameId.PC2;
-					GameDBText = "PC2";
-					break;
-				case "RBR":
-					CurrentGame = GameId.RBR;
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "RFactor1":
-					CurrentGame = GameId.RF1;
-					GameDBText = "RF1";
-					break;
-				case "RFactor2":
-				case "RFactor2Spectator":
-					CurrentGame = GameId.RF2;
-					GameDBText = "RF2";
-					break;
 				case "LMU":
 					CurrentGame = GameId.LMU;
 					GameDBText = "LMU";
 					break;
-				case "RRRE":
-					CurrentGame = GameId.RRRE;
-					break;
-				case "SIMBINGTLEGENDS":
-					CurrentGame = GameId.GTL;
-					GameDBText = "GTL";
-					break;
-				case "SIMBINGTR2":
-					CurrentGame = GameId.GTR2;
-					GameDBText = "GTR2";
-					break;
-				case "SIMBINRACE07":
-					CurrentGame = GameId.RACE07;
-					GameDBText = "RACE07";
-					break;
-				case "StockCarExtreme":
-					CurrentGame = GameId.GSCE;
-					GameDBText = "GSCE";
-					break;
-				case "CodemastersDirtRally1":
 				case "CodemastersDirtRally2":
 					CurrentGame = GameId.DR2;
 					GameDBText = "DR2";
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "CodemastersDirt2":
-				case "CodemastersDirt3":
-				case "CodemastersDirtShowdown":
-				case "CodemastersDirt4":
-					CurrentGame = GameId.D4;
-					GameDBText = "D4";
-					D.TireDiameterSampleCount = -1;
 					break;
 				case "EAWRC23":
 					CurrentGame = GameId.WRC23;
 					GameDBText = "WRC23";
 					D.AccSamples = 32;
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "F12012":
-				case "F12013":
-				case "F12014":
-				case "F12015":
-				case "F12016":
-					CurrentGame = GameId.F12016;
-					GameDBText = "F12016";
-					break;
-				case "F12017":
-					CurrentGame = GameId.F12017;
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "F12018":
-				case "F12019":
-				case "F12020":
-				case "F12021":
-				case "F12022":
-					CurrentGame = GameId.F12022;
-					GameDBText = "F12022";
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "F12023":
-				case "F12024":
-				case "F12025":
-				case "F12026":
-					CurrentGame = GameId.F12023;
-					GameDBText = "F12022";
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "CodemastersGrid2":
-				case "CodemastersGrid2019":
-				case "CodemastersAutosport":
-				case "CodemastersGridLegends":
-					CurrentGame = GameId.GLegends;
-					GameDBText = "Grid";
-					D.TireDiameterSampleCount = -1;
 					break;
 				case "BeamNgDrive":
 					CurrentGame = GameId.BeamNG;
 					GameDBText = "BeamNG";
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "GPBikes":
-					CurrentGame = GameId.GPBikes;
-					D.RumbleFromPlugin = true;
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "MXBikes":
-					CurrentGame = GameId.MXBikes;
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "WRCGenerations":
-					CurrentGame = GameId.WRCGen;
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "WRCX":
-					CurrentGame = GameId.WRCX;
-					break;
-				case "WRC10":
-					CurrentGame = GameId.WRC10;
-					break;
-				case "ATS":
-					CurrentGame = GameId.ATS;
-					break;
-				case "ETS2":
-					CurrentGame = GameId.ETS2;
-					break;
-				case "GranTurismo7":
-				case "GranTurismoSport":
-					CurrentGame = GameId.GranTurismo7;
-					GameDBText = "GranTurismo7";
-					D.TireDiameterSampleCount = -1;
 					break;
 				default:
 					CurrentGame = GameId.Other;
@@ -595,7 +466,7 @@ namespace sierses.Sim
 			LoadFailCount = 1;
 			D = new SimData();
 			E = new();
-			bool ShowFreq = true, ShowSusp = true, ShowTire = false, ShowPhysics = true;
+			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
 
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
@@ -628,8 +499,6 @@ namespace sierses.Sim
 				Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
 			}
 
-			if (1 > Settings.ABSPulseLength)
-				Settings.ABSPulseLength = 2;
 			if (1 > Settings.DownshiftDurationMs)
 				Settings.DownshiftDurationMs = 400;
 			if (1 > Settings.UpshiftDurationMs)
@@ -650,22 +519,6 @@ namespace sierses.Sim
 				Settings.SuspensionGamma = new Dictionary<string, double>();
 			if (!Settings.SuspensionGamma.TryGetValue("AllGames", out num))
 				Settings.SuspensionGamma.Add("AllGames", 1.75);
-			if (Settings.SlipXMult == null)
-				Settings.SlipXMult = new Dictionary<string, double>();
-			if (!Settings.SlipXMult.TryGetValue("AllGames", out num))
-				Settings.SlipXMult.Add("AllGames", 1.6);
-			if (Settings.SlipYMult == null)
-				Settings.SlipYMult = new Dictionary<string, double>();
-			if (!Settings.SlipYMult.TryGetValue("AllGames", out num))
-				Settings.SlipYMult.Add("AllGames", 1.0);
-			if (Settings.SlipXGamma == null)
-				Settings.SlipXGamma = new Dictionary<string, double>();
-			if (!Settings.SlipXGamma.TryGetValue("AllGames", out num))
-				Settings.SlipXGamma.Add("AllGames", 1.0);
-			if (Settings.SlipYGamma == null)
-				Settings.SlipYGamma = new Dictionary<string, double>();
-			if (!Settings.SlipYGamma.TryGetValue("AllGames", out num))
-				Settings.SlipYGamma.Add("AllGames", 1.0);
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
 
@@ -716,87 +569,33 @@ namespace sierses.Sim
 			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
 if (ShowFreq) {
 			this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
-			this.AttachDelegate("FreqOctave", () => D.FreqOctave);
-			this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
-			this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
 			this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
 			this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
 			this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
 			this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
 			this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
 			this.AttachDelegate("Gain1H", () => D.Gain1H);
-			this.AttachDelegate("Gain1H2", () => D.Gain1H2);
-			this.AttachDelegate("Gain2H", () => D.Gain2H);
-			this.AttachDelegate("Gain4H", () => D.Gain4H);
-			this.AttachDelegate("GainOctave", () => D.GainOctave);
-			this.AttachDelegate("GainIntervalA1", () => D.GainIntervalA1);
-			this.AttachDelegate("GainIntervalA2", () => D.GainIntervalA2);
 			this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
-			this.AttachDelegate("GainPeakA1Middle", () => D.GainPeakA1);
 			this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
 			this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
-			this.AttachDelegate("GainPeakA2Middle", () => D.GainPeakA2);
 			this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
 			this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
-			this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
 			this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
 			this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
-			this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
 			this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
 }
-if (ShowTire) {
-			this.AttachDelegate("SlipXFL", () => D.SlipXFL);
-			this.AttachDelegate("SlipXFR", () => D.SlipXFR);
-			this.AttachDelegate("SlipXRL", () => D.SlipXRL);
-			this.AttachDelegate("SlipXRR", () => D.SlipXRR);
-			this.AttachDelegate("SlipXAll", () => D.SlipXAll);
-			this.AttachDelegate("SlipYFL", () => D.SlipYFL);
-			this.AttachDelegate("SlipYFR", () => D.SlipYFR);
-			this.AttachDelegate("SlipYRL", () => D.SlipYRL);
-			this.AttachDelegate("SlipYRR", () => D.SlipYRR);
-			this.AttachDelegate("SlipYAll", () => D.SlipYAll);
-			this.AttachDelegate("WheelLockAll", () => D.WheelLockAll);
-			this.AttachDelegate("WheelSpinAll", () => D.WheelSpinAll);
-			this.AttachDelegate("TireDiameterFL", () => D.TireDiameterFL);
-			this.AttachDelegate("TireDiameterFR", () => D.TireDiameterFR);
-			this.AttachDelegate("TireDiameterRL", () => D.TireDiameterRL);
-			this.AttachDelegate("TireDiameterRR", () => D.TireDiameterRR);
-			this.AttachDelegate("TireSpeedFL", () => D.WheelSpeedFL);
-			this.AttachDelegate("TireSpeedFR", () => D.WheelSpeedFR);
-			this.AttachDelegate("TireSpeedRL", () => D.WheelSpeedRL);
-			this.AttachDelegate("TireSpeedRR", () => D.WheelSpeedRR);
-			this.AttachDelegate("SpeedMs", () => D.SpeedMs);
-			this.AttachDelegate("TireLoadFL", () => D.WheelLoadFL);
-			this.AttachDelegate("TireLoadFR", () => D.WheelLoadFR);
-			this.AttachDelegate("TireLoadRL", () => D.WheelLoadRL);
-			this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
-			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
-}
+
 if (ShowSusp) {
 			this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
-			this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
-			this.AttachDelegate("SuspensionFreqR0b", () => D.SuspensionFreqRb);
-			this.AttachDelegate("SuspensionFreqR0c", () => D.SuspensionFreqRc);
 			this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
 			this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
 			this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
-			this.AttachDelegate("SuspensionFreqR4", () => D.SuspensionFreqR4);
-			this.AttachDelegate("SuspensionFreqR5", () => D.SuspensionFreqR5);
-			this.AttachDelegate("SuspensionMultR0a", () => D.SuspensionMultRa);
-			this.AttachDelegate("SuspensionMultR0b", () => D.SuspensionMultRb);
-			this.AttachDelegate("SuspensionMultR0c", () => D.SuspensionMultRc);
 			this.AttachDelegate("SuspensionMultR1", () => D.SuspensionMultR1);
 			this.AttachDelegate("SuspensionMultR2", () => D.SuspensionMultR2);
 			this.AttachDelegate("SuspensionMultR3", () => D.SuspensionMultR3);
-			this.AttachDelegate("SuspensionMultR4", () => D.SuspensionMultR4);
-			this.AttachDelegate("SuspensionMultR5", () => D.SuspensionMultR5);
-			this.AttachDelegate("SuspensionRumbleMultR0b", () => D.SuspensionRumbleMultRb);
-			this.AttachDelegate("SuspensionRumbleMultR0c", () => D.SuspensionRumbleMultRc);
 			this.AttachDelegate("SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
 			this.AttachDelegate("SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
 			this.AttachDelegate("SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
-			this.AttachDelegate("SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
-			this.AttachDelegate("SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
 			this.AttachDelegate("SuspensionFL", () => D.SuspensionFL);
 			this.AttachDelegate("SuspensionFR", () => D.SuspensionFR);
 			this.AttachDelegate("SuspensionRL", () => D.SuspensionRL);
@@ -812,7 +611,6 @@ if (ShowSusp) {
 			this.AttachDelegate("RumbleMult", () => D.RumbleMult);
 			this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
 			this.AttachDelegate("RumbleRight", () => D.RumbleRight);
-			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
 			this.AttachDelegate("Gear", () => D.Gear);
 			this.AttachDelegate("Gears", () => D.Gears);
 			this.AttachDelegate("ShiftDown", () => D.Downshift);
