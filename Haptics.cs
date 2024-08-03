@@ -75,7 +75,10 @@ namespace sierses.Sim
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
 			SC = new SettingsControl(this);
-/*			if (null != Settings.Engine)
+			if (null != Settings.Theme)
+				SC.ChangeTheme(Settings.Theme);
+/*
+			if (null != Settings.Engine)
 			{
 				if (null != Settings.Engine.Theme)
 					SC.ChangeTheme(Settings.Engine.Theme);
@@ -96,7 +99,8 @@ namespace sierses.Sim
 				else if (9 != Settings.Engine.Sliders[0].Length)
 					Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
 					  + Settings.Engine.Sliders[0].Length.ToString());
-			} */
+			}
+ */
 			return SC;
 		}
 
@@ -273,8 +277,11 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
-/*			if (null == Settings.Engine)
+			Settings.Theme = SC.Theme;
+/*
+			if (null == Settings.Engine)
 				Settings.Engine = new();
+			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
 			if (null == Settings.Engine.Tones)
 			{ 
 				Settings.Engine.Tones = new ushort[4][];
@@ -284,7 +291,6 @@ namespace sierses.Sim
 				Settings.Engine.Tones[3] = new ushort[9];
 			}
 
-			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
 			for (int i = 0; i < E.Tones.Length; i++)
 				for (int j = 0; j < E.Tones[i].Freq.Length; j++)
 					Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];

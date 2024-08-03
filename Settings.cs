@@ -10,6 +10,7 @@ namespace sierses.Sim
 	public class Settings : INotifyPropertyChanged
 	{
 //		public Engine Engine;
+		public string Theme;
 		public Spec Vehicle;
 		public Dictionary<string, double> EngineMult;
 		public Dictionary<string, double> RumbleMult;
