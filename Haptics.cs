@@ -31,6 +31,7 @@ namespace sierses.Sim
 		public static GameId CurrentGame = GameId.Other;
 		public static string GameDBText;
 		internal static bool Loaded, Waiting, Save, Set, Changed;
+		internal string CarId;		// exactly matches data.NewData.CarId
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
 		//		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
@@ -113,13 +114,12 @@ namespace sierses.Sim
 		private static Haptics This;
 
 		internal static async void FetchCarData(	// called from SetVehicle() switch
-			string id,
 			string category,
 			ushort redlineFromGame,
 			ushort maxRPMFromGame,
 			ushort ushortIdleRPM)						   // FetchCarData() argument
 		{
-			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  Index = {This.D.Index}," +
+			Logging.Current.Info($"Haptics.FetchCarData({category}):  Index = {This.D.Index}," +
 							   (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
 								+ (Set ? " Set" : "") + (Changed ? "Changed " : ""));
 
@@ -127,10 +127,8 @@ namespace sierses.Sim
 			{
 				This.S.Notes = "";
 				Set = false;
-				StatusDataBase db = This.Gdat.NewData;
-				string sid = (GameId.Forza == CurrentGame && "Car_" == db.CarId.Substring(0, 4))
-							? db.CarId.Substring(4) : db.CarId;
-				This.D.Index = This.S.SelectCar(sid, // set game RPM defaults
+
+				This.D.Index = This.S.SelectCar(// set game RPM defaults
 													redlineFromGame, maxRPMFromGame, ushortIdleRPM);
 				/*
 								Logging.Current.Info($"Haptics.SelectCar({sid}): "
@@ -146,10 +144,9 @@ namespace sierses.Sim
 			{
 				Waiting = true;
 				string dls = null;
-				id ??= "0";
 				category ??= "0";
 				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
-								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
+								 + "/" + Uri.EscapeDataString(This.S.Car.id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
 				dls = async.Content.ReadAsStringAsync().Result;
@@ -207,28 +204,23 @@ namespace sierses.Sim
 		/// <param name="pluginManager"></param>
 		/// <param name="data">Current game data, including present and previous data frames.</param> 
 		internal GameData Gdat;
-		internal PluginManager PM;
+		internal StatusDataBase N;
 		internal int On;
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
-			if (null == data.NewData)
-			{
-				On = 0;
+			On = 0;
+			if (null == (N = data.NewData))
 				return;
-			}
 
 			Gdat = data;
-			PM = pluginManager;
 
 			if (S.Id == data.NewData.CarId || D.Locked)				// DataUpdate()
 			{
 				if (null != data.OldData && data.GameRunning
-					&& 1 == (On = (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
-					D.Refresh(ref data, this);
+					&& 1 == (On = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
+					D.Refresh(this, pluginManager);
 				return;
 			}
-
-			On = 0;
 
 			if (Waiting)
 			{
@@ -250,9 +242,7 @@ namespace sierses.Sim
 			{
 				if (null == S.Car.name)
 					Logging.Current.Info($"Haptics.S.Add({S.Id}) : missing car name");
-				else if (S.Add(S.Id))		// DataUpdate():  add or update S.Car in Cars list
-					S.LD.Add(S.Car);		// DataUpdate()
-				Loaded = false;
+				else Loaded = S.AddCar();		// DataUpdate():  add or update S.Car in Cars list
 			}
 
 
