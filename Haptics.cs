@@ -18,643 +18,643 @@ using System.Windows.Media;
 
 namespace sierses.Sim
 {
-    [PluginDescription("Properties for haptic feedback and more")]
-    [PluginAuthor("sierses")]
-    [PluginName("Haptics")]
-    public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
-    {
-        public string PluginVersion = FileVersionInfo.GetVersionInfo(
-            Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
-        public static int LoadFailCount;
-        public static long FrameTimeTicks = 0;
-        public static long FrameCountTicks = 0;
-        public static GameId CurrentGame = GameId.Other;
-        public static string GameDBText;
-        internal static bool Loaded, Waiting, Save, Set, Changed;
-        private static readonly HttpClient client = new();
-        private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
-        //		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
-        private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.json_with_orders.json";
-        internal static List<CarSpec> Atlas;
-        internal static int AtlasCt;        // use this to force Atlas
-        public Spec S { get; } = new() { };
+	[PluginDescription("Properties for haptic feedback and more")]
+	[PluginAuthor("sierses")]
+	[PluginName("Haptics")]
+	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
+	{
+		public string PluginVersion = FileVersionInfo.GetVersionInfo(
+			Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
+		public static int LoadFailCount;
+		public static long FrameTimeTicks = 0;
+		public static long FrameCountTicks = 0;
+		public static GameId CurrentGame = GameId.Other;
+		public static string GameDBText;
+		internal static bool Loaded, Waiting, Save, Set, Changed;
+		private static readonly HttpClient client = new();
+		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
+		//		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
+		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.json_with_orders.json";
+		internal static List<CarSpec> Atlas;
+		internal static int AtlasCt;		// use this to force Atlas
+		public Spec S { get; } = new() { };
 
-        public SimData D { get; set; }
+		public SimData D { get; set; }
 
-        //		public Geq E { get; set; } 
+		//		public Geq E { get; set; } 
 
-        public ImageSource PictureIcon
-        {
-            get { return this.ToIcon(Resources.SimHapticsShakerStyleIcon_alt012); }
-        }
+		public ImageSource PictureIcon
+		{
+			get { return this.ToIcon(Resources.SimHapticsShakerStyleIcon_alt012); }
+		}
 
-        public ImageSource RPMIcon
-        {
-            get { return this.ToIcon(Resources._100x100_RPM_White); }
-        }
+		public ImageSource RPMIcon
+		{
+			get { return this.ToIcon(Resources._100x100_RPM_White); }
+		}
 
-        public ImageSource ImpactsIcon
-        {
-            get { return this.ToIcon(Resources._100x100_Impacts_White); }
-        }
+		public ImageSource ImpactsIcon
+		{
+			get { return this.ToIcon(Resources._100x100_Impacts_White); }
+		}
 
-        public ImageSource SuspensionIcon
-        {
-            get { return this.ToIcon(Resources._100x100_Suspension_White); }
-        }
+		public ImageSource SuspensionIcon
+		{
+			get { return this.ToIcon(Resources._100x100_Suspension_White); }
+		}
 
-        public ImageSource TractionIcon
-        {
-            get { return this.ToIcon(Resources._100x100_Traction_White); }
-        }
+		public ImageSource TractionIcon
+		{
+			get { return this.ToIcon(Resources._100x100_Traction_White); }
+		}
 
-        // boilerplate SimHub -------------------------------------------
-        public string LeftMenuTitle => "Haptics";
+		// boilerplate SimHub -------------------------------------------
+		public string LeftMenuTitle => "Haptics";
 
-        internal SettingsControl SC;
-        public Control GetWPFSettingsControl(PluginManager pluginManager)
-        {
-            SC = new SettingsControl(this);
-            if (null != Settings.Theme)
-                SC.ChangeTheme(Settings.Theme);
-            /*
-                        if (null != Settings.Engine)
-                        {
-                            if (null != Settings.Engine.Theme)
-                                SC.ChangeTheme(Settings.Engine.Theme);
-                            if (null != Settings.Engine.Tones)
-                            {
-                                if (0 < Settings.Engine.Tones.Length)
-                                {
-                                    if (8 != Settings.Engine.Tones[0].Length)
-                                        Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
-                                        + Settings.Engine.Tones[0].Length.ToString());
-                                } else Logging.Current.Info($"Haptics: zero Settings.Engine.Tones.Length");
-                            }
-                            else Logging.Current.Info($"Haptics:  null Settings.Engine.Tones");
-                            if (null == Settings.Engine.Sliders)
-                                Logging.Current.Info($"Haptics:  null Settings.Engine.Sliders");
-                            else if (1 > Settings.Engine.Sliders.Count)
-                                Logging.Current.Info($"Haptics: zero Settings.Engine.Sliders.Count");
-                            else if (9 != Settings.Engine.Sliders[0].Length)
-                                Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
-                                  + Settings.Engine.Sliders[0].Length.ToString());
-                        }
-             */
-            return SC;
-        }
+		internal SettingsControl SC;
+		public Control GetWPFSettingsControl(PluginManager pluginManager)
+		{
+			SC = new SettingsControl(this);
+			if (null != Settings.Theme)
+				SC.ChangeTheme(Settings.Theme);
+			/*
+						if (null != Settings.Engine)
+						{
+							if (null != Settings.Engine.Theme)
+								SC.ChangeTheme(Settings.Engine.Theme);
+							if (null != Settings.Engine.Tones)
+							{
+								if (0 < Settings.Engine.Tones.Length)
+								{
+									if (8 != Settings.Engine.Tones[0].Length)
+										Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
+										+ Settings.Engine.Tones[0].Length.ToString());
+								} else Logging.Current.Info($"Haptics: zero Settings.Engine.Tones.Length");
+							}
+							else Logging.Current.Info($"Haptics:  null Settings.Engine.Tones");
+							if (null == Settings.Engine.Sliders)
+								Logging.Current.Info($"Haptics:  null Settings.Engine.Sliders");
+							else if (1 > Settings.Engine.Sliders.Count)
+								Logging.Current.Info($"Haptics: zero Settings.Engine.Sliders.Count");
+							else if (9 != Settings.Engine.Sliders[0].Length)
+								Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
+								  + Settings.Engine.Sliders[0].Length.ToString());
+						}
+			 */
+			return SC;
+		}
 
-        public Settings Settings { get; set; }
+		public Settings Settings { get; set; }
 
-        public PluginManager PluginManager { get; set; }
-        // ----------------------------------------------------------------
+		public PluginManager PluginManager { get; set; }
+		// ----------------------------------------------------------------
 
-        // must be void and static;  invoked by D.SetVehicle()
-        private static Haptics This;
+		// must be void and static;  invoked by D.SetVehicle()
+		private static Haptics This;
 
-        internal static async void FetchCarData(    // called from SetVehicle() switch
-            string id,
-            string category,
-            ushort redlineFromGame,
-            ushort maxRPMFromGame,
-            ushort ushortIdleRPM)                           // FetchCarData() argument
-        {
-            Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  Index = {This.D.Index}," +
-                               (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
-                                + (Set ? " Set" : "") + (Changed ? "Changed " : ""));
+		internal static async void FetchCarData(	// called from SetVehicle() switch
+			string id,
+			string category,
+			ushort redlineFromGame,
+			ushort maxRPMFromGame,
+			ushort ushortIdleRPM)						   // FetchCarData() argument
+		{
+			Logging.Current.Info($"Haptics.FetchCarData({id}/{category}):  Index = {This.D.Index}," +
+							   (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
+								+ (Set ? " Set" : "") + (Changed ? "Changed " : ""));
 
-            if (-2 == This.D.Index) // first time for this CarId change?  Also called for retries with Index = -1
-            {
-                This.S.Notes = "";
-                Set = false;
-                StatusDataBase db = This.Gdat.NewData;
-                string sid = (GameId.Forza == CurrentGame && "Car_" == db.CarId.Substring(0, 4))
-                            ? db.CarId.Substring(4) : db.CarId;
-                This.D.Index = This.S.SelectCar(sid, // set game RPM defaults
-                                                    redlineFromGame, maxRPMFromGame, ushortIdleRPM);
-                /*
-                                Logging.Current.Info($"Haptics.SelectCar({sid}): "
-                                                    + (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
-                                                    + (Waiting ? " Waiting" : "") + (Set ? " Set": "")
-                                                    + (Changed ? "Changed " : "") + $" Index = {This.D.Index}");
-                 */
-                if (0 <= This.D.Index)
-                    return;
-            }
-            // Index should be -1; non-negative values returned
-            try
-            {
-                Waiting = true;
-                string dls = null;
-                id ??= "0";
-                category ??= "0";
-                Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
-                                 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
-                HttpResponseMessage async = await client.GetAsync(requestUri);
-                async.EnsureSuccessStatusCode();
-                dls = async.Content.ReadAsStringAsync().Result;
-                if (null != dls && 11 < dls.Length)
-                {
-                    Waiting = false;    // ReadAsStringAsync() success
-                    Download dljc = JsonConvert.DeserializeObject<Download>(dls,
-                                        new JsonSerializerSettings
-                                        {
-                                            NullValueHandling = NullValueHandling.Ignore,
-                                            MissingMemberHandling = MissingMemberHandling.Ignore
-                                        }
-                                    );
-                    if (null != dljc && null != dljc.data && 0 < dljc.data.Count
-                     && null != dljc.data[0].id && null != dljc.data[0].game && null != dljc.data[0].name)
-                    {
-                        CarSpec car = dljc.data[0];
-                        car.defaults = "DB";
-                        This.S.Cache(car);                  // FetchCarData(): Set(id) at the end of SetVehicle()
-                        LoadFailCount = 1;
-                        //	Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
-                        //						+ $" CarInitCount = {This.D.CarInitCount}");
-                        This.D.CarInitCount = 0;
-                        This.D.Index = -4;
-                        return;
-                    }
-                }
-                else if (null != dls)
-                {
-                    if (-1 == This.D.Index)         // delayed dls? things may have moved on...
-                        This.D.Index = -3;          // disable self until other code decides otherwise
-                    if (11 == dls.Length)
-                        Waiting = false;
-                    /*
-                                            Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
-                                        else if (0 < dls.Length)
-                                            Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  length {dls.Length}: "
-                                                                + dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
-                     */
-                }
-                // else Waiting
-            }
-            catch (HttpRequestException ex) //  treat it like not in DB
-            {
-                Logging.Current.Error("Haptics.FetchCarData() Error: " + ex.Message);
-                Waiting = false;
-            }
-        }       // FetchCarData()
+			if (-2 == This.D.Index) // first time for this CarId change?  Also called for retries with Index = -1
+			{
+				This.S.Notes = "";
+				Set = false;
+				StatusDataBase db = This.Gdat.NewData;
+				string sid = (GameId.Forza == CurrentGame && "Car_" == db.CarId.Substring(0, 4))
+							? db.CarId.Substring(4) : db.CarId;
+				This.D.Index = This.S.SelectCar(sid, // set game RPM defaults
+													redlineFromGame, maxRPMFromGame, ushortIdleRPM);
+				/*
+								Logging.Current.Info($"Haptics.SelectCar({sid}): "
+													+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
+													+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
+													+ (Changed ? "Changed " : "") + $" Index = {This.D.Index}");
+				 */
+				if (0 <= This.D.Index)
+					return;
+			}
+			// Index should be -1; non-negative values returned
+			try
+			{
+				Waiting = true;
+				string dls = null;
+				id ??= "0";
+				category ??= "0";
+				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
+								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
+				HttpResponseMessage async = await client.GetAsync(requestUri);
+				async.EnsureSuccessStatusCode();
+				dls = async.Content.ReadAsStringAsync().Result;
+				if (null != dls && 11 < dls.Length)
+				{
+					Waiting = false;	// ReadAsStringAsync() success
+					Download dljc = JsonConvert.DeserializeObject<Download>(dls,
+										new JsonSerializerSettings
+										{
+											NullValueHandling = NullValueHandling.Ignore,
+											MissingMemberHandling = MissingMemberHandling.Ignore
+										}
+									);
+					if (null != dljc && null != dljc.data && 0 < dljc.data.Count
+					 && null != dljc.data[0].id && null != dljc.data[0].game && null != dljc.data[0].name)
+					{
+						CarSpec car = dljc.data[0];
+						car.defaults = "DB";
+						This.S.Cache(car);				  // FetchCarData(): Set(id) at the end of SetVehicle()
+						LoadFailCount = 1;
+						//	Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
+						//						+ $" CarInitCount = {This.D.CarInitCount}");
+						This.D.CarInitCount = 0;
+						This.D.Index = -4;
+						return;
+					}
+				}
+				else if (null != dls)
+				{
+					if (-1 == This.D.Index)		 // delayed dls? things may have moved on...
+						This.D.Index = -3;		  // disable self until other code decides otherwise
+					if (11 == dls.Length)
+						Waiting = false;
+					/*
+											Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
+										else if (0 < dls.Length)
+											Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  length {dls.Length}: "
+																+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
+					 */
+				}
+				// else Waiting
+			}
+			catch (HttpRequestException ex) //  treat it like not in DB
+			{
+				Logging.Current.Error("Haptics.FetchCarData() Error: " + ex.Message);
+				Waiting = false;
+			}
+		}	   // FetchCarData()
 
-        /// <summary>
-        /// Called one time per game data update, contains all normalized game data.
-        /// Raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
-        /// This method is on the critical path, must execute as fast as possible and avoid throwing any error
-        /// </summary>
-        /// <param name="pluginManager"></param>
-        /// <param name="data">Current game data, including present and previous data frames.</param> 
-        internal GameData Gdat;
-        internal PluginManager PM;
-        internal int On;
-        public void DataUpdate(PluginManager pluginManager, ref GameData data)
-        {
-            if (null == data.NewData)
-            {
-                On = 0;
-                return;
-            }
+		/// <summary>
+		/// Called one time per game data update, contains all normalized game data.
+		/// Raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
+		/// This method is on the critical path, must execute as fast as possible and avoid throwing any error
+		/// </summary>
+		/// <param name="pluginManager"></param>
+		/// <param name="data">Current game data, including present and previous data frames.</param> 
+		internal GameData Gdat;
+		internal PluginManager PM;
+		internal int On;
+		public void DataUpdate(PluginManager pluginManager, ref GameData data)
+		{
+			if (null == data.NewData)
+			{
+				On = 0;
+				return;
+			}
 
-            Gdat = data;
-            PM = pluginManager;
+			Gdat = data;
+			PM = pluginManager;
 
-            if (S.Id == data.NewData.CarId || !D.Unlocked)              // DataUpdate()
-            {
-                if (null != data.OldData && data.GameRunning
-                    && 1 == (On = (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
-                    D.Refresh(ref data, this);
-                return;
-            }
+			if (S.Id == data.NewData.CarId || D.Locked)				// DataUpdate()
+			{
+				if (null != data.OldData && data.GameRunning
+					&& 1 == (On = (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
+					D.Refresh(ref data, this);
+				return;
+			}
 
-            On = 0;
+			On = 0;
 
-            if (Waiting)
-            {
-                if ((30 * LoadFailCount) > ++D.CarInitCount)
-                    return;
+			if (Waiting)
+			{
+				if ((30 * LoadFailCount) > ++D.CarInitCount)
+					return;
 
-                Waiting = false;            // CarInitCount timeout
-                if (4 > LoadFailCount++)
-                    return;                 // do not give up (yet)
+				Waiting = false;			// CarInitCount timeout
+				if (4 > LoadFailCount++)
+					return;					// do not give up (yet)
 
-                D.Index = -3;                      // disable FetchCarData(); enable Defaults()
-                D.CarInitCount = 0;
-                //	Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
-                //						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
-                //						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
-                Changed = false;
-            }
-            else if (Loaded || Changed)       // save before SetVehicle()
-            {
-                if (null == S.Car.name)
-                    Logging.Current.Info($"Haptics.S.Add({S.Id}) : missing car name");
-                else if (S.Add(S.Id))       // DataUpdate():  add or update S.Car in Cars list
-                    S.LD.Add(S.Car);        // DataUpdate()
-                Loaded = false;
-            }
+				D.Index = -3;					  // disable FetchCarData(); enable Defaults()
+				D.CarInitCount = 0;
+				//	Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
+				//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
+				//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
+				Changed = false;
+			}
+			else if (Loaded || Changed)	  // save before SetVehicle()
+			{
+				if (null == S.Car.name)
+					Logging.Current.Info($"Haptics.S.Add({S.Id}) : missing car name");
+				else if (S.Add(S.Id))		// DataUpdate():  add or update S.Car in Cars list
+					S.LD.Add(S.Car);		// DataUpdate()
+				Loaded = false;
+			}
 
 
-            if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
-            {
-                if (-2 == D.Index)
-                    Set = Changed = false;
-                Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}): "
-                                    + (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
-                                    + (Set ? " Set" : "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
-                D.SetVehicle(this);
-            }
-        }   // DataUpdate()
+			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
+			{
+				if (-2 == D.Index)
+					Set = Changed = false;
+				Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}): "
+									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
+									+ (Set ? " Set" : "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
+				D.SetVehicle(this);
+			}
+		}	// DataUpdate()
 
-        // Null0() remove these if 0 value before saving JSON
-        private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" };
-        private string Null0(string j)
-        {
-            for (int i = 0; i < zero.Count; i++)
-                j = j.Replace($",\r\n	  \"{zero[i]}\": 0,", ",");
-            return j;
-        }
+		// Null0() remove these if 0 value before saving JSON
+		private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" };
+		private string Null0(string j)
+		{
+			for (int i = 0; i < zero.Count; i++)
+				j = j.Replace($",\r\n	  \"{zero[i]}\": 0,", ",");
+			return j;
+		}
 
-        public void End(PluginManager pluginManager)
-        {
-            Settings.Theme = SC.Theme;
-            /*
-                        if (null == Settings.Engine)
-                            Settings.Engine = new();
-                        Settings.Engine.Theme = SC.Theme;			// easier to stuff here
-                        if (null == Settings.Engine.Tones)
-                        { 
-                            Settings.Engine.Tones = new ushort[4][];
-                            Settings.Engine.Tones[0] = new ushort[9]; // 2 fundamentals, 6 harmonics, 1 modulator
-                            Settings.Engine.Tones[1] = new ushort[9];
-                            Settings.Engine.Tones[2] = new ushort[9]; // second pair: full throttle
-                            Settings.Engine.Tones[3] = new ushort[9];
-                        }
+		public void End(PluginManager pluginManager)
+		{
+			Settings.Theme = SC.Theme;
+			/*
+						if (null == Settings.Engine)
+							Settings.Engine = new();
+						Settings.Engine.Theme = SC.Theme;			// easier to stuff here
+						if (null == Settings.Engine.Tones)
+						{ 
+							Settings.Engine.Tones = new ushort[4][];
+							Settings.Engine.Tones[0] = new ushort[9]; // 2 fundamentals, 6 harmonics, 1 modulator
+							Settings.Engine.Tones[1] = new ushort[9];
+							Settings.Engine.Tones[2] = new ushort[9]; // second pair: full throttle
+							Settings.Engine.Tones[3] = new ushort[9];
+						}
 
-                        for (int i = 0; i < E.Tones.Length; i++)
-                            for (int j = 0; j < E.Tones[i].Freq.Length; j++)
-                                Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
-                        Settings.Engine.Sliders = new() { E.Q[0].Slider };
-                        for (int i = 1; i < E.Q.Count; i++)
-                            Settings.Engine.Sliders.Add(E.Q[i].Slider);
-             */
-            if (Save || Loaded || Changed)      // End()
-            {
-                if (Loaded || Changed)
-                    S.LD.Add(S.Car);            // End()
-                string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());   // delete 0 ushorts
-                if (0 == sjs.Length || "{}" == sjs)
-                    Logging.Current.Info($"Haptics.End(): JSON Serializer failure: "
-                                    + $"{S.LD.Count} games, {S.Cars.Count} {S.Car.game} cars;  "
-                                    + (Save ? "changes made.." : "(no changes)"));
-                else if (Save)
-                {
-                    File.WriteAllText(myfile, sjs);
-                    Logging.Current.Info($"Haptics.End(): {S.LD.Count} games, including "
-                        + $"{S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
-                }
-            }
+						for (int i = 0; i < E.Tones.Length; i++)
+							for (int j = 0; j < E.Tones[i].Freq.Length; j++)
+								Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
+						Settings.Engine.Sliders = new() { E.Q[0].Slider };
+						for (int i = 1; i < E.Q.Count; i++)
+							Settings.Engine.Sliders.Add(E.Q[i].Slider);
+			 */
+			if (Save || Loaded || Changed)	  // End()
+			{
+				if (Loaded || Changed)
+					S.LD.Add(S.Car);			// End()
+				string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());   // delete 0 ushorts
+				if (0 == sjs.Length || "{}" == sjs)
+					Logging.Current.Info($"Haptics.End(): JSON Serializer failure: "
+									+ $"{S.LD.Count} games, {S.Cars.Count} {S.Car.game} cars;  "
+									+ (Save ? "changes made.." : "(no changes)"));
+				else if (Save)
+				{
+					File.WriteAllText(myfile, sjs);
+					Logging.Current.Info($"Haptics.End(): {S.LD.Count} games, including "
+						+ $"{S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
+				}
+			}
 
-            // Remove default values from Settings per-game dictionaries
-            if (Settings.EngineMult.TryGetValue("AllGames", out double _))
-                Settings.EngineMult.Remove("AllGames");
-            if (Settings.EngineMult.TryGetValue(GameDBText, out double _))
-            {
-                if (D.EngineMult == 1.0)
-                    Settings.EngineMult.Remove(GameDBText);
-                else Settings.EngineMult[GameDBText] = D.EngineMult;
-            }
-            else if (D.EngineMult != 1.0)
-                Settings.EngineMult.Add(GameDBText, D.EngineMult);
-            if (Settings.RumbleMult.TryGetValue(GameDBText, out double _))
-            {
-                if (D.RumbleMult == 1.0)
-                    Settings.RumbleMult.Remove(GameDBText);
-                else Settings.RumbleMult[GameDBText] = D.RumbleMult;
-            }
-            else if (D.RumbleMult != 1.0)
-                Settings.RumbleMult.Add(GameDBText, D.RumbleMult);
-            if (Settings.SuspensionMult.TryGetValue(GameDBText, out double _))
-            {
-                if (D.SuspensionMult == 1.0)
-                    Settings.SuspensionMult.Remove(GameDBText);
-                else Settings.SuspensionMult[GameDBText] = D.SuspensionMult;
-            }
-            else if (D.SuspensionMult != 1.0)
-                Settings.SuspensionMult.Add(GameDBText, D.SuspensionMult);
-            if (Settings.SuspensionGamma.TryGetValue(GameDBText, out double _))
-            {
-                if (D.SuspensionGamma == 1.0)
-                    Settings.SuspensionGamma.Remove(GameDBText);
-                else Settings.SuspensionGamma[GameDBText] = D.SuspensionGamma;
-            }
-            else if (D.SuspensionGamma != 1.0)
-                Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
-            if (Settings.SlipXMult.TryGetValue(GameDBText, out double _))
-            {
-                if (D.SlipXMult == 1.0)
-                    Settings.SlipXMult.Remove(GameDBText);
-                else Settings.SlipXMult[GameDBText] = D.SlipXMult;
-            }
-            else if (D.SlipXMult != 1.0)
-                Settings.SlipXMult.Add(GameDBText, D.SlipXMult);
-            if (Settings.SlipYMult.TryGetValue(GameDBText, out double _))
-            {
-                if (D.SlipYMult == 1.0)
-                    Settings.SlipYMult.Remove(GameDBText);
-                else Settings.SlipYMult[GameDBText] = D.SlipYMult;
-            }
-            else if (D.SlipYMult != 1.0)
-                Settings.SlipYMult.Add(GameDBText, D.SlipYMult);
-            if (Settings.SlipXGamma.TryGetValue(GameDBText, out double _))
-            {
-                if (D.SlipXGamma == 1.0)
-                    Settings.SlipXGamma.Remove(GameDBText);
-                else Settings.SlipXGamma[GameDBText] = D.SlipXGamma;
-            }
-            else if (D.SlipXGamma != 1.0)
-                Settings.SlipXGamma.Add(GameDBText, D.SlipXGamma);
-            if (Settings.SlipYGamma.TryGetValue(GameDBText, out double _))
-            {
-                if (D.SlipYGamma == 1.0)
-                    Settings.SlipYGamma.Remove(GameDBText);
-                else Settings.SlipYGamma[GameDBText] = D.SlipYGamma;
-            }
-            else if (D.SlipYGamma != 1.0)
-                Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
+			// Remove default values from Settings per-game dictionaries
+			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
+				Settings.EngineMult.Remove("AllGames");
+			if (Settings.EngineMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.EngineMult == 1.0)
+					Settings.EngineMult.Remove(GameDBText);
+				else Settings.EngineMult[GameDBText] = D.EngineMult;
+			}
+			else if (D.EngineMult != 1.0)
+				Settings.EngineMult.Add(GameDBText, D.EngineMult);
+			if (Settings.RumbleMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.RumbleMult == 1.0)
+					Settings.RumbleMult.Remove(GameDBText);
+				else Settings.RumbleMult[GameDBText] = D.RumbleMult;
+			}
+			else if (D.RumbleMult != 1.0)
+				Settings.RumbleMult.Add(GameDBText, D.RumbleMult);
+			if (Settings.SuspensionMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SuspensionMult == 1.0)
+					Settings.SuspensionMult.Remove(GameDBText);
+				else Settings.SuspensionMult[GameDBText] = D.SuspensionMult;
+			}
+			else if (D.SuspensionMult != 1.0)
+				Settings.SuspensionMult.Add(GameDBText, D.SuspensionMult);
+			if (Settings.SuspensionGamma.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SuspensionGamma == 1.0)
+					Settings.SuspensionGamma.Remove(GameDBText);
+				else Settings.SuspensionGamma[GameDBText] = D.SuspensionGamma;
+			}
+			else if (D.SuspensionGamma != 1.0)
+				Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
+			if (Settings.SlipXMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SlipXMult == 1.0)
+					Settings.SlipXMult.Remove(GameDBText);
+				else Settings.SlipXMult[GameDBText] = D.SlipXMult;
+			}
+			else if (D.SlipXMult != 1.0)
+				Settings.SlipXMult.Add(GameDBText, D.SlipXMult);
+			if (Settings.SlipYMult.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SlipYMult == 1.0)
+					Settings.SlipYMult.Remove(GameDBText);
+				else Settings.SlipYMult[GameDBText] = D.SlipYMult;
+			}
+			else if (D.SlipYMult != 1.0)
+				Settings.SlipYMult.Add(GameDBText, D.SlipYMult);
+			if (Settings.SlipXGamma.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SlipXGamma == 1.0)
+					Settings.SlipXGamma.Remove(GameDBText);
+				else Settings.SlipXGamma[GameDBText] = D.SlipXGamma;
+			}
+			else if (D.SlipXGamma != 1.0)
+				Settings.SlipXGamma.Add(GameDBText, D.SlipXGamma);
+			if (Settings.SlipYGamma.TryGetValue(GameDBText, out double _))
+			{
+				if (D.SlipYGamma == 1.0)
+					Settings.SlipYGamma.Remove(GameDBText);
+				else Settings.SlipYGamma[GameDBText] = D.SlipYGamma;
+			}
+			else if (D.SlipYGamma != 1.0)
+				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
 
-            // unconditionally save some
-            Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
-            Settings.SuspensionGamma["AllGames"] = D.SuspensionGammaAll;
-            Settings.SuspensionMult["AllGames"] = D.SuspensionMultAll;
-            Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
-            Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
-            Settings.Motion["MotionPitchOffset"] = D.MotionPitchOffset;
-            Settings.Motion["MotionPitchMult"] = D.MotionPitchMult;
-            Settings.Motion["MotionPitchGamma"] = D.MotionPitchGamma;
-            Settings.Motion["MotionRollOffset"] = D.MotionRollOffset;
-            Settings.Motion["MotionRollMult"] = D.MotionRollMult;
-            Settings.Motion["MotionRollGamma"] = D.MotionRollGamma;
-            Settings.Motion["MotionYawOffset"] = D.MotionYawOffset;
-            Settings.Motion["MotionYawMult"] = D.MotionYawMult;
-            Settings.Motion["MotionYawGamma"] = D.MotionYawGamma;
-            Settings.Motion["MotionHeaveOffset"] = D.MotionHeaveOffset;
-            Settings.Motion["MotionHeaveMult"] = D.MotionHeaveMult;
-            Settings.Motion["MotionHeaveGamma"] = D.MotionHeaveGamma;
-            Settings.Motion["MotionSurgeOffset"] = D.MotionSurgeOffset;
-            Settings.Motion["MotionSurgeMult"] = D.MotionSurgeMult;
-            Settings.Motion["MotionSurgeGamma"] = D.MotionSurgeGamma;
-            Settings.Motion["MotionSwayOffset"] = D.MotionSwayOffset;
-            Settings.Motion["MotionSwayMult"] = D.MotionSwayMult;
-            Settings.Motion["MotionSwayGamma"] = D.MotionSwayGamma;
-            this.SaveCommonSettings("Settings", Settings);
-        }
+			// unconditionally save some
+			Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
+			Settings.SuspensionGamma["AllGames"] = D.SuspensionGammaAll;
+			Settings.SuspensionMult["AllGames"] = D.SuspensionMultAll;
+			Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
+			Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
+			Settings.Motion["MotionPitchOffset"] = D.MotionPitchOffset;
+			Settings.Motion["MotionPitchMult"] = D.MotionPitchMult;
+			Settings.Motion["MotionPitchGamma"] = D.MotionPitchGamma;
+			Settings.Motion["MotionRollOffset"] = D.MotionRollOffset;
+			Settings.Motion["MotionRollMult"] = D.MotionRollMult;
+			Settings.Motion["MotionRollGamma"] = D.MotionRollGamma;
+			Settings.Motion["MotionYawOffset"] = D.MotionYawOffset;
+			Settings.Motion["MotionYawMult"] = D.MotionYawMult;
+			Settings.Motion["MotionYawGamma"] = D.MotionYawGamma;
+			Settings.Motion["MotionHeaveOffset"] = D.MotionHeaveOffset;
+			Settings.Motion["MotionHeaveMult"] = D.MotionHeaveMult;
+			Settings.Motion["MotionHeaveGamma"] = D.MotionHeaveGamma;
+			Settings.Motion["MotionSurgeOffset"] = D.MotionSurgeOffset;
+			Settings.Motion["MotionSurgeMult"] = D.MotionSurgeMult;
+			Settings.Motion["MotionSurgeGamma"] = D.MotionSurgeGamma;
+			Settings.Motion["MotionSwayOffset"] = D.MotionSwayOffset;
+			Settings.Motion["MotionSwayMult"] = D.MotionSwayMult;
+			Settings.Motion["MotionSwayGamma"] = D.MotionSwayGamma;
+			this.SaveCommonSettings("Settings", Settings);
+		}
 
-        // Init() methods -----------------------------
-        public void SetGame(PluginManager pm)
-        {
-            GameDBText = D.GameAltText = pm.GameName;
-            switch (GameDBText)
-            {
-                case "AssettoCorsa":
-                    CurrentGame = GameId.AC;
-                    GameDBText = "AC";
-                    D.RumbleFromPlugin = true;
-                    break;
-                case "AssettoCorsaCompetizione":
-                    CurrentGame = GameId.ACC;
-                    GameDBText = "ACC";
-                    break;
-                case "Automobilista2":
-                    CurrentGame = GameId.AMS2;
-                    GameDBText = "AMS2";
-                    break;
-                case "FH4":
-                case "FH5":
-                case "FM7":
-                case "FM8":
-                    CurrentGame = GameId.Forza;
-                    GameDBText = "Forza";
-                    break;
-                case "IRacing":
-                    CurrentGame = GameId.IRacing;
-                    D.GameAltText += (string)pm.GetPropertyValue(D.raw + "SessionData.WeekendInfo.Category");
-                    break;
-                case "LMU":
-                    CurrentGame = GameId.LMU;
-                    GameDBText = "LMU";
-                    break;
-                case "CodemastersDirtRally2":
-                    CurrentGame = GameId.DR2;
-                    GameDBText = "DR2";
-                    break;
-                case "EAWRC23":
-                    CurrentGame = GameId.WRC23;
-                    GameDBText = "WRC23";
-                    D.AccSamples = 32;
-                    break;
-                case "BeamNgDrive":
-                    CurrentGame = GameId.BeamNG;
-                    GameDBText = "BeamNG";
-                    break;
-                default:
-                    CurrentGame = GameId.Other;
-                    break;
-            }
+		// Init() methods -----------------------------
+		public void SetGame(PluginManager pm)
+		{
+			GameDBText = D.GameAltText = pm.GameName;
+			switch (GameDBText)
+			{
+				case "AssettoCorsa":
+					CurrentGame = GameId.AC;
+					GameDBText = "AC";
+					D.RumbleFromPlugin = true;
+					break;
+				case "AssettoCorsaCompetizione":
+					CurrentGame = GameId.ACC;
+					GameDBText = "ACC";
+					break;
+				case "Automobilista2":
+					CurrentGame = GameId.AMS2;
+					GameDBText = "AMS2";
+					break;
+				case "FH4":
+				case "FH5":
+				case "FM7":
+				case "FM8":
+					CurrentGame = GameId.Forza;
+					GameDBText = "Forza";
+					break;
+				case "IRacing":
+					CurrentGame = GameId.IRacing;
+					D.GameAltText += (string)pm.GetPropertyValue(D.raw + "SessionData.WeekendInfo.Category");
+					break;
+				case "LMU":
+					CurrentGame = GameId.LMU;
+					GameDBText = "LMU";
+					break;
+				case "CodemastersDirtRally2":
+					CurrentGame = GameId.DR2;
+					GameDBText = "DR2";
+					break;
+				case "EAWRC23":
+					CurrentGame = GameId.WRC23;
+					GameDBText = "WRC23";
+					D.AccSamples = 32;
+					break;
+				case "BeamNgDrive":
+					CurrentGame = GameId.BeamNG;
+					GameDBText = "BeamNG";
+					break;
+				default:
+					CurrentGame = GameId.Other;
+					break;
+			}
 
-            D.AccHeave = new double[D.AccSamples];
-            D.AccSurge = new double[D.AccSamples];
-            D.AccSway = new double[D.AccSamples];
-        }   // SetGame()
+			D.AccHeave = new double[D.AccSamples];
+			D.AccSurge = new double[D.AccSamples];
+			D.AccSway = new double[D.AccSamples];
+		}   // SetGame()
 
-        public void Init(PluginManager pluginManager)
-        {
-            This = this;                                // static pointer to current instance
-            LoadFailCount = 1;
-            D = new SimData();
-            //			E = new();
-            bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
-            SetGame(pluginManager);
+		public void Init(PluginManager pluginManager)
+		{
+			This = this;								// static pointer to current instance
+			LoadFailCount = 1;
+			D = new SimData();
+			//			E = new();
+			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
+			SetGame(pluginManager);
 
-            Settings = this.ReadCommonSettings("Settings", () => new Settings());
-            /*
-                        if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
-                         || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
-                         || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
-                        {
-                            if (null == Settings.Engine)
-                                Logging.Current.Info($"Haptics.Init(): null Settings.Engine");
-                            else {
-                                if (null == Settings.Engine.Sliders)
-                                    Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Sliders");
-                                else if (1 > Settings.Engine.Sliders.Count)
-                                    Logging.Current.Info($"Haptics.Init(): 0 Settings.Engine.Sliders");
-                                else if (9 != Settings.Engine.Sliders[0].Length)
-                                    Logging.Current.Info($"Haptics.Init(): Settings.Engine.Sliders[0].Slider.Length = "
-                                            + Settings.Engine.Sliders[0].Length.ToString());
-                                if (null == Settings.Engine.Tones)
-                                    Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Tones");
-                                else {
-                                    if (4 != Settings.Engine.Tones.Length)
-                                        Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones.Length = "
-                                            + Settings.Engine.Tones.Length.ToString());
-                                    if (9 != Settings.Engine.Tones[0].Length)
-                                        Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones[0].Freq.Length = "
-                                            + Settings.Engine.Tones[0].Length.ToString()); 
-                                }
-                            }
-                            Settings = new();	// Settings.Engine will be initialized in End()
-                            Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
-                        }
-             */
-            if (1 > Settings.DownshiftDurationMs)
-                Settings.DownshiftDurationMs = 400;
-            if (1 > Settings.UpshiftDurationMs)
-                Settings.UpshiftDurationMs = 400;
-            if (Settings.EngineMult == null)
-                Settings.EngineMult = new Dictionary<string, double>();
-            if (!Settings.EngineMult.TryGetValue("AllGames", out double num))
-                Settings.EngineMult.Add("AllGames", 1.0);
-            if (Settings.RumbleMult == null)
-                Settings.RumbleMult = new Dictionary<string, double>();
-            if (!Settings.RumbleMult.TryGetValue("AllGames", out num))
-                Settings.RumbleMult.Add("AllGames", 5.0);
-            if (Settings.SuspensionMult == null)
-                Settings.SuspensionMult = new Dictionary<string, double>();
-            if (!Settings.SuspensionMult.TryGetValue("AllGames", out num))
-                Settings.SuspensionMult.Add("AllGames", 1.5);
-            if (Settings.SuspensionGamma == null)
-                Settings.SuspensionGamma = new Dictionary<string, double>();
-            if (!Settings.SuspensionGamma.TryGetValue("AllGames", out num))
-                Settings.SuspensionGamma.Add("AllGames", 1.75);
-            if (Settings.Motion == null)
-                Settings.Motion = new Dictionary<string, double>();
+			Settings = this.ReadCommonSettings("Settings", () => new Settings());
+			/*
+						if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
+						 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
+						 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
+						{
+							if (null == Settings.Engine)
+								Logging.Current.Info($"Haptics.Init(): null Settings.Engine");
+							else {
+								if (null == Settings.Engine.Sliders)
+									Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Sliders");
+								else if (1 > Settings.Engine.Sliders.Count)
+									Logging.Current.Info($"Haptics.Init(): 0 Settings.Engine.Sliders");
+								else if (9 != Settings.Engine.Sliders[0].Length)
+									Logging.Current.Info($"Haptics.Init(): Settings.Engine.Sliders[0].Slider.Length = "
+											+ Settings.Engine.Sliders[0].Length.ToString());
+								if (null == Settings.Engine.Tones)
+									Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Tones");
+								else {
+									if (4 != Settings.Engine.Tones.Length)
+										Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones.Length = "
+											+ Settings.Engine.Tones.Length.ToString());
+									if (9 != Settings.Engine.Tones[0].Length)
+										Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones[0].Freq.Length = "
+											+ Settings.Engine.Tones[0].Length.ToString()); 
+								}
+							}
+							Settings = new();	// Settings.Engine will be initialized in End()
+							Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
+						}
+			 */
+			if (1 > Settings.DownshiftDurationMs)
+				Settings.DownshiftDurationMs = 400;
+			if (1 > Settings.UpshiftDurationMs)
+				Settings.UpshiftDurationMs = 400;
+			if (Settings.EngineMult == null)
+				Settings.EngineMult = new Dictionary<string, double>();
+			if (!Settings.EngineMult.TryGetValue("AllGames", out double num))
+				Settings.EngineMult.Add("AllGames", 1.0);
+			if (Settings.RumbleMult == null)
+				Settings.RumbleMult = new Dictionary<string, double>();
+			if (!Settings.RumbleMult.TryGetValue("AllGames", out num))
+				Settings.RumbleMult.Add("AllGames", 5.0);
+			if (Settings.SuspensionMult == null)
+				Settings.SuspensionMult = new Dictionary<string, double>();
+			if (!Settings.SuspensionMult.TryGetValue("AllGames", out num))
+				Settings.SuspensionMult.Add("AllGames", 1.5);
+			if (Settings.SuspensionGamma == null)
+				Settings.SuspensionGamma = new Dictionary<string, double>();
+			if (!Settings.SuspensionGamma.TryGetValue("AllGames", out num))
+				Settings.SuspensionGamma.Add("AllGames", 1.75);
+			if (Settings.Motion == null)
+				Settings.Motion = new Dictionary<string, double>();
 
-            string Atlasst = "";
-            AtlasCt = -1;               // S.Extract() will attempt extracting List<CarSpec> Atlas from json
-            if (File.Exists(Atlasfile))
-            {
-                S.Extract(JsonConvert.DeserializeObject<Dictionary<string,
-                            List<CarSpec>>>(File.ReadAllText(Atlasfile)), GameDBText);  // to Atlas
-                AtlasCt = Atlas.Count;
-                //				Logging.Current.Info($"Haptics.Init():  {Atlas.Count} games and "
-                //								   + $"{AtlasCt} {GameDBText} cars in " + Atlasfile);
-                if (0 < AtlasCt)
-                    Atlasst = $" and {AtlasCt} cars in Atlas";
-                else
-                    Logging.Current.Info($"Haptics.Init(): {Atlasfile} load failure");
-            }
-            else AtlasCt = 0;           // S.Extract() will attempt setting LD = json
-            if (File.Exists(myfile))
-            {
-                string text = File.ReadAllText(myfile);
-                Dictionary<string, List<CarSpec>> json =
-                    JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
-                Logging.Current.Info("Haptics.Init():  " + S.LD.Set(json) + myfile + Atlasst);
-            }
-            else Logging.Current.Info("Haptics.Init():  " + myfile + " not found" + Atlasst);
+			string Atlasst = "";
+			AtlasCt = -1;			   // S.Extract() will attempt extracting List<CarSpec> Atlas from json
+			if (File.Exists(Atlasfile))
+			{
+				S.Extract(JsonConvert.DeserializeObject<Dictionary<string,
+							List<CarSpec>>>(File.ReadAllText(Atlasfile)), GameDBText);  // to Atlas
+				AtlasCt = Atlas.Count;
+				//				Logging.Current.Info($"Haptics.Init():  {Atlas.Count} games and "
+				//								   + $"{AtlasCt} {GameDBText} cars in " + Atlasfile);
+				if (0 < AtlasCt)
+					Atlasst = $" and {AtlasCt} cars in Atlas";
+				else
+					Logging.Current.Info($"Haptics.Init(): {Atlasfile} load failure");
+			}
+			else AtlasCt = 0;		   // S.Extract() will attempt setting LD = json
+			if (File.Exists(myfile))
+			{
+				string text = File.ReadAllText(myfile);
+				Dictionary<string, List<CarSpec>> json =
+					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
+				Logging.Current.Info("Haptics.Init():  " + S.LD.Set(json) + myfile + Atlasst);
+			}
+			else Logging.Current.Info("Haptics.Init():  " + myfile + " not found" + Atlasst);
 
-            D.Init(Settings, this);
-            //			E.Init(Settings.Engine, this);
-            Save = Loaded = Waiting = Set = Changed = false;        // Init()
-            this.AttachDelegate("CarName", () => S.CarName);
-            this.AttachDelegate("CarId", () => S.Id);
-            this.AttachDelegate("Category", () => S.Category);
-            this.AttachDelegate("Defaults", () => S.Default);
-            this.AttachDelegate("RedlineRPM", () => S.Redline);
-            this.AttachDelegate("MaxRPM", () => S.MaxRPM);
-            this.AttachDelegate("EngineConfig", () => S.EngineConfiguration);
-            this.AttachDelegate("EngineCylinders", () => S.EngineCylinders);
-            this.AttachDelegate("EngineLocation", () => S.EngineLocation);
-            this.AttachDelegate("FiringOrder", () => S.FiringOrder);
-            this.AttachDelegate("PoweredWheels", () => S.PoweredWheels);
-            this.AttachDelegate("DisplacementCC", () => S.Displacement);
-            this.AttachDelegate("PowerTotalHP", () => S.MaxPower);
-            this.AttachDelegate("PowerEngineHP", () => S.MaxPower - S.ElectricMaxPower);
-            this.AttachDelegate("PowerMotorHP", () => S.ElectricMaxPower);
-            this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
-            this.AttachDelegate("EngineLoad", () => D.EngineLoad);
-            this.AttachDelegate("IdleRPM", () => S.IdleRPM);            // Init()
-            if (ShowFreq)
-            {
-                this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
-                this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
-                this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
-                this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
-                this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
-                this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
-                this.AttachDelegate("Gain1H", () => D.Gain1H);
-                this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
-                this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
-                this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
-                this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
-                this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
-                this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
-                this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
-                this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
-            }
+			D.Init(Settings, this);
+			//			E.Init(Settings.Engine, this);
+			Save = Loaded = Waiting = Set = Changed = false;		// Init()
+			this.AttachDelegate("CarName", () => S.CarName);
+			this.AttachDelegate("CarId", () => S.Id);
+			this.AttachDelegate("Category", () => S.Category);
+			this.AttachDelegate("Defaults", () => S.Default);
+			this.AttachDelegate("RedlineRPM", () => S.Redline);
+			this.AttachDelegate("MaxRPM", () => S.MaxRPM);
+			this.AttachDelegate("EngineConfig", () => S.EngineConfiguration);
+			this.AttachDelegate("EngineCylinders", () => S.EngineCylinders);
+			this.AttachDelegate("EngineLocation", () => S.EngineLocation);
+			this.AttachDelegate("FiringOrder", () => S.FiringOrder);
+			this.AttachDelegate("PoweredWheels", () => S.PoweredWheels);
+			this.AttachDelegate("DisplacementCC", () => S.Displacement);
+			this.AttachDelegate("PowerTotalHP", () => S.MaxPower);
+			this.AttachDelegate("PowerEngineHP", () => S.MaxPower - S.ElectricMaxPower);
+			this.AttachDelegate("PowerMotorHP", () => S.ElectricMaxPower);
+			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
+			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
+			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
+			if (ShowFreq)
+			{
+				this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
+				this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
+				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
+				this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
+				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
+				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
+				this.AttachDelegate("Gain1H", () => D.Gain1H);
+				this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
+				this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
+				this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
+				this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
+				this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
+				this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
+				this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
+				this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
+			}
 
-            if (ShowSusp)
-            {
-                this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
-                this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
-                this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
-                this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
-                this.AttachDelegate("SuspensionMultR1", () => D.SuspensionMultR1);
-                this.AttachDelegate("SuspensionMultR2", () => D.SuspensionMultR2);
-                this.AttachDelegate("SuspensionMultR3", () => D.SuspensionMultR3);
-                this.AttachDelegate("SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
-                this.AttachDelegate("SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
-                this.AttachDelegate("SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
-                this.AttachDelegate("SuspensionFL", () => D.SuspensionFL);
-                this.AttachDelegate("SuspensionFR", () => D.SuspensionFR);
-                this.AttachDelegate("SuspensionRL", () => D.SuspensionRL);
-                this.AttachDelegate("SuspensionRR", () => D.SuspensionRR);
-                this.AttachDelegate("SuspensionFront", () => D.SuspensionFront);
-                this.AttachDelegate("SuspensionRear", () => D.SuspensionRear);
-                this.AttachDelegate("SuspensionLeft", () => D.SuspensionLeft);
-                this.AttachDelegate("SuspensionRight", () => D.SuspensionRight);
-                this.AttachDelegate("SuspensionAll", () => D.SuspensionAll);
-                this.AttachDelegate("SuspensionAccAll", () => D.SuspensionAccAll);
-            }
-            this.AttachDelegate("RumbleFromPlugin", () => D.RumbleFromPlugin);
-            this.AttachDelegate("RumbleMult", () => D.RumbleMult);
-            this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
-            this.AttachDelegate("RumbleRight", () => D.RumbleRight);
-            this.AttachDelegate("Gear", () => D.Gear);
-            this.AttachDelegate("Gears", () => D.Gears);
-            this.AttachDelegate("ShiftDown", () => D.Downshift);
-            this.AttachDelegate("ShiftUp", () => D.Upshift);
-            this.AttachDelegate("WiperStatus", () => D.WiperStatus);
-            if (ShowPhysics)
-            {
-                this.AttachDelegate("Airborne", () => D.Airborne);
-                this.AttachDelegate("YawRate", () => D.YawRate);
-                this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
-                this.AttachDelegate("AccHeave", () => D.AccHeave[D.Acc0]);
-                this.AttachDelegate("AccSurge", () => D.AccSurge[D.Acc0]);
-                this.AttachDelegate("AccSway", () => D.AccSway[D.Acc0]);
-                this.AttachDelegate("AccHeave2", () => D.AccHeave2S);
-                this.AttachDelegate("AccSurge2", () => D.AccSurge2S);
-                this.AttachDelegate("AccSway2", () => D.AccSway2S);
-                this.AttachDelegate("AccHeaveAvg", () => D.AccHeaveAvg);
-                this.AttachDelegate("AccSurgeAvg", () => D.AccSurgeAvg);
-                this.AttachDelegate("AccSwayAvg", () => D.AccSwayAvg);
-                this.AttachDelegate("JerkZ", () => D.JerkZ);
-                this.AttachDelegate("JerkY", () => D.JerkY);
-                this.AttachDelegate("JerkX", () => D.JerkX);
-                this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
-                this.AttachDelegate("MPitch", () => D.MotionPitch);
-                this.AttachDelegate("MRoll", () => D.MotionRoll);
-                this.AttachDelegate("MYaw", () => D.MotionYaw);
-                this.AttachDelegate("MHeave", () => D.MotionHeave);
-                this.AttachDelegate("MSurge", () => D.MotionSurge);
-                this.AttachDelegate("MSway", () => D.MotionSway);
-                this.AttachDelegate("Throttle", () => D.Accelerator);
-                this.AttachDelegate("VelocityX", () => D.VelocityX);
-            }
-            FrameTimeTicks = DateTime.Now.Ticks;
-        }
-    }
+			if (ShowSusp)
+			{
+				this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
+				this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
+				this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
+				this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
+				this.AttachDelegate("SuspensionMultR1", () => D.SuspensionMultR1);
+				this.AttachDelegate("SuspensionMultR2", () => D.SuspensionMultR2);
+				this.AttachDelegate("SuspensionMultR3", () => D.SuspensionMultR3);
+				this.AttachDelegate("SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
+				this.AttachDelegate("SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
+				this.AttachDelegate("SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
+				this.AttachDelegate("SuspensionFL", () => D.SuspensionFL);
+				this.AttachDelegate("SuspensionFR", () => D.SuspensionFR);
+				this.AttachDelegate("SuspensionRL", () => D.SuspensionRL);
+				this.AttachDelegate("SuspensionRR", () => D.SuspensionRR);
+				this.AttachDelegate("SuspensionFront", () => D.SuspensionFront);
+				this.AttachDelegate("SuspensionRear", () => D.SuspensionRear);
+				this.AttachDelegate("SuspensionLeft", () => D.SuspensionLeft);
+				this.AttachDelegate("SuspensionRight", () => D.SuspensionRight);
+				this.AttachDelegate("SuspensionAll", () => D.SuspensionAll);
+				this.AttachDelegate("SuspensionAccAll", () => D.SuspensionAccAll);
+			}
+			this.AttachDelegate("RumbleFromPlugin", () => D.RumbleFromPlugin);
+			this.AttachDelegate("RumbleMult", () => D.RumbleMult);
+			this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
+			this.AttachDelegate("RumbleRight", () => D.RumbleRight);
+			this.AttachDelegate("Gear", () => D.Gear);
+			this.AttachDelegate("Gears", () => D.Gears);
+			this.AttachDelegate("ShiftDown", () => D.Downshift);
+			this.AttachDelegate("ShiftUp", () => D.Upshift);
+			this.AttachDelegate("WiperStatus", () => D.WiperStatus);
+			if (ShowPhysics)
+			{
+				this.AttachDelegate("Airborne", () => D.Airborne);
+				this.AttachDelegate("YawRate", () => D.YawRate);
+				this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
+				this.AttachDelegate("AccHeave", () => D.AccHeave[D.Acc0]);
+				this.AttachDelegate("AccSurge", () => D.AccSurge[D.Acc0]);
+				this.AttachDelegate("AccSway", () => D.AccSway[D.Acc0]);
+				this.AttachDelegate("AccHeave2", () => D.AccHeave2S);
+				this.AttachDelegate("AccSurge2", () => D.AccSurge2S);
+				this.AttachDelegate("AccSway2", () => D.AccSway2S);
+				this.AttachDelegate("AccHeaveAvg", () => D.AccHeaveAvg);
+				this.AttachDelegate("AccSurgeAvg", () => D.AccSurgeAvg);
+				this.AttachDelegate("AccSwayAvg", () => D.AccSwayAvg);
+				this.AttachDelegate("JerkZ", () => D.JerkZ);
+				this.AttachDelegate("JerkY", () => D.JerkY);
+				this.AttachDelegate("JerkX", () => D.JerkX);
+				this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
+				this.AttachDelegate("MPitch", () => D.MotionPitch);
+				this.AttachDelegate("MRoll", () => D.MotionRoll);
+				this.AttachDelegate("MYaw", () => D.MotionYaw);
+				this.AttachDelegate("MHeave", () => D.MotionHeave);
+				this.AttachDelegate("MSurge", () => D.MotionSurge);
+				this.AttachDelegate("MSway", () => D.MotionSway);
+				this.AttachDelegate("Throttle", () => D.Accelerator);
+				this.AttachDelegate("VelocityX", () => D.VelocityX);
+			}
+			FrameTimeTicks = DateTime.Now.Ticks;
+		}
+	}
 }
