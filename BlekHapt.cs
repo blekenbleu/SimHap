@@ -27,6 +27,7 @@ namespace blekenbleu.Haptic
 		public static GameId CurrentGame = GameId.Other;
 		public static string GameDBText;
 		internal static bool Loaded, Waiting, Save, Set, Changed;
+		internal string CarId;		// exactly matches data.NewData.CarId
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(BlekHapt)}.{Environment.UserName}.json";
 //		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
@@ -105,13 +106,12 @@ namespace blekenbleu.Haptic
 		private static BlekHapt H;
 
 		internal static async void FetchCarData(	// called from SetVehicle() switch
-			string id,
 			string category,
 			ushort redlineFromGame,
 			ushort maxRPMFromGame,
 			ushort ushortIdleRPM)							// FetchCarData() argument
 		{
-			Logging.Current.Info($"blekHapt.FetchCarData({id}/{category}):  Index = {H.D.Index}," +
+			Logging.Current.Info($"blekHapt.FetchCarData({category}):  Index = {H.D.Index}," +
 							   (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
 								+ (Set ? " Set": "") + (Changed ? "Changed " : ""));
 
@@ -119,12 +119,9 @@ namespace blekenbleu.Haptic
 			{
 				H.S.Notes = "";
 				Set = false;
-				string sid = (GameId.Forza == CurrentGame && "Car_" == H.N.CarId.Substring(0,4))
-							? H.N.CarId.Substring(4) : H.N.CarId;
-				H.D.Index = H.S.SelectCar(sid, // set game RPM defaults
-													redlineFromGame, maxRPMFromGame, ushortIdleRPM);
+				H.D.Index = H.S.SelectCar(redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// set game RPM defaults
 /*
-				Logging.Current.Info($"blekHapt.SelectCar({sid}): "
+				Logging.Current.Info($"blekHapt.SelectCar(): "
 									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
 									+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
 									+ (Changed ? "Changed " : "") + $" Index = {H.D.Index}");
@@ -137,10 +134,9 @@ namespace blekenbleu.Haptic
 			{
 				Waiting = true;
 				string dls = null;
-				id ??= "0";
 				category ??= "0";
 				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
-								 + "/" + Uri.EscapeDataString(id) + "/" + Uri.EscapeDataString(category));
+								 + "/" + Uri.EscapeDataString(H.S.Car.id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
 				dls = async.Content.ReadAsStringAsync().Result;
@@ -158,7 +154,7 @@ namespace blekenbleu.Haptic
 					{
 						CarSpec car = dljc.data[0];
 						car.defaults = "DB";
-						H.S.Cache(car);					// FetchCarData(): Set(id) at the end of SetVehicle()
+						H.S.Cache(car);					// FetchCarData(): Set(CarId) at the end of SetVehicle()
 						LoadFailCount = 1;
 					//	Logging.Current.Info($"blekHapt.FetchCarData({car.name}): Successfully loaded; "
 					//						+ $" CarInitCount = {H.D.CarInitCount}");
@@ -170,13 +166,13 @@ namespace blekenbleu.Haptic
 				else if (null != dls)
 				{
 					if (-1 == H.D.Index)			// delayed dls? things may have moved on...
-						H.D.Index = -3;			// disable self until other code decides otherwise
+						H.D.Index = -3;				// disable self until other code decides otherwise
 					if (11 == dls.Length)
 						Waiting = false;
 /*
-						Logging.Current.Info($"blekHapt.FetchCarData({id}): not in DB");
+						Logging.Current.Info($"blekHapt.FetchCarData(): not in DB");
 					else if (0 < dls.Length)
-						Logging.Current.Info($"blekHapt.FetchCarData({id}): JsonConvert fail;  length {dls.Length}: "
+						Logging.Current.Info($"blekHapt.FetchCarData(): JsonConvert fail;  length {dls.Length}: "
 											+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
  */
 				}
@@ -197,7 +193,6 @@ namespace blekenbleu.Haptic
 		/// <param name="pluginManager"></param>
 		/// <param name="data">Current game data, including present and previous data frames.</param> 
 		internal GameData Gdat;
-		internal PluginManager PM;
 		internal int On;
 		internal StatusDataBase N;
         public void DataUpdate(PluginManager pluginManager, ref GameData data)
@@ -208,14 +203,13 @@ namespace blekenbleu.Haptic
 				return;
 			}
 
-			Gdat = data;
-			PM = pluginManager;
+			Gdat = data;									// for OldData
 
-			if (S.Id == N.CarId || D.Locked)				// DataUpdate()
+			if (CarId == N.CarId || D.Locked)				// DataUpdate()
 			{
 				if (null != data.OldData && data.GameRunning
-					&& 1 == (On = (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
-					D.Refresh(this);
+					&& 1 == (On = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
+					D.Refresh(this, pluginManager);
 				return;
 			}
 
@@ -230,22 +224,15 @@ namespace blekenbleu.Haptic
 				if (4 > LoadFailCount++)
 					return;					// do not give up (yet)
 
-				D.Index = -3;					   // disable FetchCarData(); enable Defaults()
+				D.Index = -3;				// disable FetchCarData(); enable Defaults()
 				D.CarInitCount = 0;
 			//	Logging.Current.Info($"blekHapt.DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
 			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
 			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
 			}
-			else if (Loaded || Changed)		  // save before SetVehicle()
-			{
-				if (null == S.Car.name)
-					Logging.Current.Info($"blekHapt.S.Add({S.Id}) : missing car name");
-				else if (S.Add(S.Id))		// DataUpdate():  add or update S.Car in Cars list
-					S.LD.Add(S.Car);		// DataUpdate()
-				Loaded = false;
-			}
-
+			else if (Loaded || Changed)		// save before SetVehicle()
+				Loaded = S.AddCar();		// DataUpdate():  add or update S.Car in Cars list;  Loaded = false
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{

@@ -160,7 +160,6 @@ namespace blekenbleu.Haptic
 
 		private void UpdateVehicle()
 		{
-			PM = H.PM;
 			SuspensionDistFLP = SuspensionDistFL;
 			SuspensionDistFRP = SuspensionDistFR;
 			SuspensionDistRLP = SuspensionDistRL;
@@ -203,7 +202,7 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
-					WiperStatus = (int) H.PM.GetPropertyValue(raw+"Graphics.WiperLV");
+					WiperStatus = (int) PM.GetPropertyValue(raw+"Graphics.WiperLV");
 					break;
 				case GameId.AMS1:
 					SuspensionDistFL = Data("wheel01.suspensionDeflection");
@@ -265,37 +264,37 @@ namespace blekenbleu.Haptic
 					SpeedMs = Raw("CurrentPlayer.speed");
 					break;
 				case GameId.IRacing:
-					if (H.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
+					if (PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFshockDefl");
 					}
-					else if (H.PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
+					else if (PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFSHshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFSHshockDefl");
 					}
-					if (H.PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
+					if (PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRshockDefl");
 					}
-					else if (H.PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
+					else if (PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRSHshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRSHshockDefl");
 					}
-					if (H.PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
+					if (PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.CFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.CFshockDefl");
 					}
-					else if (H.PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
+					else if (PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.HFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.HFshockDefl");
 					}
-					if (H.PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
+					if (PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
@@ -326,22 +325,22 @@ namespace blekenbleu.Haptic
 					}
 					break;
 				case GameId.RRRE:
-					if (H.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.FrontLeft") != null)
+					if (PM.GetPropertyValue(raw+"Player.SuspensionDeflection.FrontLeft") != null)
 					{
 						SuspensionDistFL = Raw("Player.SuspensionDeflection.FrontLeft");
 						SuspensionDistFR = Raw("Player.SuspensionDeflection.FrontRight");
 					}
-					if (H.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.RearLeft") != null)
+					if (PM.GetPropertyValue(raw+"Player.SuspensionDeflection.RearLeft") != null)
 					{
 						SuspensionDistRL = Raw("Player.SuspensionDeflection.RearLeft");
 						SuspensionDistRR = Raw("Player.SuspensionDeflection.RearRight");
 					}
-					if (H.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionFront") != null)
+					if (PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionFront") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 					}
-					if (H.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionRear") != null)
+					if (PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionRear") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Player.ThirdSpringSuspensionDeflectionRear");
@@ -402,7 +401,7 @@ namespace blekenbleu.Haptic
 					SuspensionDistFR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection02");
 					SuspensionDistRL = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection03");
 					SuspensionDistRR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection04");
-					WiperStatus = (bool) H.PM.GetPropertyValue(raw+"TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
+					WiperStatus = (bool) PM.GetPropertyValue(raw+"TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
 					break;
 				case GameId.BeamNG:
 					flag = false;
@@ -426,8 +425,8 @@ namespace blekenbleu.Haptic
 					SuspensionVelFR = Raw("m_sData.m_afSuspVelocity01");
 					SuspensionVelRL = Raw("m_sData.m_afSuspVelocity02");
 					SuspensionVelRR = Raw("m_sData.m_afSuspVelocity02");
-					if ((int) H.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
-					 || (int) H.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
+					if ((int) PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
+					 || (int) PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
 					{
 						RumbleLeft = 50.0;
 						RumbleRight = 50.0;
@@ -467,10 +466,11 @@ namespace blekenbleu.Haptic
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Refresh(BlekHapt shp)
+		internal void Refresh(BlekHapt bh, PluginManager pluginManager)
 		{
-			H = shp;
-			FPS = (double) H.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
+			H = bh;
+			PM = pluginManager;
+			FPS = (double) PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			Rpms = Convert.ToUInt16(0.5 + H.N.Rpms);
 			SpeedMs = H.N.SpeedKmh * 0.277778;
 			Accelerator = H.N.Throttle;
