@@ -68,7 +68,7 @@ namespace sierses.Sim
 			SlipYGamma = Settings.SlipYGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipYGammaAll = Settings.SlipYGamma.TryGetValue("AllGames", out num) ? num : 1.0;
 
-			LockedText = Unlocked ? "Lock" : "Unlock";
+			LockedText = Locked ? "Unlock" : "Lock";
 			MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
 			MotionPitchMult = GetSetting("MotionPitchMult", 1.6);
 			MotionPitchGamma = GetSetting("MotionPitchGamma", 1.5);
