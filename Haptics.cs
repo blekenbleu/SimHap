@@ -215,7 +215,7 @@ namespace sierses.Sim
 			Gdat = data;
 			PM = pluginManager;
 	
-			if (S.Id == data.NewData.CarId || !D.Unlocked)				// DataUpdate()
+			if (S.Id == data.NewData.CarId || D.Locked)				// DataUpdate()
 			{
 				if (null != data.OldData && data.GameRunning
 					&& 1 == (On = (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
