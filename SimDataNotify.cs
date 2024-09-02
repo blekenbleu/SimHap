@@ -33,11 +33,11 @@ namespace blekenbleu.Haptic
 		private double motionSwayOffset;
 		private double motionSwayMult;
 		private double motionSwayGamma;
-		private bool unlocked = true;
-		public bool Unlocked
+		private bool locked = false;
+		public bool Locked
 		{
-			get => unlocked;
-			set { SetField(ref unlocked, value, nameof(Unlocked)); }
+			get => locked;
+			set { SetField(ref locked, value, nameof(Locked)); }
 		}
 
 		public string GameAltText

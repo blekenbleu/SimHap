@@ -210,8 +210,8 @@ namespace blekenbleu.Haptic
 
 			Gdat = data;
 			PM = pluginManager;
-	
-			if (S.Id == N.CarId || !D.Unlocked)				// DataUpdate()
+
+			if (S.Id == N.CarId || D.Locked)				// DataUpdate()
 			{
 				if (null != data.OldData && data.GameRunning
 					&& 1 == (On = (int)PM.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))

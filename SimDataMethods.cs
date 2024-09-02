@@ -54,7 +54,7 @@ namespace blekenbleu.Haptic
 			SuspensionMultAll = H.Settings.SuspensionMult.TryGetValue("AllGames", out num) ? num : 1.5;
 			SuspensionGamma = H.Settings.SuspensionGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionGammaAll = H.Settings.SuspensionGamma.TryGetValue("AllGames", out num) ? num : 1.75;
-			LockedText = Unlocked ? "Lock" : "Unlock";
+			LockedText = Locked ? "Unlock" : "Lock";
 			MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
 			MotionPitchMult = GetSetting("MotionPitchMult", 1.6);
 			MotionPitchGamma = GetSetting("MotionPitchGamma", 1.5);

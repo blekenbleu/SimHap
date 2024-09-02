@@ -126,8 +126,8 @@ namespace blekenbleu.Haptic
 
 		private void Lock_Click(object sender, RoutedEventArgs e)
 		{
-			Plugin.D.Unlocked = !Plugin.D.Unlocked;
-			Plugin.D.LockedText = Plugin.D.Unlocked ? "Lock" : "Unlock";
+			Plugin.D.Locked = !Plugin.D.Locked;
+			Plugin.D.LockedText = Plugin.D.Locked ? "Unlock" : "Lock";
 		}
 
 		private void MenuTheme(object sender, RoutedEventArgs e)
