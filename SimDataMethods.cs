@@ -86,16 +86,17 @@ namespace sierses.Sim
 			MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
 		}
 
-			internal double BS = 1.0;			/*	if you could make me a version where you change ratios so its' 
-2/4/8/16 cyl to 2:1
-3/6/12 to 3:2
-5/10 to 5:4
-and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
-  I have an idea to stack main harmonic instead with slight freq shift and delay on each one
- to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
-Hopefully you don't need to change code in a million places
-22 Jun 2024 BS
-*/
+			internal double BS = 1.0;
+/*	if you could make me a version where you change ratios so its' 
+	2/4/8/16 cyl to 2:1
+	3/6/12 to 3:2
+	5/10 to 5:4
+	and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
+	I have an idea to stack main harmonic instead with slight freq shift and delay on each one
+	to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
+	Hopefully you don't need to change code in a million places
+	22 Jun 2024 BS
+ */
 		// called from DataUpdate()
 		internal void SetVehicle(Haptics shp)
 		{
