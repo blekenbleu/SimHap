@@ -27,16 +27,17 @@
 		- WheelLoads, Slips, Gear, ABS
 		- Suspension, EngineLoad
 		- Haptics based on engine RPM
-	- `SetVehicle()`, when loaded id `!=` requested
+	- `SetCar()`, when loaded CarId `!=` SimHub's current
 		- check local JSON dictionaries
 			- read/write personal
-			- optional read/only atlas
+			- optional read/only Atlas
 		- call `FetchCarData()` for dictionary misses
-			- `async await` caused `FetchCarData()`  
+			- `async await` causes `FetchCarData()`  
 				to *not complete* during initial invocation, sets `Waiting`,   
 				- successful completion when valid Download object received.   
 		- call SetDefaultVehicle() *after* `FetchCarData()` fails
 			- e.g. by timeout or invalid Download object`
+			- last gasp option:  try matching CarName instead of CarId (particularly for RRRE)
 			- UI has a Refresh button to try again
 - End()
 	- remove some defaults from Settings Dictionaries
@@ -91,7 +92,7 @@
 - `Refresh()` only if `EngineIgnitionOn` *30 May*  
 - **refactoring**
 	- when SimHub invokes `DataUpdate()` (at 60 Hz),
-		- avoid invoking either `Refresh()` or `SetVehicle()` if `Waiting`
+		- avoid invoking either `Refresh()` or `SetCar()` if `Waiting`
 	- when `static async void FetchCarData()` eventually gets valid `Download dljc`,
 		- to preclude looping, set `Loaded`, unset `Waiting`  
 		then immediately return if/when recalled with `null != dljc`
@@ -122,11 +123,11 @@
 When SimHub calls `DataUpdate()`:  
 if (`null == data.NewData`), then return  
 else if (`data.NewData.CarId == S.Id`), then try to `Refresh()` before returning  
-else if (`-1 != D.Index`), then proceed to `Add()` and `SetVehicle()`  
+else if (`-1 != D.Index`), then proceed to `Add()` and `SetCar()`  
 else if (`Waiting && 20 > D.CarInitCount`), then return  
-else if (`null != dljc || -3 == Index)`), then proceed to `Add()` and `SetVehicle()`  
+else if (`null != dljc || -3 == Index)`), then proceed to `Add()` and `SetCar()`  
 else set `D.CarInitCount = 0`, and if (`3 > LoadFailCount++`), then return  
-else lock out `FetchCarData()` by `Index = -3` and continue to `Add()` and `SetVehicle()`
+else lock out `FetchCarData()` by `Index = -3` and continue to `Add()` and `SetCar()`
 
 - to prevent being recalled while waiting for server response,  
     `async FetchCarData()` immediately returns if called when `null != dljc || -1 != Index`  
@@ -134,22 +135,22 @@ else lock out `FetchCarData()` by `Index = -3` and continue to `Add()` and `SetV
 	- on receipt of server response, `FetchCarData()` set `Waiting = false` 
     	- if a valid `Download`, set `Loaded = true`
 		- else set `Index = -3`, preventing further attempts
-- if (`-2 == Index)`,  `SetVehicle()` *first* tries getting car Spec from JSON, based on `Index >= 0`  
+- if (`-2 == Index)`,  `SetCar()` *first* tries getting car Spec from JSON, based on `Index >= 0`  
 - failed JSON sets `Index = -1`, enabling `FetchCarData()`,   
     which typically sets `Waiting = true` and goes async.  
-- *subsequent* `SetVehicle()` again checks for `null != dljc || -3 == Index`
+- *subsequent* `SetCar()` again checks for `null != dljc || -3 == Index`
 	else eventually setting `Index = -3` and `Waiting = false` for `3 <= Haptics.LoadFailCount`  
 - if (`-3 == Index` ), then `Defaults()`  
 - consequently, server car Specs are associated with `-1 == Index && !Waiting` 
 - `Defaults()` attempts to generate game-specific car `Spec`...  
-- `SetVehicle` depends on noting that `current_car != requested_car`  
+- `SetCar` depends on noting that `current_car != requested_car`  
 - however, SimHub's 60Hz `DataUpdate()` can (and does) make calls  
   when `FetchCarData()` eventually matches `requested_car`,  
      car `Spec` code has not completed dotting I's and crossing T's....  
-	 consequently, setting current Id to requested is *the final instruction* in `SetVehicle()`  
+	 consequently, setting current CarId to SimHub's is *near the end* of `SetCar()`  
 	- *after* all I's are dotted and Ts are crossed.  
-- if `Loaded`, then `Add()` current car `Spec` to current game list
-	- *just before* looking for *another* car
+- if `Loaded`, then `SaveCar()` current car `Spec` to current game list
+	- *just before* looking for *another* `SetCar()`
 	- or during `Exit()` if `Loaded || Save`
 
 ### 3 Sep 2024 `CarId` refactor
@@ -162,7 +163,7 @@ should be separate from that used for dictionary indexing.
 - convert from `data.NewData.CarId` to dictionary index, using `CarId()`, in only one place
 - access `Car.id`  instead of passing string arguments with value of `Private_Car.id`.
 	- change `Add(string cId)` to `AddCar()` 
-	- change `Set(H.N.CarId)` to `Set()`
+	- change `Set(H.N.CarId)` to `SetCar()`
 	- change `SelectCar(CarId)` to `SelectCar()`
 	- change `FetchCarData(CarId, category, redline, maxRPM, IdleRPM)`  
 			to `FetchCarData(category, redline, maxRPM, IdleRPM)`

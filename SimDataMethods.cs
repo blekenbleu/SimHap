@@ -98,11 +98,11 @@ Hopefully you don't need to change code in a million places
 22 Jun 2024 BS
 */
 		// called from DataUpdate()
-		internal void SetVehicle(Haptics shp)
+		internal void SetCar(Haptics shp)
 		{
 			H = shp;
 /*
-			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}): " +
+			Logging.Current.Info($"Haptics.SetCar({shp.Gdat.NewData.CarId}): " +
 								(Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "")
 								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
  */
@@ -131,7 +131,7 @@ Hopefully you don't need to change code in a million places
 					case GameId.D4:
 					case GameId.DR2:
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetVehicle(DR2)
+										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
 						break;
 					case GameId.WRC23:
 						Haptics.FetchCarData(null, Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(H.N.MaxRpm),
@@ -140,15 +140,15 @@ Hopefully you don't need to change code in a million places
 					case GameId.F12022:
 					case GameId.F12023:
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetVehicle(F12023): to FetchCarData()
+										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetCar(F12023): to FetchCarData()
 						break;
 					case GameId.Forza:
 						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetVehicle(Forza)
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetCar(Forza)
 						break;
 					case GameId.IRacing:
-						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetVehicle(IRacing)
+						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetCar(IRacing)
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
 										 	Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
@@ -167,9 +167,9 @@ Hopefully you don't need to change code in a million places
 						break;
 					case GameId.GPBikes:
 					case GameId.MXBikes:
-						if (H.S.Id != H.N.CarId)	// SetVehicle() Switch case: Bikes
+						if (H.S.Id != H.N.CarId)	// SetCar() Switch case: Bikes
 						{
-							H.S.Id = H.N.CarId;	// SetVehicle() Switch: Bikes not in database
+							H.S.Id = H.N.CarId;	// SetCar() Switch: Bikes not in database
 							H.S.MaxRPM = Convert.ToUInt16(0.5 + H.N.MaxRpm);
 							H.S.Redline = Convert.ToUInt16(PM.GetPropertyValue(raw+"m_sEvent.m_iShiftRPM"));
 						}
@@ -183,31 +183,31 @@ Hopefully you don't need to change code in a million places
 					default:
 						H.S.Redline = Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM);
 						H.S.MaxRPM  = Convert.ToUInt16(H.N.MaxRpm);
-						H.S.IdleRPM = Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"));		// SetVehicle(default game)
+						H.S.IdleRPM = Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"));		// SetCar(default game)
 						break;
 				}
 			}
 
 			if (Haptics.Waiting)	// still hoping for online match?
 			{
-				Logging.Current.Info($"Haptics.SetVehicle({H.N.CarId}) Waiting return: "
+				Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) Waiting return: "
 									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
 									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? " Changed" : "") + $" Index = {Index}");
-				return;				// FetchCarData() DB accesses run SetVehicle() at least twice.
+				return;				// FetchCarData() DB accesses run SetCar() at least twice.
 			}
 
 			if (Haptics.Loaded = Index == -4)					// Neither JSON nor Defaults() ?
 				H.S.Src = "DB Load Success";
 			else if(0 > Index)
-				H.S.Defaults(H.N);	// SetVehicle()
+				H.S.Defaults(H.N);	// SetCar()
 
-			Logging.Current.Info($"Haptics.SetVehicle({H.N.CarId}/{H.S.Id}): "
+			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}/{H.S.Id}): "
 								+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
 								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "")
 								+ $" {H.N.CarModel}; "
 								+ (LoadText = $" {H.S.Game} " + H.S.Src));
 
-			// finalize vehicle
+			// finalize car
 			Gears = H.N.CarSettings_MaxGears > 0 ? H.N.CarSettings_MaxGears : 1;
 			GearInterval = 1 / Gears;
 			Gear = 0;
@@ -239,14 +239,14 @@ Hopefully you don't need to change code in a million places
 			RumbleLeftAvg = 0.0;
 			RumbleRightAvg = 0.0;
 			IdleSampleCount = 0;
-			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
+			idleRPM = 2500;							// SetCar(): reset to default value for each car
 			SetRPMIntervals();
 			SetRPMMix();
 			H.S.Set();								// NotifyPropertyChanged
-			H.CarId = H.N.CarId;					// SetVehicle(): car change is complete
+			H.CarId = H.N.CarId;					// SetCar(): car change is complete
 			CarInitCount = 0;
 			Index = -2;	// for next time
-			Logging.Current.Info($"Haptics.SetVehicle({H.N.CarId}) ending: "
+			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) ending: "
 									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
 									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
 
@@ -273,6 +273,6 @@ Hopefully you don't need to change code in a million places
 					break;
 			}
 			H.SC.Ratio = H.S.EngineCylinders;
-		}	// SetVehicle()
+		}	// SetCar()
 	}
 }

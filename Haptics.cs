@@ -106,10 +106,10 @@ namespace sierses.Sim
 		public PluginManager PluginManager { get; set; }
 		// ----------------------------------------------------------------
 
-		// must be void and static;  invoked by D.SetVehicle()
+		// must be void and static;  invoked by D.SetCar()
 		private static Haptics H;
 
-		internal static async void FetchCarData(	// called from SetVehicle() switch
+		internal static async void FetchCarData(	// called from SetCar() switch
 			string category,
 			ushort redlineFromGame,
 			ushort maxRPMFromGame,
@@ -158,7 +158,7 @@ namespace sierses.Sim
 					{
 						CarSpec car = dljc.data[0];
 						car.defaults = "DB";
-						H.S.Cache(car);					// FetchCarData(): Set(CarId) at the end of SetVehicle()
+						H.S.Cache(car);					// FetchCarData(): Set(CarId) at the end of SetCar()
 						LoadFailCount = 1;
 					//	Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
 					//						+ $" CarInitCount = {H.D.CarInitCount}");
@@ -219,7 +219,7 @@ namespace sierses.Sim
 
 			On = 0;
 
-			if (Waiting)
+			if (Waiting)		// FetchCarData() has queried online data
 			{
 				if ((30 * LoadFailCount) > ++D.CarInitCount)
 					return;
@@ -235,8 +235,8 @@ namespace sierses.Sim
 			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
 			}
-			else if (Loaded || Changed)		// save before SetVehicle()
-				Loaded = S.AddCar();		// DataUpdate():  add or update S.Car in Cars list
+			else if (Loaded || Changed)		// save before SetCar()
+				Loaded = S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
@@ -245,7 +245,7 @@ namespace sierses.Sim
 				Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
-				D.SetVehicle(this);
+				D.SetCar(this);
 			}
 		}	// DataUpdate()
 
@@ -282,7 +282,7 @@ namespace sierses.Sim
 			if (Save || Loaded || Changed)		// End()
 			{
 				if (Loaded || Changed)
-					S.LD.Add(S.Car);			// End()
+					S.LD.AddCar(S.Car);			// End()
 				string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
 				if (0 == sjs.Length || "{}" == sjs)
 					Logging.Current.Info( $"Haptics.End(): JSON Serializer failure: "
@@ -707,100 +707,100 @@ namespace sierses.Sim
 			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
 			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
 			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
-if (ShowFreq) {
-			this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
-			this.AttachDelegate("FreqOctave", () => D.FreqOctave);
-			this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
-			this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
-			this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
-			this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
-			this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
-			this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
-			this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
-			this.AttachDelegate("Gain1H", () => D.Gain1H);
-			this.AttachDelegate("Gain1H2", () => D.Gain1H2);
-			this.AttachDelegate("Gain2H", () => D.Gain2H);
-			this.AttachDelegate("Gain4H", () => D.Gain4H);
-			this.AttachDelegate("GainOctave", () => D.GainOctave);
-			this.AttachDelegate("GainIntervalA1", () => D.GainIntervalA1);
-			this.AttachDelegate("GainIntervalA2", () => D.GainIntervalA2);
-			this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
-			this.AttachDelegate("GainPeakA1Middle", () => D.GainPeakA1);
-			this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
-			this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
-			this.AttachDelegate("GainPeakA2Middle", () => D.GainPeakA2);
-			this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
-			this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
-			this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
-			this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
-			this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
-			this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
-			this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
-}
-if (ShowTire) {
-			this.AttachDelegate("SlipXFL", () => D.SlipXFL);
-			this.AttachDelegate("SlipXFR", () => D.SlipXFR);
-			this.AttachDelegate("SlipXRL", () => D.SlipXRL);
-			this.AttachDelegate("SlipXRR", () => D.SlipXRR);
-			this.AttachDelegate("SlipXAll", () => D.SlipXAll);
-			this.AttachDelegate("SlipYFL", () => D.SlipYFL);
-			this.AttachDelegate("SlipYFR", () => D.SlipYFR);
-			this.AttachDelegate("SlipYRL", () => D.SlipYRL);
-			this.AttachDelegate("SlipYRR", () => D.SlipYRR);
-			this.AttachDelegate("SlipYAll", () => D.SlipYAll);
-			this.AttachDelegate("WheelLockAll", () => D.WheelLockAll);
-			this.AttachDelegate("WheelSpinAll", () => D.WheelSpinAll);
-			this.AttachDelegate("TireDiameterFL", () => D.TireDiameterFL);
-			this.AttachDelegate("TireDiameterFR", () => D.TireDiameterFR);
-			this.AttachDelegate("TireDiameterRL", () => D.TireDiameterRL);
-			this.AttachDelegate("TireDiameterRR", () => D.TireDiameterRR);
-			this.AttachDelegate("TireSpeedFL", () => D.WheelSpeedFL);
-			this.AttachDelegate("TireSpeedFR", () => D.WheelSpeedFR);
-			this.AttachDelegate("TireSpeedRL", () => D.WheelSpeedRL);
-			this.AttachDelegate("TireSpeedRR", () => D.WheelSpeedRR);
-			this.AttachDelegate("SpeedMs", () => D.SpeedMs);
-			this.AttachDelegate("TireLoadFL", () => D.WheelLoadFL);
-			this.AttachDelegate("TireLoadFR", () => D.WheelLoadFR);
-			this.AttachDelegate("TireLoadRL", () => D.WheelLoadRL);
-			this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
-			this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
-}
-if (ShowSusp) {
-			this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
-			this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
-			this.AttachDelegate("SuspensionFreqR0b", () => D.SuspensionFreqRb);
-			this.AttachDelegate("SuspensionFreqR0c", () => D.SuspensionFreqRc);
-			this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
-			this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
-			this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
-			this.AttachDelegate("SuspensionFreqR4", () => D.SuspensionFreqR4);
-			this.AttachDelegate("SuspensionFreqR5", () => D.SuspensionFreqR5);
-			this.AttachDelegate("SuspensionMultR0a", () => D.SuspensionMultRa);
-			this.AttachDelegate("SuspensionMultR0b", () => D.SuspensionMultRb);
-			this.AttachDelegate("SuspensionMultR0c", () => D.SuspensionMultRc);
-			this.AttachDelegate("SuspensionMultR1", () => D.SuspensionMultR1);
-			this.AttachDelegate("SuspensionMultR2", () => D.SuspensionMultR2);
-			this.AttachDelegate("SuspensionMultR3", () => D.SuspensionMultR3);
-			this.AttachDelegate("SuspensionMultR4", () => D.SuspensionMultR4);
-			this.AttachDelegate("SuspensionMultR5", () => D.SuspensionMultR5);
-			this.AttachDelegate("SuspensionRumbleMultR0b", () => D.SuspensionRumbleMultRb);
-			this.AttachDelegate("SuspensionRumbleMultR0c", () => D.SuspensionRumbleMultRc);
-			this.AttachDelegate("SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
-			this.AttachDelegate("SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
-			this.AttachDelegate("SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
-			this.AttachDelegate("SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
-			this.AttachDelegate("SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
-			this.AttachDelegate("SuspensionFL", () => D.SuspensionFL);
-			this.AttachDelegate("SuspensionFR", () => D.SuspensionFR);
-			this.AttachDelegate("SuspensionRL", () => D.SuspensionRL);
-			this.AttachDelegate("SuspensionRR", () => D.SuspensionRR);
-			this.AttachDelegate("SuspensionFront", () => D.SuspensionFront);
-			this.AttachDelegate("SuspensionRear", () => D.SuspensionRear);
-			this.AttachDelegate("SuspensionLeft", () => D.SuspensionLeft);
-			this.AttachDelegate("SuspensionRight", () => D.SuspensionRight);
-			this.AttachDelegate("SuspensionAll", () => D.SuspensionAll);
-			this.AttachDelegate("SuspensionAccAll", () => D.SuspensionAccAll);
-}
+			if (ShowFreq) {
+				this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
+				this.AttachDelegate("FreqOctave", () => D.FreqOctave);
+				this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
+				this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
+				this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
+				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
+				this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
+				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
+				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
+				this.AttachDelegate("Gain1H", () => D.Gain1H);
+				this.AttachDelegate("Gain1H2", () => D.Gain1H2);
+				this.AttachDelegate("Gain2H", () => D.Gain2H);
+				this.AttachDelegate("Gain4H", () => D.Gain4H);
+				this.AttachDelegate("GainOctave", () => D.GainOctave);
+				this.AttachDelegate("GainIntervalA1", () => D.GainIntervalA1);
+				this.AttachDelegate("GainIntervalA2", () => D.GainIntervalA2);
+				this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
+				this.AttachDelegate("GainPeakA1Middle", () => D.GainPeakA1);
+				this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
+				this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
+				this.AttachDelegate("GainPeakA2Middle", () => D.GainPeakA2);
+				this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
+				this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
+				this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
+				this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
+				this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
+				this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
+				this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
+			}
+			if (ShowTire) {
+				this.AttachDelegate("SlipXFL", () => D.SlipXFL);
+				this.AttachDelegate("SlipXFR", () => D.SlipXFR);
+				this.AttachDelegate("SlipXRL", () => D.SlipXRL);
+				this.AttachDelegate("SlipXRR", () => D.SlipXRR);
+				this.AttachDelegate("SlipXAll", () => D.SlipXAll);
+				this.AttachDelegate("SlipYFL", () => D.SlipYFL);
+				this.AttachDelegate("SlipYFR", () => D.SlipYFR);
+				this.AttachDelegate("SlipYRL", () => D.SlipYRL);
+				this.AttachDelegate("SlipYRR", () => D.SlipYRR);
+				this.AttachDelegate("SlipYAll", () => D.SlipYAll);
+				this.AttachDelegate("WheelLockAll", () => D.WheelLockAll);
+				this.AttachDelegate("WheelSpinAll", () => D.WheelSpinAll);
+				this.AttachDelegate("TireDiameterFL", () => D.TireDiameterFL);
+				this.AttachDelegate("TireDiameterFR", () => D.TireDiameterFR);
+				this.AttachDelegate("TireDiameterRL", () => D.TireDiameterRL);
+				this.AttachDelegate("TireDiameterRR", () => D.TireDiameterRR);
+				this.AttachDelegate("TireSpeedFL", () => D.WheelSpeedFL);
+				this.AttachDelegate("TireSpeedFR", () => D.WheelSpeedFR);
+				this.AttachDelegate("TireSpeedRL", () => D.WheelSpeedRL);
+				this.AttachDelegate("TireSpeedRR", () => D.WheelSpeedRR);
+				this.AttachDelegate("SpeedMs", () => D.SpeedMs);
+				this.AttachDelegate("TireLoadFL", () => D.WheelLoadFL);
+				this.AttachDelegate("TireLoadFR", () => D.WheelLoadFR);
+				this.AttachDelegate("TireLoadRL", () => D.WheelLoadRL);
+				this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
+				this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
+			}
+			if (ShowSusp) {
+				this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
+				this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
+				this.AttachDelegate("SuspensionFreqR0b", () => D.SuspensionFreqRb);
+				this.AttachDelegate("SuspensionFreqR0c", () => D.SuspensionFreqRc);
+				this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
+				this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
+				this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
+				this.AttachDelegate("SuspensionFreqR4", () => D.SuspensionFreqR4);
+				this.AttachDelegate("SuspensionFreqR5", () => D.SuspensionFreqR5);
+				this.AttachDelegate("SuspensionMultR0a", () => D.SuspensionMultRa);
+				this.AttachDelegate("SuspensionMultR0b", () => D.SuspensionMultRb);
+				this.AttachDelegate("SuspensionMultR0c", () => D.SuspensionMultRc);
+				this.AttachDelegate("SuspensionMultR1", () => D.SuspensionMultR1);
+				this.AttachDelegate("SuspensionMultR2", () => D.SuspensionMultR2);
+				this.AttachDelegate("SuspensionMultR3", () => D.SuspensionMultR3);
+				this.AttachDelegate("SuspensionMultR4", () => D.SuspensionMultR4);
+				this.AttachDelegate("SuspensionMultR5", () => D.SuspensionMultR5);
+				this.AttachDelegate("SuspensionRumbleMultR0b", () => D.SuspensionRumbleMultRb);
+				this.AttachDelegate("SuspensionRumbleMultR0c", () => D.SuspensionRumbleMultRc);
+				this.AttachDelegate("SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
+				this.AttachDelegate("SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
+				this.AttachDelegate("SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
+				this.AttachDelegate("SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
+				this.AttachDelegate("SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
+				this.AttachDelegate("SuspensionFL", () => D.SuspensionFL);
+				this.AttachDelegate("SuspensionFR", () => D.SuspensionFR);
+				this.AttachDelegate("SuspensionRL", () => D.SuspensionRL);
+				this.AttachDelegate("SuspensionRR", () => D.SuspensionRR);
+				this.AttachDelegate("SuspensionFront", () => D.SuspensionFront);
+				this.AttachDelegate("SuspensionRear", () => D.SuspensionRear);
+				this.AttachDelegate("SuspensionLeft", () => D.SuspensionLeft);
+				this.AttachDelegate("SuspensionRight", () => D.SuspensionRight);
+				this.AttachDelegate("SuspensionAll", () => D.SuspensionAll);
+				this.AttachDelegate("SuspensionAccAll", () => D.SuspensionAccAll);
+			}
 			this.AttachDelegate("RumbleFromPlugin", () => D.RumbleFromPlugin);
 			this.AttachDelegate("RumbleMult", () => D.RumbleMult);
 			this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
@@ -811,32 +811,32 @@ if (ShowSusp) {
 			this.AttachDelegate("ShiftDown", () => D.Downshift);
 			this.AttachDelegate("ShiftUp", () => D.Upshift);
 			this.AttachDelegate("WiperStatus", () => D.WiperStatus);
-if (ShowPhysics) {
-			this.AttachDelegate("Airborne", () => D.Airborne);
-			this.AttachDelegate("YawRate", () => D.YawRate);
-			this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
-			this.AttachDelegate("AccHeave", () => D.AccHeave[D.Acc0]);
-			this.AttachDelegate("AccSurge", () => D.AccSurge[D.Acc0]);
-			this.AttachDelegate("AccSway", () => D.AccSway[D.Acc0]);
-			this.AttachDelegate("AccHeave2", () => D.AccHeave2S);
-			this.AttachDelegate("AccSurge2", () => D.AccSurge2S);
-			this.AttachDelegate("AccSway2", () => D.AccSway2S);
-			this.AttachDelegate("AccHeaveAvg", () => D.AccHeaveAvg);
-			this.AttachDelegate("AccSurgeAvg", () => D.AccSurgeAvg);
-			this.AttachDelegate("AccSwayAvg", () => D.AccSwayAvg);
-			this.AttachDelegate("JerkZ", () => D.JerkZ);
-			this.AttachDelegate("JerkY", () => D.JerkY);
-			this.AttachDelegate("JerkX", () => D.JerkX);
-			this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
-			this.AttachDelegate("MPitch", () => D.MotionPitch);
-			this.AttachDelegate("MRoll", () => D.MotionRoll);
-			this.AttachDelegate("MYaw", () => D.MotionYaw);
-			this.AttachDelegate("MHeave", () => D.MotionHeave);
-			this.AttachDelegate("MSurge", () => D.MotionSurge);
-			this.AttachDelegate("MSway", () => D.MotionSway);
-			this.AttachDelegate("Throttle", () => D.Accelerator);
-			this.AttachDelegate("VelocityX", () => D.VelocityX);
-}
+			if (ShowPhysics) {
+				this.AttachDelegate("Airborne", () => D.Airborne);
+				this.AttachDelegate("YawRate", () => D.YawRate);
+				this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
+				this.AttachDelegate("AccHeave", () => D.AccHeave[D.Acc0]);
+				this.AttachDelegate("AccSurge", () => D.AccSurge[D.Acc0]);
+				this.AttachDelegate("AccSway", () => D.AccSway[D.Acc0]);
+				this.AttachDelegate("AccHeave2", () => D.AccHeave2S);
+				this.AttachDelegate("AccSurge2", () => D.AccSurge2S);
+				this.AttachDelegate("AccSway2", () => D.AccSway2S);
+				this.AttachDelegate("AccHeaveAvg", () => D.AccHeaveAvg);
+				this.AttachDelegate("AccSurgeAvg", () => D.AccSurgeAvg);
+				this.AttachDelegate("AccSwayAvg", () => D.AccSwayAvg);
+				this.AttachDelegate("JerkZ", () => D.JerkZ);
+				this.AttachDelegate("JerkY", () => D.JerkY);
+				this.AttachDelegate("JerkX", () => D.JerkX);
+				this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
+				this.AttachDelegate("MPitch", () => D.MotionPitch);
+				this.AttachDelegate("MRoll", () => D.MotionRoll);
+				this.AttachDelegate("MYaw", () => D.MotionYaw);
+				this.AttachDelegate("MHeave", () => D.MotionHeave);
+				this.AttachDelegate("MSurge", () => D.MotionSurge);
+				this.AttachDelegate("MSway", () => D.MotionSway);
+				this.AttachDelegate("Throttle", () => D.Accelerator);
+				this.AttachDelegate("VelocityX", () => D.VelocityX);
+			}
 			FrameTimeTicks = DateTime.Now.Ticks;
 		}
 	}
