@@ -28,16 +28,16 @@
 		- Suspension, EngineLoad
 		- Haptics based on engine RPM
 	- `SetCar()`, when loaded CarId `!=` SimHub's current
-		- check local JSON dictionaries
+		- `SelectCar()` first checks local JSON dictionaries, based on `-2 == Index`
 			- read/write personal
 			- optional read/only Atlas
-		- call `FetchCarData()` for dictionary misses
+			- last gasp option:  try matching CarName in Atlas instead of CarId (particularly for RRRE)
+		- call `FetchCarData()` for dictionary misses, based on `-1 == Index`
 			- `async await` causes `FetchCarData()`  
 				to *not complete* during initial invocation, sets `Waiting`,   
 				- successful completion when valid Download object received.   
-		- call SetDefaultVehicle() *after* `FetchCarData()` fails
+		- call SetDefaultVehicle() *after* `FetchCarData()` fails, based on `-3 == Index`
 			- e.g. by timeout or invalid Download object`
-			- last gasp option:  try matching CarName instead of CarId (particularly for RRRE)
 			- UI has a Refresh button to try again
 - End()
 	- remove some defaults from Settings Dictionaries

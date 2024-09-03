@@ -87,17 +87,19 @@ namespace sierses.Sim
 			MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
 		}
 
-			internal double BS = 1.0;			/*	if you could make me a version where you change ratios so its' 
-2/4/8/16 cyl to 2:1
-3/6/12 to 3:2
-5/10 to 5:4
-and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
-  I have an idea to stack main harmonic instead with slight freq shift and delay on each one
- to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
-Hopefully you don't need to change code in a million places
-22 Jun 2024 BS
-*/
-		// called from DataUpdate()
+		/*	if you could make me a version where you change ratios so it' s 
+			2/4/8/16 cyl to 2:1
+			3/6/12 to 3:2
+			5/10 to 5:4
+			and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
+  			I have an idea to stack main harmonic instead with slight freq shift and delay on each one
+ 			to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
+			Hopefully you don't need to change code in a million places
+			22 Jun 2024 BS
+		 */
+		internal double BS = 1.0;
+
+		// called from DataUpdate(), initially with -2 == Index
 		internal void SetCar(Haptics shp)
 		{
 			H = shp;
@@ -155,6 +157,7 @@ Hopefully you don't need to change code in a million places
 						break;
 					case GameId.RRRE:
 						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
+						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 					case GameId.BeamNG:
@@ -198,7 +201,7 @@ Hopefully you don't need to change code in a million places
 
 			if (Haptics.Loaded = Index == -4)					// Neither JSON nor Defaults() ?
 				H.S.Src = "DB Load Success";
-			else if(0 > Index)
+			else if (0 > Index)
 				H.S.Defaults(H.N);	// SetCar()
 
 			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}/{H.S.Id}): "

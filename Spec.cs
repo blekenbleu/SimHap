@@ -170,6 +170,11 @@ namespace sierses.Sim
 			Private_Car.id = along;
 		}
 
+		internal void CarModel(string along)						// store CarName until Set()
+		{
+			Private_Car.name = along;
+		}
+
 		internal void Idle(ushort rpm)
 		{
 			int i = Lcars.FindIndex(x => x.id == Car.id);
@@ -254,6 +259,17 @@ namespace sierses.Sim
 				Src = "Atlas match";
 				Default = "Atlas";
 				Cache(Haptics.Atlas[i]);						// SelectCar()
+				return i;
+			}
+
+			if (0 <= (i = 0 < Haptics.AtlasCt ? Haptics.Atlas.FindIndex(x => x.name == Car.name) : -1))
+			{
+				Src = "Atlas CarName match";					// RRRE
+				Default = "Atlas";
+				DfltCar = Haptics.Atlas[i];
+				DfltCar.id = Car.id;
+				DfltCar.name = Car.name;
+				Cache(DfltCar);									// SelectCar()
 			}
 			return i;
 		}
