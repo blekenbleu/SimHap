@@ -151,3 +151,22 @@ else lock out `FetchCarData()` by `Index = -3` and continue to `Add()` and `SetV
 - if `Loaded`, then `Add()` current car `Spec` to current game list
 	- *just before* looking for *another* car
 	- or during `Exit()` if `Loaded || Save`
+
+### 3 Sep 2024 `CarId` refactor
+- `data.NewData.CarId` is not *always* used for indexing dictionaries
+- for online database queries, update may not complete for several `DataUpdate()` invocations  
+Consequently, a value being stored for testing CarId changes
+should be separate from that used for dictionary indexing.
+- add `SimHap.cs CarId` to compare for `data.NewData.CarId`
+- add `Spec.cs CarId()` to set `Private_Car.id` before other `Private_Car` values may be available
+- convert from `data.NewData.CarId` to dictionary index, using `CarId()`, in only one place
+- access `Car.id`  instead of passing string arguments with value of `Private_Car.id`.
+	- change `Add(string cId)` to `AddCar()` 
+	- change `Set(H.N.CarId)` to `Set()`
+	- change `SelectCar(CarId)` to `SelectCar()`
+	- change `FetchCarData(CarId, category, redline, maxRPM, IdleRPM)`  
+			to `FetchCarData(category, redline, maxRPM, IdleRPM)`
+	- extract RRRE CarId number before comma for indexing
+- consolidate SimData class references to `PluginManager` instance
+	- change `Refresh(this)` to `Refresh(this, pluginManager)`
+- remove untested code for GPBikes, MXBikes

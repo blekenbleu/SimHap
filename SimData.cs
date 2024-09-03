@@ -244,7 +244,7 @@ namespace sierses.Sim
 
 		private void SetRPMIntervals()
 		{
-			if (SHP.S.EngineCylinders == 1.0)
+			if (H.S.EngineCylinders == 1.0)
 			{
 				IntervalOctave = 4.0;
 				IntervalA = 0.0;
@@ -252,7 +252,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 2.0)
+			else if (H.S.EngineCylinders == 2.0)
 			{
 				IntervalOctave = 4.0;
 				IntervalA = 6.0;
@@ -260,7 +260,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 4.0)
+			else if (H.S.EngineCylinders == 4.0)
 			{
 				IntervalOctave = 8.0;
 				IntervalA = 4.0;
@@ -268,7 +268,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 8.0)
+			else if (H.S.EngineCylinders == 8.0)
 			{
 				IntervalOctave = 16.0;
 				IntervalA = 6.0;
@@ -276,7 +276,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 16.0)
+			else if (H.S.EngineCylinders == 16.0)
 			{
 				IntervalOctave = 16.0;
 				IntervalA = 12.0;
@@ -284,7 +284,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 3.0)
+			else if (H.S.EngineCylinders == 3.0)
 			{
 				IntervalOctave = 6.0;
 				IntervalA = 4.0;
@@ -292,7 +292,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 6.0)
+			else if (H.S.EngineCylinders == 6.0)
 			{
 				IntervalOctave = 12.0;
 				IntervalA = 8.0;
@@ -300,7 +300,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 12.0)
+			else if (H.S.EngineCylinders == 12.0)
 			{
 				IntervalOctave = 12.0;
 				IntervalA = 16.0;
@@ -308,7 +308,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 5.0)
+			else if (H.S.EngineCylinders == 5.0)
 			{
 				IntervalOctave = 10.0;
 				IntervalA = 6.0;
@@ -316,7 +316,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineCylinders == 10.0)
+			else if (H.S.EngineCylinders == 10.0)
 			{
 				IntervalOctave = 10.0;
 				IntervalA = 12.0;
@@ -324,7 +324,7 @@ namespace sierses.Sim
 				IntervalPeakA = 8.0;
 				IntervalPeakB = 4.0;
 			}
-			else if (SHP.S.EngineConfiguration == "R")
+			else if (H.S.EngineConfiguration == "R")
 			{
 				IntervalOctave = 12.0;
 				IntervalA = 9.0;
@@ -344,58 +344,58 @@ namespace sierses.Sim
 
 		private void SetRPMMix()
 		{
-			InvMaxRPM = SHP.S.MaxRPM > 0.0 ? 1.0 / SHP.S.MaxRPM : 0.0001;
-			IdlePercent = SHP.S.IdleRPM * InvMaxRPM;
-			RedlinePercent = SHP.S.Redline * InvMaxRPM;
-			if (SHP.S.Displacement > 0.0)
+			InvMaxRPM = H.S.MaxRPM > 0.0 ? 1.0 / H.S.MaxRPM : 0.0001;
+			IdlePercent = H.S.IdleRPM * InvMaxRPM;
+			RedlinePercent = H.S.Redline * InvMaxRPM;
+			if (H.S.Displacement > 0.0)
 			{
-				CylinderDisplacement = SHP.S.Displacement / SHP.S.EngineCylinders;
+				CylinderDisplacement = H.S.Displacement / H.S.EngineCylinders;
 				MixCylinder = 1.0 - Math.Max(2000.0 - CylinderDisplacement, 0.0)
 									 * Math.Max(2000.0 - CylinderDisplacement, 0.0) * 2.5E-07;
-				MixDisplacement = 1.0 - Math.Max(10000.0 - SHP.S.Displacement, 0.0)
-										 * Math.Max(10000.0 - SHP.S.Displacement, 0.0) * 1E-08;
+				MixDisplacement = 1.0 - Math.Max(10000.0 - H.S.Displacement, 0.0)
+										 * Math.Max(10000.0 - H.S.Displacement, 0.0) * 1E-08;
 			}
 			else
 			{
 				MixCylinder = 0.0;
 				MixDisplacement = 0.0;
 			}
-			MixPower = 1.0 - Math.Max(2000.0 - (SHP.S.MaxPower - SHP.S.ElectricMaxPower), 0.0)
-							 * Math.Max(2000.0 - (SHP.S.MaxPower - SHP.S.ElectricMaxPower), 0.0) * 2.5E-07;
-			MixTorque = 1.0 - Math.Max(2000.0 - SHP.S.MaxTorque, 0.0) * Math.Max(2000.0 - SHP.S.MaxTorque, 0.0) * 2.5E-07;
-			MixFront = !(SHP.S.EngineLocation == "F")
-						 ? (!(SHP.S.EngineLocation == "FM")
-							 ? (!(SHP.S.EngineLocation == "M")
-								 ? (!(SHP.S.EngineLocation == "RM")
-									 ? (!(SHP.S.PoweredWheels == "F")
-										 ? (!(SHP.S.PoweredWheels == "R")
+			MixPower = 1.0 - Math.Max(2000.0 - (H.S.MaxPower - H.S.ElectricMaxPower), 0.0)
+							 * Math.Max(2000.0 - (H.S.MaxPower - H.S.ElectricMaxPower), 0.0) * 2.5E-07;
+			MixTorque = 1.0 - Math.Max(2000.0 - H.S.MaxTorque, 0.0) * Math.Max(2000.0 - H.S.MaxTorque, 0.0) * 2.5E-07;
+			MixFront = !(H.S.EngineLocation == "F")
+						 ? (!(H.S.EngineLocation == "FM")
+							 ? (!(H.S.EngineLocation == "M")
+								 ? (!(H.S.EngineLocation == "RM")
+									 ? (!(H.S.PoweredWheels == "F")
+										 ? (!(H.S.PoweredWheels == "R")
 											 ? 0.2
 											 : 0.1)
 										 : 0.3)
-									 : (!(SHP.S.PoweredWheels == "F")
-									 ? (!(SHP.S.PoweredWheels == "R")
+									 : (!(H.S.PoweredWheels == "F")
+									 ? (!(H.S.PoweredWheels == "R")
 										 ? 0.3
 										 : 0.2)
 									 : 0.4)
 								   )
-								 : (!(SHP.S.PoweredWheels == "F")
-								 	? (!(SHP.S.PoweredWheels == "R")
+								 : (!(H.S.PoweredWheels == "F")
+								 	? (!(H.S.PoweredWheels == "R")
 									 	? 0.5
 									 	: 0.4
 									  )
 									 : 0.6
 								   )
 							   )
-						 : (!(SHP.S.PoweredWheels == "F")
-							 ? (!(SHP.S.PoweredWheels == "R")
+						 : (!(H.S.PoweredWheels == "F")
+							 ? (!(H.S.PoweredWheels == "R")
 								 ? 0.7
 								 : 0.6
 							   )
 							 : 0.8
 						   )
 						)
-					 : (!(SHP.S.PoweredWheels == "F")
-					 	? (!(SHP.S.PoweredWheels == "R")
+					 : (!(H.S.PoweredWheels == "F")
+					 	? (!(H.S.PoweredWheels == "R")
 							 ? 0.8
 					 	 	: 0.7
 							)
@@ -406,7 +406,6 @@ namespace sierses.Sim
 		}
 
 		static PluginManager PM;
-		static GameData data;
 		private float Data(string prop)
 		{
 			var foo = PM.GetPropertyValue(raw+"Data."+prop);
@@ -431,10 +430,8 @@ namespace sierses.Sim
 			return 0;
 		}
 
-		private void UpdateVehicle(ref GameData Gdat)
+		private void UpdateVehicle()
 		{
-			PM = SHP.PM;
-			data = Gdat;
 			SuspensionDistFLP = SuspensionDistFL;
 			SuspensionDistFRP = SuspensionDistFR;
 			SuspensionDistRLP = SuspensionDistRL;
@@ -459,7 +456,7 @@ namespace sierses.Sim
 			SlipYFR = 0.0;
 			SlipYRL = 0.0;
 			SlipYRR = 0.0;
-			ABSActive = data.NewData.ABSActive == 1;
+			ABSActive = H.N.ABSActive == 1;
 			bool flag = true;
 			switch (Haptics.CurrentGame)
 			{
@@ -500,7 +497,7 @@ namespace sierses.Sim
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
-					WiperStatus = (int) SHP.PM.GetPropertyValue(raw+"Graphics.WiperLV");
+					WiperStatus = (int) PM.GetPropertyValue(raw+"Graphics.WiperLV");
 					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
 					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
 					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
@@ -589,7 +586,7 @@ namespace sierses.Sim
 					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
 					VelocityX = Raw("WorldSpeedX") * Math.Sin(Raw("XR"));
-					YawRate = data.NewData.OrientationYawAcceleration;
+					YawRate = H.N.OrientationYawAcceleration;
 					if (VelocityX < 0.0)
 					{
 						if (YawRate < 0.0)
@@ -639,7 +636,7 @@ namespace sierses.Sim
 					WheelSpeedRR = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_br"));
 					SlipFromWheelSpeed();
 					VelocityX = Raw("SessionUpdateLocalVelocity.X");
-					YawRate = data.NewData.OrientationYawAcceleration;
+					YawRate = H.N.OrientationYawAcceleration;
 					if (VelocityX < 0.0)
 					{
 						if (YawRate < 0.0)
@@ -757,37 +754,37 @@ namespace sierses.Sim
 					}
 					break;
 				case GameId.IRacing:
-					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
+					if (PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
+					else if (PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFSHshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFSHshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
+					if (PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
+					else if (PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRSHshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRSHshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
+					if (PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.CFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.CFshockDefl");
 					}
-					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
+					else if (PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.HFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.HFshockDefl");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
+					if (PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
@@ -833,14 +830,14 @@ namespace sierses.Sim
 					}
 					else if (Accelerator > 10.0 && SpeedMs > 0.0 && AccSurgeAvg < 0.0)
 					{
-						if (SHP.S.PoweredWheels == "F")
+						if (H.S.PoweredWheels == "F")
 						{
 							SlipYFL = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.2;
 							SlipYFR = Accelerator * -InvAccSurgeAvg * InvSpeedMs * 0.2;
 							SlipYRL = 0.0;
 							SlipYRR = 0.0;
 						}
-						else if (SHP.S.PoweredWheels == "R")
+						else if (H.S.PoweredWheels == "R")
 						{
 							SlipYFL = 0.0;
 							SlipYFR = 0.0;
@@ -920,30 +917,30 @@ namespace sierses.Sim
 					SlipXFR *= 0.5;
 					SlipXRL *= 0.5;
 					SlipXRR *= 0.5;
-					if (data.NewData.Brake > 90.0)
+					if (H.N.Brake > 90.0)
 					{
 						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
-								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
+								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < H.N.Brake - 1.0;
 						break;
 					}
 					break;
 				case GameId.RRRE:
-					if (SHP.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.FrontLeft") != null)
+					if (PM.GetPropertyValue(raw+"Player.SuspensionDeflection.FrontLeft") != null)
 					{
 						SuspensionDistFL = Raw("Player.SuspensionDeflection.FrontLeft");
 						SuspensionDistFR = Raw("Player.SuspensionDeflection.FrontRight");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Player.SuspensionDeflection.RearLeft") != null)
+					if (PM.GetPropertyValue(raw+"Player.SuspensionDeflection.RearLeft") != null)
 					{
 						SuspensionDistRL = Raw("Player.SuspensionDeflection.RearLeft");
 						SuspensionDistRR = Raw("Player.SuspensionDeflection.RearRight");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionFront") != null)
+					if (PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionFront") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Player.ThirdSpringSuspensionDeflectionFront");
 					}
-					if (SHP.PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionRear") != null)
+					if (PM.GetPropertyValue(raw+"Player.ThirdSpringSuspensionDeflectionRear") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Player.ThirdSpringSuspensionDeflectionRear");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Player.ThirdSpringSuspensionDeflectionRear");
@@ -1037,7 +1034,7 @@ namespace sierses.Sim
 					SuspensionDistFR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection02");
 					SuspensionDistRL = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection03");
 					SuspensionDistRR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection04");
-					WiperStatus = (bool) SHP.PM.GetPropertyValue(raw+"TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
+					WiperStatus = (bool) PM.GetPropertyValue(raw+"TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
 					break;
 				case GameId.BeamNG:
 					flag = false;
@@ -1075,8 +1072,8 @@ namespace sierses.Sim
 					WheelSpeedRL = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					WheelSpeedRR = Math.Abs(Raw("m_sData.m_afWheelSpeed02"));
 					SlipFromWheelSpeed();
-					if ((int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
-					 || (int) SHP.PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
+					if ((int) PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial01") == 7
+					 || (int) PM.GetPropertyValue(raw+"m_sData.m_aiWheelMaterial02") == 7)
 					{
 						RumbleLeft = 50.0;
 						RumbleRight = 50.0;
@@ -1107,10 +1104,10 @@ namespace sierses.Sim
 					SlipXFR = Math.Abs(SlipXFR - 1.0);
 					SlipXRL = Math.Abs(SlipXRL - 1.0);
 					SlipXRR = Math.Abs(SlipXRR - 1.0);
-					if (data.NewData.Brake > 80.0)
+					if (H.N.Brake > 80.0)
 					{
 						ABSActive = (Raw("CurrentPlayerTelemetry.mWheels01.mBrakePressure")
-								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < data.NewData.Brake - 1.0;
+								   + Raw("CurrentPlayerTelemetry.mWheels02.mBrakePressure")) * 100.0 < H.N.Brake - 1.0;
 						break;
 					}
 					break;
@@ -1239,24 +1236,24 @@ namespace sierses.Sim
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Refresh(ref GameData Gdat, Haptics shp)
+		internal void Refresh(Haptics shp, PluginManager pluginManager)
 		{
-			SHP = shp;
-			data = Gdat;
-			FPS = (double) SHP.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
-			Rpms = Convert.ToUInt16(0.5 + data.NewData.Rpms);
-			RPMPercent = data.NewData.Rpms * InvMaxRPM;
-			SpeedMs = data.NewData.SpeedKmh * 0.277778;
+			H = shp;
+			PM = pluginManager;
+			FPS = (double) PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
+			Rpms = Convert.ToUInt16(0.5 + H.N.Rpms);
+			RPMPercent = H.N.Rpms * InvMaxRPM;
+			SpeedMs = H.N.SpeedKmh * 0.277778;
 			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
-			Accelerator = data.NewData.Throttle;
-			Brake = data.NewData.Brake;
-			Clutch = data.NewData.Clutch;
-			Handbrake = data.NewData.Handbrake;
-			BrakeBias = data.NewData.BrakeBias;
+			Accelerator = H.N.Throttle;
+			Brake = H.N.Brake;
+			Clutch = H.N.Clutch;
+			Handbrake = H.N.Handbrake;
+			BrakeBias = H.N.BrakeBias;
 			BrakeF = Brake * (2.0 * BrakeBias) * 0.01;
 			BrakeR = Brake * (200.0 - 2.0 * BrakeBias) * 0.01;
 			BrakeVelP = BrakeVel;
-			BrakeVel = (Brake - data.OldData.Brake) * FPS;
+			BrakeVel = (Brake - H.Gdat.OldData.Brake) * FPS;
 			BrakeAcc = (BrakeVel - BrakeVelP) * FPS;
 			if (CarInitCount < 2)
 			{
@@ -1264,13 +1261,13 @@ namespace sierses.Sim
 				SuspensionDistFRP = SuspensionDistFR;
 				SuspensionDistRLP = SuspensionDistRL;
 				SuspensionDistRRP = SuspensionDistRR;
-				YawPrev = data.NewData.OrientationYaw;
-				Yaw = data.NewData.OrientationYaw;
+				YawPrev = H.N.OrientationYaw;
+				Yaw = H.N.OrientationYaw;
 				RumbleLeftAvg = 0.0;
 				RumbleRightAvg = 0.0;
 			}
 			YawPrev = Yaw;
-			Yaw = -data.NewData.OrientationYaw;
+			Yaw = -H.N.OrientationYaw;
 			if (Yaw > 100.0 && YawPrev < -100.0)
 				YawPrev += 360.0;
 			else if (Yaw < -100.0 && YawPrev > 100.0)
@@ -1291,10 +1288,10 @@ namespace sierses.Sim
 				Acc0 = 0;
 				Acc1 = AccSamples - 1;
 			}
-			AccHeave[Acc0] = data.NewData.AccelerationHeave.GetValueOrDefault();
-			AccSurge[Acc0] = data.NewData.AccelerationSurge.GetValueOrDefault();
-			AccSway[Acc0] = data.NewData.AccelerationSway.GetValueOrDefault();
-			if (!data.NewData.AccelerationHeave.HasValue)
+			AccHeave[Acc0] = H.N.AccelerationHeave.GetValueOrDefault();
+			AccSurge[Acc0] = H.N.AccelerationSurge.GetValueOrDefault();
+			AccSway[Acc0] = H.N.AccelerationSway.GetValueOrDefault();
+			if (!H.N.AccelerationHeave.HasValue)
 			{
 				AccHeave[Acc0] = Raw("WorldSpeedY");
 				AccHeave[Acc0] = (AccHeave[Acc0] - WorldSpeedY) * FPS;
@@ -1323,13 +1320,13 @@ namespace sierses.Sim
 			JerkYAvg = (AccSurgeAvg - accSurgeAvg) * FPS;
 			AccHeaveAbs = Math.Abs(AccHeave[Acc0]);
 			InvAccSurgeAvg = AccSurgeAvg != 0.0 ? 1.0 / AccSurgeAvg : 0.0;
-			MotionPitch = MotionPitchOffset + 100.0 * Math.Pow(Math.Abs(MotionPitchMult * data.NewData.OrientationPitch) * 0.01, 1.0 / MotionPitchGamma);
-			MotionRoll = MotionRollOffset + 100.0 * Math.Pow(Math.Abs(MotionRollMult * data.NewData.OrientationRoll) * 0.01, 1.0 / MotionRollGamma);
+			MotionPitch = MotionPitchOffset + 100.0 * Math.Pow(Math.Abs(MotionPitchMult * H.N.OrientationPitch) * 0.01, 1.0 / MotionPitchGamma);
+			MotionRoll = MotionRollOffset + 100.0 * Math.Pow(Math.Abs(MotionRollMult * H.N.OrientationRoll) * 0.01, 1.0 / MotionRollGamma);
 			MotionYaw = MotionYawOffset + 100.0 * Math.Pow(Math.Abs(MotionYawMult * YawRateAvg) * 0.01, 1.0 / MotionYawGamma);
 			MotionHeave = MotionHeaveOffset + 100.0 * Math.Pow(Math.Abs(MotionHeaveMult * AccHeave[Acc0]) * 0.01, 1.0 / MotionHeaveGamma);
-			if (data.NewData.OrientationPitch < 0.0)
+			if (H.N.OrientationPitch < 0.0)
 				MotionPitch = -MotionPitch;
-			if (data.NewData.OrientationRoll < 0.0)
+			if (H.N.OrientationRoll < 0.0)
 				MotionRoll = -MotionRoll;
 			if (YawRateAvg < 0.0)
 				MotionYaw = -MotionYaw;
@@ -1339,8 +1336,8 @@ namespace sierses.Sim
 			WheelLoadFR = ((100.0 + AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRL = ((100.0 - AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRR = ((100.0 - AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
-			UpdateVehicle(ref data);
-			Airborne = AccHeave2S < -2.0 || Math.Abs(data.NewData.OrientationRoll) > 60.0;
+			UpdateVehicle();
+			Airborne = AccHeave2S < -2.0 || Math.Abs(H.N.OrientationRoll) > 60.0;
 			if (Airborne && SuspensionFL < 0.1)
 				SlipXFL = SlipYFL = 0.0;
 			else
@@ -1380,8 +1377,8 @@ namespace sierses.Sim
 			Airborne = Airborne && SuspensionAll < 0.1;
 			SlipXAll = (SlipXFL + SlipXFR + SlipXRL + SlipXRR) * 0.5;
 			SlipYAll = (SlipYFL + SlipYFR + SlipYRL + SlipYRR) * 0.5;
-			WheelSpinAll = !(SHP.S.PoweredWheels == "F")
-				? (!(SHP.S.PoweredWheels == "R")
+			WheelSpinAll = !(H.S.PoweredWheels == "F")
+				? (!(H.S.PoweredWheels == "R")
 					? (Math.Max(-SlipYFL, 0.0) + Math.Max(-SlipYFR, 0.0) + Math.Max(-SlipYRL, 0.0) + Math.Max(-SlipYRR, 0.0)) * 0.25
 					: (Math.Max(-SlipYRL, 0.0) + Math.Max(-SlipYRR, 0.0)) * 0.5)
 				: (Math.Max(-SlipYFL, 0.0) + Math.Max(-SlipYFR, 0.0)) * 0.5;
@@ -1404,18 +1401,18 @@ namespace sierses.Sim
 
 			if (DateTime.Now.Ticks < ShiftTicks)	// long rollover?
 				ShiftTicks = - (DateTime.Now.Ticks + (long.MaxValue - ShiftTicks));
-			if (DateTime.Now.Ticks - ShiftTicks > SHP.Settings.DownshiftDurationMs * 10000)
+			if (DateTime.Now.Ticks - ShiftTicks > H.Settings.DownshiftDurationMs * 10000)
 				Downshift = false;
-			if (DateTime.Now.Ticks - ShiftTicks > SHP.Settings.UpshiftDurationMs * 10000)
+			if (DateTime.Now.Ticks - ShiftTicks > H.Settings.UpshiftDurationMs * 10000)
 				Upshift = false;
 			DateTime now;
-			if (data.OldData.Gear != data.NewData.Gear)
+			if (H.Gdat.OldData.Gear != H.N.Gear)
 			{
 				if (Gear != 0)
 					GearPrevious = Gear;
-				Gear = !(data.NewData.Gear == "N")
-						? (!(data.NewData.Gear == "R")
-							? Convert.ToInt32(data.NewData.Gear)
+				Gear = !(H.N.Gear == "N")
+						? (!(H.N.Gear == "R")
+							? Convert.ToInt32(H.N.Gear)
 							: -1)
 						: 0;
 				if (Gear != 0 && Gear != GearPrevious)
@@ -1428,9 +1425,9 @@ namespace sierses.Sim
 				}
 			}
 			ABSPauseInterval = SlipYAll <= 0.0
-								? (long) (1166667.0 - 666667.0 * ((data.NewData.SpeedKmh - 20.0) * 0.003333333).Clamp(0.0, 1.0))
+								? (long) (1166667.0 - 666667.0 * ((H.N.SpeedKmh - 20.0) * 0.003333333).Clamp(0.0, 1.0))
 								: (long) (1250000.0 - 666667.0 * SlipYAll.Clamp(0.0, 1.0));
-			ABSPulseInterval = 166666L * SHP.Settings.ABSPulseLength;
+			ABSPulseInterval = 166666L * H.Settings.ABSPulseLength;
 			if (ABSActive)
 			{
 				now = DateTime.Now;
@@ -1477,7 +1474,7 @@ namespace sierses.Sim
 				SuspensionRR *= 0.1 * CarInitCount;
 				++CarInitCount;
 			}
-			SuspensionFreq = data.NewData.SpeedKmh * (3.0 / 16.0);
+			SuspensionFreq = H.N.SpeedKmh * (3.0 / 16.0);
 			double num2 = 94.0 + 0.4 * SpeedMs;
 			double num3 = 76.0 + 0.45 * SpeedMs;
 			double num4 = 60.0 + 0.5 * SpeedMs;
@@ -1818,28 +1815,28 @@ namespace sierses.Sim
 				SuspensionRumbleMultR4 = num18 * 1.5;
 				SuspensionRumbleMultR5 = num18 * 0.0;
 			}
-			EngineLoad = data.NewData.CarSettings_CurrentDisplayedRPMPercent * 0.5;
-			EngineLoad += data.NewData.SpeedKmh * data.NewData.SpeedKmh * 0.0003;
-			EngineLoad += data.NewData.SpeedKmh * 0.02;
+			EngineLoad = H.N.CarSettings_CurrentDisplayedRPMPercent * 0.5;
+			EngineLoad += H.N.SpeedKmh * H.N.SpeedKmh * 0.0003;
+			EngineLoad += H.N.SpeedKmh * 0.02;
 			if (Math.Abs(SuspensionAccAll) > 0.5)
-				EngineLoad += 200.0 * Math.Sin(data.NewData.OrientationPitch * 0.0174533);
+				EngineLoad += 200.0 * Math.Sin(H.N.OrientationPitch * 0.0174533);
 			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
-			EngineLoad *= data.NewData.Throttle * 0.01 * 0.01;
+			EngineLoad *= H.N.Throttle * 0.01 * 0.01;
 
-			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh()sniff: ignore FrameCountTicks .. for now
-				if (data.NewData.Rpms > 300 && data.NewData.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
+			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh() sniff: ignore FrameCountTicks .. for now
+				if (H.N.Rpms > 300 && H.N.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
 			{
-				double num19 = Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS;
+				double num19 = Math.Abs(H.Gdat.OldData.Rpms - H.N.Rpms) * FPS;
 
 				if (num19 < 40.0)
 				{
-					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1); // Refresh(): averaging with previous average
+					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)H.N.Rpms) >> 1); // Refresh(): averaging with previous average
 					++IdleSampleCount;								// Refresh(): increment if difference < 40
 					double num20 = idleRPM * 0.008333333;		// Refresh(): some FrequencyMultiplier magic
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
-				if (20 == IdleSampleCount && 0 == SHP.S.IdleRPM)	// Refresh(): change SHP.S.IdleRPM?
-					SHP.S.Idle(idleRPM);			// Refresh() sniff: only if it was 0
+				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Refresh(): change H.S.IdleRPM?
+					H.S.Idle(idleRPM);			// Refresh() sniff: only if it was 0
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)
@@ -1847,7 +1844,7 @@ namespace sierses.Sim
 				SetRPMIntervals();
 				SetRPMMix();
 			}
-			FreqHarmonic = data.NewData.Rpms * 0.008333333;
+			FreqHarmonic = H.N.Rpms * 0.008333333;
 			FreqOctave = FreqHarmonic * (1.0 + IntervalOctave * 0.08333333);
 			FreqLFEAdaptive = FreqHarmonic * FrequencyMultiplier;
 			FreqIntervalA1 = FreqHarmonic * (1.0 + IntervalA * 0.08333333);
@@ -1951,7 +1948,7 @@ namespace sierses.Sim
 			GainPeakB2Front = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2Rear = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2 = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-			if (SHP.S.EngineCylinders < 1.0)
+			if (H.S.EngineCylinders < 1.0)
 			{
 				GainLFEAdaptive = 0.0;
 				Gain1H = Math.Floor(Gain1H * 0.7);
@@ -1974,7 +1971,7 @@ namespace sierses.Sim
 				GainPeakB2Rear = 0.0;
 				GainPeakB2 = 0.0;
 			}
-			else if (SHP.S.EngineCylinders < 2.0)
+			else if (H.S.EngineCylinders < 2.0)
 				Gain4H = 0.0;
 			if (EngineMult == 1.0)
 				return;
