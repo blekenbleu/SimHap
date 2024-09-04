@@ -1,8 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.SimData
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using GameReaderCommon;		// for GameData
+﻿using GameReaderCommon;		// for GameData
 using SimHub.Plugins;		// PluginManager
 using System;				// for Math
 
@@ -398,9 +394,7 @@ namespace sierses.Sim
 		}
 
 		
-					
 
-		
 		internal ushort Rpms;
 
 		// called from DataUpdate()
@@ -740,7 +734,7 @@ namespace sierses.Sim
 			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
 			EngineLoad *= H.N.Throttle * 0.01 * 0.01;
 
-			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh()sniff: ignore FrameCountTicks .. for now
+			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh() sniff: ignore FrameCountTicks .. for now
 				if (H.N.Rpms > 300 && H.N.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
 			{
 				double num19 = Math.Abs(H.Gdat.OldData.Rpms - H.N.Rpms) * FPS;
@@ -753,7 +747,7 @@ namespace sierses.Sim
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
 				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Refresh(): change H.S.IdleRPM?
-					H.S.Idle(idleRPM);			// Refresh() sniff: only if it was 0
+					H.S.Idle(idleRPM);							// Refresh() sniff: only if it was 0
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)
@@ -858,7 +852,6 @@ namespace sierses.Sim
 			GainPeakB2Front *= EngineMult * EngineMultAll;
 			GainPeakB2Rear *= EngineMult * EngineMultAll;
 			GainPeakB2 *= EngineMult * EngineMultAll;
-		}
-
+		}	// Refresh()
 	}
 }

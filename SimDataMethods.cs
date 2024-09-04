@@ -1,5 +1,6 @@
 using GameReaderCommon;
 using SimHub;
+using SimHub.Plugins;       // PluginManager
 using System;
 
 namespace sierses.Sim
@@ -35,35 +36,33 @@ namespace sierses.Sim
 			idleRPM = 2500;							// default value; seems high IMO
 		}
 
-		Settings MySet;
 		double GetSetting(string name, double trouble)	// Init() helper
 		{
-			return MySet.Motion.TryGetValue(name, out double num) ? num : trouble;
+			return H.Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
 		}
 
 		internal int Index;
-		internal void Init(Settings Settings, Haptics sh)
+		internal void Init(Haptics sh)
 		{
-			Index = -2;
-			MySet = Settings;
 			H = sh;
+			Index = -2;
 			string GDBtext = Haptics.GameDBText;
-			EngineMult = Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
-			EngineMultAll = Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
-			RumbleMult = Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			RumbleMultAll = Settings.RumbleMult.TryGetValue("AllGames", out num) ? num : 5.0;
-			SuspensionMult = Settings.SuspensionMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SuspensionMultAll = Settings.SuspensionMult.TryGetValue("AllGames", out num) ? num : 1.5;
-			SuspensionGamma = Settings.SuspensionGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SuspensionGammaAll = Settings.SuspensionGamma.TryGetValue("AllGames", out num) ? num : 1.75;
-			SlipXMult = Settings.SlipXMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SlipXMultAll = Settings.SlipXMult.TryGetValue("AllGames", out num) ? num : 1.6;
-			SlipYMult = Settings.SlipYMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SlipYMultAll = Settings.SlipYMult.TryGetValue("AllGames", out num) ? num : 1.0;
-			SlipXGamma = Settings.SlipXGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SlipXGammaAll = Settings.SlipXGamma.TryGetValue("AllGames", out num) ? num : 1.0;
-			SlipYGamma = Settings.SlipYGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SlipYGammaAll = Settings.SlipYGamma.TryGetValue("AllGames", out num) ? num : 1.0;
+			EngineMult = H.Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
+			EngineMultAll = H.Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
+			RumbleMult = H.Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
+			RumbleMultAll = H.Settings.RumbleMult.TryGetValue("AllGames", out num) ? num : 5.0;
+			SuspensionMult = H.Settings.SuspensionMult.TryGetValue(GDBtext, out num) ? num : 1.0;
+			SuspensionMultAll = H.Settings.SuspensionMult.TryGetValue("AllGames", out num) ? num : 1.5;
+			SuspensionGamma = H.Settings.SuspensionGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
+			SuspensionGammaAll = H.Settings.SuspensionGamma.TryGetValue("AllGames", out num) ? num : 1.75;
+			SlipXMult = H.Settings.SlipXMult.TryGetValue(GDBtext, out num) ? num : 1.0;
+			SlipXMultAll = H.Settings.SlipXMult.TryGetValue("AllGames", out num) ? num : 1.6;
+			SlipYMult = H.Settings.SlipYMult.TryGetValue(GDBtext, out num) ? num : 1.0;
+			SlipYMultAll = H.Settings.SlipYMult.TryGetValue("AllGames", out num) ? num : 1.0;
+			SlipXGamma = H.Settings.SlipXGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
+			SlipXGammaAll = H.Settings.SlipXGamma.TryGetValue("AllGames", out num) ? num : 1.0;
+			SlipYGamma = H.Settings.SlipYGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
+			SlipYGammaAll = H.Settings.SlipYGamma.TryGetValue("AllGames", out num) ? num : 1.0;
 
 			LockedText = Locked ? "Unlock" : "Lock";
 			MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
@@ -86,95 +85,97 @@ namespace sierses.Sim
 			MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
 		}
 
-			internal double BS = 1.0;
-/*	if you could make me a version where you change ratios so its' 
-	2/4/8/16 cyl to 2:1
-	3/6/12 to 3:2
-	5/10 to 5:4
-	and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
-	I have an idea to stack main harmonic instead with slight freq shift and delay on each one
-	to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
-	Hopefully you don't need to change code in a million places
-	22 Jun 2024 BS
- */
-		// called from DataUpdate()
-		internal void SetVehicle(Haptics shp)
+		/*	if you could make me a version where you change ratios so it' s 
+			2/4/8/16 cyl to 2:1
+			3/6/12 to 3:2
+			5/10 to 5:4
+			and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
+  			I have an idea to stack main harmonic instead with slight freq shift and delay on each one
+ 			to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
+			Hopefully you don't need to change code in a million places
+			22 Jun 2024 BS
+		 */
+		internal double BS = 1.0;
+
+		// called from DataUpdate(), initially with -2 == Index
+		internal void SetCar(Haptics shp, PluginManager pluginManager)
 		{
 			H = shp;
-			StatusDataBase db = H.N;
+			PM = pluginManager;
 /*
-			Logging.Current.Info($"Haptics.SetVehicle({shp.Gdat.NewData.CarId}): " +
+			Logging.Current.Info($"Haptics.SetCar({shp.Gdat.NewData.CarId}): " +
 								(Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "")
 								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
  */
 			if (-2 == Index || -1 == Index)
 			{
-				H.S.CarId(db.CarId);
+				H.S.CarId(H.N.CarId);										// only 2 exceptions: RRRE and Forza
 				switch (Haptics.CurrentGame)
 				{
 					case GameId.AC:
 					case GameId.ACC:
-						Haptics.FetchCarData(null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
+
 					case GameId.LMU:
-						Haptics.FetchCarData(db.CarClass, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
+						Haptics.FetchCarData(H.N.CarClass, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 					case GameId.AMS2:
-						Haptics.FetchCarData(null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm), 0);
-						H.S.CarName = db.CarModel;
-						H.S.Category = db.CarClass;
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						H.S.CarName = H.N.CarModel;
+						H.S.Category = H.N.CarClass;
 						break;
 					case GameId.DR2:
-						Haptics.FetchCarData(null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
-										 Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetVehicle(DR2)
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
 						break;
 					case GameId.WRC23:
-						Haptics.FetchCarData(null, Convert.ToUInt16(Math.Floor(db.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(db.MaxRpm),
-										 Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
+						Haptics.FetchCarData(null, Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(H.N.MaxRpm),
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
 						break;
 					case GameId.Forza:
-						H.S.CarId(db.CarId.Substring(4));                      // remove "Car_" prefix
-						Haptics.FetchCarData(null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(db.MaxRpm),
-										 Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetVehicle(Forza)
+						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetCar(Forza)
 						break;
 					case GameId.IRacing:
-						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetVehicle(IRacing)
-						Haptics.FetchCarData(null, Convert.ToUInt16(db.CarSettings_CurrentGearRedLineRPM),
-										 Convert.ToUInt16(db.MaxRpm), Convert.ToUInt16(rpm ?? 0));
+						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetCar(IRacing)
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
+											Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
 					case GameId.BeamNG:
-						Haptics.FetchCarData(null, Convert.ToUInt16(0.5 + db.MaxRpm),
-							Convert.ToUInt16((Math.Ceiling(db.MaxRpm * 0.001) - db.MaxRpm * 0.001) > 0.55
-								 ? Math.Ceiling(db.MaxRpm * 0.001) * 1000.0
-								 : Math.Ceiling((db.MaxRpm + 1000.0) * 0.001) * 1000.0),
-							Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
-						);
+						Haptics.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
+								Convert.ToUInt16((Math.Ceiling(H.N.MaxRpm * 0.001) - H.N.MaxRpm * 0.001) > 0.55
+								 	? Math.Ceiling(H.N.MaxRpm * 0.001) * 1000.0
+								 	: Math.Ceiling((H.N.MaxRpm + 1000.0) * 0.001) * 1000.0),
+								Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
+							);
 						break;
 				}
 			}
 
 			if (Haptics.Waiting)	// still hoping for online match?
 			{
-				Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) Waiting return: "
+				Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) Waiting return: "
 									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
 									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? " Changed" : "") + $" Index = {Index}");
-				return;				// FetchCarData() DB accesses run SetVehicle() at least twice.
+				return;				// FetchCarData() DB accesses run SetCar() at least twice.
 			}
 
 			if (Haptics.Loaded = Index == -4)					// Neither JSON nor Defaults() ?
 				H.S.Src = "DB Load Success";
-			else if(0 > Index)
-				H.S.Defaults(db);	// SetVehicle()
+			else if (0 > Index)
+				H.S.Defaults(H.N);	// SetCar()
 
-			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}/{H.S.Id}): "
+			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}/{H.S.Id}): "
 								+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
 								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "")
-								+ $" {db.CarModel}; "
+								+ $" {H.N.CarModel}; "
 								+ (LoadText = $" {H.S.Game} " + H.S.Src));
 
-			// finalize vehicle
-			Gears = db.CarSettings_MaxGears > 0 ? db.CarSettings_MaxGears : 1;
+			// finalize car
+			Gears = H.N.CarSettings_MaxGears > 0 ? H.N.CarSettings_MaxGears : 1;
 			GearInterval = 1 / Gears;
 			Gear = 0;
 			SuspensionFL = 0.0;
@@ -200,13 +201,13 @@ namespace sierses.Sim
 			RumbleLeftAvg = 0.0;
 			RumbleRightAvg = 0.0;
 			IdleSampleCount = 0;
-			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
+			idleRPM = 2500;							// SetCar(): reset to default value for each car
 			SetRPMMix();
-			H.S.Set();						// set from Cache() AKA Lcars
-			H.CarId = db.CarId;
+			H.S.Set();								// NotifyPropertyChanged
+			H.CarId = H.N.CarId;					// SetCar(): car change is complete
 			CarInitCount = 0;
 			Index = -2;	// for next time
-			Logging.Current.Info($"Haptics.SetVehicle({db.CarId}) ending: "
+			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) ending: "
 									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
 									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
 
@@ -232,6 +233,6 @@ namespace sierses.Sim
 				default:
 					break;
 			}
-		}	// SetVehicle()
+		}	// SetCar()
 	}
 }
