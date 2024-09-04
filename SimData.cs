@@ -977,7 +977,7 @@ namespace blekenbleu.Haptic
 				SuspensionRumbleMultR4 = num18 * 1.5;
 				SuspensionRumbleMultR5 = num18 * 0.0;
 			}
- 
+
 			// idle sniff
 			if (20 > IdleSampleCount && 300 < H.N.Rpms && H.N.Rpms <= idleRPM * 1.1)
 			{	// Refresh(): supposes that idleRPM is somewhat valid..??

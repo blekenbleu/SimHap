@@ -27,11 +27,11 @@ namespace blekenbleu.Haptic
 		public static GameId CurrentGame = GameId.Other;
 		public static string GameDBText;
 		internal static bool Loaded, Waiting, Save, Set, Changed;
-		internal string CarId;		// exactly matches data.NewData.CarId
+		internal string CarId;		// exactly match data.NewData.CarId for DataUpdate()
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(BlekHapt)}.{Environment.UserName}.json";
 //		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
-		private readonly string Atlasfile = $"PluginsData/{nameof(BlekHapt)}.json_with_orders.json";
+		private readonly string Atlasfile = $"PluginsData/{nameof(BlekHapt)}.Atlas_with_orders.json";
 		internal static List<CarSpec> Atlas;
 		internal static int AtlasCt;		// use this to force Atlas
 		public Spec S { get; } = new() { };
@@ -102,10 +102,10 @@ namespace blekenbleu.Haptic
 		public PluginManager PluginManager { get; set; }
 		// ----------------------------------------------------------------
 
-		// must be void and static;  invoked by D.SetVehicle()
+		// must be void and static;  invoked by D.SetCar()
 		private static BlekHapt H;
 
-		internal static async void FetchCarData(	// called from SetVehicle() switch
+		internal static async void FetchCarData(	// called from SetCar() switch
 			string category,
 			ushort redlineFromGame,
 			ushort maxRPMFromGame,
@@ -154,7 +154,7 @@ namespace blekenbleu.Haptic
 					{
 						CarSpec car = dljc.data[0];
 						car.defaults = "DB";
-						H.S.Cache(car);					// FetchCarData(): Set(CarId) at the end of SetVehicle()
+						H.S.Cache(car);					// FetchCarData(): Set(CarId) at the end of SetCar()
 						LoadFailCount = 1;
 					//	Logging.Current.Info($"blekHapt.FetchCarData({car.name}): Successfully loaded; "
 					//						+ $" CarInitCount = {H.D.CarInitCount}");
@@ -231,8 +231,8 @@ namespace blekenbleu.Haptic
 			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
 			}
-			else if (Loaded || Changed)		// save before SetVehicle()
-				Loaded = S.AddCar();		// DataUpdate():  add or update S.Car in Cars list;  Loaded = false
+			else if (Loaded || Changed)		// save before SetCar()
+				Loaded = S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
@@ -241,7 +241,7 @@ namespace blekenbleu.Haptic
 				Logging.Current.Info($"blekHapt.DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
-				D.SetVehicle(this);
+				D.SetCar(this, pluginManager);
 			}
 		}	// DataUpdate()
 
@@ -278,7 +278,7 @@ namespace blekenbleu.Haptic
 			if (Save || Loaded || Changed)		// End()
 			{
 				if (Loaded || Changed)
-					S.LD.Add(S.Car);			// End()
+					S.LD.AddCar(S.Car);			// End()
 				string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
 				if (0 == sjs.Length || "{}" == sjs)
 					Logging.Current.Info( $"blekHapt.End(): JSON Serializer failure: "
@@ -523,7 +523,7 @@ namespace blekenbleu.Haptic
 			D.AccHeave = new double[D.AccSamples];
 			D.AccSurge = new double[D.AccSamples];
 			D.AccSway = new double[D.AccSamples];
-		}   // SetGame()
+		}	// SetGame()
 
 		bool ShowSusp, ShowPhysics;
 
@@ -608,26 +608,32 @@ namespace blekenbleu.Haptic
 				Settings.Motion = new Dictionary<string, double>();
 
 			string Atlasst = "";
-			AtlasCt = -1;				// S.Extract() will attempt extracting List<CarSpec> Atlas from json
+			AtlasCt = 0;				// S.Extract() will attempt extracting List<CarSpec> Atlas from json
 			if (File.Exists(Atlasfile))
 			{
-				S.Extract(JsonConvert.DeserializeObject<Dictionary<string,
-							List<CarSpec>>>(File.ReadAllText(Atlasfile)), GameDBText);  // to Atlas
-				AtlasCt = Atlas.Count;
-//				Logging.Current.Info($"blekHapt.Init():  {Atlas.Count} games and "
-//								   + $"{AtlasCt} {GameDBText} cars in " + Atlasfile);
-				if (0 < AtlasCt)
-					Atlasst = $" and {AtlasCt} cars in Atlas";
+				Dictionary<string, List<CarSpec>> JsonDict =
+					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(Atlasfile));
+				if (null == JsonDict)
+					Logging.Current.Info("Haptics.Init(): Atlas load failure");
 				else
-					Logging.Current.Info($"blekHapt.Init(): {Atlasfile} load failure");
+				{
+					if (JsonDict.ContainsKey(GameDBText))
+					{
+						Atlas = JsonDict[GameDBText];
+						AtlasCt = Atlas.Count;
+						Atlasst = $";  {AtlasCt} cars in Atlas";
+					}
+					else Logging.Current.Info($"Haptics.Init():  {GameDBText} not in Atlas");
+				}
 			}
-			else AtlasCt = 0;			// S.Extract() will attempt setting LD = json
+			else Logging.Current.Info($"Haptics.Init():  no Atlas");
+
 			if (File.Exists(myfile))
 			{
 				string text = File.ReadAllText(myfile);
 				Dictionary<string, List<CarSpec>> json =
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
-				Logging.Current.Info("blekHapt.Init():  " + S.LD.Set(json) + myfile + Atlasst);
+				Logging.Current.Info("blekHapt.Init():  " + S.LD.SetGame(json) + myfile + Atlasst);
 			}
 			else Logging.Current.Info("blekHapt.Init():  "+myfile+" not found" + Atlasst);
 
@@ -699,31 +705,32 @@ if (ShowSusp) {
 			this.AttachDelegate("ShiftDown", () => D.Downshift);
 			this.AttachDelegate("ShiftUp", () => D.Upshift);
 			this.AttachDelegate("WiperStatus", () => D.WiperStatus);
-
-if (ShowPhysics) {
-			this.AttachDelegate("Airborne", () => D.Airborne);
-			this.AttachDelegate("YawRate", () => D.YawRate);
-			this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
-			this.AttachDelegate("AccHeave", () => D.AccHeave[D.Acc0]);
-			this.AttachDelegate("AccSurge", () => D.AccSurge[D.Acc0]);
-			this.AttachDelegate("AccSway", () => D.AccSway[D.Acc0]);
-			this.AttachDelegate("AccHeave2", () => D.AccHeave2S);
-			this.AttachDelegate("AccSurge2", () => D.AccSurge2S);
-			this.AttachDelegate("AccSway2", () => D.AccSway2S);
-			this.AttachDelegate("AccHeaveAvg", () => D.AccHeaveAvg);
-			this.AttachDelegate("AccSurgeAvg", () => D.AccSurgeAvg);
-			this.AttachDelegate("AccSwayAvg", () => D.AccSwayAvg);
-			this.AttachDelegate("JerkZ", () => D.JerkZ);
-			this.AttachDelegate("JerkY", () => D.JerkY);
-			this.AttachDelegate("JerkX", () => D.JerkX);
-			this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
-			this.AttachDelegate("MPitch", () => D.MotionPitch);
-			this.AttachDelegate("MRoll", () => D.MotionRoll);
-			this.AttachDelegate("MYaw", () => D.MotionYaw);
-			this.AttachDelegate("MHeave", () => D.MotionHeave);
-			this.AttachDelegate("MSurge", () => D.MotionSurge);
-			this.AttachDelegate("MSway", () => D.MotionSway);
-}
+			if (ShowPhysics) {
+				this.AttachDelegate("Airborne", () => D.Airborne);
+				this.AttachDelegate("YawRate", () => D.YawRate);
+				this.AttachDelegate("YawRateAvg", () => D.YawRateAvg);
+				this.AttachDelegate("AccHeave", () => D.AccHeave[D.Acc0]);
+				this.AttachDelegate("AccSurge", () => D.AccSurge[D.Acc0]);
+				this.AttachDelegate("AccSway", () => D.AccSway[D.Acc0]);
+				this.AttachDelegate("AccHeave2", () => D.AccHeave2S);
+				this.AttachDelegate("AccSurge2", () => D.AccSurge2S);
+				this.AttachDelegate("AccSway2", () => D.AccSway2S);
+				this.AttachDelegate("AccHeaveAvg", () => D.AccHeaveAvg);
+				this.AttachDelegate("AccSurgeAvg", () => D.AccSurgeAvg);
+				this.AttachDelegate("AccSwayAvg", () => D.AccSwayAvg);
+				this.AttachDelegate("JerkZ", () => D.JerkZ);
+				this.AttachDelegate("JerkY", () => D.JerkY);
+				this.AttachDelegate("JerkX", () => D.JerkX);
+				this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
+				this.AttachDelegate("MPitch", () => D.MotionPitch);
+				this.AttachDelegate("MRoll", () => D.MotionRoll);
+				this.AttachDelegate("MYaw", () => D.MotionYaw);
+				this.AttachDelegate("MHeave", () => D.MotionHeave);
+				this.AttachDelegate("MSurge", () => D.MotionSurge);
+				this.AttachDelegate("MSway", () => D.MotionSway);
+//				this.AttachDelegate("Throttle", () => D.Accelerator);
+//				this.AttachDelegate("VelocityX", () => D.VelocityX);
+			}
 			FrameTimeTicks = DateTime.Now.Ticks;
 		}
 	}

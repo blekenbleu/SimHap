@@ -1,5 +1,6 @@
 using GameReaderCommon;
 using SimHub;
+using SimHub.Plugins;
 using System;
 
 namespace blekenbleu.Haptic
@@ -76,17 +77,18 @@ namespace blekenbleu.Haptic
 		}
 
 		// called from DataUpdate()
-		internal void SetVehicle(BlekHapt bh)		// called by BlekHapt.cs  DataUpdate()
+		internal void SetCar(BlekHapt bh, PluginManager pluginManager)		// called by BlekHapt.cs  DataUpdate()
 		{
 			H = bh;
+			PM = pluginManager;
 /*
-			Logging.Current.Info($"blekHapt.SetVehicle({H.N.CarId}): " +
+			Logging.Current.Info($"blekHapt.SetCar({H.N.CarId}): " +
 								(BlekHapt.Save ? " Save" : "") + (BlekHapt.Loaded ? " Loaded" : "") + (BlekHapt.Waiting ? " Waiting" : "")
 								+ (BlekHapt.Set ? " Set": "") + (BlekHapt.Changed ? "Changed " : "") + $" Index = {Index}");
  */
 			if (-2 == Index || -1 == Index)
 			{
-				H.S.CarId(H.N.CarId);                                             // only 2 exceptions: RRRE and Forza
+				H.S.CarId(H.N.CarId);										// only 2 exceptions: RRRE and Forza
 				switch (BlekHapt.CurrentGame)
 				{
 					case GameId.AC:
@@ -109,7 +111,7 @@ namespace blekenbleu.Haptic
 					case GameId.D4:
 					case GameId.DR2:
 						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetVehicle(DR2)
+										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
 						break;
 					case GameId.WRC23:
 						BlekHapt.FetchCarData(null, Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(H.N.MaxRpm),
@@ -118,22 +120,23 @@ namespace blekenbleu.Haptic
 					case GameId.F12022:
 					case GameId.F12023:
 						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetVehicle(F12023): to FetchCarData()
+										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetCar(F12023): to FetchCarData()
 						break;
 					case GameId.Forza:
 						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
 						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetVehicle(Forza)
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetCar(Forza)
 						break;
 					case GameId.IRacing:
-						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetVehicle(IRacing)
+						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetCar(IRacing)
 						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
 										 	Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
 					case GameId.RRRE:
-							H.S.CarId(H.N.CarModel);
-							BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
+						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
+						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 					case GameId.BeamNG:
 						BlekHapt.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
@@ -152,31 +155,31 @@ namespace blekenbleu.Haptic
 					default:
 						H.S.Redline = Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM);
 						H.S.MaxRPM  = Convert.ToUInt16(H.N.MaxRpm);
-						H.S.IdleRPM = Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"));		// SetVehicle(default game)
+						H.S.IdleRPM = Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"));		// SetCar(default game)
 						break;
 				}
 			}
 
 			if (BlekHapt.Waiting)	// still hoping for online match?
 			{
-				Logging.Current.Info($"blekHapt.SetVehicle({H.N.CarId}) Waiting return: "
+				Logging.Current.Info($"blekHapt.SetCar({H.N.CarId}) Waiting return: "
 									+ (BlekHapt.Save ? " Save" : "") + (BlekHapt.Loaded ? " Loaded" : "")
 									+ (BlekHapt.Set ? " Set": "") + (BlekHapt.Changed ? " Changed" : "") + $" Index = {Index}");
-				return;				// FetchCarData() DB accesses run SetVehicle() at least twice.
+				return;				// FetchCarData() DB accesses run SetCar() at least twice.
 			}
 
 			if (BlekHapt.Loaded = Index == -4)					// Neither JSON nor Defaults() ?
 				H.S.Src = "DB Load Success";
-			else if(0 > Index)
-				H.S.Defaults(H.N);	// SetVehicle()
+			else if (0 > Index)
+				H.S.Defaults(H.N);	// SetCar()
 
-			Logging.Current.Info($"blekHapt.SetVehicle({H.N.CarId}/{H.S.Id}): "
+			Logging.Current.Info($"blekHapt.SetCar({H.N.CarId}/{H.S.Id}): "
 								+ (BlekHapt.Save ? " Save" : "") + (BlekHapt.Loaded ? " Loaded" : "")
 								+ (BlekHapt.Set ? " Set": "") + (BlekHapt.Changed ? "Changed " : "")
 								+ $" {H.N.CarModel}; "
 								+ (LoadText = $" {H.S.Game} " + H.S.Src));
 
-			// finalize vehicle
+			// finalize car
 			Gears = H.N.CarSettings_MaxGears > 0 ? H.N.CarSettings_MaxGears : 1;
 			GearInterval = 1 / Gears;
 			Gear = 0;
@@ -203,14 +206,14 @@ namespace blekenbleu.Haptic
 			RumbleLeftAvg = 0.0;
 			RumbleRightAvg = 0.0;
 			IdleSampleCount = 0;
-			idleRPM = 2500;							// SetVehicle(): reset to default value for each car
+			idleRPM = 2500;							// SetCar(): reset to default value for each car
 			H.S.Set();								// NotifyPropertyChanged
-			H.CarId = H.N.CarId;					// SetVehicle(): car change is complete
+			H.CarId = H.N.CarId;					// SetCar(): car change is complete
 			CarInitCount = 0;
 			Index = -2;	// for next time
-			Logging.Current.Info($"blekHapt.SetVehicle({H.N.CarId}) ending: "
+			Logging.Current.Info($"blekHapt.SetCar({H.N.CarId}) ending: "
 									+ (BlekHapt.Save ? " Save" : "") + (BlekHapt.Loaded ? " Loaded" : "")
 									+ (BlekHapt.Set ? " Set": "") + (BlekHapt.Changed ? "Changed " : "") + $" Index = {Index}");
-		}	// SetVehicle()
+		}	// SetCar()
 	}
 }
