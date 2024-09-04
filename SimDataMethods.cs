@@ -1,5 +1,6 @@
 using GameReaderCommon;
 using SimHub;
+using SimHub.Plugins;       // PluginManager
 using System;
 
 namespace sierses.Sim
@@ -100,9 +101,10 @@ namespace sierses.Sim
 		internal double BS = 1.0;
 
 		// called from DataUpdate(), initially with -2 == Index
-		internal void SetCar(Haptics shp)
+		internal void SetCar(Haptics shp, PluginManager pluginManager)
 		{
 			H = shp;
+			PM = pluginManager;
 /*
 			Logging.Current.Info($"Haptics.SetCar({shp.Gdat.NewData.CarId}): " +
 								(Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "")

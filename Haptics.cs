@@ -245,7 +245,7 @@ namespace sierses.Sim
 				Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
-				D.SetCar(this);
+				D.SetCar(this, pluginManager);
 			}
 		}	// DataUpdate()
 
