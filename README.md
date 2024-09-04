@@ -20,26 +20,27 @@
 - [Dictionary](https://stackoverflow.com/questions/4245064/method-to-add-new-or-update-existing-item-in-c-sharp-dictionary)
 ### How it works
 - with game running: `DataUpdate()`
-	- update physics:	// provide that loaded id == requested
+	`SimData` class hands telemetry changes
+	- `Update()`	// when `Haptics.CarId ==` SimHub's
 		- Yaw, YawRate, YawRateAvg
 		- AccHeave, AccSurge, AccSway, Jerk[XYZ]
 		- MotionPitch, MotionRoll, MotionYaw, MotionHeave
 		- WheelLoads, Slips, Gear, ABS
 		- Suspension, EngineLoad
 		- Haptics based on engine RPM
-	- `SetCar()`, when loaded CarId `!=` SimHub's current
+	- `SetCar()`	// when `Haptics.CarId !=` SimHub's current
 		- `SelectCar()` first checks local JSON dictionaries, based on `-2 == Index`
 			- read/write personal
 			- optional read/only Atlas
 			- last gasp option:  try matching CarName in Atlas instead of CarId (particularly for RRRE)
-		- call `FetchCarData()` for dictionary misses, based on `-1 == Index`
+		- `FetchCarData()` for dictionary misses, based on `-1 == Index`
 			- `async await` causes `FetchCarData()`  
 				to *not complete* during initial invocation, sets `Waiting`,   
 				- successful completion when valid Download object received.   
-		- call SetDefaultVehicle() *after* `FetchCarData()` fails, based on `-3 == Index`
+		- `SetDefaultVehicle()` *after* `FetchCarData()` fails, based on `-3 == Index`
 			- e.g. by timeout or invalid Download object`
 			- UI has a Refresh button to try again
-- End()
+- `End()`
 	- remove some defaults from Settings Dictionaries
 	- update Settings.Motion from D.Motion
 

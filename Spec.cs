@@ -75,6 +75,7 @@ namespace sierses.Sim
 		{
 			inDict = json;
 			int ct = inDict.ContainsKey(Haptics.GameDBText) ? inDict[Haptics.GameDBText].Count : 0;
+
 			return $"{inDict.Count} games, {ct} {Haptics.GameDBText} cars in ";
 		}
 

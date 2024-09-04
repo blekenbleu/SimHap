@@ -1,8 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.SimData
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using GameReaderCommon;		// for GameData
+﻿using GameReaderCommon;		// for GameData
 using SimHub.Plugins;		// PluginManager
 using System;				// for Math
 
@@ -1242,13 +1238,13 @@ namespace sierses.Sim
 			PM = pluginManager;
 			FPS = (double) PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			Rpms = Convert.ToUInt16(0.5 + H.N.Rpms);
-			RPMPercent = H.N.Rpms * InvMaxRPM;
 			SpeedMs = H.N.SpeedKmh * 0.277778;
-			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 			Accelerator = H.N.Throttle;
-			Brake = H.N.Brake;
 			Clutch = H.N.Clutch;
 			Handbrake = H.N.Handbrake;
+			RPMPercent = H.N.Rpms * InvMaxRPM;
+			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+			Brake = H.N.Brake;
 			BrakeBias = H.N.BrakeBias;
 			BrakeF = Brake * (2.0 * BrakeBias) * 0.01;
 			BrakeR = Brake * (200.0 - 2.0 * BrakeBias) * 0.01;
@@ -1332,6 +1328,7 @@ namespace sierses.Sim
 				MotionYaw = -MotionYaw;
 			if (AccHeave[Acc0] < 0.0)
 				MotionHeave = -MotionHeave;
+
 			WheelLoadFL = ((100.0 + AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadFR = ((100.0 + AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRL = ((100.0 - AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
@@ -1836,7 +1833,7 @@ namespace sierses.Sim
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 				}
 				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Refresh(): change H.S.IdleRPM?
-					H.S.Idle(idleRPM);			// Refresh() sniff: only if it was 0
+					H.S.Idle(idleRPM);							// Refresh() sniff: only if it was 0
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)
@@ -1995,7 +1992,6 @@ namespace sierses.Sim
 			GainPeakB2Front *= EngineMult * EngineMultAll;
 			GainPeakB2Rear *= EngineMult * EngineMultAll;
 			GainPeakB2 *= EngineMult * EngineMultAll;
-		}
-
+		}	// Refresh()
 	}
 }

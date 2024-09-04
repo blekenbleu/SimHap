@@ -18,7 +18,7 @@ using System.Windows.Media;
 
 namespace sierses.Sim
 {
-	[PluginDescription("Properties for haptic feedback and more")]
+	[PluginDescription("Car-specific haptic properties")]
 	[PluginAuthor("sierses")]
 	[PluginName("Haptics")]
 	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
@@ -31,7 +31,7 @@ namespace sierses.Sim
 		public static GameId CurrentGame = GameId.Other;
 		public static string GameDBText;
 		internal static bool Loaded, Waiting, Save, Set, Changed;
-		internal string CarId;				// exactly match data.NewData.CarId for DataUpdate()
+		internal string CarId;		// exactly match data.NewData.CarId for DataUpdate()
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
 //		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
@@ -236,7 +236,7 @@ namespace sierses.Sim
 				Changed = false;
 			}
 			else if (Loaded || Changed)		// save before SetCar()
-				Loaded = S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list
+				Loaded = S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
