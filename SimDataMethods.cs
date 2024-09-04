@@ -170,15 +170,6 @@ namespace sierses.Sim
 								Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
 							);
 						break;
-					case GameId.GPBikes:
-					case GameId.MXBikes:
-						if (H.S.Id != H.N.CarId)	// SetCar() Switch case: Bikes
-						{
-							H.S.Id = H.N.CarId;	// SetCar() Switch: Bikes not in database
-							H.S.MaxRPM = Convert.ToUInt16(0.5 + H.N.MaxRpm);
-							H.S.Redline = Convert.ToUInt16(PM.GetPropertyValue(raw+"m_sEvent.m_iShiftRPM"));
-						}
-						break;
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
 						Haptics.FetchCarData(null,
