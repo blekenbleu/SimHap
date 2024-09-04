@@ -279,7 +279,7 @@ namespace sierses.Sim
 		{
 			if (null == Car.name)
 			{
-				Logging.Current.Info($"blekHapt.S.SaveCar(): {Id} missing car name");
+				Logging.Current.Info($"Haptics.S.SaveCar(): {Id} missing car name");
 				return false;
 			}
 

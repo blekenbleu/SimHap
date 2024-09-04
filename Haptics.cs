@@ -208,7 +208,7 @@ namespace sierses.Sim
 			}
 
 			Gdat = data;
-	
+
 			if (CarId == N.CarId || D.Locked)				// DataUpdate()
 			{
 				if (null != data.OldData && data.GameRunning
@@ -230,9 +230,9 @@ namespace sierses.Sim
 
 				D.Index = -3;				// disable FetchCarData(); enable Defaults()
 				D.CarInitCount = 0;
-			//	Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
-			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
-			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
+				//	Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
+				//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
+				//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
 			}
 			else if (Loaded || Changed)		// save before SetCar()
@@ -684,7 +684,7 @@ namespace sierses.Sim
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
 				Logging.Current.Info("Haptics.Init():  " + S.LD.SetGame(json) + myfile + Atlasst);
 			}
-			else Logging.Current.Info("Haptics.Init():  "+myfile+" not found" + Atlasst);
+			else Logging.Current.Info("Haptics.Init():  " + myfile + " not found" + Atlasst);
 
 			D.Init(this);
 			E.Init(Settings.Engine, this);

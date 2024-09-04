@@ -123,8 +123,8 @@ namespace sierses.Sim
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 					case GameId.AMS1:
-					case GameId.LMU:
 					case GameId.RF2:
+					case GameId.LMU:
 						Haptics.FetchCarData(H.N.CarClass, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 					case GameId.AMS2:
@@ -135,7 +135,7 @@ namespace sierses.Sim
 					case GameId.D4:
 					case GameId.DR2:
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
+											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
 						break;
 					case GameId.WRC23:
 						Haptics.FetchCarData(null, Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(H.N.MaxRpm),
@@ -154,7 +154,7 @@ namespace sierses.Sim
 					case GameId.IRacing:
 						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetCar(IRacing)
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
-										 	Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
+											Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
 					case GameId.RRRE:
