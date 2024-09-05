@@ -75,7 +75,7 @@ namespace sierses.Sim
 
 		// for Fr[0-8] properties in Init()
 		// interpolate between harmonic frequencies based on throttle %
-		// see SimDataMethods.cs" line 249 for BS
+		// see SimDataMethods.cs for BSratio
 		private double F(byte i)
 		{
 			// throttle interpolation factors
@@ -83,7 +83,7 @@ namespace sierses.Sim
 			double a = 0.01 * H.D.Accelerator;
 
 			// interpolate between Tones[0] (no throttle) and Tones[2] (full throttle)
-			// H.SC.Ratio is either cylinders or BS;  SettingsControl.xaml.cs line 87
+			// H.SC.Ratio is either cylinders or BSratio;  SettingsControl.xaml.cs line 87
 			return ((d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.SC.Ratio) / 120;
 		}
 

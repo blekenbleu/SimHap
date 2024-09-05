@@ -85,9 +85,7 @@ namespace sierses.Sim
 		private void SimpleRatioToggle_Click(object sender, RoutedEventArgs e)
 		{
 			if (Ratio == Plugin.S.EngineCylinders)
-			{
-				Ratio = Plugin.D.BS;
-			}
+				Ratio = Plugin.D.BSratio;
 			else Ratio = Plugin.S.EngineCylinders;
 			ToneMode.Text = ((2 == Plugin.E.Tones[0].Freq[2]) ? "  Full Throttle " : " ")
 							+ Ratio.ToString();

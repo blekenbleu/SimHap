@@ -248,7 +248,7 @@ namespace sierses.Sim
 			Hopefully you don't need to change code in a million places
 			22 Jun 2024 BS
 		 */
-		internal double BS;
+		internal double BSratio;
 		private long FrameTimeTicks;
 		private long FrameCountTicks;
 		internal Haptics H;
@@ -260,7 +260,7 @@ namespace sierses.Sim
 		{
 			AccSamples = 16;
 			Acc1 = 0;
-			BS = 1.0;
+			BSratio = 1.0;
 			CarInitCount = 0;
 			Downshift = false;
 			FrameCountTicks = 0;

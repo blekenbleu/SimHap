@@ -208,18 +208,18 @@ namespace sierses.Sim
 				case 4:
 				case 8:
 				case 16:
-					BS = 2;
+					BSratio = 2;
 					break;
 				case 3:
 				case 6:
 				case 12:
-					BS = 3;
-					BS /= 2;
+					BSratio = 3;
+					BSratio /= 2;
 					break;
 				case 5:
 				case 10:
-					BS = 5;
-					BS /= 4;
+					BSratio = 5;
+					BSratio /= 4;
 					break;
 				default:
 					break;
