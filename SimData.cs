@@ -238,6 +238,51 @@ namespace sierses.Sim
 		public double SuspensionRumbleMultR4;
 		public double SuspensionRumbleMultR5;
 
+		/*	if you could make me a version where you change ratios so it' s 
+			2/4/8/16 cyl to 2:1
+			3/6/12 to 3:2
+			5/10 to 5:4
+			and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
+  			I have an idea to stack main harmonic instead with slight freq shift and delay on each one
+ 			to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
+			Hopefully you don't need to change code in a million places
+			22 Jun 2024 BS
+		 */
+		internal double BS;
+		private long FrameTimeTicks;
+		private long FrameCountTicks;
+		internal Haptics H;
+		internal int Index;
+		private ushort idleRPM;						 // for sniffing in Refresh()
+		internal string raw;
+
+		public SimData()
+		{
+			AccSamples = 16;
+			Acc1 = 0;
+			BS = 1.0;
+			CarInitCount = 0;
+			Downshift = false;
+			FrameCountTicks = 0;
+			GameAltText = "";
+			Gear = 0;
+			GearPrevious = 0;
+			IdleSampleCount = 0;
+			LoadText = "Not Loaded";
+			raw = "DataCorePlugin.GameRawData.";
+			RumbleFromPlugin = false;
+			ShiftTicks = FrameTimeTicks = DateTime.Now.Ticks;
+			SlipXGammaBaseMult = 1.0;
+			SlipYGammaBaseMult = 1.0;
+			SuspensionDistFLP = 0.0;
+			SuspensionDistFRP = 0.0;
+			SuspensionDistRLP = 0.0;
+			SuspensionDistRRP = 0.0;
+			TireDiameterSampleMax = 100;
+			Upshift = false;
+		}
+
+
 		private void SetRPMIntervals()
 		{
 			if (H.S.EngineCylinders == 1.0)
