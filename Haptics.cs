@@ -230,9 +230,9 @@ namespace sierses.Sim
 
 				D.Index = -3;				// disable FetchCarData(); enable Defaults()
 				D.CarInitCount = 0;
-				//	Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
-				//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
-				//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
+			//	Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
+			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
+			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
 			}
 			else if (Loaded || Changed)		// save before SetCar()
