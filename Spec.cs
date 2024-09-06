@@ -407,41 +407,58 @@ namespace sierses.Sim
 				DfltCar = new()
 				{
 					config = "V",
-					cyl = 6,
 					loc = "RM",
 					drive = "R",
+					ehp = 0,
+#if slim
+					cyl = 1,
+					cc = 1,
+					hp = 1,
+					nm = 1
+#else
+					cyl = 6,
 					cc = 1600,
 					hp = 300,
-					ehp = 0,
 					nm = 250
+#endif
 				};
 
 				switch (Haptics.CurrentGame)
 				{
-					case GameId.RRRE:
 					case GameId.AC:
 					case GameId.ACC:
-					case GameId.AMS1:
 					case GameId.AMS2:
+					case GameId.BeamNG:
 					case GameId.Forza:
-					case GameId.GTR2:
 					case GameId.IRacing:
+					case GameId.RRRE:
+#if !slim
+					case GameId.AMS1:
 					case GameId.PC2:
+					case GameId.GTR2:
 					case GameId.RBR:
 					case GameId.RF2:
-					case GameId.BeamNG:
 						DfltCar.cc = 3000;
+#else
+						DfltCar.cc = 1;
+#endif
 						DfltCar.drive = "A";
 						StatusText += "unavailable: using generic car";
 						break;
+#if !slim
 					case GameId.D4:
+#endif
 					case GameId.DR2:
 					case GameId.WRC23:
 						StatusText += "unavailable: using generic Rally2";
 						DfltCar.config = "I";
-						DfltCar.cyl = 4;
 						DfltCar.loc = "F";
 						DfltCar.drive = "A";
+#if slim
+						DfltCar.cyl = 1;
+						DfltCar.nm = 1;
+#else
+						DfltCar.cyl = 4;
 						DfltCar.nm = 400;
 						break;
 					case GameId.F12022:
@@ -481,6 +498,7 @@ namespace sierses.Sim
 						DfltCar.cc = 4000;
 						DfltCar.hp = 500;
 						DfltCar.nm = 400;
+#endif
 						break;
 					default:
 						StatusText += $"specs unavailable for {Haptics.CurrentGame}";

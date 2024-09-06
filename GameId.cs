@@ -1,19 +1,21 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.GameId
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-namespace sierses.Sim
+﻿namespace sierses.Sim
 {
   public enum GameId
   {
     Other,
     AC,
     ACC,
-    AMS1,
     AMS2,
-    D4,
+    BeamNG,
     DR2,
+    Forza,
+    IRacing,
+    LMU,
+    RRRE,
     WRC23,
+#if !slim
+    AMS1,
+    D4,
     F12020,
     F12021,
     F12022,
@@ -21,13 +23,10 @@ namespace sierses.Sim
     F12024,
     F12025,
     F12026,
-    Forza,
     GTR2,
-    IRacing,
     PC2,
     RBR,
     RF2,
-    RRRE,
     DR,
     GTL,
     LFS,
@@ -57,11 +56,10 @@ namespace sierses.Sim
     RF1,
     ATS,
     ETS2,
-    BeamNG,
     GPBikes,
     MXBikes,
-    LMU,
     GranTurismo7,
     GranTurismoSport,
+#endif
   }
 }

@@ -1,8 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.SimHapticsPlugin
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using GameReaderCommon;
+﻿using GameReaderCommon;
 using Newtonsoft.Json;
 using sierses.Sim.Properties;
 using SimHub;
@@ -41,9 +37,9 @@ namespace sierses.Sim
 		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
-
+#if !slim
 		public Geq E { get; set; } 
-
+#endif
 		public ImageSource PictureIcon
 		{
 			get { return this.ToIcon(Resources.SimHapticsShakerStyleIcon_alt012); }
@@ -76,6 +72,10 @@ namespace sierses.Sim
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
 			SC = new SettingsControl(this);
+#if slim
+			if (null != Settings.Theme)
+				SC.ChangeTheme(Settings.Theme);
+#else
 			if (null != Settings.Engine)
 			{
 				if (null != Settings.Engine.Theme)
@@ -98,6 +98,7 @@ namespace sierses.Sim
 					Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
 					  + Settings.Engine.Sliders[0].Length.ToString());
 			}
+#endif
 			return SC;
 		}
 
@@ -147,8 +148,9 @@ namespace sierses.Sim
 				if (null != dls && 11 < dls.Length)
 				{
 					Waiting = false;	// ReadAsStringAsync() success
-					Download dljc =	JsonConvert.DeserializeObject<Download>(dls,
-										new JsonSerializerSettings {
+					Download dljc = JsonConvert.DeserializeObject<Download>(dls,
+										new JsonSerializerSettings
+										{
 											NullValueHandling = NullValueHandling.Ignore,
 											MissingMemberHandling = MissingMemberHandling.Ignore
 										}
@@ -260,8 +262,12 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
+#if slim
+			Settings.Theme = SC.Theme;
+#else
 			if (null == Settings.Engine)
 				Settings.Engine = new();
+			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
 			if (null == Settings.Engine.Tones)
 			{ 
 				Settings.Engine.Tones = new ushort[4][];
@@ -271,14 +277,13 @@ namespace sierses.Sim
 				Settings.Engine.Tones[3] = new ushort[9];
 			}
 
-			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
 			for (int i = 0; i < E.Tones.Length; i++)
 				for (int j = 0; j < E.Tones[i].Freq.Length; j++)
 					Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
 			Settings.Engine.Sliders = new() { E.Q[0].Slider };
 			for (int i = 1; i < E.Q.Count; i++)
 				Settings.Engine.Sliders.Add(E.Q[i].Slider);
-
+#endif
 			if (Save || Loaded || Changed)		// End()
 			{
 				if (Loaded || Changed)
@@ -405,10 +410,6 @@ namespace sierses.Sim
 					CurrentGame = GameId.ACC;
 					GameDBText = "ACC";
 					break;
-				case "Automobilista":
-					CurrentGame = GameId.AMS1;
-					GameDBText = "AMS1";
-					break;
 				case "Automobilista2":
 					CurrentGame = GameId.AMS2;
 					GameDBText = "AMS2";
@@ -422,7 +423,37 @@ namespace sierses.Sim
 					break;
 				case "IRacing":
 					CurrentGame = GameId.IRacing;
-					D.GameAltText += (string) pm.GetPropertyValue(D.raw+"SessionData.WeekendInfo.Category");
+					D.GameAltText += (string)pm.GetPropertyValue(D.raw + "SessionData.WeekendInfo.Category");
+					break;
+				case "LMU":
+					CurrentGame = GameId.LMU;
+					GameDBText = "LMU";
+					break;
+				case "CodemastersDirtRally2":
+#if !slim
+				case "CodemastersDirtRally1":
+					D.TireDiameterSampleCount = -1;
+#endif
+					CurrentGame = GameId.DR2;
+					GameDBText = "DR2";
+					break;
+				case "EAWRC23":
+					CurrentGame = GameId.WRC23;
+					GameDBText = "WRC23";
+					D.AccSamples = 32;
+#if !slim
+					D.TireDiameterSampleCount = -1;
+#endif
+					break;
+				case "BeamNgDrive":
+					CurrentGame = GameId.BeamNG;
+					GameDBText = "BeamNG";
+#if !slim
+					D.TireDiameterSampleCount = -1;
+					break;
+				case "Automobilista":
+					CurrentGame = GameId.AMS1;
+					GameDBText = "AMS1";
 					break;
 				case "KartKraft":
 					CurrentGame = GameId.KK;
@@ -450,10 +481,6 @@ namespace sierses.Sim
 					CurrentGame = GameId.RF2;
 					GameDBText = "RF2";
 					break;
-				case "LMU":
-					CurrentGame = GameId.LMU;
-					GameDBText = "LMU";
-					break;
 				case "RRRE":
 					CurrentGame = GameId.RRRE;
 					break;
@@ -473,24 +500,12 @@ namespace sierses.Sim
 					CurrentGame = GameId.GSCE;
 					GameDBText = "GSCE";
 					break;
-				case "CodemastersDirtRally1":
-				case "CodemastersDirtRally2":
-					CurrentGame = GameId.DR2;
-					GameDBText = "DR2";
-					D.TireDiameterSampleCount = -1;
-					break;
 				case "CodemastersDirt2":
 				case "CodemastersDirt3":
 				case "CodemastersDirtShowdown":
 				case "CodemastersDirt4":
 					CurrentGame = GameId.D4;
 					GameDBText = "D4";
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "EAWRC23":
-					CurrentGame = GameId.WRC23;
-					GameDBText = "WRC23";
-					D.AccSamples = 32;
 					D.TireDiameterSampleCount = -1;
 					break;
 				case "F12012":
@@ -530,20 +545,6 @@ namespace sierses.Sim
 					GameDBText = "Grid";
 					D.TireDiameterSampleCount = -1;
 					break;
-				case "BeamNgDrive":
-					CurrentGame = GameId.BeamNG;
-					GameDBText = "BeamNG";
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "GPBikes":
-					CurrentGame = GameId.GPBikes;
-					D.RumbleFromPlugin = true;
-					D.TireDiameterSampleCount = -1;
-					break;
-				case "MXBikes":
-					CurrentGame = GameId.MXBikes;
-					D.TireDiameterSampleCount = -1;
-					break;
 				case "WRCGenerations":
 					CurrentGame = GameId.WRCGen;
 					D.TireDiameterSampleCount = -1;
@@ -565,6 +566,7 @@ namespace sierses.Sim
 					CurrentGame = GameId.GranTurismo7;
 					GameDBText = "GranTurismo7";
 					D.TireDiameterSampleCount = -1;
+#endif
 					break;
 				default:
 					CurrentGame = GameId.Other;
@@ -581,11 +583,15 @@ namespace sierses.Sim
 			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
+#if !slim
 			E = new();
-			bool ShowFreq = true, ShowSusp = true, ShowTire = false, ShowPhysics = true;
+			bool ShowTire = false;
+#endif
+			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
 
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
+#if !slim
 			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
 			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
 			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
@@ -617,6 +623,7 @@ namespace sierses.Sim
 
 			if (1 > Settings.ABSPulseLength)
 				Settings.ABSPulseLength = 2;
+#endif
 			if (1 > Settings.DownshiftDurationMs)
 				Settings.DownshiftDurationMs = 400;
 			if (1 > Settings.UpshiftDurationMs)
@@ -637,6 +644,7 @@ namespace sierses.Sim
 				Settings.SuspensionGamma = new Dictionary<string, double>();
 			if (!Settings.SuspensionGamma.TryGetValue("AllGames", out num))
 				Settings.SuspensionGamma.Add("AllGames", 1.75);
+#if !slim
 			if (Settings.SlipXMult == null)
 				Settings.SlipXMult = new Dictionary<string, double>();
 			if (!Settings.SlipXMult.TryGetValue("AllGames", out num))
@@ -653,6 +661,7 @@ namespace sierses.Sim
 				Settings.SlipYGamma = new Dictionary<string, double>();
 			if (!Settings.SlipYGamma.TryGetValue("AllGames", out num))
 				Settings.SlipYGamma.Add("AllGames", 1.0);
+#endif
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
 
@@ -687,7 +696,9 @@ namespace sierses.Sim
 			else Logging.Current.Info("Haptics.Init():  " + myfile + " not found" + Atlasst);
 
 			D.Init(this);
+#if !slim
 			E.Init(Settings.Engine, this);
+#endif
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
 			this.AttachDelegate("CarId", () => S.Id);
@@ -707,36 +718,40 @@ namespace sierses.Sim
 			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
 			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
 			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
-			if (ShowFreq) {
+			if (ShowFreq)
+			{
 				this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
+#if !slim
 				this.AttachDelegate("FreqOctave", () => D.FreqOctave);
 				this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
 				this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
-				this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
-				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
-				this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
-				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
-				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
-				this.AttachDelegate("Gain1H", () => D.Gain1H);
 				this.AttachDelegate("Gain1H2", () => D.Gain1H2);
 				this.AttachDelegate("Gain2H", () => D.Gain2H);
 				this.AttachDelegate("Gain4H", () => D.Gain4H);
 				this.AttachDelegate("GainOctave", () => D.GainOctave);
 				this.AttachDelegate("GainIntervalA1", () => D.GainIntervalA1);
 				this.AttachDelegate("GainIntervalA2", () => D.GainIntervalA2);
-				this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
 				this.AttachDelegate("GainPeakA1Middle", () => D.GainPeakA1);
+				this.AttachDelegate("GainPeakA2Middle", () => D.GainPeakA2);
+				this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
+				this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
+#endif
+				this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
+				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
+				this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
+				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
+				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
+				this.AttachDelegate("Gain1H", () => D.Gain1H);
+				this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
 				this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
 				this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
-				this.AttachDelegate("GainPeakA2Middle", () => D.GainPeakA2);
 				this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
 				this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
-				this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
 				this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
 				this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
-				this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
 				this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
 			}
+#if !slim
 			if (ShowTire) {
 				this.AttachDelegate("SlipXFL", () => D.SlipXFL);
 				this.AttachDelegate("SlipXFR", () => D.SlipXFR);
@@ -765,31 +780,36 @@ namespace sierses.Sim
 				this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
 				this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
 			}
+			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
 			if (ShowSusp) {
-				this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
 				this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
 				this.AttachDelegate("SuspensionFreqR0b", () => D.SuspensionFreqRb);
 				this.AttachDelegate("SuspensionFreqR0c", () => D.SuspensionFreqRc);
-				this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
-				this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
-				this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
 				this.AttachDelegate("SuspensionFreqR4", () => D.SuspensionFreqR4);
 				this.AttachDelegate("SuspensionFreqR5", () => D.SuspensionFreqR5);
 				this.AttachDelegate("SuspensionMultR0a", () => D.SuspensionMultRa);
 				this.AttachDelegate("SuspensionMultR0b", () => D.SuspensionMultRb);
 				this.AttachDelegate("SuspensionMultR0c", () => D.SuspensionMultRc);
-				this.AttachDelegate("SuspensionMultR1", () => D.SuspensionMultR1);
-				this.AttachDelegate("SuspensionMultR2", () => D.SuspensionMultR2);
-				this.AttachDelegate("SuspensionMultR3", () => D.SuspensionMultR3);
 				this.AttachDelegate("SuspensionMultR4", () => D.SuspensionMultR4);
 				this.AttachDelegate("SuspensionMultR5", () => D.SuspensionMultR5);
 				this.AttachDelegate("SuspensionRumbleMultR0b", () => D.SuspensionRumbleMultRb);
 				this.AttachDelegate("SuspensionRumbleMultR0c", () => D.SuspensionRumbleMultRc);
+				this.AttachDelegate("SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
+				this.AttachDelegate("SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
+#else
+			if (ShowSusp)
+			{
+#endif
+				this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
+				this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
+				this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
+				this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
+				this.AttachDelegate("SuspensionMultR1", () => D.SuspensionMultR1);
+				this.AttachDelegate("SuspensionMultR2", () => D.SuspensionMultR2);
+				this.AttachDelegate("SuspensionMultR3", () => D.SuspensionMultR3);
 				this.AttachDelegate("SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
 				this.AttachDelegate("SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
 				this.AttachDelegate("SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
-				this.AttachDelegate("SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
-				this.AttachDelegate("SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
 				this.AttachDelegate("SuspensionFL", () => D.SuspensionFL);
 				this.AttachDelegate("SuspensionFR", () => D.SuspensionFR);
 				this.AttachDelegate("SuspensionRL", () => D.SuspensionRL);
@@ -805,7 +825,6 @@ namespace sierses.Sim
 			this.AttachDelegate("RumbleMult", () => D.RumbleMult);
 			this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
 			this.AttachDelegate("RumbleRight", () => D.RumbleRight);
-			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
 			this.AttachDelegate("Gear", () => D.Gear);
 			this.AttachDelegate("Gears", () => D.Gears);
 			this.AttachDelegate("ShiftDown", () => D.Downshift);

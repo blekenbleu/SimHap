@@ -6,6 +6,8 @@ namespace sierses.Sim
 {
 	public partial class SimData
 	{
+		static PluginManager PM;
+
 		public double FPS;
 		public double InvMaxRPM;
 		public double InvSpeedKmh;
@@ -22,11 +24,6 @@ namespace sierses.Sim
 		public double BrakeVel;
 		public double BrakeVelP;
 		public double BrakeAcc;
-		public bool ABSActive;
-		public double ABSPulse;
-		public long ABSPauseInterval;
-		public long ABSPulseInterval;
-		public long ABSTicks;
 		public int Gear;
 		public int Gears;
 		public bool Downshift;
@@ -42,11 +39,6 @@ namespace sierses.Sim
 		public double IdlePercent;
 		public double RedlinePercent;
 		public double RPMPercent;
-		public double IntervalOctave;
-		public double IntervalA;
-		public double IntervalB;
-		public double IntervalPeakA;
-		public double IntervalPeakB;
 		public double MixCylinder;
 		public double MixDisplacement;
 		public double MixPower;
@@ -66,20 +58,12 @@ namespace sierses.Sim
 		public double FreqHarmonic;
 		public double FreqOctave;
 		public double FreqLFEAdaptive;
-		public double FreqIntervalA1;
-		public double FreqIntervalA2;
 		public double FreqPeakA1;
 		public double FreqPeakA2;
 		public double FreqPeakB1;
 		public double FreqPeakB2;
 		public double Gain1H;
-		public double Gain1H2;
-		public double Gain2H;
-		public double Gain4H;
-		public double GainOctave;
 		public double GainLFEAdaptive;
-		public double GainIntervalA1;
-		public double GainIntervalA2;
 		public double GainPeakA1;
 		public double GainPeakA1Front;
 		public double GainPeakA1Rear;
@@ -112,43 +96,11 @@ namespace sierses.Sim
 		public double AccHeaveAbs;
 		public double InvAccSurgeAvg;
 		public bool Airborne;
-		public double SlipXFL;
-		public double SlipXFR;
-		public double SlipXRL;
-		public double SlipXRR;
-		public double SlipXAll;
-		public double SlipYFL;
-		public double SlipYFR;
-		public double SlipYRL;
-		public double SlipYRR;
-		public double SlipYAll;
-		private double SlipXGammaBaseMult;
-		public double SlipYGammaBaseMult;
-		public double TireDiameterFL;
-		public double TireDiameterFR;
-		public double TireDiameterRL;
-		public double TireDiameterRR;
-		public double TireDiameterSampleFL;
-		public double TireDiameterSampleFR;
-		public double TireDiameterSampleRL;
-		public double TireDiameterSampleRR;
-		public int TireDiameterSampleCount;
-		public int TireDiameterSampleMax;
 		public double VelocityX;
 		public double WheelLoadFL;
 		public double WheelLoadFR;
 		public double WheelLoadRL;
 		public double WheelLoadRR;
-		public double WheelSpeedFL;
-		public double WheelSpeedFR;
-		public double WheelSpeedRL;
-		public double WheelSpeedRR;
-		public double WheelRotationFL;
-		public double WheelRotationFR;
-		public double WheelRotationRL;
-		public double WheelRotationRR;
-		public double WheelSpinAll;
-		public double WheelLockAll;
 		public double Yaw;
 		public double YawPrev;
 		public double YawRate;
@@ -213,54 +165,93 @@ namespace sierses.Sim
 		public double GainSuspensionAll;
 		public int SuspensionMainOutput;
 		public double SuspensionFreq;
-		public double SuspensionFreqRa;
-		public double SuspensionFreqRb;
-		public double SuspensionFreqRc;
 		public double SuspensionFreqR1;
 		public double SuspensionFreqR2;
 		public double SuspensionFreqR3;
+		public double SuspensionMultR1;
+		public double SuspensionMultR2;
+		public double SuspensionMultR3;
+		public double SuspensionRumbleMultR1;
+		public double SuspensionRumbleMultR2;
+		public double SuspensionRumbleMultR3;
+#if !slim
+		public bool ABSActive;
+		public double ABSPulse;
+		public long ABSPauseInterval;
+		public long ABSPulseInterval;
+		public long ABSTicks;
+		public double IntervalOctave;
+		public double IntervalA;
+		public double IntervalB;
+		public double IntervalPeakA;
+		public double IntervalPeakB;
+		public double FreqIntervalA1;
+		public double FreqIntervalA2;
+		public double Gain1H2;
+		public double Gain2H;
+		public double Gain4H;
+		public double GainOctave;
+		public double GainIntervalA1;
+		public double GainIntervalA2;
+		public double SlipXFL;
+		public double SlipXFR;
+		public double SlipXRL;
+		public double SlipXRR;
+		public double SlipXAll;
+		public double SlipYFL;
+		public double SlipYFR;
+		public double SlipYRL;
+		public double SlipYRR;
+		public double SlipYAll;
+		private double SlipXGammaBaseMult;
+		public double SlipYGammaBaseMult;
+		public double TireDiameterFL;
+		public double TireDiameterFR;
+		public double TireDiameterRL;
+		public double TireDiameterRR;
+		public double TireDiameterSampleFL;
+		public double TireDiameterSampleFR;
+		public double TireDiameterSampleRL;
+		public double TireDiameterSampleRR;
+		public int TireDiameterSampleCount;
+		public int TireDiameterSampleMax;
+		public double WheelSpeedFL;
+		public double WheelSpeedFR;
+		public double WheelSpeedRL;
+		public double WheelSpeedRR;
+		public double WheelRotationFL;
+		public double WheelRotationFR;
+		public double WheelRotationRL;
+		public double WheelRotationRR;
+		public double WheelSpinAll;
+		public double WheelLockAll;
+		public double SuspensionFreqRa;
+		public double SuspensionFreqRb;
+		public double SuspensionFreqRc;
 		public double SuspensionFreqR4;
 		public double SuspensionFreqR5;
 		public double SuspensionMultRa;
 		public double SuspensionMultRb;
 		public double SuspensionMultRc;
-		public double SuspensionMultR1;
-		public double SuspensionMultR2;
-		public double SuspensionMultR3;
 		public double SuspensionMultR4;
 		public double SuspensionMultR5;
 		public double SuspensionRumbleMultRa;
 		public double SuspensionRumbleMultRb;
 		public double SuspensionRumbleMultRc;
-		public double SuspensionRumbleMultR1;
-		public double SuspensionRumbleMultR2;
-		public double SuspensionRumbleMultR3;
 		public double SuspensionRumbleMultR4;
 		public double SuspensionRumbleMultR5;
 
-		/*	if you could make me a version where you change ratios so it' s 
-			2/4/8/16 cyl to 2:1
-			3/6/12 to 3:2
-			5/10 to 5:4
-			and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
-  			I have an idea to stack main harmonic instead with slight freq shift and delay on each one
- 			to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
-			Hopefully you don't need to change code in a million places
-			22 Jun 2024 BS
-		 */
-		internal double BSratio;
-		private long FrameTimeTicks;
-		private long FrameCountTicks;
 		internal Haptics H;
 		internal int Index;
-		private ushort idleRPM;						 // for sniffing in Refresh()
 		internal string raw;
+		private long FrameTimeTicks;
+		private long FrameCountTicks;
+		private ushort idleRPM;						 // for sniffing in Refresh()
 
 		public SimData()
 		{
 			AccSamples = 16;
 			Acc1 = 0;
-			BSratio = 1.0;
 			CarInitCount = 0;
 			Downshift = false;
 			FrameCountTicks = 0;
@@ -281,7 +272,6 @@ namespace sierses.Sim
 			TireDiameterSampleMax = 100;
 			Upshift = false;
 		}
-
 
 		private void SetRPMIntervals()
 		{
@@ -383,6 +373,15 @@ namespace sierses.Sim
 			}
 		}
 
+		private float Data(string prop)
+		{
+			var foo = PM.GetPropertyValue(raw+"Data."+prop);
+			if (foo != null)
+				return Convert.ToSingle(foo);
+			return 0;
+		}
+#endif
+
 		private void SetRPMMix()
 		{
 			InvMaxRPM = H.S.MaxRPM > 0.0 ? 1.0 / H.S.MaxRPM : 0.0001;
@@ -446,15 +445,6 @@ namespace sierses.Sim
 			MixRear = 1.0 - MixFront;
 		}
 
-		static PluginManager PM;
-		private float Data(string prop)
-		{
-			var foo = PM.GetPropertyValue(raw+"Data."+prop);
-			if (foo != null)
-				return Convert.ToSingle(foo);
-			return 0;
-		}
-
 		private float Physics(string prop)
 		{
 			var foo = PM.GetPropertyValue(raw+"Physics."+prop);
@@ -489,6 +479,7 @@ namespace sierses.Sim
 			SuspensionVelFR = 0.0;
 			SuspensionVelRL = 0.0;
 			SuspensionVelRR = 0.0;
+#if !slim
 			SlipXFL = 0.0;
 			SlipXFR = 0.0;
 			SlipXRL = 0.0;
@@ -498,6 +489,7 @@ namespace sierses.Sim
 			SlipYRL = 0.0;
 			SlipYRR = 0.0;
 			ABSActive = H.N.ABSActive == 1;
+#endif
 			bool flag = true;
 			switch (Haptics.CurrentGame)
 			{
@@ -506,6 +498,7 @@ namespace sierses.Sim
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
+#if !slim
 					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
 					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
 					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
@@ -522,6 +515,7 @@ namespace sierses.Sim
 						SlipXRL *= 0.5;
 						SlipXRR *= 0.5;
 					}
+#endif
 					TiresLeft = 1.0 + (double) Math.Max(Physics("TyreContactHeading01.Y"), Physics("TyreContactHeading03.Y"));
 					TiresRight = 1.0 + (double) Math.Max(Physics("TyreContactHeading02.Y"), Physics("TyreContactHeading04.Y"));
 					if (RumbleLeftAvg == 0.0)
@@ -539,6 +533,7 @@ namespace sierses.Sim
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
 					WiperStatus = (int) PM.GetPropertyValue(raw+"Graphics.WiperLV");
+#if !slim
 					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
 					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
 					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
@@ -581,12 +576,14 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+#endif
 					break;
 				case GameId.AMS2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
 					SuspensionDistFR = Raw("mSuspensionTravel02");
 					SuspensionDistRL = Raw("mSuspensionTravel03");
 					SuspensionDistRR = Raw("mSuspensionTravel04");
+#if !slim
 					WheelRotationFL = Math.Abs(Raw("mTyreRPS01"));
 					WheelRotationFR = Math.Abs(Raw("mTyreRPS02"));
 					WheelRotationRL = Math.Abs(Raw("mTyreRPS03"));
@@ -615,19 +612,23 @@ namespace sierses.Sim
 					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
 					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
+#endif
 					break;
 				case GameId.DR2:
 					SuspensionDistFL = Raw("SuspensionPositionFrontLeft") * 0.001;
 					SuspensionDistFR = Raw("SuspensionPositionFrontRight") * 0.001;
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
+#if !slim
 					WheelSpeedFL = Math.Abs(Raw("WheelSpeedFrontLeft"));
 					WheelSpeedFR = Math.Abs(Raw("WheelSpeedFrontRight"));
 					WheelSpeedRL = Math.Abs(Raw("WheelSpeedRearLeft"));
 					WheelSpeedRR = Math.Abs(Raw("WheelSpeedRearRight"));
 					SlipFromWheelSpeed();
+#endif
 					VelocityX = Raw("WorldSpeedX") * Math.Sin(Raw("XR"));
 					YawRate = H.N.OrientationYawAcceleration;
+#if !slim
 					if (VelocityX < 0.0)
 					{
 						if (YawRate < 0.0)
@@ -663,6 +664,7 @@ namespace sierses.Sim
 					SlipXFR = Math.Max(SlipXFL, 0.0);
 					SlipXRL = Math.Max(SlipXFL, 0.0);
 					SlipXRR = Math.Max(SlipXFL, 0.0);
+#endif
 					break;
 				case GameId.WRC23:
 					SuspensionDistFL = Raw("SessionUpdate.vehicle_hub_position_fl");
@@ -671,13 +673,16 @@ namespace sierses.Sim
 					SuspensionDistRR = Raw("SessionUpdate.vehicle_hub_position_br");
 					SpeedMs = Raw("SessionUpdate.vehicle_speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
+#if !slim
 					WheelSpeedFL = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_fl"));
 					WheelSpeedFR = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_fr"));
 					WheelSpeedRL = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_bl"));
 					WheelSpeedRR = Math.Abs(Raw("SessionUpdate.vehicle_cp_forward_speed_br"));
 					SlipFromWheelSpeed();
+#endif
 					VelocityX = Raw("SessionUpdateLocalVelocity.X");
 					YawRate = H.N.OrientationYawAcceleration;
+#if !slim
 					if (VelocityX < 0.0)
 					{
 						if (YawRate < 0.0)
@@ -743,12 +748,14 @@ namespace sierses.Sim
 					SlipXFR = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio02")) * 5.0 - Math.Abs(SlipYFR) * 1.0, 0.0);
 					SlipXRL = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio03")) * 5.0 - Math.Abs(SlipYRL) * 1.0, 0.0);
 					SlipXRR = Math.Max((double) Math.Abs(Raw("PacketMotionExData.m_wheelSlipRatio04")) * 5.0 - Math.Abs(SlipYRR) * 1.0, 0.0);
+#endif
 					break;
 				case GameId.Forza:
 					SuspensionDistFL = Raw("SuspensionTravelMetersFrontLeft");
 					SuspensionDistFR = Raw("SuspensionTravelMetersFrontRight");
 					SuspensionDistRL = Raw("SuspensionTravelMetersRearLeft");
 					SuspensionDistRR = Raw("SuspensionTravelMetersRearRight");
+#if !slim
 					WheelRotationFL = Math.Abs(Raw("WheelRotationSpeedFrontLeft"));
 					WheelRotationFR = Math.Abs(Raw("WheelRotationSpeedFrontRight"));
 					WheelRotationRL = Math.Abs(Raw("WheelRotationSpeedRearLeft"));
@@ -793,6 +800,7 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+#endif
 					break;
 				case GameId.IRacing:
 					if (PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
@@ -830,6 +838,7 @@ namespace sierses.Sim
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
 					}
+#if !slim
 					VelocityX = Raw("Telemetry.VelocityY") * 10.0;
 					if (VelocityX < 0.0)
 					{
@@ -1076,6 +1085,7 @@ namespace sierses.Sim
 					SuspensionDistRL = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection03");
 					SuspensionDistRR = Raw("TruckValues.CurrentValues.WheelsValues.SuspDeflection04");
 					WiperStatus = (bool) PM.GetPropertyValue(raw+"TruckValues.CurrentValues.DashboardValues.Wipers") ? 1 : 0;
+#endif
 					break;
 				case GameId.BeamNG:
 					flag = false;
@@ -1087,6 +1097,7 @@ namespace sierses.Sim
 					SuspensionVelFR = Raw("suspension_velocity_fr") * 0.05;
 					SuspensionVelRL = Raw("suspension_velocity_rl") * 0.05;
 					SuspensionVelRR = Raw("suspension_velocity_rr") * 0.05;
+#if !slim
 					WheelSpeedFL = Raw("wheel_speed_fl");
 					WheelSpeedFR = Raw("wheel_speed_fr");
 					WheelSpeedRL = Raw("wheel_speed_rl");
@@ -1122,12 +1133,14 @@ namespace sierses.Sim
 					}
 					RumbleLeft = 0.0;
 					RumbleRight = 0.0;
+#endif
 					break;
 				case GameId.LMU:
 					SuspensionDistFL = Raw("CurrentPlayerTelemetry.mWheels01.mSuspensionDeflection");
 					SuspensionDistFR = Raw("CurrentPlayerTelemetry.mWheels02.mSuspensionDeflection");
 					SuspensionDistRL = Raw("CurrentPlayerTelemetry.mWheels03.mSuspensionDeflection");
 					SuspensionDistRR = Raw("CurrentPlayerTelemetry.mWheels04.mSuspensionDeflection");
+#if !slim
 					WheelRotationFL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels01.mRotation"));
 					WheelRotationFR = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels02.mRotation"));
 					WheelRotationRL = Math.Abs(Raw("CurrentPlayerTelemetry.mWheels03.mRotation"));
@@ -1167,6 +1180,7 @@ namespace sierses.Sim
 					SlipXFR = Math.Max(Raw("Wheel_Slip02") - Math.Abs(SlipYFR) * 2.0, 0.0);
 					SlipXRL = Math.Max(Raw("Wheel_Slip03") - Math.Abs(SlipYRL) * 2.0, 0.0);
 					SlipXRR = Math.Max(Raw("Wheel_Slip04") - Math.Abs(SlipYRR) * 2.0, 0.0);
+#endif
 					break;
 			}
 			if (!flag)
@@ -1177,6 +1191,7 @@ namespace sierses.Sim
 			SuspensionVelRR = (SuspensionDistRR - SuspensionDistRRP) * FPS;
 		}
 
+#if !slim
 		private void SlipFromRPS()
 		{
 			if (TireDiameterSampleCount < TireDiameterSampleMax
@@ -1274,6 +1289,7 @@ namespace sierses.Sim
 			SlipYRL *= SpeedMs * 0.333;
 			SlipYRR *= SpeedMs * 0.333;
 		}
+#endif
 		internal ushort Rpms;
 
 		// called from DataUpdate()
@@ -1380,6 +1396,7 @@ namespace sierses.Sim
 			WheelLoadRR = ((100.0 - AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			UpdateVehicle();
 			Airborne = AccHeave2S < -2.0 || Math.Abs(H.N.OrientationRoll) > 60.0;
+#if !slim
 			if (Airborne && SuspensionFL < 0.1)
 				SlipXFL = SlipYFL = 0.0;
 			else
@@ -1433,6 +1450,7 @@ namespace sierses.Sim
 				WheelLockAll += SlipYRL - 50.0;
 			if (SlipYRR > 50.0)
 				WheelLockAll += SlipYRR - 50.0;
+#endif
 
 			if (DateTime.Now.Ticks < FrameTimeTicks)	// long rollover?
 				FrameCountTicks += (long.MaxValue - FrameTimeTicks) + DateTime.Now.Ticks;	// rollover
@@ -1466,6 +1484,7 @@ namespace sierses.Sim
 					else Upshift = true;
 				}
 			}
+#if !slim
 			ABSPauseInterval = SlipYAll <= 0.0
 								? (long) (1166667.0 - 666667.0 * ((H.N.SpeedKmh - 20.0) * 0.003333333).Clamp(0.0, 1.0))
 								: (long) (1250000.0 - 666667.0 * SlipYAll.Clamp(0.0, 1.0));
@@ -1490,6 +1509,7 @@ namespace sierses.Sim
 				ABSPulse = 0.0;
 				ABSTicks = -1L;
 			}
+#endif
 			SuspensionAccFLP = SuspensionAccFL;
 			SuspensionAccFRP = SuspensionAccFR;
 			SuspensionAccRLP = SuspensionAccRL;
@@ -1517,22 +1537,24 @@ namespace sierses.Sim
 				++CarInitCount;
 			}
 			SuspensionFreq = H.N.SpeedKmh * (3.0 / 16.0);
-			double num2 = 94.0 + 0.4 * SpeedMs;
-			double num3 = 76.0 + 0.45 * SpeedMs;
-			double num4 = 60.0 + 0.5 * SpeedMs;
 			double num5 = 46.0 + 0.55 * SpeedMs;
 			double num6 = 34.0 + 0.6 * SpeedMs;
 			double num7 = 24.0 + 0.65 * SpeedMs;
+#if !slim
+			double num2 = 94.0 + 0.4 * SpeedMs;
+			double num3 = 76.0 + 0.45 * SpeedMs;
+			double num4 = 60.0 + 0.5 * SpeedMs;
 			double num8 = 16.0 + 0.7 * SpeedMs;
 			double num9 = 10.0 + 0.75 * SpeedMs;
 			double num10 = 0.55 + 1.8 * AccHeaveAbs * (AccHeaveAbs + num2) / (num2 * num2);
 			double num11 = 0.5 + 2.0 * AccHeaveAbs * (AccHeaveAbs + num3) / (num3 * num3);
 			double num12 = 0.45 + 2.2 * AccHeaveAbs * (AccHeaveAbs + num4) / (num4 * num4);
+			double num16 = 0.7 + 1.2 * AccHeaveAbs * (AccHeaveAbs + num8) / (num8 * num8);
+			double num17 = 0.8 + 0.8 * AccHeaveAbs * (AccHeaveAbs + num9) / (num9 * num9);
+#endif
 			double num13 = 0.4 + 2.4 * AccHeaveAbs * (AccHeaveAbs + num5) / (num5 * num5);
 			double num14 = 0.5 + 2.0 * AccHeaveAbs * (AccHeaveAbs + num6) / (num6 * num6);
 			double num15 = 0.6 + 1.6 * AccHeaveAbs * (AccHeaveAbs + num7) / (num7 * num7);
-			double num16 = 0.7 + 1.2 * AccHeaveAbs * (AccHeaveAbs + num8) / (num8 * num8);
-			double num17 = 0.8 + 0.8 * AccHeaveAbs * (AccHeaveAbs + num9) / (num9 * num9);
 			double num18 = RumbleMult * RumbleMultAll * (0.6 + SpeedMs * (90.0 - SpeedMs) * 0.0002);
 			if (SuspensionFreq < 30.0)
 			{
@@ -1547,170 +1569,182 @@ namespace sierses.Sim
 								if (SuspensionFreq < 3.75)
 								{
 									SuspensionFreq *= 4.0;
-									SuspensionFreqRa = SuspensionFreq * 0.715;
-									SuspensionFreqRb = SuspensionFreq * 1.0;
-									SuspensionFreqRc = SuspensionFreq * 1.43;
 									SuspensionFreqR1 = SuspensionFreq * 2.0;
 									SuspensionFreqR2 = SuspensionFreq * 2.86;
 									SuspensionFreqR3 = SuspensionFreq * 4.0;
+									SuspensionMultR1 = num13 * 0.8;
+									SuspensionMultR2 = num14 * 0.25;
+									SuspensionMultR3 = num15 * 0.6;
+									SuspensionRumbleMultR1 = num18 * 1.5;
+									SuspensionRumbleMultR2 = num18 * 0.0;
+									SuspensionRumbleMultR3 = num18 * 1.0;
+#if !slim
+									SuspensionFreqRa = SuspensionFreq * 0.715;
+									SuspensionFreqRb = SuspensionFreq * 1.0;
+									SuspensionFreqRc = SuspensionFreq * 1.43;
 									SuspensionFreqR4 = SuspensionFreq * 5.72;
 									SuspensionFreqR5 = SuspensionFreq * 8.0;
 									SuspensionMultRa = num10 * 0.5;
 									SuspensionMultRb = num11 * 1.0;
 									SuspensionMultRc = num12 * 0.5;
-									SuspensionMultR1 = num13 * 0.8;
-									SuspensionMultR2 = num14 * 0.25;
-									SuspensionMultR3 = num15 * 0.6;
 									SuspensionMultR4 = num16 * 0.125;
 									SuspensionMultR5 = num17 * 0.4;
 									SuspensionRumbleMultRa = num18 * 0.0;
 									SuspensionRumbleMultRb = num18 * 2.0;
 									SuspensionRumbleMultRc = num18 * 0.0;
-									SuspensionRumbleMultR1 = num18 * 1.5;
-									SuspensionRumbleMultR2 = num18 * 0.0;
-									SuspensionRumbleMultR3 = num18 * 1.0;
 									SuspensionRumbleMultR4 = num18 * 0.0;
 									SuspensionRumbleMultR5 = num18 * 0.5;
+#endif
 								}
 								else
 								{
 									SuspensionFreq *= 2.0;
-									SuspensionFreqRa = SuspensionFreq * 0.715;
-									SuspensionFreqRb = SuspensionFreq * 1.0;
-									SuspensionFreqRc = SuspensionFreq * 1.43;
 									SuspensionFreqR1 = SuspensionFreq * 2.0;
 									SuspensionFreqR2 = SuspensionFreq * 2.86;
 									SuspensionFreqR3 = SuspensionFreq * 4.0;
+									SuspensionMultR1 = num13 * 0.8;
+									SuspensionMultR2 = num14 * 0.25;
+									SuspensionMultR3 = num15 * 0.6;
+									SuspensionRumbleMultR1 = num18 * 1.5;
+									SuspensionRumbleMultR2 = num18 * 0.0;
+									SuspensionRumbleMultR3 = num18 * 1.0;
+#if !slim
+									SuspensionFreqRa = SuspensionFreq * 0.715;
+									SuspensionFreqRb = SuspensionFreq * 1.0;
+									SuspensionFreqRc = SuspensionFreq * 1.43;
 									SuspensionFreqR4 = SuspensionFreq * 5.72;
 									SuspensionFreqR5 = SuspensionFreq * 8.0;
 									SuspensionMultRa = num10 * 0.5;
 									SuspensionMultRb = num11 * 1.0;
 									SuspensionMultRc = num12 * 0.5;
-									SuspensionMultR1 = num13 * 0.8;
-									SuspensionMultR2 = num14 * 0.25;
-									SuspensionMultR3 = num15 * 0.6;
 									SuspensionMultR4 = num16 * 0.125;
 									SuspensionMultR5 = num17 * 0.4;
 									SuspensionRumbleMultRa = num18 * 0.0;
 									SuspensionRumbleMultRb = num18 * 2.0;
 									SuspensionRumbleMultRc = num18 * 0.0;
-									SuspensionRumbleMultR1 = num18 * 1.5;
-									SuspensionRumbleMultR2 = num18 * 0.0;
-									SuspensionRumbleMultR3 = num18 * 1.0;
 									SuspensionRumbleMultR4 = num18 * 0.0;
 									SuspensionRumbleMultR5 = num18 * 0.5;
+#endif
 								}
 							}
 							else
 							{
-								SuspensionFreqRa = SuspensionFreq * 1.0;
-								SuspensionFreqRb = SuspensionFreq * 1.43;
-								SuspensionFreqRc = SuspensionFreq * 2.0;
 								SuspensionFreqR1 = SuspensionFreq * 2.86;
 								SuspensionFreqR2 = SuspensionFreq * 4.0;
 								SuspensionFreqR3 = SuspensionFreq * 5.72;
+								SuspensionMultR1 = num13 * 0.25;
+								SuspensionMultR2 = num14 * 0.6;
+								SuspensionMultR3 = num15 * 0.125;
+								SuspensionRumbleMultR1 = num18 * 0.0;
+								SuspensionRumbleMultR2 = num18 * 1.0;
+								SuspensionRumbleMultR3 = num18 * 0.0;
+#if !slim
+								SuspensionFreqRa = SuspensionFreq * 1.0;
+								SuspensionFreqRb = SuspensionFreq * 1.43;
+								SuspensionFreqRc = SuspensionFreq * 2.0;
 								SuspensionFreqR4 = SuspensionFreq * 8.0;
 								SuspensionFreqR5 = SuspensionFreq * 11.44;
 								SuspensionMultRa = num10 * 1.0;
 								SuspensionMultRb = num11 * 0.5;
 								SuspensionMultRc = num12 * 0.8;
-								SuspensionMultR1 = num13 * 0.25;
-								SuspensionMultR2 = num14 * 0.6;
-								SuspensionMultR3 = num15 * 0.125;
 								SuspensionMultR4 = num16 * 0.4;
 								SuspensionMultR5 = num17 * (1.0 / 16.0);
 								SuspensionRumbleMultRa = num18 * 2.0;
 								SuspensionRumbleMultRb = num18 * 0.0;
 								SuspensionRumbleMultRc = num18 * 1.5;
-								SuspensionRumbleMultR1 = num18 * 0.0;
-								SuspensionRumbleMultR2 = num18 * 1.0;
-								SuspensionRumbleMultR3 = num18 * 0.0;
 								SuspensionRumbleMultR4 = num18 * 0.5;
 								SuspensionRumbleMultR5 = num18 * 0.0;
+#endif
 							}
 						}
 						else
 						{
-							SuspensionFreqRa = SuspensionFreq * 0.715;
-							SuspensionFreqRb = SuspensionFreq * 1.0;
-							SuspensionFreqRc = SuspensionFreq * 1.43;
 							SuspensionFreqR1 = SuspensionFreq * 2.0;
 							SuspensionFreqR2 = SuspensionFreq * 2.86;
 							SuspensionFreqR3 = SuspensionFreq * 4.0;
+							SuspensionMultR1 = num13 * 0.8;
+							SuspensionMultR2 = num14 * 0.25;
+							SuspensionMultR3 = num15 * 0.6;
+							SuspensionRumbleMultR1 = num18 * 1.5;
+							SuspensionRumbleMultR2 = num18 * 0.0;
+							SuspensionRumbleMultR3 = num18 * 1.0;
+#if !slim
+							SuspensionFreqRa = SuspensionFreq * 0.715;
+							SuspensionFreqRb = SuspensionFreq * 1.0;
+							SuspensionFreqRc = SuspensionFreq * 1.43;
 							SuspensionFreqR4 = SuspensionFreq * 5.72;
 							SuspensionFreqR5 = SuspensionFreq * 8.0;
 							SuspensionMultRa = num10 * 0.5;
 							SuspensionMultRb = num11 * 1.0;
 							SuspensionMultRc = num12 * 0.5;
-							SuspensionMultR1 = num13 * 0.8;
-							SuspensionMultR2 = num14 * 0.25;
-							SuspensionMultR3 = num15 * 0.6;
 							SuspensionMultR4 = num16 * 0.125;
 							SuspensionMultR5 = num17 * 0.4;
 							SuspensionRumbleMultRa = num18 * 0.0;
 							SuspensionRumbleMultRb = num18 * 2.0;
 							SuspensionRumbleMultRc = num18 * 0.0;
-							SuspensionRumbleMultR1 = num18 * 1.5;
-							SuspensionRumbleMultR2 = num18 * 0.0;
-							SuspensionRumbleMultR3 = num18 * 1.0;
 							SuspensionRumbleMultR4 = num18 * 0.0;
 							SuspensionRumbleMultR5 = num18 * 0.5;
+#endif
 						}
 					}
 					else
 					{
-						SuspensionFreqRa = SuspensionFreq * 0.5;
-						SuspensionFreqRb = SuspensionFreq * 0.715;
-						SuspensionFreqRc = SuspensionFreq * 1.0;
 						SuspensionFreqR1 = SuspensionFreq * 1.43;
 						SuspensionFreqR2 = SuspensionFreq * 2.0;
 						SuspensionFreqR3 = SuspensionFreq * 2.86;
+						SuspensionMultR1 = num13 * 0.5;
+						SuspensionMultR2 = num14 * 0.8;
+						SuspensionMultR3 = num15 * 0.25;
+						SuspensionRumbleMultR1 = num18 * 0.0;
+						SuspensionRumbleMultR2 = num18 * 1.5;
+						SuspensionRumbleMultR3 = num18 * 0.0;
+#if !slim
+						SuspensionFreqRa = SuspensionFreq * 0.5;
+						SuspensionFreqRb = SuspensionFreq * 0.715;
+						SuspensionFreqRc = SuspensionFreq * 1.0;
 						SuspensionFreqR4 = SuspensionFreq * 4.0;
 						SuspensionFreqR5 = SuspensionFreq * 5.72;
 						SuspensionMultRa = num10 * 0.8;
 						SuspensionMultRb = num11 * 0.5;
 						SuspensionMultRc = num12 * 1.0;
-						SuspensionMultR1 = num13 * 0.5;
-						SuspensionMultR2 = num14 * 0.8;
-						SuspensionMultR3 = num15 * 0.25;
 						SuspensionMultR4 = num16 * 0.6;
 						SuspensionMultR5 = num17 * 0.125;
 						SuspensionRumbleMultRa = num18 * 1.5;
 						SuspensionRumbleMultRb = num18 * 0.0;
 						SuspensionRumbleMultRc = num18 * 2.0;
-						SuspensionRumbleMultR1 = num18 * 0.0;
-						SuspensionRumbleMultR2 = num18 * 1.5;
-						SuspensionRumbleMultR3 = num18 * 0.0;
 						SuspensionRumbleMultR4 = num18 * 1.0;
 						SuspensionRumbleMultR5 = num18 * 0.0;
+#endif
 					}
 				}
 				else
 				{
-					SuspensionFreqRa = SuspensionFreq * (143.0 / 400.0);
-					SuspensionFreqRb = SuspensionFreq * 0.5;
-					SuspensionFreqRc = SuspensionFreq * 0.715;
 					SuspensionFreqR1 = SuspensionFreq * 1.0;
 					SuspensionFreqR2 = SuspensionFreq * 1.43;
 					SuspensionFreqR3 = SuspensionFreq * 2.0;
+					SuspensionMultR1 = num13 * 1.0;
+					SuspensionMultR2 = num14 * 0.5;
+					SuspensionMultR3 = num15 * 0.8;
+					SuspensionRumbleMultR1 = num18 * 2.0;
+					SuspensionRumbleMultR2 = num18 * 0.0;
+					SuspensionRumbleMultR3 = num18 * 1.5;
+#if !slim
+					SuspensionFreqRa = SuspensionFreq * (143.0 / 400.0);
+					SuspensionFreqRb = SuspensionFreq * 0.5;
+					SuspensionFreqRc = SuspensionFreq * 0.715;
 					SuspensionFreqR4 = SuspensionFreq * 2.86;
 					SuspensionFreqR5 = SuspensionFreq * 4.0;
 					SuspensionMultRa = num10 * 0.25;
 					SuspensionMultRb = num11 * 0.8;
 					SuspensionMultRc = num12 * 0.5;
-					SuspensionMultR1 = num13 * 1.0;
-					SuspensionMultR2 = num14 * 0.5;
-					SuspensionMultR3 = num15 * 0.8;
 					SuspensionMultR4 = num16 * 0.25;
 					SuspensionMultR5 = num17 * 0.6;
 					SuspensionRumbleMultRa = num18 * 0.0;
 					SuspensionRumbleMultRb = num18 * 1.5;
 					SuspensionRumbleMultRc = num18 * 0.0;
-					SuspensionRumbleMultR1 = num18 * 2.0;
-					SuspensionRumbleMultR2 = num18 * 0.0;
-					SuspensionRumbleMultR3 = num18 * 1.5;
 					SuspensionRumbleMultR4 = num18 * 0.0;
 					SuspensionRumbleMultR5 = num18 * 1.0;
+#endif
 				}
 			}
 			else if (SuspensionFreq > 40.0)
@@ -1721,141 +1755,151 @@ namespace sierses.Sim
 					{
 						if (SuspensionFreq > 120.0)
 						{
-							SuspensionFreqRa = SuspensionFreq * (1.0 / 16.0);
-							SuspensionFreqRb = SuspensionFreq * 0.089375;
-							SuspensionFreqRc = SuspensionFreq * 0.125;
 							SuspensionFreqR1 = SuspensionFreq * (143.0 / 800.0);
 							SuspensionFreqR2 = SuspensionFreq * 0.25;
 							SuspensionFreqR3 = SuspensionFreq * (143.0 / 400.0);
+							SuspensionMultR1 = num13 * 0.125;
+							SuspensionMultR2 = num14 * 0.6;
+							SuspensionMultR3 = num15 * 0.25;
+							SuspensionRumbleMultR1 = num18 * 0.0;
+							SuspensionRumbleMultR2 = num18 * 1.0;
+							SuspensionRumbleMultR3 = num18 * 0.0;
+#if !slim
+							SuspensionFreqRa = SuspensionFreq * (1.0 / 16.0);
+							SuspensionFreqRb = SuspensionFreq * 0.089375;
+							SuspensionFreqRc = SuspensionFreq * 0.125;
 							SuspensionFreqR4 = SuspensionFreq * 0.5;
 							SuspensionFreqR5 = SuspensionFreq * 0.715;
 							SuspensionMultRa = num10 * 0.2;
 							SuspensionMultRb = num11 * (1.0 / 16.0);
 							SuspensionMultRc = num12 * 0.4;
-							SuspensionMultR1 = num13 * 0.125;
-							SuspensionMultR2 = num14 * 0.6;
-							SuspensionMultR3 = num15 * 0.25;
 							SuspensionMultR4 = num16 * 0.8;
 							SuspensionMultR5 = num17 * 0.5;
 							SuspensionRumbleMultRa = num18 * 0.3;
 							SuspensionRumbleMultRb = num18 * 0.0;
 							SuspensionRumbleMultRc = num18 * 0.5;
-							SuspensionRumbleMultR1 = num18 * 0.0;
-							SuspensionRumbleMultR2 = num18 * 1.0;
-							SuspensionRumbleMultR3 = num18 * 0.0;
 							SuspensionRumbleMultR4 = num18 * 1.5;
 							SuspensionRumbleMultR5 = num18 * 0.0;
+#endif
 						}
 						else
 						{
-							SuspensionFreqRa = SuspensionFreq * 0.089375;
-							SuspensionFreqRb = SuspensionFreq * 0.125;
-							SuspensionFreqRc = SuspensionFreq * (143.0 / 800.0);
 							SuspensionFreqR1 = SuspensionFreq * 0.25;
 							SuspensionFreqR2 = SuspensionFreq * (143.0 / 400.0);
 							SuspensionFreqR3 = SuspensionFreq * 0.5;
+							SuspensionMultR1 = num13 * 0.6;
+							SuspensionMultR2 = num14 * 0.25;
+							SuspensionMultR3 = num15 * 0.8;
+							SuspensionRumbleMultR1 = num18 * 1.0;
+							SuspensionRumbleMultR2 = num18 * 0.0;
+							SuspensionRumbleMultR3 = num18 * 1.5;
+#if !slim
+							SuspensionFreqRa = SuspensionFreq * 0.089375;
+							SuspensionFreqRb = SuspensionFreq * 0.125;
+							SuspensionFreqRc = SuspensionFreq * (143.0 / 800.0);
 							SuspensionFreqR4 = SuspensionFreq * 0.715;
 							SuspensionFreqR5 = SuspensionFreq * 1.0;
 							SuspensionMultRa = num10 * (1.0 / 16.0);
 							SuspensionMultRb = num11 * 0.4;
 							SuspensionMultRc = num12 * 0.125;
-							SuspensionMultR1 = num13 * 0.6;
-							SuspensionMultR2 = num14 * 0.25;
-							SuspensionMultR3 = num15 * 0.8;
 							SuspensionMultR4 = num16 * 0.5;
 							SuspensionMultR5 = num17 * 1.0;
 							SuspensionRumbleMultRa = num18 * 0.0;
 							SuspensionRumbleMultRb = num18 * 0.5;
 							SuspensionRumbleMultRc = num18 * 0.0;
-							SuspensionRumbleMultR1 = num18 * 1.0;
-							SuspensionRumbleMultR2 = num18 * 0.0;
-							SuspensionRumbleMultR3 = num18 * 1.5;
 							SuspensionRumbleMultR4 = num18 * 0.0;
 							SuspensionRumbleMultR5 = num18 * 2.0;
+#endif
 						}
 					}
 					else
 					{
-						SuspensionFreqRa = SuspensionFreq * 0.125;
-						SuspensionFreqRb = SuspensionFreq * (143.0 / 800.0);
-						SuspensionFreqRc = SuspensionFreq * 0.25;
 						SuspensionFreqR1 = SuspensionFreq * (143.0 / 400.0);
 						SuspensionFreqR2 = SuspensionFreq * 0.5;
 						SuspensionFreqR3 = SuspensionFreq * 0.715;
+						SuspensionMultR1 = num13 * 0.25;
+						SuspensionMultR2 = num14 * 0.8;
+						SuspensionMultR3 = num15 * 0.5;
+						SuspensionRumbleMultR1 = num18 * 0.0;
+						SuspensionRumbleMultR2 = num18 * 1.5;
+						SuspensionRumbleMultR3 = num18 * 0.0;
+#if !slim
+						SuspensionFreqRa = SuspensionFreq * 0.125;
+						SuspensionFreqRb = SuspensionFreq * (143.0 / 800.0);
+						SuspensionFreqRc = SuspensionFreq * 0.25;
 						SuspensionFreqR4 = SuspensionFreq * 1.0;
 						SuspensionFreqR5 = SuspensionFreq * 1.43;
 						SuspensionMultRa = num10 * 0.4;
 						SuspensionMultRb = num11 * 0.125;
 						SuspensionMultRc = num12 * 0.6;
-						SuspensionMultR1 = num13 * 0.25;
-						SuspensionMultR2 = num14 * 0.8;
-						SuspensionMultR3 = num15 * 0.5;
 						SuspensionMultR4 = num16 * 1.0;
 						SuspensionMultR5 = num17 * 0.5;
 						SuspensionRumbleMultRa = num18 * 0.5;
 						SuspensionRumbleMultRb = num18 * 0.0;
 						SuspensionRumbleMultRc = num18 * 1.0;
-						SuspensionRumbleMultR1 = num18 * 0.0;
-						SuspensionRumbleMultR2 = num18 * 1.5;
-						SuspensionRumbleMultR3 = num18 * 0.0;
 						SuspensionRumbleMultR4 = num18 * 2.0;
 						SuspensionRumbleMultR5 = num18 * 0.0;
+#endif
 					}
 				}
 				else
 				{
-					SuspensionFreqRa = SuspensionFreq * (143.0 / 800.0);
-					SuspensionFreqRb = SuspensionFreq * 0.25;
-					SuspensionFreqRc = SuspensionFreq * (143.0 / 400.0);
 					SuspensionFreqR1 = SuspensionFreq * 0.5;
 					SuspensionFreqR2 = SuspensionFreq * 0.715;
 					SuspensionFreqR3 = SuspensionFreq * 1.0;
+					SuspensionMultR1 = num13 * 0.8;
+					SuspensionMultR2 = num14 * 0.5;
+					SuspensionMultR3 = num15 * 1.0;
+					SuspensionRumbleMultR1 = num18 * 1.5;
+					SuspensionRumbleMultR2 = num18 * 0.0;
+					SuspensionRumbleMultR3 = num18 * 2.0;
+#if !slim
+					SuspensionFreqRa = SuspensionFreq * (143.0 / 800.0);
+					SuspensionFreqRb = SuspensionFreq * 0.25;
+					SuspensionFreqRc = SuspensionFreq * (143.0 / 400.0);
 					SuspensionFreqR4 = SuspensionFreq * 1.43;
 					SuspensionFreqR5 = SuspensionFreq * 2.0;
 					SuspensionMultRa = num10 * 0.125;
 					SuspensionMultRb = num11 * 0.6;
 					SuspensionMultRc = num12 * 0.25;
-					SuspensionMultR1 = num13 * 0.8;
-					SuspensionMultR2 = num14 * 0.5;
-					SuspensionMultR3 = num15 * 1.0;
 					SuspensionMultR4 = num16 * 0.5;
 					SuspensionMultR5 = num17 * 0.8;
 					SuspensionRumbleMultRa = num18 * 0.0;
 					SuspensionRumbleMultRb = num18 * 1.0;
 					SuspensionRumbleMultRc = num18 * 0.0;
-					SuspensionRumbleMultR1 = num18 * 1.5;
-					SuspensionRumbleMultR2 = num18 * 0.0;
-					SuspensionRumbleMultR3 = num18 * 2.0;
 					SuspensionRumbleMultR4 = num18 * 0.0;
 					SuspensionRumbleMultR5 = num18 * 1.5;
+#endif
 				}
 			}
 			else
 			{
-				SuspensionFreqRa = SuspensionFreq * 0.25;
-				SuspensionFreqRb = SuspensionFreq * (143.0 / 400.0);
-				SuspensionFreqRc = SuspensionFreq * 0.5;
 				SuspensionFreqR1 = SuspensionFreq * 0.715;
 				SuspensionFreqR2 = SuspensionFreq * 1.0;
 				SuspensionFreqR3 = SuspensionFreq * 1.43;
+				SuspensionMultR1 = num13 * 0.5;
+				SuspensionMultR2 = num14 * 1.0;
+				SuspensionMultR3 = num15 * 0.5;
+				SuspensionRumbleMultR1 = num18 * 0.0;
+				SuspensionRumbleMultR2 = num18 * 2.0;
+				SuspensionRumbleMultR3 = num18 * 0.0;
+#if !slim
+				SuspensionFreqRa = SuspensionFreq * 0.25;
+				SuspensionFreqRb = SuspensionFreq * (143.0 / 400.0);
+				SuspensionFreqRc = SuspensionFreq * 0.5;
 				SuspensionFreqR4 = SuspensionFreq * 2.0;
 				SuspensionFreqR5 = SuspensionFreq * 2.86;
 				SuspensionMultRa = num10 * 0.6;
 				SuspensionMultRb = num11 * 0.25;
 				SuspensionMultRc = num12 * 0.8;
-				SuspensionMultR1 = num13 * 0.5;
-				SuspensionMultR2 = num14 * 1.0;
-				SuspensionMultR3 = num15 * 0.5;
 				SuspensionMultR4 = num16 * 0.8;
 				SuspensionMultR5 = num17 * 0.25;
 				SuspensionRumbleMultRa = num18 * 1.0;
 				SuspensionRumbleMultRb = num18 * 0.0;
 				SuspensionRumbleMultRc = num18 * 1.5;
-				SuspensionRumbleMultR1 = num18 * 0.0;
-				SuspensionRumbleMultR2 = num18 * 2.0;
-				SuspensionRumbleMultR3 = num18 * 0.0;
 				SuspensionRumbleMultR4 = num18 * 1.5;
 				SuspensionRumbleMultR5 = num18 * 0.0;
+#endif
 			}
 			EngineLoad = H.N.CarSettings_CurrentDisplayedRPMPercent * 0.5;
 			EngineLoad += H.N.SpeedKmh * H.N.SpeedKmh * 0.0003;
@@ -1883,18 +1927,27 @@ namespace sierses.Sim
 
 			if (FrameCountTicks % 5000000L <= 150000L)
 			{
+#if !slim
 				SetRPMIntervals();
+#endif
 				SetRPMMix();
 			}
 			FreqHarmonic = H.N.Rpms * 0.008333333;
-			FreqOctave = FreqHarmonic * (1.0 + IntervalOctave * 0.08333333);
 			FreqLFEAdaptive = FreqHarmonic * FrequencyMultiplier;
-			FreqIntervalA1 = FreqHarmonic * (1.0 + IntervalA * 0.08333333);
-			FreqIntervalA2 = FreqHarmonic * 0.5 * (1.0 + IntervalA * 0.08333333);
+#if !slim
+			FreqPeakA1 = FreqHarmonic * 1.5 * (1.0 + 8 * 0.08333333);
+			FreqPeakB1 = FreqHarmonic * 0.75 * (1.0 + 8 * 0.08333333);
+			FreqPeakA2 = FreqHarmonic * 0.5 * (1.0 + 8 * 0.08333333);
+			FreqPeakB2 = FreqHarmonic * 1.25 * (1.0 + 8 * 0.08333333);
+#else
 			FreqPeakA1 = FreqHarmonic * (1.0 + IntervalPeakA * 0.08333333);
 			FreqPeakB1 = FreqHarmonic * (1.0 + IntervalPeakB * 0.08333333);
 			FreqPeakA2 = FreqHarmonic * 0.5 * (1.0 + IntervalPeakA * 0.08333333);
 			FreqPeakB2 = FreqHarmonic * 0.5 * (1.0 + IntervalPeakB * 0.08333333);
+			FreqIntervalA1 = FreqHarmonic * (1.0 + IntervalA * 0.08333333);
+			FreqIntervalA2 = FreqHarmonic * 0.5 * (1.0 + IntervalA * 0.08333333);
+			FreqOctave = FreqHarmonic * (1.0 + IntervalOctave * 0.08333333);
+#endif
 			double num21 = 1.0;
 			double num22 = 1.0;
 			if (Gear > 0)
@@ -1909,13 +1962,29 @@ namespace sierses.Sim
 						? (FreqHarmonic >= 65.0
 							? (FreqHarmonic >= 95.0
 								? (FreqHarmonic >= 125.0
+#if slim
+									? (1 - (FreqHarmonic - 95) / (200 - 95)) * 95.55
+									: (1 - (FreqHarmonic - 95) / (200 - 95)) * 95.55)
+								: (3.5 - (FreqHarmonic - 95) / (65 - 95)) * 27.3)
+							: (5.25 - (FreqHarmonic - 65) / (40 - 65)) * 13)
+						: (1.6 - (FreqHarmonic - 25) / (1 - 25)) * 25)
+					: (1.6 - (FreqHarmonic - 25) / (1 - 25)) * 25;
+#else
 									? 75.0 - (FreqHarmonic - 125.0)
 									: 95.0 - (FreqHarmonic - 95.0) * 0.667)
 								: 65.0 + (FreqHarmonic - 65.0) * 1.0)
 							: 52.5 + (FreqHarmonic - 40.0) * 0.5)
 						: 40.0 + (FreqHarmonic - 25.0) * 0.834)
 					: 30.0 + (FreqHarmonic - 15.0) * 1.0;
+#endif
 			Gain1H = Math.Max(Gain1H, 0.0) * num21 * num22 * (0.8 + 0.2 * MixPower + 0.2 * MixCylinder);
+#if slim
+			Gain1H = (Gain1H.Clamp(0.0, sbyte.MaxValue));
+			PeakA1Start = RedlinePercent * (0.76 + GearInterval * Gear * 0.06);
+			PeakB1Start = RedlinePercent * (0.72 + GearInterval * Gear * 0.06);
+			PeakA2Start = RedlinePercent * (0.70 + MixPower * GearInterval * Gear * 0.9);
+			PeakB2Start = RedlinePercent * (0.90 - MixTorque * 0.08);
+#else
 			Gain1H = Math.Floor(Gain1H.Clamp(0.0, sbyte.MaxValue));
 			Gain1H2 = FreqHarmonic >= 25.0 ? (FreqHarmonic >= 40.0
 												 ? (FreqHarmonic >= 65.0
@@ -1966,40 +2035,84 @@ namespace sierses.Sim
 			PeakB1Start = RedlinePercent * (0.92 + GearInterval * Gear * 0.04);
 			PeakA2Start = RedlinePercent * (0.9 + MixPower * GearInterval * Gear * 0.06);
 			PeakB2Start = RedlinePercent * (0.98 - MixTorque * 0.08);
+#endif
 			PeakA1Modifier = ((RPMPercent - PeakA1Start) / (RedlinePercent - PeakA1Start + (1.0 - RedlinePercent) * (0.75 + MixCylinder * 0.75))).Clamp(0.0, 1.0);
 			PeakB1Modifier = ((RPMPercent - PeakB1Start) / (RedlinePercent - PeakB1Start + (1.0 - RedlinePercent) * (0.0 + MixCylinder))).Clamp(0.0, 1.0);
 			PeakA2Modifier = ((RPMPercent - PeakA2Start) / (RedlinePercent - PeakA2Start)).Clamp(0.0, 1.0);
 			PeakB2Modifier = ((RPMPercent - PeakB2Start) / (RedlinePercent - PeakB2Start + (1.0 - RedlinePercent) * (1.0 - MixDisplacement))).Clamp(0.0, 1.0);
+
+#if slim
+			GainPeakA1 = FreqPeakA1 >= 45.0 ? (FreqPeakA1 >= 105.0 ? (1 - (FreqPeakA1 - 105) / (225 - 105)) * 90 : (1 - (FreqPeakA1 - 105) / (45 - 105)) * 90) : 0;
+#else
 			GainPeakA1 = FreqPeakA1 >= 55.0 ? (FreqPeakA1 >= 75.0 ? (FreqPeakA1 >= 105.0 ? 90.0 - (FreqPeakA1 - 105.0) * 0.75 : 60.0 + (FreqPeakA1 - 75.0) * 1.0) : 30.0 + (FreqPeakA1 - 55.0) * 1.5) : (FreqPeakA1 - 45.0) * 3.0;
+#endif
 			GainPeakA1 = Math.Max(GainPeakA1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
+#if slim
+			GainPeakA1Front = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakA1Rear = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakA1 = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+#else
 			GainPeakA1Front = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1Rear = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1 = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+#endif
+
+#if slim
+			GainPeakB1 = FreqPeakB1 >= 45.0 ? (FreqPeakB1 >= 105.0 ? (1 - (FreqPeakB1 - 105) / (225 - 105)) * 90 : (1 - (FreqPeakB1 - 105) / (45 - 105)) * 90) : 0;
+#else
 			GainPeakB1 = FreqPeakB1 >= 55.0 ? (FreqPeakB1 >= 75.0 ? (FreqPeakB1 >= 105.0 ? 90.0 - (FreqPeakB1 - 105.0) * 0.75 : 60.0 + (FreqPeakB1 - 75.0) * 1.0) : 30.0 + (FreqPeakB1 - 55.0) * 1.5) : (FreqPeakB1 - 45.0) * 3.0;
+#endif
 			GainPeakB1 = Math.Max(GainPeakB1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
+#if slim
+			GainPeakB1Front = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB1Rear = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB1 = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+#else
 			GainPeakB1Front = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB1Rear = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB1 = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+#endif
+
+#if slim
+			GainPeakA2 = FreqPeakA2 >= 45.0 ? (FreqPeakA2 >= 105.0 ? (1 - (FreqPeakA2 - 105) / (225 - 105)) * 90 : (1 - (FreqPeakA2 - 105) / (45 - 105)) * 90) : 0;
+#else
 			GainPeakA2 = FreqPeakA2 >= 55.0 ? (FreqPeakA2 >= 75.0 ? (FreqPeakA2 >= 105.0 ? 90.0 - (FreqPeakA2 - 105.0) * 0.75 : 60.0 + (FreqPeakA2 - 75.0) * 1.0) : 30.0 + (FreqPeakA2 - 55.0) * 1.5) : (FreqPeakA2 - 45.0) * 3.0;
+#endif
 			GainPeakA2 = Math.Max(GainPeakA2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
+#if slim
+			GainPeakA2Front = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakA2Rear = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakA2 = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB2 = FreqPeakB2 >= 45.0 ? (FreqPeakB2 >= 105.0 ? (1 - (FreqPeakB2 - 105) / (225 - 105)) * 90 : (1 - (FreqPeakB2 - 105) / (45 - 105)) * 90) : 0;
+#else
 			GainPeakA2Front = Math.Floor((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA2Rear = Math.Floor((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA2 = Math.Floor((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2 = FreqPeakB2 >= 60.0 ? (FreqPeakB2 >= 100.0 ? 100.0 - (FreqPeakB2 - 100.0) * 0.85 : 30.0 + (FreqPeakB2 - 60.0) * 1.75) : (FreqPeakB2 - 30.0) * 1.0;
+#endif
 			GainPeakB2 = Math.Max(GainPeakB2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
+#if slim
+			GainPeakB2Front = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB2Rear = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB2 = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+#else
 			GainPeakB2Front = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2Rear = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2 = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+#endif
+
 			if (H.S.EngineCylinders < 1.0)
 			{
 				GainLFEAdaptive = 0.0;
 				Gain1H = Math.Floor(Gain1H * 0.7);
+#if !slim
 				Gain1H2 = 0.0;
 				Gain2H = 0.0;
 				Gain4H = 0.0;
 				GainOctave = 0.0;
 				GainIntervalA1 = 0.0;
 				GainIntervalA2 = 0.0;
+#endif
 				GainPeakA1Front = 0.0;
 				GainPeakA1Rear = 0.0;
 				GainPeakA1 = 0.0;
@@ -2013,18 +2126,22 @@ namespace sierses.Sim
 				GainPeakB2Rear = 0.0;
 				GainPeakB2 = 0.0;
 			}
+#if !slim
 			else if (H.S.EngineCylinders < 2.0)
 				Gain4H = 0.0;
+#endif
 			if (EngineMult == 1.0)
 				return;
 			GainLFEAdaptive *= EngineMult * EngineMultAll;
 			Gain1H *= EngineMult * EngineMultAll;
+#if !slim
 			Gain1H2 *= EngineMult * EngineMultAll;
 			Gain2H *= EngineMult * EngineMultAll;
 			Gain4H *= EngineMult * EngineMultAll;
 			GainOctave *= EngineMult * EngineMultAll;
 			GainIntervalA1 *= EngineMult * EngineMultAll;
 			GainIntervalA2 *= EngineMult * EngineMultAll;
+#endif
 			GainPeakA1Front *= EngineMult * EngineMultAll;
 			GainPeakA1Rear *= EngineMult * EngineMultAll;
 			GainPeakA1 *= EngineMult * EngineMultAll;
