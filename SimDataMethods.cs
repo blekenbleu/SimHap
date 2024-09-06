@@ -1,5 +1,5 @@
 using SimHub;
-using SimHub.Plugins;       // PluginManager
+using SimHub.Plugins;		// PluginManager
 using System;
 
 namespace sierses.Sim
@@ -36,6 +36,18 @@ namespace sierses.Sim
 			Acc1 = 0;
 			idleRPM = 2500;							// default value; seems high IMO
 		}
+#else
+		/*	if you could make me a version where you change ratios so it' s 
+			2/4/8/16 cyl to 2:1
+			3/6/12 to 3:2
+			5/10 to 5:4
+			and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
+  			I have an idea to stack main harmonic instead with slight freq shift and delay on each one
+ 			to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
+			Hopefully you don't need to change code in a million places
+			22 Jun 2024 BS
+		 */
+		internal double BSratio = 1.0;
 #endif
 		double GetSetting(string name, double trouble)	// Init() helper
 		{
