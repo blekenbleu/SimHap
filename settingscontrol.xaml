@@ -27,7 +27,7 @@
         <ResourceDictionary>
             <!--  needed for Designer debugging  -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/sierses.Sim;component/Themes/SteelTheme.xaml" />
+                <ResourceDictionary Source="/sierses.Sim;component/Themes/AmberTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!--  gets overridden by ChangeTheme()  -->
 
@@ -600,7 +600,7 @@
                                     VerticalAlignment="Top"
                                     Background="Transparent"
                                     FontFamily="roboto"
-                                    FontSize="14"
+                                    FontSize="15"
                                     Foreground="white"
                                     Text="{Binding Value, RelativeSource={RelativeSource AncestorType={x:Type Slider}, Mode=FindAncestor}}"
                                     TextAlignment="Center" />
@@ -639,7 +639,7 @@
                     <Border
                         x:Name="TrackBackground"
                         Grid.Row="1"
-                        Height="3"
+                        Height="1.5"
                         Margin="8,-7,0,0"
                         Background="{DynamicResource Slider}"
                         BorderThickness="0"
@@ -1368,12 +1368,12 @@
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Checked="EngineView_Switch_Checked"
-                                    Content="Expand"
+                                    Content="Collapse"
                                     FontFamily="roboto"
                                     FontSize="16"
                                     FontWeight="SemiBold"
                                     Foreground="White"
-                                    IsChecked="True"
+                                    IsChecked="False"
                                     Style="{StaticResource dMASSbuttonToggle}"
                                     Unchecked="EngineView_Switch_Unchecked" />
                                 <!--  Lock/unlock button  -->
@@ -1420,9 +1420,6 @@
                             </Grid>
                         </Expander>
 
-
-
-
                         <!--  Suspension Multi container start  -->
                         <!--  EXPANDER Suspension  -->
                         <Expander
@@ -1430,7 +1427,7 @@
                             Margin="5,1,5,3"
                             BorderThickness="2"
                             FontFamily="roboto"
-                            FontSize="14"
+                            FontSize="15"
                             IsExpanded="True"
                             MouseDown="ExpanderSuspension_MouseDown">
                             <Expander.Header>
@@ -1452,16 +1449,20 @@
 
                             <Grid Margin="-12,0,0,0" HorizontalAlignment="Center">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="90" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="10" />
                                     <RowDefinition Height="*" />
-                                    <RowDefinition Height="7" />
+                                    <RowDefinition Height="10" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="10" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="8" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
@@ -1470,7 +1471,8 @@
                                     x:Name="SusMultAllLabel"
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    Margin="-4,4,0,0"
+                                    Grid.ColumnSpan="2"
+                                    Margin="-4,7,0,0"
                                     HorizontalAlignment="Center"
                                     FontFamily="roboto"
                                     Foreground="{DynamicResource Foreground}">
@@ -1478,9 +1480,10 @@
                                 </TextBlock>
                                 <TextBlock
                                     x:Name="SusMultLabel"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Margin="-1,4,0,0"
+                                    Grid.Row="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Margin="-1,7,0,0"
                                     HorizontalAlignment="Center"
                                     FontFamily="roboto"
                                     Foreground="{DynamicResource Foreground}">
@@ -1490,6 +1493,7 @@
                                     x:Name="SusGammaAllLabel"
                                     Grid.Row="0"
                                     Grid.Column="2"
+                                    Grid.ColumnSpan="2"
                                     Margin="0,4,0,0"
                                     HorizontalAlignment="Center"
                                     FontFamily="roboto"
@@ -1498,8 +1502,9 @@
                                 </TextBlock>
                                 <TextBlock
                                     x:Name="SusGammaLabel"
-                                    Grid.Row="0"
-                                    Grid.Column="3"
+                                    Grid.Row="4"
+                                    Grid.Column="2"
+                                    Grid.ColumnSpan="2"
                                     Margin="0,4,0,0"
                                     HorizontalAlignment="Center"
                                     FontFamily="roboto"
@@ -1515,9 +1520,9 @@
                                     x:Name="SuspensionMultAll"
                                     Grid.Row="2"
                                     Grid.Column="0"
-                                    Width="80"
-                                    Margin="4,0,0,0"
-                                    HorizontalAlignment="Left"
+                                    Grid.ColumnSpan="2"
+                                    Width="160"
+                                    HorizontalAlignment="Center"
                                     GotFocus="SuspensionMultAll_GotFocus"
                                     IsSnapToTickEnabled="True"
                                     LostFocus="SuspensionMultAll_LostFocus"
@@ -1529,11 +1534,11 @@
                                 <!--  game gain  -->
                                 <Slider
                                     x:Name="SuspensionMult"
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Width="80"
-                                    Margin="5,0,0,0"
-                                    HorizontalAlignment="Left"
+                                    Grid.Row="6"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Width="160"
+                                    HorizontalAlignment="Center"
                                     GotFocus="SuspensionMult_GotFocus"
                                     IsSnapToTickEnabled="True"
                                     LostFocus="SuspensionMult_LostFocus"
@@ -1547,9 +1552,9 @@
                                     x:Name="SuspensionGammaAll"
                                     Grid.Row="2"
                                     Grid.Column="2"
-                                    Width="80"
-                                    Margin="6,0,0,0"
-                                    HorizontalAlignment="Left"
+                                    Grid.ColumnSpan="2"
+                                    Width="160"
+                                    HorizontalAlignment="Center"
                                     GotFocus="SuspensionGammaAll_GotFocus"
                                     IsSnapToTickEnabled="True"
                                     LostFocus="SuspensionGammaAll_LostFocus"
@@ -1561,11 +1566,11 @@
                                 <!--  game gamma  -->
                                 <Slider
                                     x:Name="SuspensionGamma"
-                                    Grid.Row="2"
-                                    Grid.Column="3"
-                                    Width="80"
-                                    Margin="6,0,0,0"
-                                    HorizontalAlignment="Left"
+                                    Grid.Row="6"
+                                    Grid.Column="2"
+                                    Grid.ColumnSpan="2"
+                                    Width="160"
+                                    HorizontalAlignment="Center"
                                     GotFocus="SuspensionGamma_GotFocus"
                                     IsSnapToTickEnabled="True"
                                     LostFocus="SuspensionGamma_LostFocus"
@@ -1578,7 +1583,7 @@
                                 <!--  reset button  -->
                                 <Button
                                     x:Name="ButtonResetSuspension"
-                                    Grid.Row="4"
+                                    Grid.Row="8"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="4"
                                     Width="95"

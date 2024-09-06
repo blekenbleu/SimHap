@@ -1,12 +1,11 @@
-﻿using SimHub.Plugins;		// PluginManager
+﻿using GameReaderCommon;		// for GameData
+using SimHub.Plugins;		// PluginManager
 using System;				// for Math
 
 namespace sierses.Sim
 {
 	public partial class SimData
 	{
-		static PluginManager PM;
-
 		public double FPS;
 		public double InvMaxRPM;
 		public double InvSpeedKmh;
@@ -31,7 +30,6 @@ namespace sierses.Sim
 		public double GearInterval;
 		public long ShiftTicks;
 		public double CylinderDisplacement;
-		public double EngineLoad;
 		public int WiperStatus;
 		public int CarInitCount;
 		public int IdleSampleCount;			// used in Refresh()
@@ -40,7 +38,7 @@ namespace sierses.Sim
 		public double RPMPercent;
 		public double MixCylinder;
 		public double MixDisplacement;
-		public double MixPower;
+        public double MixPower;
 		public double MixTorque;
 		public double MixFront;
 		public double MixMiddle;
@@ -53,16 +51,45 @@ namespace sierses.Sim
 		public double PeakA2Modifier;
 		public double PeakB1Modifier;
 		public double PeakB2Modifier;
-		public double FrequencyMultiplier;
+        public double PeakA1CylMod;
+        public double PeakA2CylMod;
+		public double PeakB1CylMod;
+        public double PeakB2CylMod;
+        public double FrequencyMultiplier;
 		public double FreqHarmonic;
 		public double FreqOctave;
 		public double FreqLFEAdaptive;
-		public double FreqPeakA1;
+        public double LFEeq;
+		public double LFEhpScale;
+        public double peakEQeng;
+		public double peakGearMulti;
+		public double peakEQ;
+        public double rpmMainEQ;
+        public double rpmMainSum;
+        public double rpmMain;
+        public double rpmPeakA2RearSum;
+        public double rpmPeakA2Rear;
+        public double rpmPeakB1RearSum;
+        public double rpmPeakB1Rear;
+        public double rpmPeakA1RearSum;
+        public double rpmPeakA1Rear;
+        public double rpmPeakB2RearSum;
+        public double rpmPeakB2Rear;
+
+        public double rpmPeakA2FrontSum;
+        public double rpmPeakA2Front;
+        public double rpmPeakB1FrontSum;
+        public double rpmPeakB1Front;
+        public double rpmPeakA1FrontSum;
+        public double rpmPeakA1Front;
+        public double rpmPeakB2FrontSum;
+        public double rpmPeakB2Front;
+
+        public double FreqPeakA1;
 		public double FreqPeakA2;
 		public double FreqPeakB1;
 		public double FreqPeakB2;
 		public double Gain1H;
-		public double GainLFEAdaptive;
 		public double GainPeakA1;
 		public double GainPeakA1Front;
 		public double GainPeakA1Rear;
@@ -104,12 +131,6 @@ namespace sierses.Sim
 		public double YawPrev;
 		public double YawRate;
 		public double YawRateAvg;
-		public double MotionPitch;
-		public double MotionRoll;
-		public double MotionYaw;
-		public double MotionHeave;
-		public double MotionSurge;
-		public double MotionSway;
 		public double SuspensionDistFL;
 		public double SuspensionDistFR;
 		public double SuspensionDistRL;
@@ -148,13 +169,8 @@ namespace sierses.Sim
 		public double SuspensionRight;
 		public double SuspensionAll;
 		public double SuspensionAccAll;
-		public bool RumbleFromPlugin;
 		public double TiresLeft;
 		public double TiresRight;
-		public double RumbleLeftAvg;
-		public double RumbleRightAvg;
-		public double RumbleLeft;
-		public double RumbleRight;
 		public int SurfaceMaterial;
 		public double VelocityZAvg;
 		public double GainSuspensionFront;
@@ -170,65 +186,63 @@ namespace sierses.Sim
 		public double SuspensionMultR1;
 		public double SuspensionMultR2;
 		public double SuspensionMultR3;
-		public double SuspensionRumbleMultR1;
-		public double SuspensionRumbleMultR2;
-		public double SuspensionRumbleMultR3;
 
+		
 
 		private void SetRPMMix()
 		{
-			InvMaxRPM = H.S.MaxRPM > 0.0 ? 1.0 / H.S.MaxRPM : 0.0001;
-			IdlePercent = H.S.IdleRPM * InvMaxRPM;
-			RedlinePercent = H.S.Redline * InvMaxRPM;
-			if (H.S.Displacement > 0.0)
+			InvMaxRPM = SHP.S.MaxRPM > 0.0 ? 1.0 / SHP.S.MaxRPM : 0.0001;
+			IdlePercent = SHP.S.IdleRPM * InvMaxRPM;
+			RedlinePercent = SHP.S.Redline * InvMaxRPM;
+			if (SHP.S.Displacement > 0.0)
 			{
-				CylinderDisplacement = H.S.Displacement / H.S.EngineCylinders;
+				CylinderDisplacement = SHP.S.Displacement / SHP.S.EngineCylinders;
 				MixCylinder = 1.0 - Math.Max(2000.0 - CylinderDisplacement, 0.0)
 									 * Math.Max(2000.0 - CylinderDisplacement, 0.0) * 2.5E-07;
-				MixDisplacement = 1.0 - Math.Max(10000.0 - H.S.Displacement, 0.0)
-										 * Math.Max(10000.0 - H.S.Displacement, 0.0) * 1E-08;
+				MixDisplacement = 1.0 - Math.Max(10000.0 - SHP.S.Displacement, 0.0)
+										 * Math.Max(10000.0 - SHP.S.Displacement, 0.0) * 1E-08;
 			}
 			else
 			{
 				MixCylinder = 0.0;
 				MixDisplacement = 0.0;
 			}
-			MixPower = 1.0 - Math.Max(2000.0 - (H.S.MaxPower - H.S.ElectricMaxPower), 0.0)
-							 * Math.Max(2000.0 - (H.S.MaxPower - H.S.ElectricMaxPower), 0.0) * 2.5E-07;
-			MixTorque = 1.0 - Math.Max(2000.0 - H.S.MaxTorque, 0.0) * Math.Max(2000.0 - H.S.MaxTorque, 0.0) * 2.5E-07;
-			MixFront = !(H.S.EngineLocation == "F")
-						 ? (!(H.S.EngineLocation == "FM")
-							 ? (!(H.S.EngineLocation == "M")
-								 ? (!(H.S.EngineLocation == "RM")
-									 ? (!(H.S.PoweredWheels == "F")
-										 ? (!(H.S.PoweredWheels == "R")
+			MixPower = 1.0 - Math.Max(2000.0 - (SHP.S.MaxPower - SHP.S.ElectricMaxPower), 0.0)
+							 * Math.Max(2000.0 - (SHP.S.MaxPower - SHP.S.ElectricMaxPower), 0.0) * 2.5E-07;
+			MixTorque = 1.0 - Math.Max(2000.0 - SHP.S.MaxTorque, 0.0) * Math.Max(2000.0 - SHP.S.MaxTorque, 0.0) * 2.5E-07;
+			MixFront = !(SHP.S.EngineLocation == "F")
+						 ? (!(SHP.S.EngineLocation == "FM")
+							 ? (!(SHP.S.EngineLocation == "M")
+								 ? (!(SHP.S.EngineLocation == "RM")
+									 ? (!(SHP.S.PoweredWheels == "F")
+										 ? (!(SHP.S.PoweredWheels == "R")
 											 ? 0.2
 											 : 0.1)
 										 : 0.3)
-									 : (!(H.S.PoweredWheels == "F")
-									 ? (!(H.S.PoweredWheels == "R")
+									 : (!(SHP.S.PoweredWheels == "F")
+									 ? (!(SHP.S.PoweredWheels == "R")
 										 ? 0.3
 										 : 0.2)
 									 : 0.4)
 								   )
-								 : (!(H.S.PoweredWheels == "F")
-								 	? (!(H.S.PoweredWheels == "R")
+								 : (!(SHP.S.PoweredWheels == "F")
+								 	? (!(SHP.S.PoweredWheels == "R")
 									 	? 0.5
 									 	: 0.4
 									  )
 									 : 0.6
 								   )
 							   )
-						 : (!(H.S.PoweredWheels == "F")
-							 ? (!(H.S.PoweredWheels == "R")
+						 : (!(SHP.S.PoweredWheels == "F")
+							 ? (!(SHP.S.PoweredWheels == "R")
 								 ? 0.7
 								 : 0.6
 							   )
 							 : 0.8
 						   )
 						)
-					 : (!(H.S.PoweredWheels == "F")
-					 	? (!(H.S.PoweredWheels == "R")
+					 : (!(SHP.S.PoweredWheels == "F")
+					 	? (!(SHP.S.PoweredWheels == "R")
 							 ? 0.8
 					 	 	: 0.7
 							)
@@ -237,6 +251,9 @@ namespace sierses.Sim
 			MixMiddle = Math.Abs(MixFront - 0.5) * 2.0;
 			MixRear = 1.0 - MixFront;
 		}
+
+		static PluginManager PM;
+		static GameData data;
 
 		private float Physics(string prop)
 		{
@@ -254,8 +271,10 @@ namespace sierses.Sim
 			return 0;
 		}
 
-		private void UpdateVehicle()
+		private void UpdateVehicle(ref GameData Gdat)
 		{
+			PM = SHP.PM;
+			data = Gdat;
 			SuspensionDistFLP = SuspensionDistFL;
 			SuspensionDistFRP = SuspensionDistFR;
 			SuspensionDistRLP = SuspensionDistRL;
@@ -282,21 +301,13 @@ namespace sierses.Sim
 					SuspensionDistRR = Physics("SuspensionTravel04");
 					TiresLeft = 1.0 + (double) Math.Max(Physics("TyreContactHeading01.Y"), Physics("TyreContactHeading03.Y"));
 					TiresRight = 1.0 + (double) Math.Max(Physics("TyreContactHeading02.Y"), Physics("TyreContactHeading04.Y"));
-					if (RumbleLeftAvg == 0.0)
-						RumbleLeftAvg = TiresLeft;
-					if (RumbleRightAvg == 0.0)
-						RumbleRightAvg = TiresRight;
-					RumbleLeftAvg = (RumbleLeftAvg + TiresLeft) * 0.5;
-					RumbleRightAvg = (RumbleRightAvg + TiresRight) * 0.5;
-					RumbleLeft = Math.Abs(TiresLeft / RumbleLeftAvg - 1.0) * 2000.0;
-					RumbleRight = Math.Abs(TiresRight / RumbleRightAvg - 1.0) * 2000.0;
 					break;
 				case GameId.ACC:
 					SuspensionDistFL = Physics("SuspensionTravel01");
 					SuspensionDistFR = Physics("SuspensionTravel02");
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
-					WiperStatus = (int) PM.GetPropertyValue(raw+"Graphics.WiperLV");
+					WiperStatus = (int) SHP.PM.GetPropertyValue(raw+"Graphics.WiperLV");
 					break;
 				case GameId.AMS2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
@@ -310,7 +321,7 @@ namespace sierses.Sim
 					SuspensionDistRL = Raw("SuspensionPositionRearLeft") * 0.001;
 					SuspensionDistRR = Raw("SuspensionPositionRearRight") * 0.001;
 					VelocityX = Raw("WorldSpeedX") * Math.Sin(Raw("XR"));
-					YawRate = H.N.OrientationYawAcceleration;
+					YawRate = data.NewData.OrientationYawAcceleration;
 					break;
 				case GameId.WRC23:
 					SuspensionDistFL = Raw("SessionUpdate.vehicle_hub_position_fl");
@@ -320,7 +331,7 @@ namespace sierses.Sim
 					SpeedMs = Raw("SessionUpdate.vehicle_speed");
 					InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
 					VelocityX = Raw("SessionUpdateLocalVelocity.X");
-					YawRate = H.N.OrientationYawAcceleration;
+					YawRate = data.NewData.OrientationYawAcceleration;
 					break;
 				case GameId.Forza:
 					SuspensionDistFL = Raw("SuspensionTravelMetersFrontLeft");
@@ -329,41 +340,42 @@ namespace sierses.Sim
 					SuspensionDistRR = Raw("SuspensionTravelMetersRearRight");
 					break;
 				case GameId.IRacing:
-					if (PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFshockDefl");
 					}
-					else if (PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
 					{
 						SuspensionDistFL = Raw("Telemetry.LFSHshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFSHshockDefl");
 					}
-					if (PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRshockDefl");
 					}
-					else if (PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
 					{
 						SuspensionDistRL = Raw("Telemetry.LRSHshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRSHshockDefl");
 					}
-					if (PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.CFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.CFshockDefl");
 					}
-					else if (PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
+					else if (SHP.PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.HFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.HFshockDefl");
 					}
-					if (PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
+					if (SHP.PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
 					}
+					
 					break;
 				case GameId.BeamNG:
 					flag = false;
@@ -391,28 +403,31 @@ namespace sierses.Sim
 			SuspensionVelRR = (SuspensionDistRR - SuspensionDistRRP) * FPS;
 		}
 
+		
+					
 
+		
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Refresh(Haptics shp, PluginManager pluginManager)
+		internal void Refresh(ref GameData Gdat, Haptics shp)
 		{
-			H = shp;
-			PM = pluginManager;
-			FPS = (double) PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
-			Rpms = Convert.ToUInt16(0.5 + H.N.Rpms);
-			SpeedMs = H.N.SpeedKmh * 0.277778;
-			Accelerator = H.N.Throttle;
-			Clutch = H.N.Clutch;
-			Handbrake = H.N.Handbrake;
-			RPMPercent = H.N.Rpms * InvMaxRPM;
+			SHP = shp;
+			data = Gdat;
+			FPS = (double) SHP.PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
+			Rpms = Convert.ToUInt16(0.5 + data.NewData.Rpms);
+			RPMPercent = data.NewData.Rpms * InvMaxRPM;
+			SpeedMs = data.NewData.SpeedKmh * 0.277778;
 			InvSpeedMs = SpeedMs != 0.0 ? 1.0 / SpeedMs : 0.0;
-			Brake = H.N.Brake;
-			BrakeBias = H.N.BrakeBias;
+			Accelerator = data.NewData.Throttle;
+			Brake = data.NewData.Brake;
+			Clutch = data.NewData.Clutch;
+			Handbrake = data.NewData.Handbrake;
+			BrakeBias = data.NewData.BrakeBias;
 			BrakeF = Brake * (2.0 * BrakeBias) * 0.01;
 			BrakeR = Brake * (200.0 - 2.0 * BrakeBias) * 0.01;
 			BrakeVelP = BrakeVel;
-			BrakeVel = (Brake - H.Gdat.OldData.Brake) * FPS;
+			BrakeVel = (Brake - data.OldData.Brake) * FPS;
 			BrakeAcc = (BrakeVel - BrakeVelP) * FPS;
 			if (CarInitCount < 2)
 			{
@@ -420,13 +435,11 @@ namespace sierses.Sim
 				SuspensionDistFRP = SuspensionDistFR;
 				SuspensionDistRLP = SuspensionDistRL;
 				SuspensionDistRRP = SuspensionDistRR;
-				YawPrev = H.N.OrientationYaw;
-				Yaw = H.N.OrientationYaw;
-				RumbleLeftAvg = 0.0;
-				RumbleRightAvg = 0.0;
+				YawPrev = data.NewData.OrientationYaw;
+				Yaw = data.NewData.OrientationYaw;
 			}
 			YawPrev = Yaw;
-			Yaw = -H.N.OrientationYaw;
+			Yaw = -data.NewData.OrientationYaw;
 			if (Yaw > 100.0 && YawPrev < -100.0)
 				YawPrev += 360.0;
 			else if (Yaw < -100.0 && YawPrev > 100.0)
@@ -447,10 +460,10 @@ namespace sierses.Sim
 				Acc0 = 0;
 				Acc1 = AccSamples - 1;
 			}
-			AccHeave[Acc0] = H.N.AccelerationHeave.GetValueOrDefault();
-			AccSurge[Acc0] = H.N.AccelerationSurge.GetValueOrDefault();
-			AccSway[Acc0] = H.N.AccelerationSway.GetValueOrDefault();
-			if (!H.N.AccelerationHeave.HasValue)
+			AccHeave[Acc0] = data.NewData.AccelerationHeave.GetValueOrDefault();
+			AccSurge[Acc0] = data.NewData.AccelerationSurge.GetValueOrDefault();
+			AccSway[Acc0] = data.NewData.AccelerationSway.GetValueOrDefault();
+			if (!data.NewData.AccelerationHeave.HasValue)
 			{
 				AccHeave[Acc0] = Raw("WorldSpeedY");
 				AccHeave[Acc0] = (AccHeave[Acc0] - WorldSpeedY) * FPS;
@@ -479,25 +492,12 @@ namespace sierses.Sim
 			JerkYAvg = (AccSurgeAvg - accSurgeAvg) * FPS;
 			AccHeaveAbs = Math.Abs(AccHeave[Acc0]);
 			InvAccSurgeAvg = AccSurgeAvg != 0.0 ? 1.0 / AccSurgeAvg : 0.0;
-			MotionPitch = MotionPitchOffset + 100.0 * Math.Pow(Math.Abs(MotionPitchMult * H.N.OrientationPitch) * 0.01, 1.0 / MotionPitchGamma);
-			MotionRoll = MotionRollOffset + 100.0 * Math.Pow(Math.Abs(MotionRollMult * H.N.OrientationRoll) * 0.01, 1.0 / MotionRollGamma);
-			MotionYaw = MotionYawOffset + 100.0 * Math.Pow(Math.Abs(MotionYawMult * YawRateAvg) * 0.01, 1.0 / MotionYawGamma);
-			MotionHeave = MotionHeaveOffset + 100.0 * Math.Pow(Math.Abs(MotionHeaveMult * AccHeave[Acc0]) * 0.01, 1.0 / MotionHeaveGamma);
-			if (H.N.OrientationPitch < 0.0)
-				MotionPitch = -MotionPitch;
-			if (H.N.OrientationRoll < 0.0)
-				MotionRoll = -MotionRoll;
-			if (YawRateAvg < 0.0)
-				MotionYaw = -MotionYaw;
-			if (AccHeave[Acc0] < 0.0)
-				MotionHeave = -MotionHeave;
-
 			WheelLoadFL = ((100.0 + AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadFR = ((100.0 + AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRL = ((100.0 - AccSurge[Acc0]) * (100.0 - AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
 			WheelLoadRR = ((100.0 - AccSurge[Acc0]) * (100.0 + AccSway[Acc0]) * 0.01 - 50.0) * 0.01;
-			UpdateVehicle();
-			Airborne = AccHeave2S < -2.0 || Math.Abs(H.N.OrientationRoll) > 60.0;
+			UpdateVehicle(ref data);
+			Airborne = AccHeave2S < -2.0 || Math.Abs(data.NewData.OrientationRoll) > 60.0;
 
 			if (DateTime.Now.Ticks < FrameTimeTicks)	// long rollover?
 				FrameCountTicks += (long.MaxValue - FrameTimeTicks) + DateTime.Now.Ticks;	// rollover
@@ -508,18 +508,18 @@ namespace sierses.Sim
 
 			if (DateTime.Now.Ticks < ShiftTicks)	// long rollover?
 				ShiftTicks = - (DateTime.Now.Ticks + (long.MaxValue - ShiftTicks));
-			if (DateTime.Now.Ticks - ShiftTicks > H.Settings.DownshiftDurationMs * 10000)
+			if (DateTime.Now.Ticks - ShiftTicks > SHP.Settings.DownshiftDurationMs * 10000)
 				Downshift = false;
-			if (DateTime.Now.Ticks - ShiftTicks > H.Settings.UpshiftDurationMs * 10000)
+			if (DateTime.Now.Ticks - ShiftTicks > SHP.Settings.UpshiftDurationMs * 10000)
 				Upshift = false;
 			DateTime now;
-			if (H.Gdat.OldData.Gear != H.N.Gear)
+			if (data.OldData.Gear != data.NewData.Gear)
 			{
 				if (Gear != 0)
 					GearPrevious = Gear;
-				Gear = !(H.N.Gear == "N")
-						? (!(H.N.Gear == "R")
-							? Convert.ToInt32(H.N.Gear)
+				Gear = !(data.NewData.Gear == "N")
+						? (!(data.NewData.Gear == "R")
+							? Convert.ToInt32(data.NewData.Gear)
 							: -1)
 						: 0;
 				if (Gear != 0 && Gear != GearPrevious)
@@ -531,6 +531,7 @@ namespace sierses.Sim
 					else Upshift = true;
 				}
 			}
+			
 			SuspensionAccFLP = SuspensionAccFL;
 			SuspensionAccFRP = SuspensionAccFR;
 			SuspensionAccRLP = SuspensionAccRL;
@@ -557,14 +558,14 @@ namespace sierses.Sim
 				SuspensionRR *= 0.1 * CarInitCount;
 				++CarInitCount;
 			}
-			SuspensionFreq = H.N.SpeedKmh * (3.0 / 16.0);
+			SuspensionFreq = data.NewData.SpeedKmh * (3.0 / 16.0);
 			double num5 = 46.0 + 0.55 * SpeedMs;
 			double num6 = 34.0 + 0.6 * SpeedMs;
 			double num7 = 24.0 + 0.65 * SpeedMs;
 			double num13 = 0.4 + 2.4 * AccHeaveAbs * (AccHeaveAbs + num5) / (num5 * num5);
 			double num14 = 0.5 + 2.0 * AccHeaveAbs * (AccHeaveAbs + num6) / (num6 * num6);
 			double num15 = 0.6 + 1.6 * AccHeaveAbs * (AccHeaveAbs + num7) / (num7 * num7);
-			double num18 = RumbleMult * RumbleMultAll * (0.6 + SpeedMs * (90.0 - SpeedMs) * 0.0002);
+			
 			if (SuspensionFreq < 30.0)
 			{
 				if (SuspensionFreq < 20.0)
@@ -584,9 +585,6 @@ namespace sierses.Sim
 									SuspensionMultR1 = num13 * 0.8;
 									SuspensionMultR2 = num14 * 0.25;
 									SuspensionMultR3 = num15 * 0.6;
-									SuspensionRumbleMultR1 = num18 * 1.5;
-									SuspensionRumbleMultR2 = num18 * 0.0;
-									SuspensionRumbleMultR3 = num18 * 1.0;
 								}
 								else
 								{
@@ -597,9 +595,6 @@ namespace sierses.Sim
 									SuspensionMultR1 = num13 * 0.8;
 									SuspensionMultR2 = num14 * 0.25;
 									SuspensionMultR3 = num15 * 0.6;
-									SuspensionRumbleMultR1 = num18 * 1.5;
-									SuspensionRumbleMultR2 = num18 * 0.0;
-									SuspensionRumbleMultR3 = num18 * 1.0;
 								}
 							}
 							else
@@ -610,9 +605,6 @@ namespace sierses.Sim
 								SuspensionMultR1 = num13 * 0.25;
 								SuspensionMultR2 = num14 * 0.6;
 								SuspensionMultR3 = num15 * 0.125;
-								SuspensionRumbleMultR1 = num18 * 0.0;
-								SuspensionRumbleMultR2 = num18 * 1.0;
-								SuspensionRumbleMultR3 = num18 * 0.0;
 							}
 						}
 						else
@@ -623,9 +615,6 @@ namespace sierses.Sim
 							SuspensionMultR1 = num13 * 0.8;
 							SuspensionMultR2 = num14 * 0.25;
 							SuspensionMultR3 = num15 * 0.6;
-							SuspensionRumbleMultR1 = num18 * 1.5;
-							SuspensionRumbleMultR2 = num18 * 0.0;
-							SuspensionRumbleMultR3 = num18 * 1.0;
 						}
 					}
 					else
@@ -636,9 +625,6 @@ namespace sierses.Sim
 						SuspensionMultR1 = num13 * 0.5;
 						SuspensionMultR2 = num14 * 0.8;
 						SuspensionMultR3 = num15 * 0.25;
-						SuspensionRumbleMultR1 = num18 * 0.0;
-						SuspensionRumbleMultR2 = num18 * 1.5;
-						SuspensionRumbleMultR3 = num18 * 0.0;
 					}
 				}
 				else
@@ -649,9 +635,6 @@ namespace sierses.Sim
 					SuspensionMultR1 = num13 * 1.0;
 					SuspensionMultR2 = num14 * 0.5;
 					SuspensionMultR3 = num15 * 0.8;
-					SuspensionRumbleMultR1 = num18 * 2.0;
-					SuspensionRumbleMultR2 = num18 * 0.0;
-					SuspensionRumbleMultR3 = num18 * 1.5;
 				}
 			}
 			else if (SuspensionFreq > 40.0)
@@ -668,9 +651,6 @@ namespace sierses.Sim
 							SuspensionMultR1 = num13 * 0.125;
 							SuspensionMultR2 = num14 * 0.6;
 							SuspensionMultR3 = num15 * 0.25;
-							SuspensionRumbleMultR1 = num18 * 0.0;
-							SuspensionRumbleMultR2 = num18 * 1.0;
-							SuspensionRumbleMultR3 = num18 * 0.0;
 						}
 						else
 						{
@@ -680,9 +660,6 @@ namespace sierses.Sim
 							SuspensionMultR1 = num13 * 0.6;
 							SuspensionMultR2 = num14 * 0.25;
 							SuspensionMultR3 = num15 * 0.8;
-							SuspensionRumbleMultR1 = num18 * 1.0;
-							SuspensionRumbleMultR2 = num18 * 0.0;
-							SuspensionRumbleMultR3 = num18 * 1.5;
 						}
 					}
 					else
@@ -693,9 +670,6 @@ namespace sierses.Sim
 						SuspensionMultR1 = num13 * 0.25;
 						SuspensionMultR2 = num14 * 0.8;
 						SuspensionMultR3 = num15 * 0.5;
-						SuspensionRumbleMultR1 = num18 * 0.0;
-						SuspensionRumbleMultR2 = num18 * 1.5;
-						SuspensionRumbleMultR3 = num18 * 0.0;
 					}
 				}
 				else
@@ -706,9 +680,6 @@ namespace sierses.Sim
 					SuspensionMultR1 = num13 * 0.8;
 					SuspensionMultR2 = num14 * 0.5;
 					SuspensionMultR3 = num15 * 1.0;
-					SuspensionRumbleMultR1 = num18 * 1.5;
-					SuspensionRumbleMultR2 = num18 * 0.0;
-					SuspensionRumbleMultR3 = num18 * 2.0;
 				}
 			}
 			else
@@ -719,44 +690,185 @@ namespace sierses.Sim
 				SuspensionMultR1 = num13 * 0.5;
 				SuspensionMultR2 = num14 * 1.0;
 				SuspensionMultR3 = num15 * 0.5;
-				SuspensionRumbleMultR1 = num18 * 0.0;
-				SuspensionRumbleMultR2 = num18 * 2.0;
-				SuspensionRumbleMultR3 = num18 * 0.0;
 			}
-			EngineLoad = H.N.CarSettings_CurrentDisplayedRPMPercent * 0.5;
-			EngineLoad += H.N.SpeedKmh * H.N.SpeedKmh * 0.0003;
-			EngineLoad += H.N.SpeedKmh * 0.02;
-			if (Math.Abs(SuspensionAccAll) > 0.5)
-				EngineLoad += 200.0 * Math.Sin(H.N.OrientationPitch * 0.0174533);
-			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
-			EngineLoad *= H.N.Throttle * 0.01 * 0.01;
 
-			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh() sniff: ignore FrameCountTicks .. for now
-				if (H.N.Rpms > 300 && H.N.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
+			if (IdleSampleCount < 0) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh()sniff: ignore FrameCountTicks .. for now
+				if (data.NewData.Rpms > 300 && data.NewData.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
 			{
-				double num19 = Math.Abs(H.Gdat.OldData.Rpms - H.N.Rpms) * FPS;
+				double num19 = Math.Abs(data.OldData.Rpms - data.NewData.Rpms) * FPS;
 
 				if (num19 < 40.0)
 				{
-					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)H.N.Rpms) >> 1); // Refresh(): averaging with previous average
+					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)data.NewData.Rpms) >> 1); // Refresh(): averaging with previous average
 					++IdleSampleCount;								// Refresh(): increment if difference < 40
-					double num20 = idleRPM * 0.008333333;		// Refresh(): some FrequencyMultiplier magic
-					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
-				}
-				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Refresh(): change H.S.IdleRPM?
-					H.S.Idle(idleRPM);							// Refresh() sniff: only if it was 0
+                    }
+				if (20 == IdleSampleCount && 0 == SHP.S.IdleRPM)	// Refresh(): change SHP.S.IdleRPM?
+					SHP.S.Idle(idleRPM);			// Refresh() sniff: only if it was 0
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)
 			{
 				SetRPMMix();
 			}
-			FreqHarmonic = H.N.Rpms * 0.008333333;
+
+            //peak interval based off cylinder count
+            if (SHP.S.EngineCylinders == 1 || SHP.S.EngineCylinders == 2 || SHP.S.EngineCylinders == 4 || SHP.S.EngineCylinders == 8 || SHP.S.EngineCylinders == 16)
+            {
+                PeakA2CylMod = 0.8333333333333333;
+                PeakB1CylMod = 1.666666666666667;
+                PeakA1CylMod = 2.5;
+                PeakB2CylMod = 2.083333333333333;
+            }
+
+            if (SHP.S.EngineCylinders == 3 || SHP.S.EngineCylinders == 6 || SHP.S.EngineCylinders == 12)
+            {
+                PeakA2CylMod = 1.0;
+                PeakB1CylMod = 1.5;
+                PeakA1CylMod = 2.5;
+                PeakB2CylMod = 2.0;
+            }
+
+            if (SHP.S.EngineCylinders == 5 || SHP.S.EngineCylinders == 10)
+            {
+                PeakA2CylMod = 1.0;
+                PeakB1CylMod = 1.5;
+                PeakA1CylMod = 2.5;
+                PeakB2CylMod = 2.0;
+            }
+
+            //lfe rpm freq multi 
+            double num20 = SHP.S.IdleRPM * 0.008333333;
+            if (num20 < 10)
+                FrequencyMultiplier = 1 + (1 - (num20 / 10));
+            else
+                FrequencyMultiplier = 1;
+
+            FreqHarmonic = data.NewData.Rpms * 0.008333333;
 			FreqLFEAdaptive = FreqHarmonic * FrequencyMultiplier;
-			FreqPeakA1 = FreqHarmonic * 1.5 * (1.0 + 8 * 0.08333333);
-			FreqPeakB1 = FreqHarmonic * 0.75 * (1.0 + 8 * 0.08333333);
-			FreqPeakA2 = FreqHarmonic * 0.5 * (1.0 + 8 * 0.08333333);
-			FreqPeakB2 = FreqHarmonic * 1.25 * (1.0 + 8 * 0.08333333);
+
+			//LFE hp scaler
+            if (SHP.S.MaxPower > 0 && SHP.S.MaxPower < 200)
+                LFEhpScale = 0.85;
+            if (SHP.S.MaxPower >= 200 && SHP.S.MaxPower < 300)
+                LFEhpScale = 0.88;
+            if (SHP.S.MaxPower >= 300 && SHP.S.MaxPower < 400)
+                LFEhpScale = 0.91;
+            if (SHP.S.MaxPower >= 400 && SHP.S.MaxPower < 500)
+                LFEhpScale = 0.94;
+            if (SHP.S.MaxPower >= 500 && SHP.S.MaxPower < 600)
+                LFEhpScale = 0.97;
+            if (SHP.S.MaxPower >= 600)
+                LFEhpScale = 1;
+
+
+            //LFEeq
+            if (FreqLFEAdaptive <= 0 || FreqLFEAdaptive >= 300) 
+				LFEeq = 0;
+			if (FreqLFEAdaptive < 300 && FreqLFEAdaptive > 250)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 250) / (300 - 250)) * 38.5); // 250Hz:38.5 - 300Hz:0;
+			if (FreqLFEAdaptive <= 250 && FreqLFEAdaptive > 70)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 70) / (70 - 142)) * 11); // 70Hz:11 - 250Hz:38.5
+            if (FreqLFEAdaptive <= 70 && FreqLFEAdaptive > 65)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 65) / (65 - 96.666666666666)) * 9.5); //65Hz:9.5 - 70Hz:11
+            if (FreqLFEAdaptive <= 65 && FreqLFEAdaptive > 60)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 60) / (60 - 102.5)) * 8.5); //   60Hz:8.5 - 65Hz:9.5
+            if (FreqLFEAdaptive <= 60 && FreqLFEAdaptive > 45)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 45) / (45 - 115)) * 7); //   45Hz:7 - 60Hz:8.5
+            if (FreqLFEAdaptive <= 45 && FreqLFEAdaptive > 32)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 32) / (32 - 201)) * 6.5); //   32Hz:6.5 - 45Hz:7
+            if (FreqLFEAdaptive <= 32 && FreqLFEAdaptive > 29)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 29) / (29 - 39)) * 5); //   29Hz:5 - 32Hz:6.5
+            if (FreqLFEAdaptive <= 29 && FreqLFEAdaptive > 21)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 21) / (21 - 53)) * 4); //   21Hz:4 - 29Hz:5
+            if (FreqLFEAdaptive <= 21 && FreqLFEAdaptive > 17)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 17) / (29 - 17)) * 6); // 17Hz:6 - 21Hz:4
+            if (FreqLFEAdaptive <= 17 && FreqLFEAdaptive > 14)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 14) / (53 - 14)) * 6.5); // 14Hz:6.5 - 17Hz:6
+            if (FreqLFEAdaptive <= 14 && FreqLFEAdaptive > 11)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 11) / (53 - 11)) * 7); // 11Hz:7 - 14Hz:6.5
+            if (FreqLFEAdaptive <= 11 && FreqLFEAdaptive > 10)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 10) / (18 - 10)) * 8); // 10Hz:8 - 11Hz:7
+            if (FreqLFEAdaptive <= 10 && FreqLFEAdaptive > 9)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 9) / (18 - 9)) * 9); // 9Hz: 9 - 10Hz:8
+            if (FreqLFEAdaptive <= 9 && FreqLFEAdaptive > 8)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 8) / (18 - 8)) * 10); // 8Hz:10 -  9Hz:9
+            if (FreqLFEAdaptive <= 8 && FreqLFEAdaptive > 6)
+				LFEeq = LFEhpScale * ((1 - (FreqLFEAdaptive - 8) / (10 - 8)) * 10); // 8Hz:10 - 6Hz:20
+            if (FreqLFEAdaptive <= 6 && FreqLFEAdaptive > 0)
+				LFEeq = LFEhpScale * ((FreqLFEAdaptive / 6) * 20);
+
+			//peakEQ cylinder modifier
+            if (SHP.S.EngineCylinders == 3 || SHP.S.EngineCylinders == 6 || SHP.S.EngineCylinders == 12)
+                peakEQeng = 0.8;
+			if (SHP.S.EngineCylinders == 5 || SHP.S.EngineCylinders == 10)
+				peakEQeng = 0.9;
+            if (SHP.S.EngineCylinders == 1 || SHP.S.EngineCylinders == 2 || SHP.S.EngineCylinders == 4 || SHP.S.EngineCylinders == 8 || SHP.S.EngineCylinders == 16)
+                peakEQeng = 1;
+
+			//peakEQ
+            if (SHP.S.Redline > 0 && SHP.S.Redline < 3000)
+                peakEQ = 5 * peakEQeng;
+            if (SHP.S.Redline >= 3000 && SHP.S.Redline < 4000)
+                peakEQ = 4 * peakEQeng;
+            if (SHP.S.Redline >= 4000 && SHP.S.Redline < 5000)
+                peakEQ = 3 * peakEQeng;
+            if (SHP.S.Redline >= 5000 && SHP.S.Redline < 6000)
+                peakEQ = 2 * peakEQeng;
+            if (SHP.S.Redline >= 6000 && SHP.S.Redline < 7000)
+                peakEQ = 1.85 * peakEQeng;
+            if (SHP.S.Redline >= 7000 && SHP.S.Redline < 8000)
+                peakEQ = 1.65 * peakEQeng;
+            if (SHP.S.Redline >= 8000 && SHP.S.Redline < 9000)
+                peakEQ = 1.5 * peakEQeng;
+            if (SHP.S.Redline >= 9000 && SHP.S.Redline < 10000)
+                peakEQ = 1.35 * peakEQeng;
+            if (SHP.S.Redline >= 10000 && SHP.S.Redline < 11000)
+                peakEQ = 1.35 * peakEQeng;
+            if (SHP.S.Redline >= 11000 && SHP.S.Redline < 12000)
+                peakEQ = 1.4 * peakEQeng;
+            if (SHP.S.Redline >= 12000 && SHP.S.Redline < 13000)
+                peakEQ = 1.45 * peakEQeng;
+            if (SHP.S.Redline >= 13000 && SHP.S.Redline < 14000)
+                peakEQ = 1.55 * peakEQeng;
+            if (SHP.S.Redline >= 14000 && SHP.S.Redline < 15000)
+                peakEQ = 1.8 * peakEQeng;
+            if (SHP.S.Redline >= 15000 && SHP.S.Redline < 17000)
+                peakEQ = 1.4 * peakEQeng;
+            if (SHP.S.Redline >= 17000 && SHP.S.Redline < 18000)
+                peakEQ = 1.7 * peakEQeng;
+            if (SHP.S.Redline >= 18000)
+                peakEQ = 1.45 * peakEQeng;
+
+            //peakGear multi
+            if (Gear <= 1)
+				peakGearMulti = 1;
+            if (Gear == 2)
+                peakGearMulti = 1.03;
+            if (Gear == 3)
+                peakGearMulti = 1.06;
+            if (Gear == 4)
+                peakGearMulti = 1.12;
+            if (Gear >= 5)
+                peakGearMulti = 1.20;
+
+			//rpmMain EQ
+			if (FreqHarmonic > 65 && FreqHarmonic <= 95)
+				rpmMainEQ = (1 - (FreqHarmonic - 65) / (210.375 - 65)) * 1.26; //1.26 at 30hz, 1 @ 95hz
+			if (FreqHarmonic > 30 && FreqHarmonic <= 65)
+				rpmMainEQ = (1 - (FreqHarmonic - 30) / (380 - 30)) * 1.4; //1.4 at 30hz, 1.26 @ 65hz
+			if (FreqHarmonic > 20 && FreqHarmonic <= 30)
+				rpmMainEQ = (1 - (FreqHarmonic - 20) / (70 - 20)) * 1.75; //1.75 @ 20hz, 1.4 @ 30hz
+			if (FreqHarmonic > 0 && FreqHarmonic <= 20)
+				rpmMainEQ = (1 - (FreqHarmonic - 10) / (27.77777777777777 - 10)) * 4; //4 at 10hz, 1.75 @ 20hz
+			if (FreqHarmonic == 0 || FreqHarmonic > 95)
+				rpmMainEQ = 1;
+
+
+
+            FreqPeakA1 = FreqHarmonic * PeakA1CylMod;
+			FreqPeakB1 = FreqHarmonic * PeakB1CylMod;
+			FreqPeakA2 = FreqHarmonic * PeakA2CylMod;
+			FreqPeakB2 = FreqHarmonic * PeakB2CylMod;
 			double num21 = 1.0;
 			double num22 = 1.0;
 			if (Gear > 0)
@@ -771,79 +883,202 @@ namespace sierses.Sim
 						? (FreqHarmonic >= 65.0
 							? (FreqHarmonic >= 95.0
 								? (FreqHarmonic >= 125.0
-									? (1 - (FreqHarmonic - 95) / (200 - 95)) * 95.55
-									: (1 - (FreqHarmonic - 95) / (200 - 95)) * 95.55)
-								: (3.5 - (FreqHarmonic - 95) / (65 - 95)) * 27.3)
-							: (5.25 - (FreqHarmonic - 65) / (40 - 65)) * 13)
-						: (1.6 - (FreqHarmonic - 25) / (1 - 25)) * 25)
-					: (1.6 - (FreqHarmonic - 25) / (1 - 25)) * 25;
-			Gain1H = Math.Max(Gain1H, 0.0) * num21 * num22 * (0.8 + 0.2 * MixPower + 0.2 * MixCylinder);
-			Gain1H = (Gain1H.Clamp(0.0, sbyte.MaxValue));
-			PeakA1Start = RedlinePercent * (0.76 + GearInterval * Gear * 0.06);
-			PeakB1Start = RedlinePercent * (0.72 + GearInterval * Gear * 0.06);
-			PeakA2Start = RedlinePercent * (0.70 + MixPower * GearInterval * Gear * 0.9);
-			PeakB2Start = RedlinePercent * (0.90 - MixTorque * 0.08);
-			PeakA1Modifier = ((RPMPercent - PeakA1Start) / (RedlinePercent - PeakA1Start + (1.0 - RedlinePercent) * (0.75 + MixCylinder * 0.75))).Clamp(0.0, 1.0);
-			PeakB1Modifier = ((RPMPercent - PeakB1Start) / (RedlinePercent - PeakB1Start + (1.0 - RedlinePercent) * (0.0 + MixCylinder))).Clamp(0.0, 1.0);
-			PeakA2Modifier = ((RPMPercent - PeakA2Start) / (RedlinePercent - PeakA2Start)).Clamp(0.0, 1.0);
-			PeakB2Modifier = ((RPMPercent - PeakB2Start) / (RedlinePercent - PeakB2Start + (1.0 - RedlinePercent) * (1.0 - MixDisplacement))).Clamp(0.0, 1.0);
+									 ? (FreqHarmonic >= 150.0
 
-			GainPeakA1 = FreqPeakA1 >= 45.0 ? (FreqPeakA1 >= 105.0 ? (1 - (FreqPeakA1 - 105) / (225 - 105)) * 90 : (1 - (FreqPeakA1 - 105) / (45 - 105)) * 90) : 0;
-			GainPeakA1 = Math.Max(GainPeakA1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
+									 ? (1 - (FreqHarmonic - 150) / (300 - 150)) * 90   // 150-300hz:  90-0
+
+									: (1 - (FreqHarmonic - 125) / (125 - 1225)) * 88)  // 125-150hz:  88-90
+
+                                    : (1 - (FreqHarmonic - 95) / (95 - 945)) * 85)     //  95-125hz:  85-88
+
+								: (1 - (FreqHarmonic - 65) / (65 - 137)) * 60)     //   65-95hz:  60-85
+
+                            : (1 - (FreqHarmonic - 40) / (40 - 165)) * 50)     //  40-65hz:   50-60
+
+                        : (1 - (FreqHarmonic - 25) / (25 - 160)) * 45)        //  25-40hz:  45-50
+
+                    : (1 - (FreqHarmonic - 0) / (0 - 200)) * 40;           // 00-25hz:  40-45
+
+            Gain1H = Math.Max(Gain1H, 0.0) * num21 * num22 * (0.8 + 0.2 * MixPower + 0.2 * MixCylinder);
+			Gain1H = (Gain1H.Clamp(0.0, sbyte.MaxValue));
+			PeakA1Start = RedlinePercent * (0.68 + GearInterval * Gear * 0.12);
+			PeakB1Start = RedlinePercent * (0.64 + GearInterval * Gear * 0.12);
+			PeakA2Start = RedlinePercent * (0.62 + MixPower * GearInterval * Gear * 0.14);
+			PeakB2Start = RedlinePercent * (0.82 - MixTorque * 0.16);
+            PeakA1Modifier = ((RPMPercent - PeakA1Start) / (RedlinePercent - PeakA1Start + (1.0 - RedlinePercent) * (0.75 + MixCylinder * 0.75))).Clamp(0.0, 1.0);
+            PeakB1Modifier = ((RPMPercent - PeakB1Start) / (RedlinePercent - PeakB1Start + (1.0 - RedlinePercent) * (0.0 + MixCylinder))).Clamp(0.0, 1.0);
+            PeakA2Modifier = ((RPMPercent - PeakA2Start) / (RedlinePercent - PeakA2Start)).Clamp(0.0, 1.0);
+            PeakB2Modifier = ((RPMPercent - PeakB2Start) / (RedlinePercent - PeakB2Start + (1.0 - RedlinePercent) * (1.0 - MixDisplacement))).Clamp(0.0, 1.0);
+
+			//rpmMain sum
+			rpmMainSum = (0.13333333333 * (FreqHarmonic + 64.375) * 0.7) * (Gain1H / 100);
+
+            //rpmMain
+            if (FreqHarmonic <= 0 && FreqHarmonic >= 900)
+                rpmMain = 0;
+            if (FreqHarmonic >= 750 && FreqHarmonic < 900)
+                rpmMain = (1 - (FreqHarmonic - 750) / (900 - 750)) * rpmMainSum;
+            if (FreqHarmonic > 0 && FreqHarmonic < 750)
+                rpmMain = rpmMainSum;
+
+            GainPeakA1 = FreqPeakA1 >= 30.0 ? (FreqPeakA1 >= 150.0 ? (FreqPeakA1 >= 250.0 ? (1 - (FreqPeakA1 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakA1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA1 - 110) / (30 - 110)) * 60) : 0;
+
+            GainPeakA1 = Math.Max(GainPeakA1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 			GainPeakA1Front = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1Rear = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1 = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
 
-			GainPeakB1 = FreqPeakB1 >= 45.0 ? (FreqPeakB1 >= 105.0 ? (1 - (FreqPeakB1 - 105) / (225 - 105)) * 90 : (1 - (FreqPeakB1 - 105) / (45 - 105)) * 90) : 0;
-			GainPeakB1 = Math.Max(GainPeakB1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
+            GainPeakB1 = FreqPeakB1 >= 30.0 ? (FreqPeakB1 >= 150.0 ? (FreqPeakB1 >= 250.0 ? (1 - (FreqPeakB1 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakB1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakB1 - 110) / (30 - 110)) * 60) : 0;
+
+            GainPeakB1 = Math.Max(GainPeakB1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 			GainPeakB1Front = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB1Rear = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB1 = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
 
-			GainPeakA2 = FreqPeakA2 >= 45.0 ? (FreqPeakA2 >= 105.0 ? (1 - (FreqPeakA2 - 105) / (225 - 105)) * 90 : (1 - (FreqPeakA2 - 105) / (45 - 105)) * 90) : 0;
-			GainPeakA2 = Math.Max(GainPeakA2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
+            GainPeakA2 = FreqPeakA2 >= 30.0 ? (FreqPeakA2 >= 150.0 ? (FreqPeakA2 >= 250.0 ? (1 - (FreqPeakA2 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakA2 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA2 - 110) / (30 - 110)) * 60) : 0;
+
+            GainPeakA2 = Math.Max(GainPeakA2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 			GainPeakA2Front = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA2Rear = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA2 = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB2 = FreqPeakB2 >= 45.0 ? (FreqPeakB2 >= 105.0 ? (1 - (FreqPeakB2 - 105) / (225 - 105)) * 90 : (1 - (FreqPeakB2 - 105) / (45 - 105)) * 90) : 0;
-			GainPeakB2 = Math.Max(GainPeakB2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
+
+            GainPeakB2 = FreqPeakB2 >= 30.0 ? (FreqPeakB2 >= 150.0 ? (FreqPeakB2 >= 250.0 ? (1 - (FreqPeakB2 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakB2 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakB2 - 110) / (30 - 110)) * 60) : 0;
+
+            GainPeakB2 = Math.Max(GainPeakB2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 			GainPeakB2Front = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2Rear = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2 = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
 
-			if (H.S.EngineCylinders < 1.0)
-			{
-				GainLFEAdaptive = 0.0;
-				Gain1H = Math.Floor(Gain1H * 0.7);
-				GainPeakA1Front = 0.0;
-				GainPeakA1Rear = 0.0;
-				GainPeakA1 = 0.0;
-				GainPeakA2Front = 0.0;
-				GainPeakA2Rear = 0.0;
-				GainPeakA2 = 0.0;
-				GainPeakB1Front = 0.0;
-				GainPeakB1Rear = 0.0;
-				GainPeakB1 = 0.0;
-				GainPeakB2Front = 0.0;
-				GainPeakB2Rear = 0.0;
-				GainPeakB2 = 0.0;
-			}
-			if (EngineMult == 1.0)
-				return;
-			GainLFEAdaptive *= EngineMult * EngineMultAll;
-			Gain1H *= EngineMult * EngineMultAll;
-			GainPeakA1Front *= EngineMult * EngineMultAll;
-			GainPeakA1Rear *= EngineMult * EngineMultAll;
-			GainPeakA1 *= EngineMult * EngineMultAll;
-			GainPeakA2Front *= EngineMult * EngineMultAll;
-			GainPeakA2Rear *= EngineMult * EngineMultAll;
-			GainPeakA2 *= EngineMult * EngineMultAll;
-			GainPeakB1Front *= EngineMult * EngineMultAll;
-			GainPeakB1Rear *= EngineMult * EngineMultAll;
-			GainPeakB1 *= EngineMult * EngineMultAll;
-			GainPeakB2Front *= EngineMult * EngineMultAll;
-			GainPeakB2Rear *= EngineMult * EngineMultAll;
-			GainPeakB2 *= EngineMult * EngineMultAll;
-		}	// Refresh()
+            //rpmPeakA2Rear sum
+            rpmPeakA2RearSum = (0.35087719298 * (FreqPeakA2 + 25.6) * 0.7) * (GainPeakA2Rear / 127);
+
+			//rpmPeakA2Rear
+			if (FreqPeakA2 <= 15)
+				rpmPeakA2Rear = ((FreqPeakA2/15) * rpmPeakA2RearSum) * peakGearMulti * peakEQ;
+
+			if (FreqPeakA2 >= 325 && FreqPeakA2 <= 600)
+                rpmPeakA2Rear = ((1 - (FreqPeakA2 - 325) / (600 - 325)) * rpmPeakA2RearSum) * peakGearMulti * peakEQ; // 1 at 325Hz, 0 at 600Hz;
+
+            if (FreqPeakA2 > 600)
+                rpmPeakA2Rear = 0;
+
+			if (FreqPeakA2 > 15 && FreqPeakA2 < 325)
+				rpmPeakA2Rear = rpmPeakA2RearSum * peakGearMulti * peakEQ;
+
+
+            //rpmPeakB1Rear sum
+            rpmPeakB1RearSum = (0.35087719298 * (FreqPeakB1 + 25.6) * 0.7) * (GainPeakB1Rear / 127);
+            
+			//rpmPeakB1Rear
+            if (FreqPeakB1 <= 15)
+                rpmPeakB1Rear = ((FreqPeakB1 / 15) * rpmPeakB1RearSum) * peakGearMulti * peakEQ;
+
+            if (FreqPeakB1 >= 325 && FreqPeakB1 <= 600)
+                rpmPeakB1Rear = ((1 - (FreqPeakB1 - 325) / (600 - 325)) * rpmPeakB1RearSum) * peakGearMulti * peakEQ; // 1 at 325Hz, 0 at 600Hz;
+
+            if (FreqPeakB1 > 600)
+                rpmPeakB1Rear = 0;
+
+            if (FreqPeakB1 > 15 && FreqPeakB1 < 325)
+                rpmPeakB1Rear = rpmPeakB1RearSum * peakGearMulti * peakEQ;
+
+            //rpmPeakA1Rear sum
+            rpmPeakA1RearSum = (0.35087719298 * (FreqPeakA1 + 25.6) * 0.7) * (GainPeakA1Rear / 127);
+
+            //rpmPeakA1Rear
+            if (FreqPeakA1 <= 15)
+                rpmPeakA1Rear = ((FreqPeakA1 / 15) * rpmPeakA1RearSum) * peakGearMulti * peakEQ;
+
+            if (FreqPeakA1 >= 325 && FreqPeakA1 <= 600)
+                rpmPeakA1Rear = ((1 - (FreqPeakA1 - 325) / (600 - 325)) * rpmPeakA1RearSum) * peakGearMulti * peakEQ; // 1 at 325Hz, 0 at 600Hz;
+
+            if (FreqPeakA1 > 600)
+                rpmPeakA1Rear = 0;
+
+            if (FreqPeakA1 > 15 && FreqPeakA1 < 325)
+                rpmPeakA1Rear = rpmPeakA1RearSum * peakGearMulti * peakEQ;
+
+            //rpmPeakB2Rear sum
+            rpmPeakB2RearSum = (0.35087719298 * (FreqPeakB2 + 25.6) * 0.7) * (GainPeakB2Rear / 127);
+
+            //rpmPeakB2Rear
+            if (FreqPeakB2 <= 15)
+                rpmPeakB2Rear = ((FreqPeakB2 / 15) * rpmPeakB2RearSum) * peakGearMulti * peakEQ;
+
+            if (FreqPeakB2 >= 325 && FreqPeakB2 <= 600)
+                rpmPeakB2Rear = ((1 - (FreqPeakB2 - 325) / (600 - 325)) * rpmPeakB2RearSum) * peakGearMulti * peakEQ; // 1 at 325Hz, 0 at 600Hz;
+
+            if (FreqPeakB2 > 600)
+                rpmPeakB2Rear = 0;
+
+            if (FreqPeakB2 > 15 && FreqPeakB2 < 325)
+                rpmPeakB2Rear = rpmPeakB2RearSum * peakGearMulti * peakEQ;
+
+            //rpmPeakA2Front sum
+            rpmPeakA2FrontSum = (0.35087719298 * (FreqPeakA2 + 25.6) * 0.7) * (GainPeakA2Front / 127);
+
+            //rpmPeakA2Front
+            if (FreqPeakA2 <= 15)
+                rpmPeakA2Front = ((FreqPeakA2 / 15) * rpmPeakA2FrontSum) * peakGearMulti * peakEQ;
+
+            if (FreqPeakA2 >= 325 && FreqPeakA2 <= 600)
+                rpmPeakA2Front = ((1 - (FreqPeakA2 - 325) / (600 - 325)) * rpmPeakA2FrontSum) * peakGearMulti * peakEQ; // 1 at 325Hz, 0 at 600Hz;
+
+            if (FreqPeakA2 > 600)
+                rpmPeakA2Front = 0;
+
+            if (FreqPeakA2 > 15 && FreqPeakA2 < 325)
+                rpmPeakA2Front = rpmPeakA2FrontSum * peakGearMulti * peakEQ;
+
+            //rpmPeakB1Front sum
+            rpmPeakB1FrontSum = (0.35087719298 * (FreqPeakB1 + 25.6) * 0.7) * (GainPeakB1Front / 127);
+
+            //rpmPeakB1Front
+            if (FreqPeakB1 <= 15)
+                rpmPeakB1Front = ((FreqPeakB1 / 15) * rpmPeakB1FrontSum) * peakGearMulti * peakEQ;
+
+            if (FreqPeakB1 >= 325 && FreqPeakB1 <= 600)
+                rpmPeakB1Front = ((1 - (FreqPeakB1 - 325) / (600 - 325)) * rpmPeakB1FrontSum) * peakGearMulti * peakEQ; // 1 at 325Hz, 0 at 600Hz;
+
+            if (FreqPeakB1 > 600)
+                rpmPeakB1Front = 0;
+
+            if (FreqPeakB1 > 15 && FreqPeakB1 < 325)
+                rpmPeakB1Front = rpmPeakB1FrontSum * peakGearMulti * peakEQ;
+
+            //rpmPeakA1Front sum
+            rpmPeakA1FrontSum = (0.35087719298 * (FreqPeakA1 + 25.6) * 0.7) * (GainPeakA1Front / 127);
+
+            //rpmPeakA1Front
+            if (FreqPeakA1 <= 15)
+                rpmPeakA1Front = ((FreqPeakA1 / 15) * rpmPeakA1FrontSum) * peakGearMulti * peakEQ;
+
+            if (FreqPeakA1 >= 325 && FreqPeakA1 <= 600)
+                rpmPeakA1Front = ((1 - (FreqPeakA1 - 325) / (600 - 325)) * rpmPeakA1FrontSum) * peakGearMulti * peakEQ; // 1 at 325Hz, 0 at 600Hz;
+
+            if (FreqPeakA1 > 600)
+                rpmPeakA1Front = 0;
+
+            if (FreqPeakA1 > 15 && FreqPeakA1 < 325)
+                rpmPeakA1Front = rpmPeakA1FrontSum * peakGearMulti * peakEQ;
+
+            //rpmPeakB2Front sum
+            rpmPeakB2FrontSum = (0.35087719298 * (FreqPeakB2 + 25.6) * 0.7) * (GainPeakB2Front / 127);
+
+            //rpmPeakB2Front
+            if (FreqPeakB2 <= 15)
+                rpmPeakB2Front = ((FreqPeakB2 / 15) * rpmPeakB2FrontSum) * peakGearMulti * peakEQ;
+
+            if (FreqPeakB2 >= 325 && FreqPeakB2 <= 600)
+                rpmPeakB2Front = ((1 - (FreqPeakB2 - 325) / (600 - 325)) * rpmPeakB2FrontSum) * peakGearMulti * peakEQ; // 1 at 325Hz, 0 at 600Hz;
+
+            if (FreqPeakB2 > 600)
+                rpmPeakB2Front = 0;
+
+            if (FreqPeakB2 > 15 && FreqPeakB2 < 325)
+                rpmPeakB2Front = rpmPeakB2FrontSum * peakGearMulti * peakEQ;
+
+        }
+
 	}
 }

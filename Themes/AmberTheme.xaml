@@ -13,5 +13,5 @@
     <SolidColorBrush x:Key="Background" Color="#252525" />
 
     <SolidColorBrush x:Key="Slider" Color="White" />
-    
+
 </ResourceDictionary>
