@@ -457,6 +457,47 @@ namespace sierses.Sim
 #if slim
 						DfltCar.cyl = 1;
 						DfltCar.nm = 1;
+#else
+						DfltCar.cyl = 4;
+						DfltCar.nm = 400;
+						break;
+					case GameId.F12022:
+					case GameId.F12023:
+						StatusText += "unavailable: using generic F1";
+						DfltCar.hp = 1000;
+						DfltCar.nm = 650;
+						break;
+					case GameId.KK:
+						StatusText += "unavailable: using generic Kart";
+						DfltCar.config = "I";
+						DfltCar.cyl = 1;
+						DfltCar.cc = 130;
+						DfltCar.hp = 34;
+						DfltCar.nm = 24;
+						break;
+					case GameId.GPBikes:
+						StatusText += "unavailable: using generic Superbike";
+						DfltCar.config = "I";
+						DfltCar.cyl = 4;
+						DfltCar.loc = "M";
+						DfltCar.cc = 998;
+						DfltCar.hp = 200;
+						DfltCar.nm = 100;
+						break;
+					case GameId.MXBikes:
+						StatusText += "unavailable: using generic MX Bike"; EngineConfiguration = "I";
+						DfltCar.cyl = 1;
+						DfltCar.loc = "M";
+						DfltCar.cc = 450;
+						DfltCar.hp = 50;
+						DfltCar.nm = 45;
+						break;
+					case GameId.GranTurismo7:
+					case GameId.GranTurismoSport:
+						StatusText += "unavailable: assume 500HP 4 Liter V6";
+						DfltCar.cc = 4000;
+						DfltCar.hp = 500;
+						DfltCar.nm = 400;
 #endif
 						break;
 					default:
