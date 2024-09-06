@@ -1,7 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.Settings
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
+﻿#define slim
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -9,8 +6,6 @@ namespace sierses.Sim
 {
 	public class Settings : INotifyPropertyChanged
 	{
-//		public Engine Engine;
-		public string Theme;
 		public Spec Vehicle;
 		public Dictionary<string, double> EngineMult;
 		public Dictionary<string, double> RumbleMult;
@@ -23,8 +18,18 @@ namespace sierses.Sim
 		public Dictionary<string, double> Motion;
 		private int downshiftDurationMs;
 		private int upshiftDurationMs;
+#if slim
+		public string Theme;
+#else
+		public Engine Engine;
+		private int absPulseLength;
 
-
+		public int ABSPulseLength
+		{
+			get => absPulseLength;
+			set { SetProp(ref absPulseLength, value, nameof(ABSPulseLength)); }
+		}
+#endif
 		public int DownshiftDurationMs
 		{
 			get => downshiftDurationMs;

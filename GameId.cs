@@ -1,7 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.GameId
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
+﻿#define slim
 namespace sierses.Sim
 {
   public enum GameId
@@ -10,11 +7,12 @@ namespace sierses.Sim
     AC,
     ACC,
     AMS2,
+    BeamNG,
     DR2,
-    WRC23,
     Forza,
     IRacing,
-    BeamNG,
     LMU,
+    RRRE,
+    WRC23,
   }
 }

@@ -1,4 +1,5 @@
-﻿using GameReaderCommon;
+﻿#define slim
+using GameReaderCommon;
 using Newtonsoft.Json;
 using SimHub;
 using System.Collections.Generic;
@@ -407,13 +408,20 @@ namespace sierses.Sim
 				DfltCar = new()
 				{
 					config = "V",
-					cyl = 1,
 					loc = "RM",
 					drive = "R",
+					ehp = 0,
+#if slim
+					cyl = 1,
 					cc = 1,
 					hp = 1,
-					ehp = 0,
 					nm = 1
+#else
+					cyl = 6,
+					cc = 1600,
+					hp = 300,
+					nm = 250
+#endif
 				};
 
 				switch (Haptics.CurrentGame)
@@ -421,21 +429,36 @@ namespace sierses.Sim
 					case GameId.AC:
 					case GameId.ACC:
 					case GameId.AMS2:
+					case GameId.BeamNG:
 					case GameId.Forza:
 					case GameId.IRacing:
-					case GameId.BeamNG:
+					case GameId.RRRE:
+#if !slim
+					case GameId.AMS1:
+					case GameId.PC2:
+					case GameId.GTR2:
+					case GameId.RBR:
+					case GameId.RF2:
+						DfltCar.cc = 3000;
+#else
 						DfltCar.cc = 1;
+#endif
 						DfltCar.drive = "A";
 						StatusText += "unavailable: using generic car";
 						break;
+#if !slim
+					case GameId.D4:
+#endif
 					case GameId.DR2:
 					case GameId.WRC23:
 						StatusText += "unavailable: using generic Rally2";
 						DfltCar.config = "I";
-						DfltCar.cyl = 1;
 						DfltCar.loc = "F";
 						DfltCar.drive = "A";
+#if slim
+						DfltCar.cyl = 1;
 						DfltCar.nm = 1;
+#endif
 						break;
 					default:
 						StatusText += $"specs unavailable for {Haptics.CurrentGame}";

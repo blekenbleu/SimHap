@@ -1,7 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.SimHapticsPlugin
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
+﻿#define slim
 using GameReaderCommon;
 using Newtonsoft.Json;
 using sierses.Sim.Properties;
@@ -35,15 +32,15 @@ namespace sierses.Sim
 		private static readonly HttpClient client = new();
 		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
 //		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
-		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.json_with_orders.json";
+		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas_engine_data.json";
 		internal static List<CarSpec> Atlas;
 		internal static int AtlasCt;		// use this to force Atlas
 		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
-
-		//		public Geq E { get; set; } 
-
+#if !slim
+		public Geq E { get; set; } 
+#endif
 		public ImageSource PictureIcon
 		{
 			get { return this.ToIcon(Resources.SimHapticsShakerStyleIcon_alt012); }
@@ -76,32 +73,33 @@ namespace sierses.Sim
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
 			SC = new SettingsControl(this);
+#if slim
 			if (null != Settings.Theme)
 				SC.ChangeTheme(Settings.Theme);
-			/*
-						if (null != Settings.Engine)
-						{
-							if (null != Settings.Engine.Theme)
-								SC.ChangeTheme(Settings.Engine.Theme);
-							if (null != Settings.Engine.Tones)
-							{
-								if (0 < Settings.Engine.Tones.Length)
-								{
-									if (8 != Settings.Engine.Tones[0].Length)
-										Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
-										+ Settings.Engine.Tones[0].Length.ToString());
-								} else Logging.Current.Info($"Haptics: zero Settings.Engine.Tones.Length");
-							}
-							else Logging.Current.Info($"Haptics:  null Settings.Engine.Tones");
-							if (null == Settings.Engine.Sliders)
-								Logging.Current.Info($"Haptics:  null Settings.Engine.Sliders");
-							else if (1 > Settings.Engine.Sliders.Count)
-								Logging.Current.Info($"Haptics: zero Settings.Engine.Sliders.Count");
-							else if (9 != Settings.Engine.Sliders[0].Length)
-								Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
-								  + Settings.Engine.Sliders[0].Length.ToString());
-						}
-			 */
+#else
+			if (null != Settings.Engine)
+			{
+				if (null != Settings.Engine.Theme)
+					SC.ChangeTheme(Settings.Engine.Theme);
+				if (null != Settings.Engine.Tones)
+				{
+					if (0 < Settings.Engine.Tones.Length)
+					{
+						if (8 != Settings.Engine.Tones[0].Length)
+							Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
+							+ Settings.Engine.Tones[0].Length.ToString());
+					} else Logging.Current.Info($"Haptics: zero Settings.Engine.Tones.Length");
+				}
+				else Logging.Current.Info($"Haptics:  null Settings.Engine.Tones");
+				if (null == Settings.Engine.Sliders)
+					Logging.Current.Info($"Haptics:  null Settings.Engine.Sliders");
+				else if (1 > Settings.Engine.Sliders.Count)
+					Logging.Current.Info($"Haptics: zero Settings.Engine.Sliders.Count");
+				else if (9 != Settings.Engine.Sliders[0].Length)
+					Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
+					  + Settings.Engine.Sliders[0].Length.ToString());
+			}
+#endif
 			return SC;
 		}
 
@@ -127,15 +125,13 @@ namespace sierses.Sim
 			{
 				H.S.Notes = "";
 				Set = false;
-
-				H.D.Index = H.S.SelectCar(// set game RPM defaults
-													redlineFromGame, maxRPMFromGame, ushortIdleRPM);
-				/*
-								Logging.Current.Info($"Haptics.SelectCar({sid}): "
-													+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
-													+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
-													+ (Changed ? "Changed " : "") + $" Index = {H.D.Index}");
-				 */
+				H.D.Index = H.S.SelectCar(redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
+/*
+				Logging.Current.Info($"Haptics.SelectCar(): "
+									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
+									+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
+									+ (Changed ? "Changed " : "") + $" Index = {H.D.Index}");
+ */
 				if (0 <= H.D.Index)
 					return;
 			}
@@ -165,10 +161,10 @@ namespace sierses.Sim
 					{
 						CarSpec car = dljc.data[0];
 						car.defaults = "DB";
-						H.S.Cache(car);				  // FetchCarData(): Set(id) at the end of SetVehicle()
+						H.S.Cache(car);					// FetchCarData(): Set(CarId) at the end of SetCar()
 						LoadFailCount = 1;
-						//	Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
-						//						+ $" CarInitCount = {H.D.CarInitCount}");
+					//	Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
+					//						+ $" CarInitCount = {H.D.CarInitCount}");
 						H.D.CarInitCount = 0;
 						H.D.Index = -4;
 						return;
@@ -176,25 +172,25 @@ namespace sierses.Sim
 				}
 				else if (null != dls)
 				{
-					if (-1 == H.D.Index)		 // delayed dls? things may have moved on...
-						H.D.Index = -3;		  // disable self until other code decides otherwise
+					if (-1 == H.D.Index)			// delayed dls? things may have moved on...
+						H.D.Index = -3;				// disable self until other code decides otherwise
 					if (11 == dls.Length)
 						Waiting = false;
-					/*
-											Logging.Current.Info($"Haptics.FetchCarData({id}): not in DB");
-										else if (0 < dls.Length)
-											Logging.Current.Info($"Haptics.FetchCarData({id}): JsonConvert fail;  length {dls.Length}: "
-																+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
-					 */
+/*
+						Logging.Current.Info($"Haptics.FetchCarData(): not in DB");
+					else if (0 < dls.Length)
+						Logging.Current.Info($"Haptics.FetchCarData(): JsonConvert fail;  length {dls.Length}: "
+											+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
+ */
 				}
 				// else Waiting
 			}
-			catch (HttpRequestException ex) //  treat it like not in DB
+			catch (HttpRequestException ex)	//  treat it like not in DB
 			{
 				Logging.Current.Error("Haptics.FetchCarData() Error: " + ex.Message);
 				Waiting = false;
 			}
-		}	   // FetchCarData()
+		}		// FetchCarData()
 
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data.
@@ -237,9 +233,9 @@ namespace sierses.Sim
 
 				D.Index = -3;				// disable FetchCarData(); enable Defaults()
 				D.CarInitCount = 0;
-				//	Logging.Current.Info($"Haptics.DataUpdate({data.NewData.CarId}/{S.Id}):  async Waiting timeout" +
-				//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
-				//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
+			//	Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
+			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
+			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
 			}
 			else if (Loaded || Changed)		// save before SetCar()
@@ -267,28 +263,29 @@ namespace sierses.Sim
 
 		public void End(PluginManager pluginManager)
 		{
+#if slim
 			Settings.Theme = SC.Theme;
-			/*
-						if (null == Settings.Engine)
-							Settings.Engine = new();
-						Settings.Engine.Theme = SC.Theme;			// easier to stuff here
-						if (null == Settings.Engine.Tones)
-						{ 
-							Settings.Engine.Tones = new ushort[4][];
-							Settings.Engine.Tones[0] = new ushort[9]; // 2 fundamentals, 6 harmonics, 1 modulator
-							Settings.Engine.Tones[1] = new ushort[9];
-							Settings.Engine.Tones[2] = new ushort[9]; // second pair: full throttle
-							Settings.Engine.Tones[3] = new ushort[9];
-						}
+#else
+			if (null == Settings.Engine)
+				Settings.Engine = new();
+			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
+			if (null == Settings.Engine.Tones)
+			{ 
+				Settings.Engine.Tones = new ushort[4][];
+				Settings.Engine.Tones[0] = new ushort[9]; // 2 fundamentals, 6 harmonics, 1 modulator
+				Settings.Engine.Tones[1] = new ushort[9];
+				Settings.Engine.Tones[2] = new ushort[9]; // second pair: full throttle
+				Settings.Engine.Tones[3] = new ushort[9];
+			}
 
-						for (int i = 0; i < E.Tones.Length; i++)
-							for (int j = 0; j < E.Tones[i].Freq.Length; j++)
-								Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
-						Settings.Engine.Sliders = new() { E.Q[0].Slider };
-						for (int i = 1; i < E.Q.Count; i++)
-							Settings.Engine.Sliders.Add(E.Q[i].Slider);
-			 */
-			if (Save || Loaded || Changed)	  // End()
+			for (int i = 0; i < E.Tones.Length; i++)
+				for (int j = 0; j < E.Tones[i].Freq.Length; j++)
+					Settings.Engine.Tones[i][j] = E.Tones[i].Freq[j];
+			Settings.Engine.Sliders = new() { E.Q[0].Slider };
+			for (int i = 1; i < E.Q.Count; i++)
+				Settings.Engine.Sliders.Add(E.Q[i].Slider);
+#endif
+			if (Save || Loaded || Changed)		// End()
 			{
 				if (Loaded || Changed)
 					S.LD.AddCar(S.Car);			// End()
@@ -461,41 +458,47 @@ namespace sierses.Sim
 			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
-			//			E = new();
+#if !slim
+			E = new();
+			bool ShowTire = false;
+#endif
 			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
 
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
-			/*
-						if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
-						 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
-						 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
-						{
-							if (null == Settings.Engine)
-								Logging.Current.Info($"Haptics.Init(): null Settings.Engine");
-							else {
-								if (null == Settings.Engine.Sliders)
-									Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Sliders");
-								else if (1 > Settings.Engine.Sliders.Count)
-									Logging.Current.Info($"Haptics.Init(): 0 Settings.Engine.Sliders");
-								else if (9 != Settings.Engine.Sliders[0].Length)
-									Logging.Current.Info($"Haptics.Init(): Settings.Engine.Sliders[0].Slider.Length = "
-											+ Settings.Engine.Sliders[0].Length.ToString());
-								if (null == Settings.Engine.Tones)
-									Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Tones");
-								else {
-									if (4 != Settings.Engine.Tones.Length)
-										Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones.Length = "
-											+ Settings.Engine.Tones.Length.ToString());
-									if (9 != Settings.Engine.Tones[0].Length)
-										Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones[0].Freq.Length = "
-											+ Settings.Engine.Tones[0].Length.ToString()); 
-								}
-							}
-							Settings = new();	// Settings.Engine will be initialized in End()
-							Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
-						}
-			 */
+#if !slim
+			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
+			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
+			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
+			{
+				if (null == Settings.Engine)
+					Logging.Current.Info($"Haptics.Init(): null Settings.Engine");
+				else {
+					if (null == Settings.Engine.Sliders)
+						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Sliders");
+					else if (1 > Settings.Engine.Sliders.Count)
+						Logging.Current.Info($"Haptics.Init(): 0 Settings.Engine.Sliders");
+					else if (9 != Settings.Engine.Sliders[0].Length)
+						Logging.Current.Info($"Haptics.Init(): Settings.Engine.Sliders[0].Slider.Length = "
+								+ Settings.Engine.Sliders[0].Length.ToString());
+					if (null == Settings.Engine.Tones)
+						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Tones");
+					else {
+						if (4 != Settings.Engine.Tones.Length)
+							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones.Length = "
+								+ Settings.Engine.Tones.Length.ToString());
+						if (9 != Settings.Engine.Tones[0].Length)
+							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones[0].Freq.Length = "
+								+ Settings.Engine.Tones[0].Length.ToString()); 
+					}
+				}
+				Settings = new();	// Settings.Engine will be initialized in End()
+				Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
+			}
+
+			if (1 > Settings.ABSPulseLength)
+				Settings.ABSPulseLength = 2;
+#endif
 			if (1 > Settings.DownshiftDurationMs)
 				Settings.DownshiftDurationMs = 400;
 			if (1 > Settings.UpshiftDurationMs)
@@ -550,7 +553,9 @@ namespace sierses.Sim
 			else Logging.Current.Info("Haptics.Init():  " + myfile + " not found" + Atlasst);
 
 			D.Init(this);
-			//			E.Init(Settings.Engine, this);
+#if !slim
+			E.Init(Settings.Engine, this);
+#endif
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
 			this.AttachDelegate("CarId", () => S.Id);
