@@ -7,6 +7,7 @@ namespace sierses.Sim
 
 	public partial class SimData
 	{
+#if slim
 		private long FrameTimeTicks;
 		private long FrameCountTicks;
 		internal Haptics H;
@@ -35,7 +36,7 @@ namespace sierses.Sim
 			Acc1 = 0;
 			idleRPM = 2500;							// default value; seems high IMO
 		}
-
+#endif
 		double GetSetting(string name, double trouble)	// Init() helper
 		{
 			return H.Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
@@ -101,9 +102,17 @@ namespace sierses.Sim
 				{
 					case GameId.AC:
 					case GameId.ACC:
+#if !slim
+					case GameId.PC2:
+					case GameId.RBR:
+					case GameId.GTR2:
+#endif
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
-
+#if !slim
+					case GameId.AMS1:
+					case GameId.RF2:
+#endif
 					case GameId.LMU:
 						Haptics.FetchCarData(H.N.CarClass, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
@@ -112,6 +121,9 @@ namespace sierses.Sim
 						H.S.CarName = H.N.CarModel;
 						H.S.Category = H.N.CarClass;
 						break;
+#if !slim
+					case GameId.D4:
+#endif
 					case GameId.DR2:
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
@@ -120,6 +132,13 @@ namespace sierses.Sim
 						Haptics.FetchCarData(null, Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(H.N.MaxRpm),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
 						break;
+#if !slim
+					case GameId.F12022:
+					case GameId.F12023:
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetCar(F12023): to FetchCarData()
+						break;
+#endif
 					case GameId.Forza:
 						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
@@ -131,6 +150,13 @@ namespace sierses.Sim
 											Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
+#if !slim
+					case GameId.RRRE:
+						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
+						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						break;
+#endif
 					case GameId.BeamNG:
 						Haptics.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
 								Convert.ToUInt16((Math.Ceiling(H.N.MaxRpm * 0.001) - H.N.MaxRpm * 0.001) > 0.55
@@ -139,6 +165,19 @@ namespace sierses.Sim
 								Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
 							);
 						break;
+#if !slim
+					case GameId.GranTurismo7:
+					case GameId.GranTurismoSport:
+						Haptics.FetchCarData(null,
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MinAlertRPM")),
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MaxAlertRPM")), 0);
+						break;
+					default:
+						H.S.Redline = Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM);
+						H.S.MaxRPM  = Convert.ToUInt16(H.N.MaxRpm);
+						H.S.IdleRPM = Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"));		// SetCar(default game)
+						break;
+#endif
 				}
 			}
 
@@ -185,10 +224,20 @@ namespace sierses.Sim
 			Array.Clear(AccSurge, 0, AccSurge.Length);
 			Array.Clear(AccSway, 0, AccSway.Length);
 			Acc1 = 0;
+#if !slim
+			TireDiameterSampleCount = TireDiameterSampleCount == -1 ? -1 : 0;
+			TireDiameterFL = 0.0;
+			TireDiameterFR = 0.0;
+			TireDiameterRL = 0.0;
+			TireDiameterRR = 0.0;
+#endif
 			RumbleLeftAvg = 0.0;
 			RumbleRightAvg = 0.0;
 			IdleSampleCount = 0;
-			idleRPM = 2500;							// SetCar(): reset to default value for each car
+			idleRPM = 2500;							// SetCar(): reset to default (IMO high) value for each car
+#if !slim
+			SetRPMIntervals();
+#endif
 			SetRPMMix();
 			H.S.Set();								// NotifyPropertyChanged
 			H.CarId = H.N.CarId;					// SetCar(): car change is complete
@@ -198,6 +247,31 @@ namespace sierses.Sim
 									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
 									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
 
+#if !slim
+			switch (H.S.EngineCylinders)	// BS
+			{
+				case 2:
+				case 4:
+				case 8:
+				case 16:
+					BSratio = 2;
+					break;
+				case 3:
+				case 6:
+				case 12:
+					BSratio = 3;
+					BSratio /= 2;
+					break;
+				case 5:
+				case 10:
+					BSratio = 5;
+					BSratio /= 4;
+					break;
+				default:
+					break;
+			}
+			H.SC.Ratio = H.S.EngineCylinders;
+#endif
 		}	// SetCar()
 	}
 }
