@@ -1,5 +1,4 @@
-﻿using GameReaderCommon;		// for GameData
-using SimHub.Plugins;		// PluginManager
+﻿using SimHub.Plugins;		// PluginManager
 using System;				// for Math
 
 namespace sierses.Sim

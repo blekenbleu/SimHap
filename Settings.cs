@@ -1,5 +1,4 @@
-﻿#define slim
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace sierses.Sim

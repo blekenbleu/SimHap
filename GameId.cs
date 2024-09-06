@@ -1,5 +1,4 @@
-﻿#define slim
-namespace sierses.Sim
+﻿namespace sierses.Sim
 {
   public enum GameId
   {

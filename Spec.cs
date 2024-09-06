@@ -1,5 +1,4 @@
-﻿#define slim
-using GameReaderCommon;
+﻿using GameReaderCommon;
 using Newtonsoft.Json;
 using SimHub;
 using System.Collections.Generic;

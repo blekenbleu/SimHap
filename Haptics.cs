@@ -1,5 +1,4 @@
-﻿#define slim
-using GameReaderCommon;
+﻿using GameReaderCommon;
 using Newtonsoft.Json;
 using sierses.Sim.Properties;
 using SimHub;
