@@ -132,6 +132,7 @@ namespace blekenbleu.Haptic
 		public double SuspensionRumbleMultR3;
 		public double SuspensionRumbleMultR4;
 		public double SuspensionRumbleMultR5;
+		public int TireDiameterSampleCount;
 
 		static PluginManager PM;
 		private float Data(string prop)

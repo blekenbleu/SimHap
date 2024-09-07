@@ -146,10 +146,10 @@ else lock out `FetchCarData()` by `Index = -3` and continue to `Add()` and `SetV
 - however, SimHub's 60Hz `DataUpdate()` can (and does) make calls  
   when `FetchCarData()` eventually matches `requested_car`,  
      car `Spec` code has not completed dotting I's and crossing T's....  
-	 consequently, setting current Id to requested is *the final instruction* in `SetVehicle()`  
+	 consequently, setting current CarId to SimHub's is *near the end* of `SetCar()`  
 	- *after* all I's are dotted and Ts are crossed.  
-- if `Loaded`, then `Add()` current car `Spec` to current game list
-	- *just before* looking for *another* car
+- if `Loaded`, then `SaveCar()` current car `Spec` to current game list
+	- *just before* looking for *another* `SetCar()`
 	- or during `Exit()` if `Loaded || Save`
 
 ### 2 Sep 2024 `CarId` refactor
@@ -162,7 +162,7 @@ should be separate from that used for dictionary indexing.
 - convert from `data.NewData.CarId` to dictionary index, using `CarId()`, in only one place
 - access `Car.id`  instead of passing string arguments with value of `Private_Car.id`.
 	- change `Add(string cId)` to `AddCar()` 
-	- change `Set(H.N.CarId)` to `Set()`
+	- change `Set(H.N.CarId)` to `SetCar()`
 	- change `SelectCar(CarId)` to `SelectCar()`
 	- change `FetchCarData(CarId, category, redline, maxRPM, IdleRPM)`  
 			to `FetchCarData(category, redline, maxRPM, IdleRPM)`
