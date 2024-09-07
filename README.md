@@ -166,7 +166,6 @@ should be separate from that used for dictionary indexing.
 	- change `SelectCar(CarId)` to `SelectCar()`
 	- change `FetchCarData(CarId, category, redline, maxRPM, IdleRPM)`  
 			to `FetchCarData(category, redline, maxRPM, IdleRPM)`
-	- extract RRRE CarId number before comma for indexing
 - consolidate SimData class references to `PluginManager` instance
 	- change `Refresh(this)` to `Refresh(this, pluginManager)`
 - remove untested code for GPBikes, MXBikes
