@@ -1,4 +1,3 @@
-
 namespace sierses.Sim
 {
 	// see Spec.cs for public abstract class NotifyPropertyChanged : INotifyPropertyChanged
@@ -7,14 +6,15 @@ namespace sierses.Sim
 		private string gameAltText;
 		private string loadStatusText;
 		private string lockedText;
-		private double engineMult;
-		private double engineMultAll;
-		private double rumbleMult;
-		private double rumbleMultAll;
 		private double suspensionMult;
 		private double suspensionMultAll;
 		private double suspensionGamma;
 		private double suspensionGammaAll;
+#if !slim
+		private double engineMult;
+		private double engineMultAll;
+		private double rumbleMult;
+		private double rumbleMultAll;
 		private double slipXMult;
 		private double slipXMultAll;
 		private double slipXGamma;
@@ -41,6 +41,7 @@ namespace sierses.Sim
 		private double motionSwayOffset;
 		private double motionSwayMult;
 		private double motionSwayGamma;
+#endif
 		private bool locked = false;
 		public bool Locked
 		{
@@ -66,30 +67,6 @@ namespace sierses.Sim
 			set { SetField(ref lockedText, value, nameof(LockedText)); }
 		}
 
-		public double EngineMult
-		{
-			get => engineMult;
-			set { SetField(ref engineMult, value, nameof(EngineMult)); }
-		}
-
-		public double EngineMultAll
-		{
-			get => engineMultAll;
-			set { SetField(ref engineMultAll, value, nameof(EngineMultAll)); }
-		}
-
-		public double RumbleMult
-		{
-			get => rumbleMult;
-			set { SetField(ref rumbleMult, value, nameof(RumbleMult)); }
-		}
-
-		public double RumbleMultAll
-		{
-			get => rumbleMultAll;
-			set { SetField(ref rumbleMultAll, value, nameof(RumbleMultAll)); }
-		}
-
 		public double SuspensionGamma
 		{
 			get => suspensionGamma;
@@ -112,6 +89,30 @@ namespace sierses.Sim
 		{
 			get => suspensionMultAll;
 			set { SetField(ref suspensionMultAll, value, nameof(SuspensionMultAll)); }
+		}
+#if !slim
+		public double EngineMult
+		{
+			get => engineMult;
+			set { SetField(ref engineMult, value, nameof(EngineMult)); }
+		}
+
+		public double EngineMultAll
+		{
+			get => engineMultAll;
+			set { SetField(ref engineMultAll, value, nameof(EngineMultAll)); }
+		}
+
+		public double RumbleMult
+		{
+			get => rumbleMult;
+			set { SetField(ref rumbleMult, value, nameof(RumbleMult)); }
+		}
+
+		public double RumbleMultAll
+		{
+			get => rumbleMultAll;
+			set { SetField(ref rumbleMultAll, value, nameof(RumbleMultAll)); }
 		}
 
 		public double SlipXMult
@@ -269,5 +270,6 @@ namespace sierses.Sim
 			get => motionSwayGamma;
 			set { SetField(ref motionSwayGamma, value, nameof(MotionSwayGamma)); }
 		}
+#endif
 	}
 }

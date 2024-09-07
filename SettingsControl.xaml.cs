@@ -12,34 +12,13 @@ using System.Windows.Media;
 
 namespace sierses.Sim
 {
-	// see also ToneControl.cs
+	// see also ToneControl.cs in master branch
 
 	public partial class SettingsControl : UserControl //, IComponentConnector
 	{
 		public readonly Haptics Plugin;
 		readonly ResourceDictionary Tres;
-		public SettingsControl()
-		{
-			Tres = new ResourceDictionary();
-			// VS generates InitializeComponent() from settingscontrol.xaml
-			InitializeComponent();
-		}
-
-
-		public SettingsControl(Haptics plugin) : this()
-		{
-			Plugin = plugin;
-			DataContext = Plugin;
-			Version.Text = Plugin.PluginVersion;
-            SetTheme();
-		}
-
 		internal string Theme = "SteelLightTheme.xaml";
-		internal void ChangeTheme(string theme)
-		{
-			Theme = theme;
-			SetTheme();
-		}
 
 		internal void SetTheme()
 		{
@@ -47,6 +26,27 @@ namespace sierses.Sim
 			//			Resources.MergedDictionaries.Clear();
 			//			Resources.MergedDictionaries.Add(Tres);
 			Resources.MergedDictionaries[0] = Tres;
+		}
+
+		internal void ChangeTheme(string theme)
+		{
+			Theme = theme;
+			SetTheme();
+		}
+
+		public SettingsControl()
+		{
+			Tres = new ResourceDictionary();
+			// VS generates InitializeComponent() from settingscontrol.xaml
+			InitializeComponent();
+		}
+
+		public SettingsControl(Haptics plugin) : this()
+		{
+			Plugin = plugin;
+			DataContext = Plugin;
+			Version.Text = Plugin.PluginVersion;
+            SetTheme();
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)

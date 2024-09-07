@@ -8,11 +8,11 @@ namespace sierses.Sim
 	public partial class SimData
 	{
 #if slim
-		private long FrameTimeTicks;
-		private long FrameCountTicks;
 		internal Haptics H;
 		internal int Index;
 		internal string raw = "DataCorePlugin.GameRawData.";
+		private long FrameTimeTicks;
+		private long FrameCountTicks;
 		private ushort idleRPM;						 // for sniffing in Refresh()
 
 		public SimData()
@@ -27,15 +27,14 @@ namespace sierses.Sim
 			ShiftTicks = FrameTimeTicks = DateTime.Now.Ticks;
 			FrameCountTicks = 0;
 			IdleSampleCount = 0;
-			RumbleFromPlugin = false;
 			SuspensionDistFLP = 0.0;
 			SuspensionDistFRP = 0.0;
 			SuspensionDistRLP = 0.0;
 			SuspensionDistRRP = 0.0;
 			AccSamples = 16;
 			Acc1 = 0;
-			idleRPM = 2500;							// default value; seems high IMO
-		}
+			idleRPM = 0;
+		}	
 #else
 		/*	if you could make me a version where you change ratios so it' s 
 			2/4/8/16 cyl to 2:1
@@ -48,17 +47,19 @@ namespace sierses.Sim
 			22 Jun 2024 BS
 		 */
 		internal double BSratio = 1.0;
-#endif
+
 		double GetSetting(string name, double trouble)	// Init() helper
 		{
 			return H.Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
 		}
+#endif
 
 		internal void Init(Haptics sh)
 		{
 			H = sh;
 			Index = -2;
 			string GDBtext = Haptics.GameDBText;
+#if !slim
 			EngineMult = H.Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
 			EngineMultAll = H.Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
 			RumbleMult = H.Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
@@ -76,7 +77,6 @@ namespace sierses.Sim
 			SlipYGamma = H.Settings.SlipYGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipYGammaAll = H.Settings.SlipYGamma.TryGetValue("AllGames", out num) ? num : 1.0;
 
-			LockedText = Locked ? "Unlock" : "Lock";
 			MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
 			MotionPitchMult = GetSetting("MotionPitchMult", 1.6);
 			MotionPitchGamma = GetSetting("MotionPitchGamma", 1.5);
@@ -95,6 +95,8 @@ namespace sierses.Sim
 			MotionSwayOffset = GetSetting("MotionSwayOffset", 0.0);
 			MotionSwayMult = GetSetting("MotionSwayMult", 1.0);
 			MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
+#endif
+			LockedText = Locked ? "Unlock" : "Lock";
 		}
 
 		// called from DataUpdate(), initially with -2 == Index
@@ -201,7 +203,7 @@ namespace sierses.Sim
 				return;				// FetchCarData() DB accesses run SetCar() at least twice.
 			}
 
-			if (Haptics.Loaded = Index == -4)					// Neither JSON nor Defaults() ?
+			if (Haptics.Loaded = (Index == -4))					// Neither JSON nor Defaults() ?
 				H.S.Src = "DB Load Success";
 			else if (0 > Index)
 				H.S.Defaults(H.N);	// SetCar()
@@ -236,19 +238,19 @@ namespace sierses.Sim
 			Array.Clear(AccSurge, 0, AccSurge.Length);
 			Array.Clear(AccSway, 0, AccSway.Length);
 			Acc1 = 0;
-#if !slim
+#if slim
+			idleRPM = 0;							// SetCar(): reset to default value for each car
+			IdleSampleCount = 0;
+			SetRPMIntervals();
+#else
+			idleRPM = 2500;							// SetCar(): reset to default (IMO high) value for each car
 			TireDiameterSampleCount = TireDiameterSampleCount == -1 ? -1 : 0;
 			TireDiameterFL = 0.0;
 			TireDiameterFR = 0.0;
 			TireDiameterRL = 0.0;
 			TireDiameterRR = 0.0;
-#endif
 			RumbleLeftAvg = 0.0;
 			RumbleRightAvg = 0.0;
-			IdleSampleCount = 0;
-			idleRPM = 2500;							// SetCar(): reset to default (IMO high) value for each car
-#if !slim
-			SetRPMIntervals();
 #endif
 			SetRPMMix();
 			H.S.Set();								// NotifyPropertyChanged

@@ -1,5 +1,4 @@
-﻿using GameReaderCommon;		// for GameData
-using SimHub.Plugins;		// PluginManager
+﻿using SimHub.Plugins;		// PluginManager
 using System;				// for Math
 
 namespace sierses.Sim
@@ -32,7 +31,6 @@ namespace sierses.Sim
 		public double GearInterval;
 		public long ShiftTicks;
 		public double CylinderDisplacement;
-		public double EngineLoad;
 		public int WiperStatus;
 		public int CarInitCount;
 		public int IdleSampleCount;			// used in Refresh()
@@ -54,16 +52,13 @@ namespace sierses.Sim
 		public double PeakA2Modifier;
 		public double PeakB1Modifier;
 		public double PeakB2Modifier;
-		public double FrequencyMultiplier;
 		public double FreqHarmonic;
 		public double FreqOctave;
 		public double FreqLFEAdaptive;
-		public double FreqPeakA1;
 		public double FreqPeakA2;
 		public double FreqPeakB1;
 		public double FreqPeakB2;
 		public double Gain1H;
-		public double GainLFEAdaptive;
 		public double GainPeakA1;
 		public double GainPeakA1Front;
 		public double GainPeakA1Rear;
@@ -99,18 +94,34 @@ namespace sierses.Sim
 		public double VelocityX;
 		public double WheelLoadFL;
 		public double WheelLoadFR;
-		public double WheelLoadRL;
-		public double WheelLoadRR;
-		public double Yaw;
-		public double YawPrev;
-		public double YawRate;
-		public double YawRateAvg;
+#if !slim
+		public double EngineLoad;
+		public double FrequencyMultiplier;
+		public double FreqPeakA1;
+		public double GainLFEAdaptive;
 		public double MotionPitch;
 		public double MotionRoll;
 		public double MotionYaw;
 		public double MotionHeave;
 		public double MotionSurge;
 		public double MotionSway;
+		public bool RumbleFromPlugin;
+		double TiresLeft;
+		double TiresRight;
+		public double RumbleLeftAvg;
+		public double RumbleRightAvg;
+		public double RumbleLeft;
+		public double RumbleRight;
+		public double SuspensionRumbleMultR1;
+		public double SuspensionRumbleMultR2;
+		public double SuspensionRumbleMultR3;
+#endif
+		public double WheelLoadRL;
+		public double WheelLoadRR;
+		public double Yaw;
+		public double YawPrev;
+		public double YawRate;
+		public double YawRateAvg;
 		public double SuspensionDistFL;
 		public double SuspensionDistFR;
 		public double SuspensionDistRL;
@@ -149,13 +160,6 @@ namespace sierses.Sim
 		public double SuspensionRight;
 		public double SuspensionAll;
 		public double SuspensionAccAll;
-		public bool RumbleFromPlugin;
-		public double TiresLeft;
-		public double TiresRight;
-		public double RumbleLeftAvg;
-		public double RumbleRightAvg;
-		public double RumbleLeft;
-		public double RumbleRight;
 		public int SurfaceMaterial;
 		public double VelocityZAvg;
 		public double GainSuspensionFront;
@@ -171,9 +175,6 @@ namespace sierses.Sim
 		public double SuspensionMultR1;
 		public double SuspensionMultR2;
 		public double SuspensionMultR3;
-		public double SuspensionRumbleMultR1;
-		public double SuspensionRumbleMultR2;
-		public double SuspensionRumbleMultR3;
 #if !slim
 		public bool ABSActive;
 		public double ABSPulse;
@@ -515,7 +516,6 @@ namespace sierses.Sim
 						SlipXRL *= 0.5;
 						SlipXRR *= 0.5;
 					}
-#endif
 					TiresLeft = 1.0 + (double) Math.Max(Physics("TyreContactHeading01.Y"), Physics("TyreContactHeading03.Y"));
 					TiresRight = 1.0 + (double) Math.Max(Physics("TyreContactHeading02.Y"), Physics("TyreContactHeading04.Y"));
 					if (RumbleLeftAvg == 0.0)
@@ -526,6 +526,7 @@ namespace sierses.Sim
 					RumbleRightAvg = (RumbleRightAvg + TiresRight) * 0.5;
 					RumbleLeft = Math.Abs(TiresLeft / RumbleLeftAvg - 1.0) * 2000.0;
 					RumbleRight = Math.Abs(TiresRight / RumbleRightAvg - 1.0) * 2000.0;
+#endif
 					break;
 				case GameId.ACC:
 					SuspensionDistFL = Physics("SuspensionTravel01");
@@ -1320,8 +1321,10 @@ namespace sierses.Sim
 				SuspensionDistRRP = SuspensionDistRR;
 				YawPrev = H.N.OrientationYaw;
 				Yaw = H.N.OrientationYaw;
+#if !slim
 				RumbleLeftAvg = 0.0;
 				RumbleRightAvg = 0.0;
+#endif
 			}
 			YawPrev = Yaw;
 			Yaw = -H.N.OrientationYaw;
@@ -1555,7 +1558,9 @@ namespace sierses.Sim
 			double num13 = 0.4 + 2.4 * AccHeaveAbs * (AccHeaveAbs + num5) / (num5 * num5);
 			double num14 = 0.5 + 2.0 * AccHeaveAbs * (AccHeaveAbs + num6) / (num6 * num6);
 			double num15 = 0.6 + 1.6 * AccHeaveAbs * (AccHeaveAbs + num7) / (num7 * num7);
+#if !slim
 			double num18 = RumbleMult * RumbleMultAll * (0.6 + SpeedMs * (90.0 - SpeedMs) * 0.0002);
+#endif
 			if (SuspensionFreq < 30.0)
 			{
 				if (SuspensionFreq < 20.0)

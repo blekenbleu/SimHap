@@ -122,12 +122,15 @@ namespace sierses.Sim
 
 	public class Spec : NotifyPropertyChanged
 	{
-		private CarSpec Private_Car;
-		internal CarSpec Car { get => Private_Car; }
-		private readonly List<CarSpec> Lcars;
-		internal List<CarSpec> Cars { get => Lcars; }
 		public ListDictionary LD { get; set; }  // needs to be public for JsonConvert
+		internal CarSpec Car { get => Private_Car; }
 		internal string Src;
+		internal List<CarSpec> Cars { get => Lcars; }
+		private readonly List<CarSpec> Lcars;
+		private CarSpec Private_Car, DfltCar;
+		private static ushort redlineFromGame;
+		private static ushort maxRPMFromGame;
+		private static ushort ushortIdleRPM;
 
 		public Spec()
 		{
@@ -135,10 +138,6 @@ namespace sierses.Sim
 			Lcars = new() { };					  // required 24 May 2024
 			LD = new() { };
 		}
-
-		private static ushort redlineFromGame;
-		private static ushort maxRPMFromGame;
-		private static ushort ushortIdleRPM;
 
 		private CarSpec NewCar(CarSpec c)
 		{
@@ -391,15 +390,8 @@ namespace sierses.Sim
 			return false;
 		}	// S.SaveCar()
 
-		private CarSpec DfltCar;
 		internal void Defaults(StatusDataBase db)
 		{
-			if (null == Haptics.GameDBText)
-			{
-				Src = $"Haptics.Defaults({db.CarId}):  null GameDBText";
-				return;
-			}
-
 			string StatusText = "Haptics.Defaults:  ";
 
 			if (null == DfltCar)
@@ -410,17 +402,10 @@ namespace sierses.Sim
 					loc = "RM",
 					drive = "R",
 					ehp = 0,
-#if slim
-					cyl = 1,
-					cc = 1,
-					hp = 1,
-					nm = 1
-#else
 					cyl = 6,
 					cc = 1600,
 					hp = 300,
 					nm = 250
-#endif
 				};
 
 				switch (Haptics.CurrentGame)
@@ -438,29 +423,12 @@ namespace sierses.Sim
 					case GameId.GTR2:
 					case GameId.RBR:
 					case GameId.RF2:
-						DfltCar.cc = 3000;
-#else
-						DfltCar.cc = 1;
 #endif
+						DfltCar.cc = 3000;
 						DfltCar.drive = "A";
 						StatusText += "unavailable: using generic car";
 						break;
 #if !slim
-					case GameId.D4:
-#endif
-					case GameId.DR2:
-					case GameId.WRC23:
-						StatusText += "unavailable: using generic Rally2";
-						DfltCar.config = "I";
-						DfltCar.loc = "F";
-						DfltCar.drive = "A";
-#if slim
-						DfltCar.cyl = 1;
-						DfltCar.nm = 1;
-#else
-						DfltCar.cyl = 4;
-						DfltCar.nm = 400;
-						break;
 					case GameId.F12022:
 					case GameId.F12023:
 						StatusText += "unavailable: using generic F1";
@@ -475,30 +443,23 @@ namespace sierses.Sim
 						DfltCar.hp = 34;
 						DfltCar.nm = 24;
 						break;
-					case GameId.GPBikes:
-						StatusText += "unavailable: using generic Superbike";
-						DfltCar.config = "I";
-						DfltCar.cyl = 4;
-						DfltCar.loc = "M";
-						DfltCar.cc = 998;
-						DfltCar.hp = 200;
-						DfltCar.nm = 100;
-						break;
-					case GameId.MXBikes:
-						StatusText += "unavailable: using generic MX Bike"; EngineConfiguration = "I";
-						DfltCar.cyl = 1;
-						DfltCar.loc = "M";
-						DfltCar.cc = 450;
-						DfltCar.hp = 50;
-						DfltCar.nm = 45;
-						break;
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
 						StatusText += "unavailable: assume 500HP 4 Liter V6";
 						DfltCar.cc = 4000;
 						DfltCar.hp = 500;
 						DfltCar.nm = 400;
+						break;
+					case GameId.D4:
 #endif
+					case GameId.DR2:
+					case GameId.WRC23:
+						StatusText += "unavailable: using generic Rally2";
+						DfltCar.config = "I";
+						DfltCar.loc = "F";
+						DfltCar.drive = "A";
+						DfltCar.cyl = 4;
+						DfltCar.nm = 400;
 						break;
 					default:
 						StatusText += $"specs unavailable for {Haptics.CurrentGame}";
@@ -509,7 +470,7 @@ namespace sierses.Sim
 			else StatusText = DfltCar.notes;
 			DfltCar.name = db.CarModel;
 			DfltCar.category = string.IsNullOrEmpty(db.CarClass) ? "street" : db.CarClass;
-			DfltCar.id = Car.id;						// Defaults()
+			DfltCar.id = Car.id;						// CarId()
 			Cache(DfltCar);
 			Src = StatusText;
 		}												// Defaults()
