@@ -205,12 +205,10 @@ namespace sierses.Sim
 				return;				// FetchCarData() DB accesses run SetCar() at least twice.
 			}
 
-			if (Haptics.Loaded = Index == -4)					// Neither JSON nor Defaults() ?
+			if (Haptics.Loaded = (Index == -4))					// Neither JSON nor Defaults() ?
 				H.S.Src = "DB Load Success";
-#if !slim
 			else if (0 > Index)
 				H.S.Defaults(H.N);	// SetCar()
-#endif
 
 			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}/{H.S.Id}): "
 								+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
