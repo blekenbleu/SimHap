@@ -81,9 +81,6 @@ namespace sierses.Sim
 
 		internal void AddCar(CarSpec car)			// ListDictionary: S.LD.AddCar; update Save
 		{
-			if (null == car || null == car.id)
-				return;
-
 			string g = Haptics.GameDBText;
 
 			if (inDict.ContainsKey(g))
@@ -97,16 +94,6 @@ namespace sierses.Sim
 			else inDict.Add(g, new() { car } );			// ListDictionary:  add new dictionary with car
 			Haptics.Save = true;
 			return;
-		}
-
-		internal CarSpec FindCar(string cn)
-		{
-			string g = Haptics.GameDBText;
-			int i;
-
-			if (inDict.ContainsKey(g) && 0 <= (i = inDict[g].FindIndex(x => x.id == cn)))
-				return inDict[g][i];
-			else return null;
 		}
 
 		internal int CarCount(string g) { return inDict.ContainsKey(g) ? inDict[g].Count : 0; }
@@ -123,19 +110,19 @@ namespace sierses.Sim
 	public class Spec : NotifyPropertyChanged
 	{
 		public ListDictionary LD { get; set; }  // needs to be public for JsonConvert
-		internal CarSpec Car { get => Private_Car; }
-		internal string Src;
-		internal List<CarSpec> Cars { get => Lcars; }
-		private readonly List<CarSpec> Lcars;
-		private CarSpec Private_Car, DfltCar;
 		private static ushort redlineFromGame;
 		private static ushort maxRPMFromGame;
 		private static ushort ushortIdleRPM;
+		private readonly List<CarSpec> Lcache;
+		private CarSpec Private_Car, DfltCar;
+		internal CarSpec Car { get => Private_Car; }
+		internal List<CarSpec> Cars { get => Lcache; }
+		internal string Src;
 
 		public Spec()
 		{
 			Private_Car = new() { };				// required 24 May 2024
-			Lcars = new() { };					  // required 24 May 2024
+			Lcache = new() { };						// required 24 May 2024
 			LD = new() { };
 		}
 
@@ -156,7 +143,7 @@ namespace sierses.Sim
 				nm = c.nm,
 				redline = c.redline,
 				maxrpm = c.maxrpm,
-				idlerpm = c.idlerpm,							  // CarSpec element
+				idlerpm = c.idlerpm,						  // CarSpec element
 				order = c.order,
 				category = c.category,
 				notes = c.notes,
@@ -170,22 +157,22 @@ namespace sierses.Sim
 			Private_Car.id = along;
 		}
 
-		internal void CarModel(string along)						// store CarName until Set()
+		internal void CarModel(string along)					// store CarName until Set()
 		{
 			Private_Car.name = along;
 		}
 
 		internal void Idle(ushort rpm)
 		{
-			int i = Lcars.FindIndex(x => x.id == Car.id);
-			IdleRPM = Lcars[i].idlerpm = rpm;
+			int i = Lcache.FindIndex(x => x.id == Car.id);
+			IdleRPM = Lcache[i].idlerpm = rpm;
 			Haptics.Changed = false;
 		}
 
 		internal void Set()				// S.Set
 		{
-			int i = Lcars.FindIndex(x => x.id == Car.id);
-			CarSpec c = Lcars[i];
+			int i = Lcache.FindIndex(x => x.id == Car.id);
+			CarSpec c = Lcache[i];
 			Private_Car = new();
 			Game = c.game;
 	  		CarName = c.name;
@@ -213,14 +200,10 @@ namespace sierses.Sim
 		// apply game defaults and add to LCars
 		internal int Cache(CarSpec c)
 		{
-			if (null == c)
-			{
-				Logging.Current.Info("Haptics.S.Cache(CarSpec Car):  null Car");
-				return -1;
-			}
-			// wtf FindIndex returns 0 for 0 == Lcars.count ??!!
-			int Idx = 0 < Lcars.Count ? Lcars.FindIndex(x => x.id == c.id) : -1;
-			if (0 > Idx)
+			int Idx;
+
+			// wtf FindIndex returns 0 for 0 == Lcache.count ??!!
+			if (0 == Lcache.Count || 0 > (Idx  = Lcache.FindIndex(x => x.id == c.id))
 			{
 				c.game = Haptics.GameDBText;
 				c.redline =	0 < c.redline ? c.redline : redlineFromGame;
@@ -230,27 +213,29 @@ namespace sierses.Sim
 				c.nm =	  0 < c.nm ? c.nm : MaxPower;
 				c.hp =	  0 < c.hp ? c.hp : (ushort)333;
 				c.category = string.IsNullOrEmpty(c.category) ? "street" : c.category;
-				Lcars.Add(NewCar(c));
+				Lcache.Add(NewCar(c));
+				Idx = Lcache.FindIndex(x => x.id == c.id);
 			}
-			else Logging.Current.Info($"Haptics.S.Cache({c.name}): Car {Idx} of {Lcars.Count}");
-			return Lcars.FindIndex(x => x.id == c.id);
+			Logging.Current.Info($"Haptics.S.Cache({c.name}): Car {Idx} of {Lcache.Count}");
+			return Idx;
 		}
 
 		internal int SelectCar(ushort r, ushort m, ushort I)
 		{
 			redlineFromGame = r;  maxRPMFromGame = m;  ushortIdleRPM = I;
-			int i = Lcars.FindIndex(x => x.id == Car.id);
+			int i = Lcache.FindIndex(x => x.id == Car.id);
+
 			if (0 <= i)
 			{
 				Src = "Cache match";	
 				return i;
 			}
 
-			CarSpec car = LD.FindCar(Car.id);
-			if (null != car)
+			string g = Haptics.GameDBText;
+			if (inDict.ContainsKey(g) && 0 <= (i = inDict[g].FindIndex(x => x.id == Car.id)))
 			{
 				Src = "JSON match";
-				Cache(car);
+				Cache(inDict[g][i]);
 				return 0;
 			}
 
@@ -292,7 +277,7 @@ namespace sierses.Sim
 			int Index = Cars.FindIndex(x => x.id == Car.id);
 			if (0 > Index)
 			{
-				Lcars.Add(Private_Car);		// generic List<CarSpec>.Add()
+				Lcache.Add(Private_Car);		// generic List<CarSpec>.Add()
 				Logging.Current.Info($"\tHaptics.S.SaveCar():  {Car.id} makes {Cars.Count} {Car.game} cars");
 				LD.AddCar(Car);
 				return false;
@@ -300,90 +285,90 @@ namespace sierses.Sim
 
 			Logging.Current.Info($"\tHaptics.S.SaveCar(): {Car.id} Index = {Index}/{Cars.Count}");
 			bool tf = false;
-			if (Lcars[Index].game != Private_Car.game)
+			if (Lcache[Index].game != Private_Car.game)
 			{
 				tf = true;
-				Lcars[Index].game = Private_Car.game;
+				Lcache[Index].game = Private_Car.game;
 			}
-			if (Lcars[Index].name != Private_Car.name)
+			if (Lcache[Index].name != Private_Car.name)
 			{
 				tf = true;
-				Lcars[Index].name = Private_Car.name;
+				Lcache[Index].name = Private_Car.name;
 			}
-			if (Lcars[Index].config != Private_Car.config)
+			if (Lcache[Index].config != Private_Car.config)
 			{
 				tf = true;
-				Lcars[Index].config = Private_Car.config;
+				Lcache[Index].config = Private_Car.config;
 			}
-			if (Lcars[Index].cyl != Private_Car.cyl)
+			if (Lcache[Index].cyl != Private_Car.cyl)
 			{
 				tf = true;
-				Lcars[Index].cyl = Private_Car.cyl;
+				Lcache[Index].cyl = Private_Car.cyl;
 			}
-			if (Lcars[Index].loc != Private_Car.loc)
+			if (Lcache[Index].loc != Private_Car.loc)
 			{
 				tf = true;
-				Lcars[Index].loc = Private_Car.loc;
+				Lcache[Index].loc = Private_Car.loc;
 			}
-			if (Lcars[Index].drive != Private_Car.drive)
+			if (Lcache[Index].drive != Private_Car.drive)
 			{
 				tf = true;
-				Lcars[Index].drive = Private_Car.drive;
+				Lcache[Index].drive = Private_Car.drive;
 			}
-			if (Lcars[Index].hp != Private_Car.hp)
+			if (Lcache[Index].hp != Private_Car.hp)
 			{
 				tf = true;
-				Lcars[Index].hp = Private_Car.hp;
+				Lcache[Index].hp = Private_Car.hp;
 			}
-			if (Lcars[Index].ehp != Private_Car.ehp)
+			if (Lcache[Index].ehp != Private_Car.ehp)
 			{
 				tf = true;
-				Lcars[Index].ehp = Private_Car.ehp;
+				Lcache[Index].ehp = Private_Car.ehp;
 			}
-			if (Lcars[Index].cc != Private_Car.cc)
+			if (Lcache[Index].cc != Private_Car.cc)
 			{
 				tf = true;
-				Lcars[Index].cc = Private_Car.cc;
+				Lcache[Index].cc = Private_Car.cc;
 			}
-			if (Lcars[Index].nm != Private_Car.nm)
+			if (Lcache[Index].nm != Private_Car.nm)
 			{
 				tf = true;
-				Lcars[Index].nm = Private_Car.nm;
+				Lcache[Index].nm = Private_Car.nm;
 			}
-			if (Lcars[Index].redline != Private_Car.redline)
+			if (Lcache[Index].redline != Private_Car.redline)
 			{
 				tf = true;
-				Lcars[Index].redline = Private_Car.redline;
+				Lcache[Index].redline = Private_Car.redline;
 			}
-			if (Lcars[Index].maxrpm != Private_Car.maxrpm)
+			if (Lcache[Index].maxrpm != Private_Car.maxrpm)
 			{
 				tf = true;
-				Lcars[Index].maxrpm = Private_Car.maxrpm;
+				Lcache[Index].maxrpm = Private_Car.maxrpm;
 			}
-			if (Lcars[Index].idlerpm != Private_Car.idlerpm)		// SaveCar(): changing value in Cars?
+			if (Lcache[Index].idlerpm != Private_Car.idlerpm)		// SaveCar(): changing value in Cars?
 			{
 				tf = true;
-				Lcars[Index].idlerpm = Private_Car.idlerpm;			// SaveCar(): Yes, value has changed
+				Lcache[Index].idlerpm = Private_Car.idlerpm;			// SaveCar(): Yes, value has changed
 			}
-			if (Lcars[Index].order != Private_Car.order)
+			if (Lcache[Index].order != Private_Car.order)
 			{
 				tf = true;
-				Lcars[Index].order = Private_Car.order;
+				Lcache[Index].order = Private_Car.order;
 			}
-			if (Lcars[Index].defaults != Private_Car.defaults)
+			if (Lcache[Index].defaults != Private_Car.defaults)
 			{
 				tf = true;
-				Lcars[Index].defaults = Private_Car.defaults;
+				Lcache[Index].defaults = Private_Car.defaults;
 			}
-			if (Lcars[Index].category != Private_Car.category)
+			if (Lcache[Index].category != Private_Car.category)
 			{
 				tf = true;
-				Lcars[Index].category = Private_Car.category;
+				Lcache[Index].category = Private_Car.category;
 			}
-			if (Lcars[Index].notes != Private_Car.notes)
+			if (Lcache[Index].notes != Private_Car.notes)
 			{
 				tf = true;
-				Lcars[Index].notes = Private_Car.notes;
+				Lcache[Index].notes = Private_Car.notes;
 			}
 			if (tf)
 				LD.AddCar(Car);
@@ -397,6 +382,19 @@ namespace sierses.Sim
 			if (null == DfltCar)
 			{
 				DfltCar = new()
+#if slim
+				{
+					config = "?",
+					loc = "?",
+					drive = "?",
+					ehp = 0,
+					cyl = 0,
+					cc = 0,
+					hp = 0,
+					nm = 0
+				};
+				StatusText = "Specs unknown";
+#else
 				{
 					config = "V",
 					loc = "RM",
@@ -417,18 +415,15 @@ namespace sierses.Sim
 					case GameId.Forza:
 					case GameId.IRacing:
 					case GameId.RRRE:
-#if !slim
 					case GameId.AMS1:
 					case GameId.PC2:
 					case GameId.GTR2:
 					case GameId.RBR:
 					case GameId.RF2:
-#endif
 						DfltCar.cc = 3000;
 						DfltCar.drive = "A";
 						StatusText += "unavailable: using generic car";
 						break;
-#if !slim
 					case GameId.F12022:
 					case GameId.F12023:
 						StatusText += "unavailable: using generic F1";
@@ -451,7 +446,6 @@ namespace sierses.Sim
 						DfltCar.nm = 400;
 						break;
 					case GameId.D4:
-#endif
 					case GameId.DR2:
 					case GameId.WRC23:
 						StatusText += "unavailable: using generic Rally2";
@@ -465,6 +459,7 @@ namespace sierses.Sim
 						StatusText += $"specs unavailable for {Haptics.CurrentGame}";
 						break;
 				}
+#endif
 				DfltCar.notes = StatusText;
 			}
 			else StatusText = DfltCar.notes;

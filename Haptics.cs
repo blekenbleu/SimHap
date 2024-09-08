@@ -110,7 +110,7 @@ namespace sierses.Sim
 		// must be void and static;  invoked by D.SetCar()
 		private static Haptics H;
 #if slim
-		internal static void FetchCarData(    // called from SetVehicle() switch
+		internal static void FetchCarData(	// called from SetVehicle() switch
 #else
 		internal static async void FetchCarData(	// called from SetCar() switch
 #endif
@@ -194,7 +194,7 @@ namespace sierses.Sim
 				Waiting = false;
 			}
 #endif
-		}       // FetchCarData()
+		}	   // FetchCarData()
 
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data.
@@ -243,7 +243,12 @@ namespace sierses.Sim
 				Changed = false;
 			}
 			else if (Loaded || Changed)		// save before SetCar()
-				Loaded = S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
+			{
+				if (null == Car.name)
+					Logging.Current.Info($"Haptics.S.SaveCar(): {Car.id} missing car name");
+				else S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
+				Loaded = false;
+			}
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
@@ -756,22 +761,22 @@ namespace sierses.Sim
 #endif
 				this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
 #if slim
-                this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
-                //this.AttachDelegate("LFEhpScale", () => D.LFEhpScale);
-                this.AttachDelegate("rpmMain", () => D.rpmMain);
-                this.AttachDelegate("rpmPeakA2Rear", () => D.rpmPeakA2Rear);
-                this.AttachDelegate("rpmPeakB1Rear", () => D.rpmPeakB1Rear);
-                this.AttachDelegate("rpmPeakA1Rear", () => D.rpmPeakA1Rear);
-                this.AttachDelegate("rpmPeakB2Rear", () => D.rpmPeakB2Rear);
-                this.AttachDelegate("rpmPeakA2Front", () => D.rpmPeakA2Front);
-                this.AttachDelegate("rpmPeakB1Front", () => D.rpmPeakB1Front);
-                this.AttachDelegate("rpmPeakA1Front", () => D.rpmPeakA1Front);
-                this.AttachDelegate("rpmPeakB2Front", () => D.rpmPeakB2Front);
-                this.AttachDelegate("peakEQ", () => D.peakEQ);
-                this.AttachDelegate("rpmMainEQ", () => D.rpmMainEQ);
-                this.AttachDelegate("peakGearMulti", () => D.peakGearMulti);
-                this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
+				this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
+				//this.AttachDelegate("LFEhpScale", () => D.LFEhpScale);
+				this.AttachDelegate("rpmMain", () => D.rpmMain);
+				this.AttachDelegate("rpmPeakA2Rear", () => D.rpmPeakA2Rear);
+				this.AttachDelegate("rpmPeakB1Rear", () => D.rpmPeakB1Rear);
+				this.AttachDelegate("rpmPeakA1Rear", () => D.rpmPeakA1Rear);
+				this.AttachDelegate("rpmPeakB2Rear", () => D.rpmPeakB2Rear);
+				this.AttachDelegate("rpmPeakA2Front", () => D.rpmPeakA2Front);
+				this.AttachDelegate("rpmPeakB1Front", () => D.rpmPeakB1Front);
+				this.AttachDelegate("rpmPeakA1Front", () => D.rpmPeakA1Front);
+				this.AttachDelegate("rpmPeakB2Front", () => D.rpmPeakB2Front);
+				this.AttachDelegate("rpmMainEQ", () => D.rpmMainEQ);
+				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
 #else
+				this.AttachDelegate("peakEQ", () => D.peakEQ);
+				this.AttachDelegate("peakGearMulti", () => D.peakGearMulti);
 				this.AttachDelegate("Gain1H", () => D.Gain1H);
 				this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
 				this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
