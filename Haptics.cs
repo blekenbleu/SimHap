@@ -67,6 +67,7 @@ namespace sierses.Sim
 
 		// boilerplate SimHub -------------------------------------------
 		public string LeftMenuTitle => pname;
+		public PluginManager PluginManager { get; set; }
 
 		internal SettingsControl SC;
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
@@ -104,14 +105,13 @@ namespace sierses.Sim
 
 		public Settings Settings { get; set; }
 
-		public PluginManager PluginManager { get; set; }
 		// ----------------------------------------------------------------
 
-		// must be void and static;  invoked by D.SetCar()
 		private static Haptics H;
 #if slim
 		internal static void FetchCarData(		// called from SetVehicle() switch
 #else
+		// async must be void and static;  invoked by D.SetCar()
 		internal static async void FetchCarData(	// called from SetCar() switch
 #endif
 			string category,
@@ -257,7 +257,7 @@ namespace sierses.Sim
 				Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
-				D.SetCar(this, pluginManager);
+				D.SetCar(pluginManager);
 			}
 		}	// DataUpdate()
 
@@ -412,7 +412,7 @@ namespace sierses.Sim
 		}
 
 		// Init() methods -----------------------------
-		public void SetGame(PluginManager pm)
+		void SetGame(PluginManager pm)
 		{
 			GameDBText = D.GameAltText = pm.GameName;
 			switch (GameDBText)
@@ -499,9 +499,6 @@ namespace sierses.Sim
 					CurrentGame = GameId.RF2;
 					GameDBText = "RF2";
 					break;
-				case "RRRE":
-					CurrentGame = GameId.RRRE;
-					break;
 				case "SIMBINGTLEGENDS":
 					CurrentGame = GameId.GTL;
 					GameDBText = "GTL";
@@ -585,6 +582,9 @@ namespace sierses.Sim
 					GameDBText = "GranTurismo7";
 					D.TireDiameterSampleCount = -1;
 #endif
+					break;
+				case "RRRE":
+					CurrentGame = GameId.RRRE;
 					break;
 				default:
 					CurrentGame = GameId.Other;

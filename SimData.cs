@@ -1,4 +1,4 @@
-﻿using SimHub.Plugins;		// PluginManager
+﻿using SimHub.Plugins;
 using System;				// for Math
 
 namespace sierses.Sim
@@ -217,7 +217,7 @@ namespace sierses.Sim
 			InvMaxRPM = H.S.MaxRPM > 0.0 ? 1.0 / H.S.MaxRPM : 0.0001;
 			IdlePercent = H.S.IdleRPM * InvMaxRPM;
 			RedlinePercent = H.S.Redline * InvMaxRPM;
-			if (H.S.Displacement > 0.0)
+			if (H.S.Displacement > 0.0 && 0 < H.S.EngineCylinders)
 			{
 				CylinderDisplacement = H.S.Displacement / H.S.EngineCylinders;
 				MixCylinder = 1.0 - Math.Max(2000.0 - CylinderDisplacement, 0.0)

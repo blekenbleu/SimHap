@@ -1,5 +1,5 @@
 using SimHub;
-using SimHub.Plugins;		// PluginManager
+using SimHub.Plugins;
 using System;
 
 namespace sierses.Sim
@@ -102,9 +102,8 @@ namespace sierses.Sim
 		}
 
 		// called from DataUpdate(), initially with -2 == Index
-		internal void SetCar(Haptics shp, PluginManager pluginManager)
+		internal void SetCar(PluginManager pluginManager)
 		{
-			H = shp;
 			PM = pluginManager;
 /*
 			Logging.Current.Info($"Haptics.SetCar({shp.Gdat.NewData.CarId}): " +
@@ -113,7 +112,7 @@ namespace sierses.Sim
  */
 			if (-2 == Index || -1 == Index)
 			{
-				H.S.CarId(H.N.CarId);										// only exception: Forza
+				H.S.CarId(H);										// SetCar() only exception: Forza
 				switch (Haptics.CurrentGame)
 				{
 					case GameId.AC:
@@ -137,16 +136,20 @@ namespace sierses.Sim
 						H.S.CarName = H.N.CarModel;
 						H.S.Category = H.N.CarClass;
 						break;
+					case GameId.BeamNG:
+						Haptics.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
+								Convert.ToUInt16((Math.Ceiling(H.N.MaxRpm * 0.001) - H.N.MaxRpm * 0.001) > 0.55
+								 	? Math.Ceiling(H.N.MaxRpm * 0.001) * 1000.0
+								 	: Math.Ceiling((H.N.MaxRpm + 1000.0) * 0.001) * 1000.0),
+								Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
+							);
+						break;
 #if !slim
 					case GameId.D4:
 #endif
 					case GameId.DR2:
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
-						break;
-					case GameId.WRC23:
-						Haptics.FetchCarData(null, Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
 						break;
 #if !slim
 					case GameId.F12022:
@@ -167,33 +170,35 @@ namespace sierses.Sim
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
 #if !slim
-					case GameId.RRRE:
-						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
-						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
-						break;
-#endif
-					case GameId.BeamNG:
-						Haptics.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
-								Convert.ToUInt16((Math.Ceiling(H.N.MaxRpm * 0.001) - H.N.MaxRpm * 0.001) > 0.55
-								 	? Math.Ceiling(H.N.MaxRpm * 0.001) * 1000.0
-								 	: Math.Ceiling((H.N.MaxRpm + 1000.0) * 0.001) * 1000.0),
-								Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
-							);
-						break;
-#if !slim
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
 						Haptics.FetchCarData(null,
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MinAlertRPM")),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MaxAlertRPM")), 0);
 						break;
-					default:
-						H.S.Redline = Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM);
-						H.S.MaxRPM  = Convert.ToUInt16(H.N.MaxRpm);
-						H.S.IdleRPM = Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"));		// SetCar(default game)
+					case GameId.RRRE:
+						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
+						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 #endif
+					case GameId.WRC23:
+						Haptics.FetchCarData(null,
+											Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)),
+											Convert.ToUInt16(H.N.MaxRpm),
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
+						break;
+					default:
+						Haptics.FetchCarData(null,
+#if slim
+						0, 0, 0
+#else
+						Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
+						Convert.ToUInt16(H.N.MaxRpm),
+						Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"))
+#endif
+						);
+						break;
 				}
 			}
 

@@ -154,6 +154,12 @@ namespace sierses.Sim
 			};
 		}
 
+		internal void CarId(Haptics h)						// store CarID until Set()
+		{
+			H = h;
+			Private_Car.id = H.N.CarId;
+		}
+
 		internal void CarId(string along)						// store CarID until Set()
 		{
 			Private_Car.id = along;
@@ -211,9 +217,11 @@ namespace sierses.Sim
 				c.redline =	0 < c.redline ? c.redline : redlineFromGame;
 				c.maxrpm  =	0 < c.maxrpm ? c.maxrpm : maxRPMFromGame;
 				c.idlerpm =	0 < c.idlerpm ? c.idlerpm : ushortIdleRPM;
-				c.cc =	  0 < c.cc ? c.cc : (ushort)3333;
 				c.nm =	  0 < c.nm ? c.nm : MaxPower;
+#if !slim
+				c.cc =	  0 < c.cc ? c.cc : (ushort)3333;
 				c.hp =	  0 < c.hp ? c.hp : (ushort)333;
+#endif
 				c.category = string.IsNullOrEmpty(c.category) ? "street" : c.category;
 				Lcache.Add(NewCar(c));
 				Idx = Lcache.FindIndex(x => x.id == c.id);
