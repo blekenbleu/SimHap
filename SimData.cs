@@ -88,7 +88,6 @@ namespace sierses.Sim
 		public double rpmPeakB2Front;
 
 		public double FreqPeakA1;
-#else
 #endif
 		public double FreqPeakA2;
 		public double FreqPeakB1;
@@ -1041,24 +1040,28 @@ namespace sierses.Sim
 				rpmMain = rpmMainSum;
 #endif
 
-			GainPeakA1 = FreqPeakA1 >= 30.0 ? (FreqPeakA1 >= 150.0 ? (FreqPeakA1 >= 250.0 ? (1 - (FreqPeakA1 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakA1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA1 - 110) / (30 - 110)) * 60) : 0;
+			GainPeakA1 = FreqPeakA1 >= 30.0 ? (FreqPeakA1 >= 150.0 ? (FreqPeakA1 >= 250.0 ? (1 - (FreqPeakA1 - 250) / (450 - 250)) * 30
+					   : (1 - (FreqPeakA1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA1 - 110) / (30 - 110)) * 60) : 0;
 			GainPeakA1 = Math.Max(GainPeakA1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 			GainPeakA1Front = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1Rear = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1 = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
 
-			GainPeakB1 = FreqPeakB1 >= 30.0 ? (FreqPeakB1 >= 150.0 ? (FreqPeakB1 >= 250.0 ? (1 - (FreqPeakB1 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakB1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakB1 - 110) / (30 - 110)) * 60) : 0;
+			GainPeakB1 = FreqPeakB1 >= 30.0 ? (FreqPeakB1 >= 150.0 ? (FreqPeakB1 >= 250.0 ? (1 - (FreqPeakB1 - 250) / (450 - 250)) * 30
+					   : (1 - (FreqPeakB1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakB1 - 110) / (30 - 110)) * 60) : 0;
 			GainPeakB1 = Math.Max(GainPeakB1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 			GainPeakB1Front = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB1Rear = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB1 = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
 
-			GainPeakA2 = FreqPeakA2 >= 30.0 ? (FreqPeakA2 >= 150.0 ? (FreqPeakA2 >= 250.0 ? (1 - (FreqPeakA2 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakA2 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA2 - 110) / (30 - 110)) * 60) : 0;
+			GainPeakA2 = FreqPeakA2 >= 30.0 ? (FreqPeakA2 >= 150.0 ? (FreqPeakA2 >= 250.0 ? (1 - (FreqPeakA2 - 250) / (450 - 250)) * 30
+					   : (1 - (FreqPeakA2 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA2 - 110) / (30 - 110)) * 60) : 0;
 			GainPeakA2 = Math.Max(GainPeakA2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 			GainPeakA2Front = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA2Rear = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA2 = ((PeakA2Modifier * GainPeakA2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB2 = FreqPeakB2 >= 30.0 ? (FreqPeakB2 >= 150.0 ? (FreqPeakB2 >= 250.0 ? (1 - (FreqPeakB2 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakB2 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakB2 - 110) / (30 - 110)) * 60) : 0;
+			GainPeakB2 = FreqPeakB2 >= 30.0 ? (FreqPeakB2 >= 150.0 ? (FreqPeakB2 >= 250.0 ? (1 - (FreqPeakB2 - 250) / (450 - 250)) * 30
+					   : (1 - (FreqPeakB2 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakB2 - 110) / (30 - 110)) * 60) : 0;
 			GainPeakB2 = Math.Max(GainPeakB2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 			GainPeakB2Front = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2Rear = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
