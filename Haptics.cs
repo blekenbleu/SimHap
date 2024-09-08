@@ -111,7 +111,7 @@ namespace sierses.Sim
 		// must be void and static;  invoked by D.SetCar()
 		private static Haptics H;
 #if slim
-		internal static void FetchCarData(    // called from SetVehicle() switch
+		internal static void FetchCarData(		// called from SetVehicle() switch
 #else
 		internal static async void FetchCarData(	// called from SetCar() switch
 #endif
@@ -128,7 +128,7 @@ namespace sierses.Sim
 			{
 				H.S.Notes = "";
 				Set = false;
-				H.D.Index = H.S.SelectCar(redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// set game RPM defaults
+				H.D.Index = H.S.SelectCar(GameDBText, redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
 /*
 				Logging.Current.Info(pname + ".SelectCar(): "
 									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
@@ -195,7 +195,7 @@ namespace sierses.Sim
 				Waiting = false;
 			}
 #endif
-		}       // FetchCarData()
+		}	   // FetchCarData()
 
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data.
@@ -244,7 +244,12 @@ namespace sierses.Sim
 				Changed = false;
 			}
 			else if (Loaded || Changed)		// save before SetCar()
-				Loaded = S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
+			{
+				if (null == S.Car.name)
+					Logging.Current.Info(pname + $".S.SaveCar(): {CarId} missing car name");
+				else S.SaveCar(pname);		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
+				Loaded = false;
+			}
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
@@ -377,7 +382,9 @@ namespace sierses.Sim
 			}
 			else if (D.SlipYGamma != 1.0)
 				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
+#endif
 			// unconditionally save some
+#if !slim
 			Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
 			Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
 			Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
