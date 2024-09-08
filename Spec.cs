@@ -31,7 +31,6 @@ namespace sierses.Sim
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return;
 			field = value;
-			Haptics.Changed = Haptics.Set;				// SetSpec()
 			OnPropertyChanged(propertyname);
 		}
 	}
@@ -67,21 +66,23 @@ namespace sierses.Sim
 
 	public class ListDictionary : NotifyPropertyChanged
 	{
-		private Dictionary<string, List<CarSpec>> inDict;
+		internal Dictionary<string, List<CarSpec>> inDict;
 		internal ListDictionary() { inDict = new(); }
+		Haptics H;
 
 		// create inDict, return List<CarSpec>
-		internal string SetGame(Dictionary<string, List<CarSpec>> json)
+		internal string SetGame(Haptics h, Dictionary<string, List<CarSpec>> json)
 		{
+			H = h;
 			inDict = json;
-			int ct = inDict.ContainsKey(Haptics.GameDBText) ? inDict[Haptics.GameDBText].Count : 0;
+			int ct = inDict.ContainsKey(H.GameDBText) ? inDict[H.GameDBText].Count : 0;
 
-			return $"{inDict.Count} games, {ct} {Haptics.GameDBText} cars in ";
+			return $"{inDict.Count} games, {ct} {H.GameDBText} cars in ";
 		}
 
 		internal void AddCar(CarSpec car)			// ListDictionary: S.LD.AddCar; update Save
 		{
-			string g = Haptics.GameDBText;
+			string g = H.GameDBText;
 
 			if (inDict.ContainsKey(g))
 			{
@@ -92,7 +93,7 @@ namespace sierses.Sim
 				else inDict[g].Add(car);				// ListDictionary:  add car to current dictionary
 			}
 			else inDict.Add(g, new() { car } );			// ListDictionary:  add new dictionary with car
-			Haptics.Save = true;
+			H.Save = true;
 			return;
 		}
 
@@ -118,6 +119,7 @@ namespace sierses.Sim
 		internal CarSpec Car { get => Private_Car; }
 		internal List<CarSpec> Cars { get => Lcache; }
 		internal string Src;
+		Haptics H;
 
 		public Spec()
 		{
@@ -166,7 +168,7 @@ namespace sierses.Sim
 		{
 			int i = Lcache.FindIndex(x => x.id == Car.id);
 			IdleRPM = Lcache[i].idlerpm = rpm;
-			Haptics.Changed = false;
+			H.Changed = false;
 		}
 
 		internal void Set()				// S.Set
@@ -193,8 +195,8 @@ namespace sierses.Sim
 			Notes = c.notes;
 			Default = c.defaults;
 			Property = c.properties;
-			Haptics.Set = true;			// subsequent value changes set Changed = true
-			Haptics.Changed = false;
+			H.Set = true;			// subsequent value changes set Changed = true
+			H.Changed = false;
 		}
 
 		// apply game defaults and add to LCars
@@ -203,9 +205,9 @@ namespace sierses.Sim
 			int Idx;
 
 			// wtf FindIndex returns 0 for 0 == Lcache.count ??!!
-			if (0 == Lcache.Count || 0 > (Idx  = Lcache.FindIndex(x => x.id == c.id))
+			if (0 == Lcache.Count || 0 > (Idx  = Lcache.FindIndex(x => x.id == c.id)))
 			{
-				c.game = Haptics.GameDBText;
+				c.game = H.GameDBText;
 				c.redline =	0 < c.redline ? c.redline : redlineFromGame;
 				c.maxrpm  =	0 < c.maxrpm ? c.maxrpm : maxRPMFromGame;
 				c.idlerpm =	0 < c.idlerpm ? c.idlerpm : ushortIdleRPM;
@@ -216,42 +218,46 @@ namespace sierses.Sim
 				Lcache.Add(NewCar(c));
 				Idx = Lcache.FindIndex(x => x.id == c.id);
 			}
-			Logging.Current.Info($"Haptics.S.Cache({c.name}): Car {Idx} of {Lcache.Count}");
+			Logging.Current.Info($"H.S.Cache({c.name}): Car {Idx} of {Lcache.Count}");
 			return Idx;
 		}
 
-		internal int SelectCar(ushort r, ushort m, ushort I)
+		internal int SelectCar(Haptics h, List<CarSpec> Atlas, ushort r, ushort m, ushort I)
 		{
+			H = h;
+			Game = H.GameDBText;
 			redlineFromGame = r;  maxRPMFromGame = m;  ushortIdleRPM = I;
 			int i = Lcache.FindIndex(x => x.id == Car.id);
 
 			if (0 <= i)
 			{
-				Src = "Cache match";	
+				Src = "Cache match";
 				return i;
 			}
 
-			string g = Haptics.GameDBText;
-			if (inDict.ContainsKey(g) && 0 <= (i = inDict[g].FindIndex(x => x.id == Car.id)))
+			if (LD.inDict.ContainsKey(Game) && 0 <= (i = LD.inDict[Game].FindIndex(x => x.id == Car.id)))
 			{
 				Src = "JSON match";
-				Cache(inDict[g][i]);
+				Cache(LD.inDict[Game][i]);
 				return 0;
 			}
 
-			if (0 <= (i = 0 < Haptics.AtlasCt ? Haptics.Atlas.FindIndex(x => x.id == Car.id) : -1))
+			if (1 > Atlas.Count)
+				return -1;
+
+			if (0 <= (i = Atlas.FindIndex(x => x.id == Car.id)))
 			{
 				Src = "Atlas match";
 				Default = "Atlas";
-				Cache(Haptics.Atlas[i]);						// SelectCar()
+				Cache(Atlas[i]);						// SelectCar()
 				return i;
 			}
 
-			if (0 <= (i = 0 < Haptics.AtlasCt ? Haptics.Atlas.FindIndex(x => x.name == Car.name) : -1))
+			if (0 <= (i = Atlas.FindIndex(x => x.name == Car.name)))
 			{
 				Src = "Atlas CarName match";					// RRRE
 				Default = "Atlas";
-				DfltCar = Haptics.Atlas[i];
+				DfltCar = Atlas[i];
 				DfltCar.id = Car.id;
 				DfltCar.name = Car.name;
 				Cache(DfltCar);									// SelectCar()
@@ -259,14 +265,8 @@ namespace sierses.Sim
 			return i;
 		}
 
-		internal bool SaveCar()				// S.SaveCar():  add or update Car in Cars
+		internal bool SaveCar(string pname)				// S.SaveCar():  add or update Car in Cars
 		{
-			if (null == Car.name)
-			{
-				Logging.Current.Info($"Haptics.S.SaveCar(): {Id} missing car name");
-				return false;
-			}
-
 			if ("Defaults" == Private_Car.defaults && null != DfltCar && DfltCar.name == Private_Car.name
 				&& DfltCar.category == Private_Car.category && DfltCar.config == Private_Car.config
 				&& DfltCar.cyl == Private_Car.cyl && DfltCar.loc == Private_Car.loc
@@ -278,12 +278,12 @@ namespace sierses.Sim
 			if (0 > Index)
 			{
 				Lcache.Add(Private_Car);		// generic List<CarSpec>.Add()
-				Logging.Current.Info($"\tHaptics.S.SaveCar():  {Car.id} makes {Cars.Count} {Car.game} cars");
+				Logging.Current.Info($"\t{pname}.S.SaveCar():  {Car.id} makes {Cars.Count} {Car.game} cars");
 				LD.AddCar(Car);
 				return false;
 			}
 
-			Logging.Current.Info($"\tHaptics.S.SaveCar(): {Car.id} Index = {Index}/{Cars.Count}");
+			Logging.Current.Info($"\t{pname}.S.SaveCar(): {Car.id} Index = {Index}/{Cars.Count}");
 			bool tf = false;
 			if (Lcache[Index].game != Private_Car.game)
 			{
@@ -377,7 +377,7 @@ namespace sierses.Sim
 
 		internal void Defaults(StatusDataBase db)
 		{
-			string StatusText = "Haptics.Defaults:  ";
+			string StatusText = "Defaults:  ";
 
 			if (null == DfltCar)
 			{
@@ -456,7 +456,7 @@ namespace sierses.Sim
 						DfltCar.nm = 400;
 						break;
 					default:
-						StatusText += $"specs unavailable for {Haptics.CurrentGame}";
+						StatusText += $"specs unavailable for {H.GameDBText}";
 						break;
 				}
 #endif
@@ -485,103 +485,137 @@ namespace sierses.Sim
 		public string Notes
 		{
 			get => Private_Car.notes;
-			set { SetSpec(ref Private_Car.notes, value, nameof(Notes)); }
+			set { SetSpec(ref Private_Car.notes, value, nameof(Notes));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public string Id
 		{
 			get => Private_Car.id;
-			set { SetField(ref Private_Car.id, value, nameof(Id)); }
+			set { SetField(ref Private_Car.id, value, nameof(Id));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public string Default
 		{
 			get => Private_Car.defaults;
-			set { SetSpec(ref Private_Car.defaults, value, nameof(Default)); }
+			set { SetSpec(ref Private_Car.defaults, value, nameof(Default));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public string Property
 		{
 			get => Private_Car.properties;
-			set { SetSpec(ref Private_Car.properties, value, nameof(Property)); }
+			set { SetSpec(ref Private_Car.properties, value, nameof(Property));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public string Category
 		{
 			get => Private_Car.category;
-			set { SetSpec(ref Private_Car.category, value, nameof(Category)); }
+			set { SetSpec(ref Private_Car.category, value, nameof(Category));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public ushort Redline
 		{
 			get => Private_Car.redline;
-			set { SetSpec(ref Private_Car.redline, value, nameof(Redline)); }
+			set { SetSpec(ref Private_Car.redline, value, nameof(Redline));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 	
 		public ushort MaxRPM
 		{
 			get => Private_Car.maxrpm;
-			set { SetSpec(ref Private_Car.maxrpm, value, nameof(MaxRPM)); }
+			set { SetSpec(ref Private_Car.maxrpm, value, nameof(MaxRPM));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public ushort IdleRPM								// public for Private_Car.idlerpm
 		{
 			get => Private_Car.idlerpm;						// IdleRPM
-			set { SetSpec(ref Private_Car.idlerpm, value, nameof(IdleRPM)); }	// IdleRPM
+			set { SetSpec(ref Private_Car.idlerpm, value, nameof(IdleRPM));
+					H.Changed = H.Set;				// SetSpec()
+			}	// IdleRPM
 		}
 
 		public string FiringOrder								// public for Private_Car.order
 		{
 			get => Private_Car.order;						// FiringOrder
-			set { SetSpec(ref Private_Car.order, value, nameof(FiringOrder)); }
+			set { SetSpec(ref Private_Car.order, value, nameof(FiringOrder));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public string EngineConfiguration
 		{
 			get => Private_Car.config;
-			set { SetSpec(ref Private_Car.config, value, nameof(EngineConfiguration)); }
+			set { SetSpec(ref Private_Car.config, value, nameof(EngineConfiguration));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 	
 		public ushort EngineCylinders
 		{
 			get => Private_Car.cyl;
-			set { SetSpec(ref Private_Car.cyl, value, nameof(EngineCylinders)); }
+			set { SetSpec(ref Private_Car.cyl, value, nameof(EngineCylinders));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public string EngineLocation
 		{
 			get => Private_Car.loc;
-			set { SetSpec(ref Private_Car.loc, value, nameof(EngineLocation)); }
+			set { SetSpec(ref Private_Car.loc, value, nameof(EngineLocation));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public string PoweredWheels
 		{
 			get => Private_Car.drive;
-			set { SetSpec(ref Private_Car.drive, value, nameof(PoweredWheels)); }
+			set { SetSpec(ref Private_Car.drive, value, nameof(PoweredWheels));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 
 		public ushort MaxPower
 		{
 			get => Private_Car.hp;
-			set { SetSpec(ref Private_Car.hp, value, nameof(MaxPower)); }
+			set { SetSpec(ref Private_Car.hp, value, nameof(MaxPower));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 	
 		public ushort ElectricMaxPower
 		{
 			get => Private_Car.ehp;
-			set { SetSpec(ref Private_Car.ehp, value, nameof(ElectricMaxPower)); }
+			set { SetSpec(ref Private_Car.ehp, value, nameof(ElectricMaxPower));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 	
 		public ushort Displacement
 		{
 			get => Private_Car.cc;
-			set { SetSpec(ref Private_Car.cc, value, nameof(Displacement)); }
+			set { SetSpec(ref Private_Car.cc, value, nameof(Displacement));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 	
 		public ushort MaxTorque
 		{
 			get => Private_Car.nm;
-			set { SetSpec(ref Private_Car.nm, value, nameof(MaxTorque)); }
+			set { SetSpec(ref Private_Car.nm, value, nameof(MaxTorque));
+					H.Changed = H.Set;				// SetSpec()
+			}
 		}
 	}	// class Spec
 }

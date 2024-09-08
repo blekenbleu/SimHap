@@ -19,21 +19,21 @@ namespace sierses.Sim
 	[PluginName("Haptics")]
 	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
+		static readonly string pname = nameof(Haptics);
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(
 			Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
-		public static long FrameTimeTicks = 0;
-		public static long FrameCountTicks = 0;
 		public static GameId CurrentGame = GameId.Other;
-		public static string GameDBText;
-		internal static bool Loaded, Waiting, Save, Set, Changed;
+		public string GameDBText;
+		internal bool Loaded, Waiting, Save, Set, Changed;
 		internal string CarId;		// exactly match data.NewData.CarId for DataUpdate()
+#if !slim
 		private static readonly HttpClient client = new();
-		private readonly string myfile = $"PluginsData/{nameof(Haptics)}.{Environment.UserName}.json";
-//		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas.json";
-		private readonly string Atlasfile = $"PluginsData/{nameof(Haptics)}.Atlas_with_orders.json";
-		internal static List<CarSpec> Atlas;
-		internal static int AtlasCt;		// use this to force Atlas
+#endif
+		private readonly string myfile = $"PluginsData/{pname}.{Environment.UserName}.json";
+//		private readonly string Atlasfile = $"PluginsData/{pname}.Atlas.json";
+		private readonly string Atlasfile = $"PluginsData/{pname}.Atlas_with_orders.json";
+		private static List<CarSpec> Atlas = new();
 		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
@@ -66,7 +66,7 @@ namespace sierses.Sim
 		}
 
 		// boilerplate SimHub -------------------------------------------
-		public string LeftMenuTitle => "Haptics";
+		public string LeftMenuTitle => pname;
 
 		internal SettingsControl SC;
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
@@ -85,17 +85,17 @@ namespace sierses.Sim
 					if (0 < Settings.Engine.Tones.Length)
 					{
 						if (8 != Settings.Engine.Tones[0].Length)
-							Logging.Current.Info($"Haptics: Settings.Engine.Tones[0].Freq.Count = "
+							Logging.Current.Info(pname + ": Settings.Engine.Tones[0].Freq.Count = "
 							+ Settings.Engine.Tones[0].Length.ToString());
-					} else Logging.Current.Info($"Haptics: zero Settings.Engine.Tones.Length");
+					} else Logging.Current.Info(pname + ": zero Settings.Engine.Tones.Length");
 				}
-				else Logging.Current.Info($"Haptics:  null Settings.Engine.Tones");
+				else Logging.Current.Info(pname  + ":  null Settings.Engine.Tones");
 				if (null == Settings.Engine.Sliders)
-					Logging.Current.Info($"Haptics:  null Settings.Engine.Sliders");
+					Logging.Current.Info(pname + ":  null Settings.Engine.Sliders");
 				else if (1 > Settings.Engine.Sliders.Count)
-					Logging.Current.Info($"Haptics: zero Settings.Engine.Sliders.Count");
+					Logging.Current.Info(pname + ": zero Settings.Engine.Sliders.Count");
 				else if (9 != Settings.Engine.Sliders[0].Length)
-					Logging.Current.Info($"Haptics: Settings.Engine.Sliders[0].Length = "
+					Logging.Current.Info(pname + ": Settings.Engine.Sliders[0].Length = "
 					  + Settings.Engine.Sliders[0].Length.ToString());
 			}
 #endif
@@ -110,7 +110,7 @@ namespace sierses.Sim
 		// must be void and static;  invoked by D.SetCar()
 		private static Haptics H;
 #if slim
-		internal static void FetchCarData(	// called from SetVehicle() switch
+		internal static void FetchCarData(		// called from SetVehicle() switch
 #else
 		internal static async void FetchCarData(	// called from SetCar() switch
 #endif
@@ -119,17 +119,17 @@ namespace sierses.Sim
 			ushort maxRPMFromGame,
 			ushort ushortIdleRPM)							// FetchCarData() argument
 		{
-			Logging.Current.Info($"Haptics.FetchCarData({category}):  Index = {H.D.Index}," +
-							   (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
-								+ (Set ? " Set": "") + (Changed ? "Changed " : ""));
+			Logging.Current.Info(pname + $".FetchCarData({category}):  Index = {H.D.Index}," +
+							   (H.Save ? " Save " : "") + (H.Loaded ? " Loaded " : "") + (H.Waiting ? " Waiting" : "")
+								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : ""));
 
 			if (-2 == H.D.Index)	// first time for this CarId change?  Also called for retries with Index = -1
 			{
 				H.S.Notes = "";
-				Set = false;
-				H.D.Index = H.S.SelectCar(redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
+				H.Set = false;
+				H.D.Index = H.S.SelectCar(H, Atlas, redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
 /*
-				Logging.Current.Info($"Haptics.SelectCar(): "
+				Logging.Current.Info(pname + ".SelectCar(): "
 									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
 									+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
 									+ (Changed ? "Changed " : "") + $" Index = {H.D.Index}");
@@ -144,7 +144,7 @@ namespace sierses.Sim
 				Waiting = true;
 				string dls = null;
 				category ??= "0";
-				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
+				Uri requestUri = new("https://api.simhaptics.com/data/" + H.GameDBText
 								 + "/" + Uri.EscapeDataString(H.S.Car.id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
@@ -166,7 +166,7 @@ namespace sierses.Sim
 						car.defaults = "DB";
 						H.S.Cache(car);					// FetchCarData(): Set(CarId) at the end of SetCar()
 						LoadFailCount = 1;
-					//	Logging.Current.Info($"Haptics.FetchCarData({car.name}): Successfully loaded; "
+					//	Logging.Current.Info(pname + $".FetchCarData({car.name}): Successfully loaded; "
 					//						+ $" CarInitCount = {H.D.CarInitCount}");
 						H.D.CarInitCount = 0;
 						H.D.Index = -4;
@@ -180,9 +180,9 @@ namespace sierses.Sim
 					if (11 == dls.Length)
 						Waiting = false;
 /*
-						Logging.Current.Info($"Haptics.FetchCarData(): not in DB");
+						Logging.Current.Info(pname + ".FetchCarData(): not in DB");
 					else if (0 < dls.Length)
-						Logging.Current.Info($"Haptics.FetchCarData(): JsonConvert fail;  length {dls.Length}: "
+						Logging.Current.Info(pname + $".FetchCarData(): JsonConvert fail;  length {dls.Length}: "
 											+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
  */
 				}
@@ -190,7 +190,7 @@ namespace sierses.Sim
 			}
 			catch (HttpRequestException ex)		//  treat it like not in DB
 			{
-				Logging.Current.Error("Haptics.FetchCarData() Error: " + ex.Message);
+				Logging.Current.Error(pname + ".FetchCarData() Error: " + ex.Message);
 				Waiting = false;
 			}
 #endif
@@ -214,7 +214,7 @@ namespace sierses.Sim
 				return;
 			}
 
-			Gdat = data;
+			Gdat = data;									// for OldData
 
 			if (CarId == N.CarId || D.Locked)				// DataUpdate()
 			{
@@ -237,16 +237,16 @@ namespace sierses.Sim
 
 				D.Index = -3;				// disable FetchCarData(); enable Defaults()
 				D.CarInitCount = 0;
-			//	Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
+			//	Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
 			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
 			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
 				Changed = false;
 			}
 			else if (Loaded || Changed)		// save before SetCar()
 			{
-				if (null == Car.name)
-					Logging.Current.Info($"Haptics.S.SaveCar(): {Car.id} missing car name");
-				else S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
+				if (null == S.Car.name)
+					Logging.Current.Info(pname + $".S.SaveCar(): {CarId} missing car name");
+				else S.SaveCar(pname);		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
 				Loaded = false;
 			}
 
@@ -254,7 +254,7 @@ namespace sierses.Sim
 			{
 				if (-2 == D.Index)
 					Set = Changed = false;
-				Logging.Current.Info($"Haptics.DataUpdate({N.CarId}/{S.Id}): "
+				Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
 				D.SetCar(this, pluginManager);
@@ -300,22 +300,22 @@ namespace sierses.Sim
 					S.LD.AddCar(S.Car);			// End()
 				string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
 				if (0 == sjs.Length || "{}" == sjs)
-					Logging.Current.Info( $"Haptics.End(): JSON Serializer failure: "
+					Logging.Current.Info(pname + ".End(): JSON Serializer failure: "
 									+ $"{S.LD.Count} games, {S.Cars.Count} {S.Car.game} cars;  "
 									+ (Save ? "changes made.." : "(no changes)"));
 				else if (Save)
 				{
 					File.WriteAllText(myfile, sjs);
-					Logging.Current.Info($"Haptics.End(): {S.LD.Count} games, including "
+					Logging.Current.Info(pname + $".End(): {S.LD.Count} games, including "
 						+ $"{S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
 				}
 			}
 
 			// Remove default values from Settings per-game dictionaries
 #if !slim
-			if (Settings.EngineMult.TryGetValue("AllGames", out double _))
+			if (Settings.EngineMult.ContainsKey("AllGames"))
 				Settings.EngineMult.Remove("AllGames");
-			if (Settings.EngineMult.TryGetValue(GameDBText, out double _))
+			if (Settings.EngineMult.ContainsKey(GameDBText))
 			{
 				if (D.EngineMult == 1.0)
 					Settings.EngineMult.Remove(GameDBText);
@@ -323,7 +323,7 @@ namespace sierses.Sim
 			}
 			else if (D.EngineMult != 1.0)
 				Settings.EngineMult.Add(GameDBText, D.EngineMult);
-			if (Settings.RumbleMult.TryGetValue(GameDBText, out double _))
+			if (Settings.RumbleMult.ContainsKey(GameDBText))
 			{
 				if (D.RumbleMult == 1.0)
 					Settings.RumbleMult.Remove(GameDBText);
@@ -332,7 +332,7 @@ namespace sierses.Sim
 			else if (D.RumbleMult != 1.0)
 				Settings.RumbleMult.Add(GameDBText, D.RumbleMult);
 #endif
-			if (Settings.SuspensionMult.TryGetValue(GameDBText, out double _))
+			if (Settings.SuspensionMult.ContainsKey(GameDBText))
 			{
 				if (D.SuspensionMult == 1.0)
 					Settings.SuspensionMult.Remove(GameDBText);
@@ -340,7 +340,7 @@ namespace sierses.Sim
 			}
 			else if (D.SuspensionMult != 1.0)
 				Settings.SuspensionMult.Add(GameDBText, D.SuspensionMult);
-			if (Settings.SuspensionGamma.TryGetValue(GameDBText, out double _))
+			if (Settings.SuspensionGamma.ContainsKey(GameDBText))
 			{
 				if (D.SuspensionGamma == 1.0)
 					Settings.SuspensionGamma.Remove(GameDBText);
@@ -349,7 +349,7 @@ namespace sierses.Sim
 			else if (D.SuspensionGamma != 1.0)
 				Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
 #if !slim
-			if (Settings.SlipXMult.TryGetValue(GameDBText, out double _))
+			if (Settings.SlipXMult.ContainsKey(GameDBText))
 			{
 				if (D.SlipXMult == 1.0)
 					Settings.SlipXMult.Remove(GameDBText);
@@ -357,7 +357,7 @@ namespace sierses.Sim
 			}
 			else if (D.SlipXMult != 1.0)
 				Settings.SlipXMult.Add(GameDBText, D.SlipXMult);
-			if (Settings.SlipYMult.TryGetValue(GameDBText, out double _))
+			if (Settings.SlipYMult.ContainsKey(GameDBText))
 			{
 				if (D.SlipYMult == 1.0)
 					Settings.SlipYMult.Remove(GameDBText);
@@ -365,7 +365,7 @@ namespace sierses.Sim
 			}
 			else if (D.SlipYMult != 1.0)
 				Settings.SlipYMult.Add(GameDBText, D.SlipYMult);
-			if (Settings.SlipXGamma.TryGetValue(GameDBText, out double _))
+			if (Settings.SlipXGamma.ContainsKey(GameDBText))
 			{
 				if (D.SlipXGamma == 1.0)
 					Settings.SlipXGamma.Remove(GameDBText);
@@ -373,7 +373,7 @@ namespace sierses.Sim
 			}
 			else if (D.SlipXGamma != 1.0)
 				Settings.SlipXGamma.Add(GameDBText, D.SlipXGamma);
-			if (Settings.SlipYGamma.TryGetValue(GameDBText, out double _))
+			if (Settings.SlipYGamma.ContainsKey(GameDBText))
 			{
 				if (D.SlipYGamma == 1.0)
 					Settings.SlipYGamma.Remove(GameDBText);
@@ -598,6 +598,8 @@ namespace sierses.Sim
 
 		public void Init(PluginManager pluginManager)
 		{
+			string Atlasst = "";
+
 			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
@@ -615,28 +617,28 @@ namespace sierses.Sim
 			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
 			{
 				if (null == Settings.Engine)
-					Logging.Current.Info($"Haptics.Init(): null Settings.Engine");
+					Logging.Current.Info(pname + ".Init(): null Settings.Engine");
 				else {
 					if (null == Settings.Engine.Sliders)
-						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Sliders");
+						Logging.Current.Info(pname + $".Init(): null Settings.Engine.Sliders");
 					else if (1 > Settings.Engine.Sliders.Count)
-						Logging.Current.Info($"Haptics.Init(): 0 Settings.Engine.Sliders");
+						Logging.Current.Info(pname + $".Init(): 0 Settings.Engine.Sliders");
 					else if (9 != Settings.Engine.Sliders[0].Length)
-						Logging.Current.Info($"Haptics.Init(): Settings.Engine.Sliders[0].Slider.Length = "
+						Logging.Current.Info(pname + $".Init(): Settings.Engine.Sliders[0].Slider.Length = "
 								+ Settings.Engine.Sliders[0].Length.ToString());
 					if (null == Settings.Engine.Tones)
-						Logging.Current.Info($"Haptics.Init(): null Settings.Engine.Tones");
+						Logging.Current.Info(pname + $".Init(): null Settings.Engine.Tones");
 					else {
 						if (4 != Settings.Engine.Tones.Length)
-							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones.Length = "
+							Logging.Current.Info(pname + $".Init():  Settings.Engine.Tones.Length = "
 								+ Settings.Engine.Tones.Length.ToString());
 						if (9 != Settings.Engine.Tones[0].Length)
-							Logging.Current.Info($"Haptics.Init():  Settings.Engine.Tones[0].Freq.Length = "
+							Logging.Current.Info(pname + $".Init():  Settings.Engine.Tones[0].Freq.Length = "
 								+ Settings.Engine.Tones[0].Length.ToString()); 
 					}
 				}
 				Settings = new();	// Settings.Engine will be initialized in End()
-				Logging.Current.Info($"Haptics.Init(): re-initializing Settings");
+				Logging.Current.Info(pname + $".Init(): re-initializing Settings");
 			}
 
 			if (1 > Settings.ABSPulseLength)
@@ -649,75 +651,71 @@ namespace sierses.Sim
 #if !slim
 			if (Settings.EngineMult == null)
 				Settings.EngineMult = new Dictionary<string, double>();
-			if (!Settings.EngineMult.TryGetValue("AllGames", out double num))
+			if (!Settings.EngineMult.ContainsKey("AllGames"))
 				Settings.EngineMult.Add("AllGames", 1.0);
 			if (Settings.RumbleMult == null)
 				Settings.RumbleMult = new Dictionary<string, double>();
-			if (!Settings.RumbleMult.TryGetValue("AllGames", out num))
+			if (!Settings.RumbleMult.ContainsKey("AllGames"))
 				Settings.RumbleMult.Add("AllGames", 5.0);
 #endif
 			if (Settings.SuspensionMult == null)
 				Settings.SuspensionMult = new Dictionary<string, double>();
-			if (!Settings.SuspensionMult.TryGetValue("AllGames", out double num))
+			if (!Settings.SuspensionMult.ContainsKey("AllGames"))
 				Settings.SuspensionMult.Add("AllGames", 1.5);
 			if (Settings.SuspensionGamma == null)
 				Settings.SuspensionGamma = new Dictionary<string, double>();
-			if (!Settings.SuspensionGamma.TryGetValue("AllGames", out num))
+			if (!Settings.SuspensionGamma.ContainsKey("AllGames"))
 				Settings.SuspensionGamma.Add("AllGames", 1.75);
 #if !slim
 			if (Settings.SlipXMult == null)
 				Settings.SlipXMult = new Dictionary<string, double>();
-			if (!Settings.SlipXMult.TryGetValue("AllGames", out num))
+			if (!Settings.SlipXMult.ContainsKey("AllGames"))
 				Settings.SlipXMult.Add("AllGames", 1.6);
 			if (Settings.SlipYMult == null)
 				Settings.SlipYMult = new Dictionary<string, double>();
-			if (!Settings.SlipYMult.TryGetValue("AllGames", out num))
+			if (!Settings.SlipYMult.ContainsKey("AllGames"))
 				Settings.SlipYMult.Add("AllGames", 1.0);
 			if (Settings.SlipXGamma == null)
 				Settings.SlipXGamma = new Dictionary<string, double>();
-			if (!Settings.SlipXGamma.TryGetValue("AllGames", out num))
+			if (!Settings.SlipXGamma.ContainsKey("AllGames"))
 				Settings.SlipXGamma.Add("AllGames", 1.0);
 			if (Settings.SlipYGamma == null)
 				Settings.SlipYGamma = new Dictionary<string, double>();
-			if (!Settings.SlipYGamma.TryGetValue("AllGames", out num))
+			if (!Settings.SlipYGamma.ContainsKey("AllGames"))
 				Settings.SlipYGamma.Add("AllGames", 1.0);
 			if (Settings.Motion == null)
 				Settings.Motion = new Dictionary<string, double>();
 #endif
 
-			string Atlasst = "";
-			AtlasCt = 0;				// S.Extract() will attempt extracting List<CarSpec> Atlas from json
 			if (File.Exists(Atlasfile))
 			{
 				Dictionary<string, List<CarSpec>> JsonDict =
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(Atlasfile));
 				if (null == JsonDict)
-					Logging.Current.Info("Haptics.Init(): Atlas load failure");
-				else
+					Logging.Current.Info(pname + ".Init(): Atlas load failure");
+				else if (JsonDict.ContainsKey(GameDBText))
 				{
-					if (JsonDict.ContainsKey(GameDBText))
-					{
-						Atlas = JsonDict[GameDBText];
-						AtlasCt = Atlas.Count;
-						Atlasst = $";  {AtlasCt} cars in Atlas";
-					}
-					else Logging.Current.Info($"Haptics.Init():  {GameDBText} not in Atlas");
+					Atlas = JsonDict[GameDBText];
+					Atlasst = $";  {Atlas.Count} cars in Atlas";
 				}
+				else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");
 			}
-			else Logging.Current.Info($"Haptics.Init():  no Atlas");
+			else Logging.Current.Info(pname + $".Init():  no Atlas");
 
 			if (File.Exists(myfile))
 			{
 				string text = File.ReadAllText(myfile);
 				Dictionary<string, List<CarSpec>> json =
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
-				Logging.Current.Info("Haptics.Init():  " + S.LD.SetGame(json) + myfile + Atlasst);
+				Logging.Current.Info(pname + ".Init():  " + S.LD.SetGame(this, json) + myfile + Atlasst);
 			}
-			else Logging.Current.Info("Haptics.Init():  " + myfile + " not found" + Atlasst);
+			else Logging.Current.Info(pname + ".Init():  " + myfile + " not found" + Atlasst);
 
 			D.Init(this);
 #if !slim
 			E.Init(Settings.Engine, this);
+			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
+			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
 #endif
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
@@ -737,13 +735,28 @@ namespace sierses.Sim
 			this.AttachDelegate("PowerMotorHP", () => S.ElectricMaxPower);
 			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
 			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
-#if !slim
-			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
-#endif
 			if (ShowFreq)
 			{
 				this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
-#if !slim
+				this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
+				this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
+				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
+				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
+#if slim
+				this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
+				this.AttachDelegate("rpmMain", () => D.rpmMain);
+				this.AttachDelegate("rpmPeakA2Rear", () => D.rpmPeakA2Rear);
+				this.AttachDelegate("rpmPeakB1Rear", () => D.rpmPeakB1Rear);
+				this.AttachDelegate("rpmPeakA1Rear", () => D.rpmPeakA1Rear);
+				this.AttachDelegate("rpmPeakB2Rear", () => D.rpmPeakB2Rear);
+				this.AttachDelegate("rpmPeakA2Front", () => D.rpmPeakA2Front);
+				this.AttachDelegate("rpmPeakB1Front", () => D.rpmPeakB1Front);
+				this.AttachDelegate("rpmPeakA1Front", () => D.rpmPeakA1Front);
+				this.AttachDelegate("rpmPeakB2Front", () => D.rpmPeakB2Front);
+				this.AttachDelegate("rpmMainEQ", () => D.rpmMainEQ);
+				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
+#else
+				this.AttachDelegate("LFEhpScale", () => D.LFEhpScale);
 				this.AttachDelegate("FreqOctave", () => D.FreqOctave);
 				this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
 				this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
@@ -758,23 +771,6 @@ namespace sierses.Sim
 				this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
 				this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
 				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
-#endif
-				this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
-#if slim
-				this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
-				//this.AttachDelegate("LFEhpScale", () => D.LFEhpScale);
-				this.AttachDelegate("rpmMain", () => D.rpmMain);
-				this.AttachDelegate("rpmPeakA2Rear", () => D.rpmPeakA2Rear);
-				this.AttachDelegate("rpmPeakB1Rear", () => D.rpmPeakB1Rear);
-				this.AttachDelegate("rpmPeakA1Rear", () => D.rpmPeakA1Rear);
-				this.AttachDelegate("rpmPeakB2Rear", () => D.rpmPeakB2Rear);
-				this.AttachDelegate("rpmPeakA2Front", () => D.rpmPeakA2Front);
-				this.AttachDelegate("rpmPeakB1Front", () => D.rpmPeakB1Front);
-				this.AttachDelegate("rpmPeakA1Front", () => D.rpmPeakA1Front);
-				this.AttachDelegate("rpmPeakB2Front", () => D.rpmPeakB2Front);
-				this.AttachDelegate("rpmMainEQ", () => D.rpmMainEQ);
-				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
-#else
 				this.AttachDelegate("peakEQ", () => D.peakEQ);
 				this.AttachDelegate("peakGearMulti", () => D.peakGearMulti);
 				this.AttachDelegate("Gain1H", () => D.Gain1H);
@@ -787,9 +783,6 @@ namespace sierses.Sim
 				this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
 				this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
 #endif
-				this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
-				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
-				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
 			}
 #if !slim
 			if (ShowTire) {
@@ -820,7 +813,6 @@ namespace sierses.Sim
 				this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
 				this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
 			}
-			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
 #endif
 			if (ShowSusp)
 			{
@@ -887,6 +879,8 @@ namespace sierses.Sim
 					this.AttachDelegate("JerkY", () => D.JerkY);
 					this.AttachDelegate("JerkX", () => D.JerkX);
 					this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
+					this.AttachDelegate("Throttle", () => D.Accelerator);
+					this.AttachDelegate("VelocityX", () => D.VelocityX);
 #if !slim
 					this.AttachDelegate("MPitch", () => D.MotionPitch);
 					this.AttachDelegate("MRoll", () => D.MotionRoll);
@@ -895,10 +889,7 @@ namespace sierses.Sim
 					this.AttachDelegate("MSurge", () => D.MotionSurge);
 					this.AttachDelegate("MSway", () => D.MotionSway);
 #endif
-					this.AttachDelegate("Throttle", () => D.Accelerator);
-					this.AttachDelegate("VelocityX", () => D.VelocityX);
 				}
-				FrameTimeTicks = DateTime.Now.Ticks;
 			}
 		}	// Init()
 	}

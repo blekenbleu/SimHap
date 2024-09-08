@@ -61,7 +61,7 @@ namespace sierses.Sim
 		{
 			H = sh;
 			Index = -2;
-			string GDBtext = Haptics.GameDBText;
+			string GDBtext = H.GameDBText;
 #if !slim
 			EngineMult = H.Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
 			EngineMultAll = H.Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
@@ -108,8 +108,8 @@ namespace sierses.Sim
 			PM = pluginManager;
 /*
 			Logging.Current.Info($"Haptics.SetCar({shp.Gdat.NewData.CarId}): " +
-								(Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "")
-								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
+								(H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "") + (H.Waiting ? " Waiting" : "")
+								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
  */
 			if (-2 == Index || -1 == Index)
 			{
@@ -197,22 +197,22 @@ namespace sierses.Sim
 				}
 			}
 
-			if (Haptics.Waiting)	// still hoping for online match?
+			if (H.Waiting)	// still hoping for online match?
 			{
 				Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) Waiting return: "
-									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
-									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? " Changed" : "") + $" Index = {Index}");
+									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
+									+ (H.Set ? " Set": "") + (H.Changed ? " Changed" : "") + $" Index = {Index}");
 				return;				// FetchCarData() DB accesses run SetCar() at least twice.
 			}
 
-			if (Haptics.Loaded = (Index == -4))					// Neither JSON nor Defaults() ?
+			if (H.Loaded = (Index == -4))					// Neither JSON nor Defaults() ?
 				H.S.Src = "DB Load Success";
 			else if (0 > Index)
 				H.S.Defaults(H.N);	// SetCar()
 
 			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}/{H.S.Id}): "
-								+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
-								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "")
+								+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
+								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "")
 								+ $" {H.N.CarModel}; "
 								+ (LoadText = $" {H.S.Game} " + H.S.Src));
 
@@ -260,8 +260,8 @@ namespace sierses.Sim
 			CarInitCount = 0;
 			Index = -2;	// for next time
 			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) ending: "
-									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
-									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
+									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
+									+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
 
 #if !slim
 			switch (H.S.EngineCylinders)	// BS
