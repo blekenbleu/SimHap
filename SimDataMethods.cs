@@ -1,5 +1,5 @@
 using SimHub;
-using SimHub.Plugins;		// PluginManager
+using SimHub.Plugins;
 using System;
 
 namespace sierses.Sim
@@ -8,11 +8,11 @@ namespace sierses.Sim
 	public partial class SimData
 	{
 #if slim
+		private long FrameTimeTicks;
+		private long FrameCountTicks;
 		internal Haptics H;
 		internal int Index;
 		internal string raw = "DataCorePlugin.GameRawData.";
-		private long FrameTimeTicks;
-		private long FrameCountTicks;
 		private ushort idleRPM;						 // for sniffing in Refresh()
 
 		public SimData()
@@ -36,6 +36,9 @@ namespace sierses.Sim
 			idleRPM = 0;
 		}	
 #else
+			RumbleFromPlugin = false;
+			idleRPM = 2500;							// default value; seems high IMO
+		}
 		/*	if you could make me a version where you change ratios so it' s 
 			2/4/8/16 cyl to 2:1
 			3/6/12 to 3:2
@@ -58,7 +61,7 @@ namespace sierses.Sim
 		{
 			H = sh;
 			Index = -2;
-			string GDBtext = Haptics.GameDBText;
+			string GDBtext = H.GameDBText;
 #if !slim
 			EngineMult = H.Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
 			EngineMultAll = H.Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
@@ -76,7 +79,6 @@ namespace sierses.Sim
 			SlipXGammaAll = H.Settings.SlipXGamma.TryGetValue("AllGames", out num) ? num : 1.0;
 			SlipYGamma = H.Settings.SlipYGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipYGammaAll = H.Settings.SlipYGamma.TryGetValue("AllGames", out num) ? num : 1.0;
-
 			MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
 			MotionPitchMult = GetSetting("MotionPitchMult", 1.6);
 			MotionPitchGamma = GetSetting("MotionPitchGamma", 1.5);
@@ -100,18 +102,17 @@ namespace sierses.Sim
 		}
 
 		// called from DataUpdate(), initially with -2 == Index
-		internal void SetCar(Haptics shp, PluginManager pluginManager)
+		internal void SetCar(PluginManager pluginManager)
 		{
-			H = shp;
 			PM = pluginManager;
 /*
 			Logging.Current.Info($"Haptics.SetCar({shp.Gdat.NewData.CarId}): " +
-								(Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "") + (Haptics.Waiting ? " Waiting" : "")
-								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
+								(H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "") + (H.Waiting ? " Waiting" : "")
+								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
  */
 			if (-2 == Index || -1 == Index)
 			{
-				H.S.CarId(H.N.CarId);										// only exception: Forza
+				H.S.CarId(H);										// SetCar() only exception: Forza
 				switch (Haptics.CurrentGame)
 				{
 					case GameId.AC:
@@ -135,16 +136,20 @@ namespace sierses.Sim
 						H.S.CarName = H.N.CarModel;
 						H.S.Category = H.N.CarClass;
 						break;
+					case GameId.BeamNG:
+						Haptics.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
+								Convert.ToUInt16((Math.Ceiling(H.N.MaxRpm * 0.001) - H.N.MaxRpm * 0.001) > 0.55
+								 	? Math.Ceiling(H.N.MaxRpm * 0.001) * 1000.0
+								 	: Math.Ceiling((H.N.MaxRpm + 1000.0) * 0.001) * 1000.0),
+								Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
+							);
+						break;
 #if !slim
 					case GameId.D4:
 #endif
 					case GameId.DR2:
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
-						break;
-					case GameId.WRC23:
-						Haptics.FetchCarData(null, Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
 						break;
 #if !slim
 					case GameId.F12022:
@@ -165,52 +170,54 @@ namespace sierses.Sim
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
 #if !slim
-					case GameId.RRRE:
-						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
-						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
-						break;
-#endif
-					case GameId.BeamNG:
-						Haptics.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
-								Convert.ToUInt16((Math.Ceiling(H.N.MaxRpm * 0.001) - H.N.MaxRpm * 0.001) > 0.55
-								 	? Math.Ceiling(H.N.MaxRpm * 0.001) * 1000.0
-								 	: Math.Ceiling((H.N.MaxRpm + 1000.0) * 0.001) * 1000.0),
-								Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
-							);
-						break;
-#if !slim
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
 						Haptics.FetchCarData(null,
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MinAlertRPM")),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MaxAlertRPM")), 0);
 						break;
-					default:
-						H.S.Redline = Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM);
-						H.S.MaxRPM  = Convert.ToUInt16(H.N.MaxRpm);
-						H.S.IdleRPM = Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"));		// SetCar(default game)
+					case GameId.RRRE:
+						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
+						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 #endif
+					case GameId.WRC23:
+						Haptics.FetchCarData(null,
+											Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)),
+											Convert.ToUInt16(H.N.MaxRpm),
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
+						break;
+					default:
+						Haptics.FetchCarData(null,
+#if slim
+						0, 0, 0
+#else
+						Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
+						Convert.ToUInt16(H.N.MaxRpm),
+						Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"))
+#endif
+						);
+						break;
 				}
 			}
 
-			if (Haptics.Waiting)	// still hoping for online match?
+			if (H.Waiting)	// still hoping for online match?
 			{
 				Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) Waiting return: "
-									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
-									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? " Changed" : "") + $" Index = {Index}");
+									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
+									+ (H.Set ? " Set": "") + (H.Changed ? " Changed" : "") + $" Index = {Index}");
 				return;				// FetchCarData() DB accesses run SetCar() at least twice.
 			}
 
-			if (Haptics.Loaded = (Index == -4))					// Neither JSON nor Defaults() ?
+			if (H.Loaded = (Index == -4))					// Neither JSON nor Defaults() ?
 				H.S.Src = "DB Load Success";
 			else if (0 > Index)
 				H.S.Defaults(H.N);	// SetCar()
 
 			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}/{H.S.Id}): "
-								+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
-								+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "")
+								+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
+								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "")
 								+ $" {H.N.CarModel}; "
 								+ (LoadText = $" {H.S.Game} " + H.S.Src));
 
@@ -238,12 +245,12 @@ namespace sierses.Sim
 			Array.Clear(AccSurge, 0, AccSurge.Length);
 			Array.Clear(AccSway, 0, AccSway.Length);
 			Acc1 = 0;
-#if slim
-			idleRPM = 0;							// SetCar(): reset to default value for each car
 			IdleSampleCount = 0;
-			SetRPMIntervals();
+#if slim
+			idleRPM = 0;							// SetVehicle(): reset to default value for each car
 #else
 			idleRPM = 2500;							// SetCar(): reset to default (IMO high) value for each car
+			SetRPMIntervals();
 			TireDiameterSampleCount = TireDiameterSampleCount == -1 ? -1 : 0;
 			TireDiameterFL = 0.0;
 			TireDiameterFR = 0.0;
@@ -258,8 +265,8 @@ namespace sierses.Sim
 			CarInitCount = 0;
 			Index = -2;	// for next time
 			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) ending: "
-									+ (Haptics.Save ? " Save" : "") + (Haptics.Loaded ? " Loaded" : "")
-									+ (Haptics.Set ? " Set": "") + (Haptics.Changed ? "Changed " : "") + $" Index = {Index}");
+									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
+									+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
 
 #if !slim
 			switch (H.S.EngineCylinders)	// BS

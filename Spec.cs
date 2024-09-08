@@ -31,7 +31,6 @@ namespace sierses.Sim
 			if (EqualityComparer<T>.Default.Equals(field, value))
 				return;
 			field = value;
-			Haptics.Changed = Haptics.Set;				// SetSpec()
 			OnPropertyChanged(propertyname);
 		}
 	}
@@ -67,24 +66,23 @@ namespace sierses.Sim
 
 	public class ListDictionary : NotifyPropertyChanged
 	{
-		private Dictionary<string, List<CarSpec>> inDict;
+		internal Dictionary<string, List<CarSpec>> inDict;
 		internal ListDictionary() { inDict = new(); }
+		Haptics H;
 
 		// create inDict, return List<CarSpec>
-		internal string SetGame(Dictionary<string, List<CarSpec>> json)
+		internal string SetGame(Haptics h, Dictionary<string, List<CarSpec>> json)
 		{
+			H = h;
 			inDict = json;
-			int ct = inDict.ContainsKey(Haptics.GameDBText) ? inDict[Haptics.GameDBText].Count : 0;
+			int ct = inDict.ContainsKey(H.GameDBText) ? inDict[H.GameDBText].Count : 0;
 
-			return $"{inDict.Count} games, {ct} {Haptics.GameDBText} cars in ";
+			return $"{inDict.Count} games, {ct} {H.GameDBText} cars in ";
 		}
 
 		internal void AddCar(CarSpec car)			// ListDictionary: S.LD.AddCar; update Save
 		{
-			if (null == car || null == car.id)
-				return;
-
-			string g = Haptics.GameDBText;
+			string g = H.GameDBText;
 
 			if (inDict.ContainsKey(g))
 			{
@@ -95,18 +93,8 @@ namespace sierses.Sim
 				else inDict[g].Add(car);				// ListDictionary:  add car to current dictionary
 			}
 			else inDict.Add(g, new() { car } );			// ListDictionary:  add new dictionary with car
-			Haptics.Save = true;
+			H.Save = true;
 			return;
-		}
-
-		internal CarSpec FindCar(string cn)
-		{
-			string g = Haptics.GameDBText;
-			int i;
-
-			if (inDict.ContainsKey(g) && 0 <= (i = inDict[g].FindIndex(x => x.id == cn)))
-				return inDict[g][i];
-			else return null;
 		}
 
 		internal int CarCount(string g) { return inDict.ContainsKey(g) ? inDict[g].Count : 0; }
@@ -123,19 +111,20 @@ namespace sierses.Sim
 	public class Spec : NotifyPropertyChanged
 	{
 		public ListDictionary LD { get; set; }  // needs to be public for JsonConvert
-		internal CarSpec Car { get => Private_Car; }
-		internal string Src;
-		internal List<CarSpec> Cars { get => Lcache; }
-		private readonly List<CarSpec> Lcache;
-		private CarSpec Private_Car, DfltCar;
 		private static ushort redlineFromGame;
 		private static ushort maxRPMFromGame;
 		private static ushort ushortIdleRPM;
+		private readonly List<CarSpec> Lcache;
+		private CarSpec Private_Car, DfltCar;
+		internal CarSpec Car { get => Private_Car; }
+		internal List<CarSpec> Cars { get => Lcache; }
+		internal string Src;
+		Haptics H;
 
 		public Spec()
 		{
 			Private_Car = new() { };				// required 24 May 2024
-			Lcache = new() { };					  // required 24 May 2024
+			Lcache = new() { };						// required 24 May 2024
 			LD = new() { };
 		}
 
@@ -156,7 +145,7 @@ namespace sierses.Sim
 				nm = c.nm,
 				redline = c.redline,
 				maxrpm = c.maxrpm,
-				idlerpm = c.idlerpm,							  // CarSpec element
+				idlerpm = c.idlerpm,						  // CarSpec element
 				order = c.order,
 				category = c.category,
 				notes = c.notes,
@@ -165,12 +154,18 @@ namespace sierses.Sim
 			};
 		}
 
+		internal void CarId(Haptics h)						// store CarID until Set()
+		{
+			H = h;
+			Private_Car.id = H.N.CarId;
+		}
+
 		internal void CarId(string along)						// store CarID until Set()
 		{
 			Private_Car.id = along;
 		}
 
-		internal void CarModel(string along)						// store CarName until Set()
+		internal void CarModel(string along)					// store CarName until Set()
 		{
 			Private_Car.name = along;
 		}
