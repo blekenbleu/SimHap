@@ -10,7 +10,9 @@ namespace sierses.Sim
 		{
 			H = sh;
 			string GDBtext = H.GameDBText;
-			double num;
+#pragma warning disable IDE0018 // Inline variable declaration
+            double num;
+#pragma warning restore IDE0018 // Inline variable declaration
 
 			Index = -2;
 			LockedText = Locked ? "Unlock" : "Lock";
@@ -62,7 +64,7 @@ namespace sierses.Sim
 		{
 			PM = pluginManager;
 /*
-			Logging.Current.Info($"Haptics.SetCar({shp.Gdat.NewData.CarId}): " +
+			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}): " +
 								(H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "") + (H.Waiting ? " Waiting" : "")
 								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
  */
@@ -101,31 +103,11 @@ namespace sierses.Sim
 							);
 						break;
 #if !slim
-					case GameId.D4:
-#endif
-					case GameId.DR2:
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
-						break;
-#if !slim
 					case GameId.F12022:
 					case GameId.F12023:
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetCar(F12023): to FetchCarData()
 						break;
-#endif
-					case GameId.Forza:
-						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetCar(Forza)
-						break;
-					case GameId.IRacing:
-						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetCar(IRacing)
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
-											Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
-						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
-						break;
-#if !slim
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
 						Haptics.FetchCarData(null,
@@ -137,7 +119,23 @@ namespace sierses.Sim
 						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
+					case GameId.D4:
 #endif
+					case GameId.DR2:
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
+						break;
+					case GameId.Forza:
+						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetCar(Forza)
+						break;
+					case GameId.IRacing:
+						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetCar(IRacing)
+						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
+											Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
+						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
+						break;
 					case GameId.WRC23:
 						Haptics.FetchCarData(null,
 											Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)),
@@ -223,7 +221,6 @@ namespace sierses.Sim
 			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) ending: "
 									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
 									+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
-
 #if BS
 			switch (H.S.EngineCylinders)	// BS
 			{

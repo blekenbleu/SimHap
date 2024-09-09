@@ -348,7 +348,7 @@ namespace sierses.Sim
 			}
 			else if (D.SuspensionGamma != 1.0)
 				Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
-#if !slim
+#if slip
 			if (Settings.SlipXMult.ContainsKey(GameDBText))
 			{
 				if (D.SlipXMult == 1.0)
@@ -381,12 +381,12 @@ namespace sierses.Sim
 			}
 			else if (D.SlipYGamma != 1.0)
 				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
+			Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
+			Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
 #endif
 			// unconditionally save some
 #if !slim
 			Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
-			Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
-			Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
 			Settings.Motion["MotionPitchOffset"] = D.MotionPitchOffset;
 			Settings.Motion["MotionPitchMult"] = D.MotionPitchMult;
 			Settings.Motion["MotionPitchGamma"] = D.MotionPitchGamma;
@@ -603,15 +603,13 @@ namespace sierses.Sim
 			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
-#if !slim
-			E = new();
-			bool ShowTire = false;
-#endif
-			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
-
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
-#if !slim
+            bool ShowSusp = true, ShowPhysics = true;
+#if slim
+			bool ShowFreq = true, ShowTire = false;
+#else
+			E = new();
 			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
 			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
 			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
