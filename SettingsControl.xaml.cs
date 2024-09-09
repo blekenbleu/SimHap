@@ -432,8 +432,8 @@ namespace sierses.Sim
 			if (null != Plugin)
 				ShowEq(Plugin.E.Q[Plugin.E.EQswitch].Slider);
 		}
-
-		internal double Ratio;									// BS
+#if BS
+		internal double Ratio;							
 		private void SimpleRatioToggle_Click(object sender, RoutedEventArgs e)
 		{
 			if (Ratio == Plugin.S.EngineCylinders)
@@ -442,7 +442,7 @@ namespace sierses.Sim
 			ToneMode.Text = ((2 == Plugin.E.Tones[0].Freq[2]) ? "  Full Throttle " : " ")
 							+ Ratio.ToString();
 		}
-
+#endif
 		// invoked by UI Eq buttons
 		// should provoke equalizer property recalculations
 		private void EQ_Click(object sender, RoutedEventArgs e)

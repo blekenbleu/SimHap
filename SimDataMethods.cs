@@ -4,65 +4,21 @@ using System;
 
 namespace sierses.Sim
 {
-
 	public partial class SimData
 	{
-#if slim
-		private long FrameTimeTicks;
-		private long FrameCountTicks;
-		internal Haptics H;
-		internal int Index;
-		internal string raw = "DataCorePlugin.GameRawData.";
-		private ushort idleRPM;						 // for sniffing in Refresh()
-
-		public SimData()
-		{
-			GameAltText = "";
-			LoadText = "Not Loaded";
-			Gear = 0;
-			GearPrevious = 0;
-			Downshift = false;
-			Upshift = false;
-			CarInitCount = 0;
-			ShiftTicks = FrameTimeTicks = DateTime.Now.Ticks;
-			FrameCountTicks = 0;
-			IdleSampleCount = 0;
-			SuspensionDistFLP = 0.0;
-			SuspensionDistFRP = 0.0;
-			SuspensionDistRLP = 0.0;
-			SuspensionDistRRP = 0.0;
-			AccSamples = 16;
-			Acc1 = 0;
-			idleRPM = 0;
-		}	
-#else
-			RumbleFromPlugin = false;
-			idleRPM = 2500;							// default value; seems high IMO
-		}
-		/*	if you could make me a version where you change ratios so it' s 
-			2/4/8/16 cyl to 2:1
-			3/6/12 to 3:2
-			5/10 to 5:4
-			and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
-  			I have an idea to stack main harmonic instead with slight freq shift and delay on each one
- 			to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do 
-			Hopefully you don't need to change code in a million places
-			22 Jun 2024 BS
-		 */
-		internal double BSratio = 1.0;
-
-		double GetSetting(string name, double trouble)	// Init() helper
-		{
-			return H.Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
-		}
-#endif
-
 		internal void Init(Haptics sh)
 		{
 			H = sh;
 			Index = -2;
-			string GDBtext = H.GameDBText;
+			LockedText = Locked ? "Unlock" : "Lock";
 #if !slim
+			double GetSetting(string name, double trouble)  // Init() helper
+       		{
+            	return H.Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
+        	}
+
+			string GDBtext = H.GameDBText;
+
 			EngineMult = H.Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
 			EngineMultAll = H.Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
 			RumbleMult = H.Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
@@ -98,7 +54,6 @@ namespace sierses.Sim
 			MotionSwayMult = GetSetting("MotionSwayMult", 1.0);
 			MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
 #endif
-			LockedText = Locked ? "Unlock" : "Lock";
 		}
 
 		// called from DataUpdate(), initially with -2 == Index
@@ -268,7 +223,7 @@ namespace sierses.Sim
 									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
 									+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
 
-#if !slim
+#if BS
 			switch (H.S.EngineCylinders)	// BS
 			{
 				case 2:
@@ -291,8 +246,21 @@ namespace sierses.Sim
 				default:
 					break;
 			}
-			H.SC.Ratio = H.S.EngineCylinders;
 #endif
+			H.SC.Ratio = H.S.EngineCylinders;
 		}	// SetCar()
-	}
+#if BS
+		/*  if you could make me a version where you change ratios so it' s
+            2/4/8/16 cyl to 2:1
+            3/6/12 to 3:2
+            5/10 to 5:4
+            and ('Haptics.E.Q0.[1-8]') also change for that I would appreciate it very much.
+            I have an idea to stack main harmonic instead with slight freq shift and delay on each one
+            to make chorus effect for more cylinders rather than doubling  or tripling freq like we currently do
+            Hopefully you don't need to change code in a million places
+            22 Jun 2024 BS
+         */
+        internal double BSratio = 1.0; 
+#endif
+	}		// SimData
 }

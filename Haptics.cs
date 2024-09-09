@@ -141,7 +141,7 @@ namespace sierses.Sim
 			// Index should be -1; non-negative values returned
 			try
 			{
-				Waiting = true;
+				H.Waiting = true;
 				string dls = null;
 				category ??= "0";
 				Uri requestUri = new("https://api.simhaptics.com/data/" + H.GameDBText
@@ -151,7 +151,7 @@ namespace sierses.Sim
 				dls = async.Content.ReadAsStringAsync().Result;
 				if (null != dls && 11 < dls.Length)
 				{
-					Waiting = false;	// ReadAsStringAsync() success
+					H.Waiting = false;	// ReadAsStringAsync() success
 					Download dljc = JsonConvert.DeserializeObject<Download>(dls,
 										new JsonSerializerSettings
 										{
@@ -178,7 +178,7 @@ namespace sierses.Sim
 					if (-1 == H.D.Index)			// delayed dls? things may have moved on...
 						H.D.Index = -3;				// disable self until other code decides otherwise
 					if (11 == dls.Length)
-						Waiting = false;
+						H.Waiting = false;
 /*
 						Logging.Current.Info(pname + ".FetchCarData(): not in DB");
 					else if (0 < dls.Length)
@@ -191,7 +191,7 @@ namespace sierses.Sim
 			catch (HttpRequestException ex)		//  treat it like not in DB
 			{
 				Logging.Current.Error(pname + ".FetchCarData() Error: " + ex.Message);
-				Waiting = false;
+				H.Waiting = false;
 			}
 #endif
 		}	   // FetchCarData()
@@ -231,7 +231,7 @@ namespace sierses.Sim
 				if ((30 * LoadFailCount) > ++D.CarInitCount)
 					return;
 
-				Waiting = false;			// CarInitCount timeout
+				H.Waiting = false;			// CarInitCount timeout
 				if (4 > LoadFailCount++)
 					return;					// do not give up (yet)
 
@@ -755,8 +755,10 @@ namespace sierses.Sim
 				this.AttachDelegate("rpmPeakB2Front", () => D.rpmPeakB2Front);
 				this.AttachDelegate("rpmMainEQ", () => D.rpmMainEQ);
 				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
-#else
 				this.AttachDelegate("LFEhpScale", () => D.LFEhpScale);
+				this.AttachDelegate("peakEQ", () => D.peakEQ);
+				this.AttachDelegate("peakGearMulti", () => D.peakGearMulti);
+#else
 				this.AttachDelegate("FreqOctave", () => D.FreqOctave);
 				this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
 				this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
@@ -771,8 +773,6 @@ namespace sierses.Sim
 				this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
 				this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
 				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
-				this.AttachDelegate("peakEQ", () => D.peakEQ);
-				this.AttachDelegate("peakGearMulti", () => D.peakGearMulti);
 				this.AttachDelegate("Gain1H", () => D.Gain1H);
 				this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
 				this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);

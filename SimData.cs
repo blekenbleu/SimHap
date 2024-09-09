@@ -209,7 +209,14 @@ namespace sierses.Sim
 		public double SuspensionMultR1;
 		public double SuspensionMultR2;
 		public double SuspensionMultR3;
-#if !slim
+#if slim
+		private long FrameTimeTicks;
+        private long FrameCountTicks;
+        internal Haptics H;
+        internal int Index;
+        internal string raw = "DataCorePlugin.GameRawData.";
+        private ushort idleRPM;
+#else
 		public bool ABSActive;
 		public double ABSPulse;
 		public long ABSPauseInterval;
@@ -282,9 +289,29 @@ namespace sierses.Sim
 		private long FrameTimeTicks;
 		private long FrameCountTicks;
 		private ushort idleRPM;						 // for sniffing in Refresh()
+#endif
 
 		public SimData()
 		{
+#if slim
+            GameAltText = "";
+            LoadText = "Not Loaded";
+            Gear = 0;
+            GearPrevious = 0;
+            Downshift = false;
+            Upshift = false;
+            CarInitCount = 0;
+            ShiftTicks = FrameTimeTicks = DateTime.Now.Ticks;
+            FrameCountTicks = 0;
+            IdleSampleCount = 0;
+            SuspensionDistFLP = 0.0;
+            SuspensionDistFRP = 0.0;
+            SuspensionDistRLP = 0.0;
+            SuspensionDistRRP = 0.0;
+            AccSamples = 16;
+            Acc1 = 0;
+            idleRPM = 0;
+#else
 			AccSamples = 16;
 			Acc1 = 0;
 			CarInitCount = 0;
@@ -306,8 +333,11 @@ namespace sierses.Sim
 			SuspensionDistRRP = 0.0;
 			TireDiameterSampleMax = 100;
 			Upshift = false;
+            RumbleFromPlugin = false;
+            idleRPM = 2500;                         // default value; seems high IMO
+#endif
 		}
-
+#if !slim
 		private void SetRPMIntervals()
 		{
 			if (H.S.EngineCylinders == 1.0)
@@ -612,7 +642,6 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
-#endif
 					break;
 				case GameId.AMS2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
