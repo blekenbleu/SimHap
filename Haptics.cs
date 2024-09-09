@@ -603,15 +603,11 @@ namespace sierses.Sim
 			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
-#if !slim
-			E = new();
-			bool ShowTire = false;
-#endif
-			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
+			bool ShowFreq = true, ShowTire = false, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
-
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
 #if !slim
+			E = new();
 			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
 			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
 			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
