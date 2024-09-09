@@ -211,11 +211,11 @@ namespace sierses.Sim
 		public double SuspensionMultR3;
 #if slim
 		private long FrameTimeTicks;
-        private long FrameCountTicks;
-        internal Haptics H;
-        internal int Index;
-        internal string raw = "DataCorePlugin.GameRawData.";
-        private ushort idleRPM;
+		private long FrameCountTicks;
+		internal Haptics H;
+		internal int Index;
+		internal string raw = "DataCorePlugin.GameRawData.";
+		private ushort idleRPM;
 #else
 		public bool ABSActive;
 		public double ABSPulse;
@@ -294,23 +294,23 @@ namespace sierses.Sim
 		public SimData()
 		{
 #if slim
-            GameAltText = "";
-            LoadText = "Not Loaded";
-            Gear = 0;
-            GearPrevious = 0;
-            Downshift = false;
-            Upshift = false;
-            CarInitCount = 0;
-            ShiftTicks = FrameTimeTicks = DateTime.Now.Ticks;
-            FrameCountTicks = 0;
-            IdleSampleCount = 0;
-            SuspensionDistFLP = 0.0;
-            SuspensionDistFRP = 0.0;
-            SuspensionDistRLP = 0.0;
-            SuspensionDistRRP = 0.0;
-            AccSamples = 16;
-            Acc1 = 0;
-            idleRPM = 0;
+			GameAltText = "";
+			LoadText = "Not Loaded";
+			Gear = 0;
+			GearPrevious = 0;
+			Downshift = false;
+			Upshift = false;
+			CarInitCount = 0;
+			ShiftTicks = FrameTimeTicks = DateTime.Now.Ticks;
+			FrameCountTicks = 0;
+			IdleSampleCount = 0;
+			SuspensionDistFLP = 0.0;
+			SuspensionDistFRP = 0.0;
+			SuspensionDistRLP = 0.0;
+			SuspensionDistRRP = 0.0;
+			AccSamples = 16;
+			Acc1 = 0;
+			idleRPM = 0;
 #else
 			AccSamples = 16;
 			Acc1 = 0;
@@ -333,8 +333,8 @@ namespace sierses.Sim
 			SuspensionDistRRP = 0.0;
 			TireDiameterSampleMax = 100;
 			Upshift = false;
-            RumbleFromPlugin = false;
-            idleRPM = 2500;                         // default value; seems high IMO
+			RumbleFromPlugin = false;
+			idleRPM = 2500;						 // default value; seems high IMO
 #endif
 		}
 #if !slim

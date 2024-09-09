@@ -1,14 +1,9 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: sierses.Haptics.SettingsControl
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-using SimHub;
+﻿using SimHub;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-
-
 
 namespace sierses.Sim
 {
@@ -46,7 +41,7 @@ namespace sierses.Sim
 			Plugin = plugin;
 			DataContext = Plugin;
 			Version.Text = Plugin.PluginVersion;
-            SetTheme();
+			SetTheme();
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
@@ -338,21 +333,21 @@ namespace sierses.Sim
 		{
 			FiringOrderLabel1.Foreground = (SolidColorBrush)this.FindResource("Light");
 			FiringOrderLabel1.FontWeight = FontWeights.Bold;
-            FiringOrderLabel2.Foreground = (SolidColorBrush)this.FindResource("Light");
-            FiringOrderLabel2.FontWeight = FontWeights.Bold;
-            FiringOrderLabel3.Foreground = (SolidColorBrush)this.FindResource("Light");
-            FiringOrderLabel3.FontWeight = FontWeights.Bold;
-        }
+			FiringOrderLabel2.Foreground = (SolidColorBrush)this.FindResource("Light");
+			FiringOrderLabel2.FontWeight = FontWeights.Bold;
+			FiringOrderLabel3.Foreground = (SolidColorBrush)this.FindResource("Light");
+			FiringOrderLabel3.FontWeight = FontWeights.Bold;
+		}
 
 		private void FiringOrder_LostFocus(object sender, RoutedEventArgs e)
 		{
 			FiringOrderLabel1.Foreground = (SolidColorBrush)this.FindResource("Foreground");
 			FiringOrderLabel1.FontWeight = FontWeights.Regular;
-            FiringOrderLabel2.Foreground = (SolidColorBrush)this.FindResource("Foreground");
-            FiringOrderLabel2.FontWeight = FontWeights.Regular;
-            FiringOrderLabel3.Foreground = (SolidColorBrush)this.FindResource("Foreground");
-            FiringOrderLabel3.FontWeight = FontWeights.Regular;
-        }
+			FiringOrderLabel2.Foreground = (SolidColorBrush)this.FindResource("Foreground");
+			FiringOrderLabel2.FontWeight = FontWeights.Regular;
+			FiringOrderLabel3.Foreground = (SolidColorBrush)this.FindResource("Foreground");
+			FiringOrderLabel3.FontWeight = FontWeights.Regular;
+		}
 
 		private void SuspensionMultAll_GotFocus(object sender, RoutedEventArgs e)
 		{
@@ -806,9 +801,9 @@ namespace sierses.Sim
 			LabelSwayGamma.FontWeight = FontWeights.Regular;
 		}
 
-        private void ExpanderMIDI_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        }
+		private void ExpanderMIDI_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+		}
 
 		private void ButtonMIDI_Click(object sender, RoutedEventArgs e)
 		{
@@ -836,7 +831,7 @@ namespace sierses.Sim
 					Plugin.D.LoadText = "MIDI Learn:  no such control";
 					break;
 			}
-        }
+		}
 #endif
-    }
+	}
 }
