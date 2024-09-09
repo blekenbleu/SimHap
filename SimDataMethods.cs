@@ -14,49 +14,12 @@ namespace sierses.Sim
             double num;
 #pragma warning restore IDE0018 // Inline variable declaration
 
-            Index = -2;
+			Index = -2;
 			LockedText = Locked ? "Unlock" : "Lock";
 			SuspensionMult = H.Settings.SuspensionMult.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionMultAll = H.Settings.SuspensionMult.TryGetValue("AllGames", out num) ? num : 1.5;
 			SuspensionGamma = H.Settings.SuspensionGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionGammaAll = H.Settings.SuspensionGamma.TryGetValue("AllGames", out num) ? num : 1.75;
-#if !slim
-			double GetSetting(string name, double trouble)  // Init() helper
-	   		{
-				return H.Settings.Motion.TryGetValue(name, out num) ? num : trouble;
-			}
-
-			EngineMult = H.Settings.EngineMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			EngineMultAll = H.Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
-			RumbleMult = H.Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			RumbleMultAll = H.Settings.RumbleMult.TryGetValue("AllGames", out num) ? num : 5.0;
-			SlipXMult = H.Settings.SlipXMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SlipXMultAll = H.Settings.SlipXMult.TryGetValue("AllGames", out num) ? num : 1.6;
-			SlipYMult = H.Settings.SlipYMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SlipYMultAll = H.Settings.SlipYMult.TryGetValue("AllGames", out num) ? num : 1.0;
-			SlipXGamma = H.Settings.SlipXGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SlipXGammaAll = H.Settings.SlipXGamma.TryGetValue("AllGames", out num) ? num : 1.0;
-			SlipYGamma = H.Settings.SlipYGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
-			SlipYGammaAll = H.Settings.SlipYGamma.TryGetValue("AllGames", out num) ? num : 1.0;
-			MotionPitchOffset = GetSetting("MotionPitchOffset", 0.0);
-			MotionPitchMult = GetSetting("MotionPitchMult", 1.6);
-			MotionPitchGamma = GetSetting("MotionPitchGamma", 1.5);
-			MotionRollOffset = GetSetting("MotionRollOffset", 0.0);
-			MotionRollMult = GetSetting("MotionRollMult", 1.2);
-			MotionRollGamma = GetSetting("MotionRollGamma", 1.5);
-			MotionYawOffset = GetSetting("MotionYawOffset", 0.0);
-			MotionYawMult = GetSetting("MotionYawMult", 1.0);
-			MotionYawGamma = GetSetting("MotionYawGamma", 1.0);
-			MotionHeaveOffset = GetSetting("MotionHeaveOffset", 0.0);
-			MotionHeaveMult = GetSetting("MotionHeaveMult", 1.0);
-			MotionHeaveGamma = GetSetting("MotionHeaveGamma", 1.0);
-			MotionSurgeOffset = GetSetting("MotionSurgeOffset", 0.0);
-			MotionSurgeMult = GetSetting("MotionSurgeMult", 1.0);
-			MotionSurgeGamma = GetSetting("MotionSurgeGamma", 1.0);
-			MotionSwayOffset = GetSetting("MotionSwayOffset", 0.0);
-			MotionSwayMult = GetSetting("MotionSwayMult", 1.0);
-			MotionSwayGamma = GetSetting("MotionSwayGamma", 1.0);
-#endif
 		}
 
 		// called from DataUpdate(), initially with -2 == Index
@@ -64,7 +27,7 @@ namespace sierses.Sim
 		{
 			PM = pluginManager;
 /*
-			Logging.Current.Info($"Haptics.SetCar({shp.Gdat.NewData.CarId}): " +
+			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}): " +
 								(H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "") + (H.Waiting ? " Waiting" : "")
 								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
  */
@@ -75,17 +38,8 @@ namespace sierses.Sim
 				{
 					case GameId.AC:
 					case GameId.ACC:
-#if !slim
-					case GameId.PC2:
-					case GameId.RBR:
-					case GameId.GTR2:
-#endif
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
-#if !slim
-					case GameId.AMS1:
-					case GameId.RF2:
-#endif
 					case GameId.LMU:
 						Haptics.FetchCarData(H.N.CarClass, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
@@ -102,20 +56,10 @@ namespace sierses.Sim
 								Convert.ToUInt16(PM.GetPropertyValue(raw+"idle_rpm"))
 							);
 						break;
-#if !slim
-					case GameId.D4:
-#endif
 					case GameId.DR2:
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
 						break;
-#if !slim
-					case GameId.F12022:
-					case GameId.F12023:
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
-										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetCar(F12023): to FetchCarData()
-						break;
-#endif
 					case GameId.Forza:
 						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
 						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
@@ -127,19 +71,6 @@ namespace sierses.Sim
 											Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
-#if !slim
-					case GameId.GranTurismo7:
-					case GameId.GranTurismoSport:
-						Haptics.FetchCarData(null,
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MinAlertRPM")),
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MaxAlertRPM")), 0);
-						break;
-					case GameId.RRRE:
-						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
-						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
-						break;
-#endif
 					case GameId.WRC23:
 						Haptics.FetchCarData(null,
 											Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)),
@@ -148,13 +79,7 @@ namespace sierses.Sim
 						break;
 					default:
 						Haptics.FetchCarData(null,
-#if slim
 						0, 0, 0
-#else
-						Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
-						Convert.ToUInt16(H.N.MaxRpm),
-						Convert.ToUInt16(PM.GetPropertyValue("DataCorePlugin.IdleRPM"))
-#endif
 						);
 						break;
 				}
@@ -204,19 +129,7 @@ namespace sierses.Sim
 			Array.Clear(AccSway, 0, AccSway.Length);
 			Acc1 = 0;
 			IdleSampleCount = 0;
-#if slim
 			idleRPM = 0;							// SetVehicle(): reset to default value for each car
-#else
-			idleRPM = 2500;							// SetCar(): reset to default (IMO high) value for each car
-			SetRPMIntervals();
-			TireDiameterSampleCount = TireDiameterSampleCount == -1 ? -1 : 0;
-			TireDiameterFL = 0.0;
-			TireDiameterFR = 0.0;
-			TireDiameterRL = 0.0;
-			TireDiameterRR = 0.0;
-			RumbleLeftAvg = 0.0;
-			RumbleRightAvg = 0.0;
-#endif
 			SetRPMMix();
 			H.S.Set();								// NotifyPropertyChanged
 			H.CarId = H.N.CarId;					// SetCar(): car change is complete
@@ -225,7 +138,6 @@ namespace sierses.Sim
 			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) ending: "
 									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
 									+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
-
 #if BS
 			switch (H.S.EngineCylinders)	// BS
 			{
