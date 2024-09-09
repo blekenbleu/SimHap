@@ -1,8 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: SimHaptics.Helpers
-// MVID: E01F66FE-3F59-44B4-8EBC-5ABAA8CD8267
-
-using System;
+﻿using System;
 
 namespace sierses.Sim
 {

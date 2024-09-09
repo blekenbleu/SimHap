@@ -9,24 +9,25 @@ namespace sierses.Sim
 		internal void Init(Haptics sh)
 		{
 			H = sh;
+			string GDBtext = H.GameDBText;
+			double num;
+
 			Index = -2;
 			LockedText = Locked ? "Unlock" : "Lock";
-#if !slim
-			double GetSetting(string name, double trouble)  // Init() helper
-	   		{
-				return H.Settings.Motion.TryGetValue(name, out double num) ? num : trouble;
-			}
-
-			string GDBtext = H.GameDBText;
-
-			EngineMult = H.Settings.EngineMult.TryGetValue(GDBtext, out double num) ? num : 1.0;
-			EngineMultAll = H.Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
-			RumbleMult = H.Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
-			RumbleMultAll = H.Settings.RumbleMult.TryGetValue("AllGames", out num) ? num : 5.0;
 			SuspensionMult = H.Settings.SuspensionMult.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionMultAll = H.Settings.SuspensionMult.TryGetValue("AllGames", out num) ? num : 1.5;
 			SuspensionGamma = H.Settings.SuspensionGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionGammaAll = H.Settings.SuspensionGamma.TryGetValue("AllGames", out num) ? num : 1.75;
+#if !slim
+			double GetSetting(string name, double trouble)  // Init() helper
+	   		{
+				return H.Settings.Motion.TryGetValue(name, out num) ? num : trouble;
+			}
+
+			EngineMult = H.Settings.EngineMult.TryGetValue(GDBtext, out num) ? num : 1.0;
+			EngineMultAll = H.Settings.EngineMult.TryGetValue("AllGames", out num) ? num : 1.0;
+			RumbleMult = H.Settings.RumbleMult.TryGetValue(GDBtext, out num) ? num : 1.0;
+			RumbleMultAll = H.Settings.RumbleMult.TryGetValue("AllGames", out num) ? num : 5.0;
 			SlipXMult = H.Settings.SlipXMult.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SlipXMultAll = H.Settings.SlipXMult.TryGetValue("AllGames", out num) ? num : 1.6;
 			SlipYMult = H.Settings.SlipYMult.TryGetValue(GDBtext, out num) ? num : 1.0;
@@ -246,8 +247,8 @@ namespace sierses.Sim
 				default:
 					break;
 			}
-#endif
 			H.SC.Ratio = H.S.EngineCylinders;
+#endif
 		}	// SetCar()
 #if BS
 		/*  if you could make me a version where you change ratios so it' s

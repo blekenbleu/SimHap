@@ -600,6 +600,7 @@ namespace sierses.Sim
 					SuspensionDistRL = Physics("SuspensionTravel03");
 					SuspensionDistRR = Physics("SuspensionTravel04");
 					WiperStatus = (int) PM.GetPropertyValue(raw+"Graphics.WiperLV");
+#if !slim
 					WheelRotationFL = Math.Abs(Physics("WheelAngularSpeed01"));
 					WheelRotationFR = Math.Abs(Physics("WheelAngularSpeed02"));
 					WheelRotationRL = Math.Abs(Physics("WheelAngularSpeed03"));
@@ -642,6 +643,7 @@ namespace sierses.Sim
 						SlipXRR *= 0.5;
 						break;
 					}
+#endif
 					break;
 				case GameId.AMS2:
 					SuspensionDistFL = Raw("mSuspensionTravel01");
@@ -2226,7 +2228,8 @@ namespace sierses.Sim
 			if (FreqHarmonic > 0 && FreqHarmonic < 750)
 				rpmMain = rpmMainSum;
 
-			GainPeakA1 = FreqPeakA1 >= 30.0 ? (FreqPeakA1 >= 150.0 ? (FreqPeakA1 >= 250.0 ? (1 - (FreqPeakA1 - 250) / (450 - 250)) * 30 : (1 - (FreqPeakA1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA1 - 110) / (30 - 110)) * 60) : 0;
+			GainPeakA1 = FreqPeakA1 >= 30.0 ? (FreqPeakA1 >= 150.0 ? (FreqPeakA1 >= 250.0 ? (1 - (FreqPeakA1 - 250) / (450 - 250)) * 30
+					   : (1 - (FreqPeakA1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA1 - 110) / (30 - 110)) * 60) : 0;
 #else
 			GainPeakA1 = FreqPeakA1 >= 30.0 ? (FreqPeakA1 >= 150.0 ? (FreqPeakA1 >= 250.0 ? (1 - (FreqPeakA1 - 250) / (450 - 250)) * 30
 					   : (1 - (FreqPeakA1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA1 - 110) / (30 - 110)) * 60) : 0;
@@ -2236,34 +2239,27 @@ namespace sierses.Sim
 			GainPeakA1Front = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1Rear = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1 = ((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB1 = FreqPeakB1 >= 30.0 ? (FreqPeakB1 >= 150.0 ? (FreqPeakB1 >= 250.0 ? (1 - (FreqPeakB1 - 250) / (450 - 250)) * 30
+					   : (1 - (FreqPeakB1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakB1 - 110) / (30 - 110)) * 60) : 0;
 #else
 			GainPeakA1Front = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1Rear = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakA1 = Math.Floor((PeakA1Modifier * GainPeakA1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-#endif
 
-#if slim
-			GainPeakB1 = FreqPeakB1 >= 30.0 ? (FreqPeakB1 >= 150.0 ? (FreqPeakB1 >= 250.0 ? (1 - (FreqPeakB1 - 250) / (450 - 250)) * 30
-					   : (1 - (FreqPeakB1 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakB1 - 110) / (30 - 110)) * 60) : 0;
-#else
-			GainPeakB1 = FreqPeakB1 >= 55.0 ? (FreqPeakB1 >= 75.0 ? (FreqPeakB1 >= 105.0 ? 90.0 - (FreqPeakB1 - 105.0) * 0.75 : 60.0 + (FreqPeakB1 - 75.0) * 1.0) : 30.0 + (FreqPeakB1 - 55.0) * 1.5) : (FreqPeakB1 - 45.0) * 3.0;
+			GainPeakB1 = FreqPeakB1 >= 55.0 ? (FreqPeakB1 >= 75.0 ? (FreqPeakB1 >= 105.0 ? 90.0 - (FreqPeakB1 - 105.0) * 0.75
+					   : 60.0 + (FreqPeakB1 - 75.0) * 1.0) : 30.0 + (FreqPeakB1 - 55.0) * 1.5) : (FreqPeakB1 - 45.0) * 3.0;
 #endif
 			GainPeakB1 = Math.Max(GainPeakB1, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 #if slim
 			GainPeakB1Front = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB1Rear = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB1 = ((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-#else
-			GainPeakB1Front = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB1Rear = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB1 = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-#endif
 
-#if slim
 			GainPeakA2 = FreqPeakA2 >= 30.0 ? (FreqPeakA2 >= 150.0 ? (FreqPeakA2 >= 250.0 ? (1 - (FreqPeakA2 - 250) / (450 - 250)) * 30
 					   : (1 - (FreqPeakA2 - 150) / (300 - 150)) * 90) : (1 - (FreqPeakA2 - 110) / (30 - 110)) * 60) : 0;
 #else
-			GainPeakA2 = FreqPeakA2 >= 55.0 ? (FreqPeakA2 >= 75.0 ? (FreqPeakA2 >= 105.0 ? 90.0 - (FreqPeakA2 - 105.0) * 0.75 : 60.0 + (FreqPeakA2 - 75.0) * 1.0) : 30.0 + (FreqPeakA2 - 55.0) * 1.5) : (FreqPeakA2 - 45.0) * 3.0;
+			GainPeakA2 = FreqPeakA2 >= 55.0 ? (FreqPeakA2 >= 75.0 ? (FreqPeakA2 >= 105.0 ? 90.0 - (FreqPeakA2 - 105.0) * 0.75
+					   : 60.0 + (FreqPeakA2 - 75.0) * 1.0) : 30.0 + (FreqPeakA2 - 55.0) * 1.5) : (FreqPeakA2 - 45.0) * 3.0;
 #endif
 			GainPeakA2 = Math.Max(GainPeakA2, 0.0) * (0.9 + 0.1 * MixPower + 0.1 * MixCylinder + 0.1 * MixTorque);
 #if slim
@@ -2276,60 +2272,6 @@ namespace sierses.Sim
 			GainPeakB2Front = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2Rear = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
 			GainPeakB2 = ((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-#endif
-#if !slim
-			GainPeakB2Front = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB2Rear = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
-			GainPeakB2 = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
-
-			if (H.S.EngineCylinders < 1.0)
-			{
-				GainLFEAdaptive = 0.0;
-				Gain1H = Math.Floor(Gain1H * 0.7);
-				Gain1H2 = 0.0;
-				Gain2H = 0.0;
-				Gain4H = 0.0;
-				GainOctave = 0.0;
-				GainIntervalA1 = 0.0;
-				GainIntervalA2 = 0.0;
-				GainPeakA1Front = 0.0;
-				GainPeakA1Rear = 0.0;
-				GainPeakA1 = 0.0;
-				GainPeakA2Front = 0.0;
-				GainPeakA2Rear = 0.0;
-				GainPeakA2 = 0.0;
-				GainPeakB1Front = 0.0;
-				GainPeakB1Rear = 0.0;
-				GainPeakB1 = 0.0;
-				GainPeakB2Front = 0.0;
-				GainPeakB2Rear = 0.0;
-				GainPeakB2 = 0.0;
-			}
-			else if (H.S.EngineCylinders < 2.0)
-				Gain4H = 0.0;
-			if (EngineMult == 1.0)
-				return;
-			GainLFEAdaptive *= EngineMult * EngineMultAll;
-			Gain1H *= EngineMult * EngineMultAll;
-			Gain1H2 *= EngineMult * EngineMultAll;
-			Gain2H *= EngineMult * EngineMultAll;
-			Gain4H *= EngineMult * EngineMultAll;
-			GainOctave *= EngineMult * EngineMultAll;
-			GainIntervalA1 *= EngineMult * EngineMultAll;
-			GainIntervalA2 *= EngineMult * EngineMultAll;
-			GainPeakA1Front *= EngineMult * EngineMultAll;
-			GainPeakA1Rear *= EngineMult * EngineMultAll;
-			GainPeakA1 *= EngineMult * EngineMultAll;
-			GainPeakA2Front *= EngineMult * EngineMultAll;
-			GainPeakA2Rear *= EngineMult * EngineMultAll;
-			GainPeakA2 *= EngineMult * EngineMultAll;
-			GainPeakB1Front *= EngineMult * EngineMultAll;
-			GainPeakB1Rear *= EngineMult * EngineMultAll;
-			GainPeakB1 *= EngineMult * EngineMultAll;
-			GainPeakB2Front *= EngineMult * EngineMultAll;
-			GainPeakB2Rear *= EngineMult * EngineMultAll;
-			GainPeakB2 *= EngineMult * EngineMultAll;
-#else
 			//rpmPeakA2Rear sum
 			rpmPeakA2RearSum = (0.35087719298 * (FreqPeakA2 + 25.6) * 0.7) * (GainPeakA2Rear / 127);
 
@@ -2458,6 +2400,61 @@ namespace sierses.Sim
 
 			if (FreqPeakB2 > 15 && FreqPeakB2 < 325)
 				rpmPeakB2Front = rpmPeakB2FrontSum * peakGearMulti * peakEQ;
+#else
+			GainPeakB1Front = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB1Rear = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB1 = Math.Floor((PeakB1Modifier * GainPeakB1 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB2Front = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixFront)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB2Rear = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixRear)).Clamp(0.0, sbyte.MaxValue));
+			GainPeakB2 = Math.Floor((PeakB2Modifier * GainPeakB2 * (0.9 + 0.3 * MixMiddle)).Clamp(0.0, sbyte.MaxValue));
+
+			if (H.S.EngineCylinders < 1.0)
+			{
+				GainLFEAdaptive = 0.0;
+				Gain1H = Math.Floor(Gain1H * 0.7);
+				Gain1H2 = 0.0;
+				Gain2H = 0.0;
+				Gain4H = 0.0;
+				GainOctave = 0.0;
+				GainIntervalA1 = 0.0;
+				GainIntervalA2 = 0.0;
+				GainPeakA1Front = 0.0;
+				GainPeakA1Rear = 0.0;
+				GainPeakA1 = 0.0;
+				GainPeakA2Front = 0.0;
+				GainPeakA2Rear = 0.0;
+				GainPeakA2 = 0.0;
+				GainPeakB1Front = 0.0;
+				GainPeakB1Rear = 0.0;
+				GainPeakB1 = 0.0;
+				GainPeakB2Front = 0.0;
+				GainPeakB2Rear = 0.0;
+				GainPeakB2 = 0.0;
+			}
+			else if (H.S.EngineCylinders < 2.0)
+				Gain4H = 0.0;
+			if (EngineMult == 1.0)
+				return;
+			GainLFEAdaptive *= EngineMult * EngineMultAll;
+			Gain1H *= EngineMult * EngineMultAll;
+			Gain1H2 *= EngineMult * EngineMultAll;
+			Gain2H *= EngineMult * EngineMultAll;
+			Gain4H *= EngineMult * EngineMultAll;
+			GainOctave *= EngineMult * EngineMultAll;
+			GainIntervalA1 *= EngineMult * EngineMultAll;
+			GainIntervalA2 *= EngineMult * EngineMultAll;
+			GainPeakA1Front *= EngineMult * EngineMultAll;
+			GainPeakA1Rear *= EngineMult * EngineMultAll;
+			GainPeakA1 *= EngineMult * EngineMultAll;
+			GainPeakA2Front *= EngineMult * EngineMultAll;
+			GainPeakA2Rear *= EngineMult * EngineMultAll;
+			GainPeakA2 *= EngineMult * EngineMultAll;
+			GainPeakB1Front *= EngineMult * EngineMultAll;
+			GainPeakB1Rear *= EngineMult * EngineMultAll;
+			GainPeakB1 *= EngineMult * EngineMultAll;
+			GainPeakB2Front *= EngineMult * EngineMultAll;
+			GainPeakB2Rear *= EngineMult * EngineMultAll;
+			GainPeakB2 *= EngineMult * EngineMultAll;
 #endif
 		}	// Refresh()
 	}
