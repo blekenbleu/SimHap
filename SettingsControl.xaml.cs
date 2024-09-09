@@ -89,21 +89,6 @@ namespace sierses.Sim
 			SuspensionGamma.Value = 1;
 		}
 
-		private void SuspensionMultAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-
-		}
-
-		private void SuspensionGammaAll_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-
-		}
-
-		private void SuspensionGamma_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-
-		}
-
 		private void ExpanderEngine_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 

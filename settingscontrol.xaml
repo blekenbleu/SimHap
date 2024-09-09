@@ -1529,7 +1529,6 @@
                                     Maximum="5"
                                     Minimum="0"
                                     TickFrequency="0.1"
-                                    ValueChanged="SuspensionMultAll_ValueChanged"
                                     Value="{Binding D.SuspensionMultAll}" />
                                 <!--  game gain  -->
                                 <Slider
@@ -1545,7 +1544,6 @@
                                     Maximum="2"
                                     Minimum="0"
                                     TickFrequency="0.1"
-                                    ValueChanged="SuspensionMultAll_ValueChanged"
                                     Value="{Binding D.SuspensionMult}" />
                                 <!--  all gamma  -->
                                 <Slider
@@ -1561,7 +1559,6 @@
                                     Maximum="2"
                                     Minimum="0"
                                     TickFrequency="0.1"
-                                    ValueChanged="SuspensionGammaAll_ValueChanged"
                                     Value="{Binding D.SuspensionGammaAll}" />
                                 <!--  game gamma  -->
                                 <Slider
@@ -1577,7 +1574,6 @@
                                     Maximum="2"
                                     Minimum="0"
                                     TickFrequency="0.1"
-                                    ValueChanged="SuspensionGamma_ValueChanged"
                                     Value="{Binding D.SuspensionGamma}" />
 
                                 <!--  reset button  -->

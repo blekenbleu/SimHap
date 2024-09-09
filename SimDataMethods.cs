@@ -10,9 +10,11 @@ namespace sierses.Sim
 		{
 			H = sh;
 			string GDBtext = H.GameDBText;
-			double num;
+#pragma warning disable IDE0018 // Inline variable declaration
+            double num;
+#pragma warning restore IDE0018 // Inline variable declaration
 
-			Index = -2;
+            Index = -2;
 			LockedText = Locked ? "Unlock" : "Lock";
 			SuspensionMult = H.Settings.SuspensionMult.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionMultAll = H.Settings.SuspensionMult.TryGetValue("AllGames", out num) ? num : 1.5;
