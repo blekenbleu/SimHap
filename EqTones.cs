@@ -73,25 +73,27 @@ namespace sierses.Sim
 			return true;
 		}
 
-		// for Fr[0-8] properties in Init()
-		// interpolate between harmonic frequencies based on throttle %
-		// see SimDataMethods.cs for BSratio
-		private double F(byte i)
+		public ushort Fr0()
 		{
-			// throttle interpolation factors
-			double d = 0.01 * (100 - H.D.Accelerator);
-			double a = 0.01 * H.D.Accelerator;
-
-			// interpolate between Tones[0] (no throttle) and Tones[2] (full throttle)
-			// H.SC.Ratio is either cylinders or BSratio;  SettingsControl.xaml.cs line 87
-			return ((d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.SC.Ratio) / 120;
+			return (ushort)((30 + H.D.Rpms) / 60);     // RPM Hz
 		}
 
+		public ushort Fr2()
+		{
+			return (ushort)((60 + H.D.Rpms) / 120);     // RPM Hz
+		}
+
+		// for Fr[0-8] properties in Init()
+		// interpolate between harmonic frequencies based on throttle %
 		public ushort Fr(byte i)
 		{
-			return (ushort)(  0 == i ? (30 + H.D.Rpms) / 60		// RPM Hz
-							: 2 == i ? (60 + H.D.Rpms) / 120	// power stroke subharmonic for imbalance
-							: 0.5 + F(i));						// power stroke components
+			// throttle interpolation factors
+			double a = 0.01 * H.D.Accelerator;
+			double d = 1.0 - a;
+
+			// interpolate between Tones[0] (no throttle) and Tones[2] (full throttle)
+			// H.SC.Ratio is either cylinders or BSratio;  SettingsControl.xaml.cs, SimDataMethods.cs
+			return (ushort)((60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.SC.Ratio) / 120);		// power stroke harmonic
 		}
 
 		// interpolate between harmonic amplitudes based on throttle %
@@ -140,9 +142,9 @@ namespace sierses.Sim
 				Tones[0].Freq[2] = 0; // start on bank 0
 			}
 
-			H.AttachDelegate("E.Fr0", () => Fr(0));
+			H.AttachDelegate("E.Fr0", () => Fr0());
 			H.AttachDelegate("E.Fr1", () => Fr(1));
-			H.AttachDelegate("E.Fr2", () => Fr(2));
+			H.AttachDelegate("E.Fr2", () => Fr2());
 			H.AttachDelegate("E.Fr3", () => Fr(3));
 			H.AttachDelegate("E.Fr4", () => Fr(4));
 			H.AttachDelegate("E.Fr5", () => Fr(5));
