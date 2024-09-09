@@ -23,18 +23,17 @@ namespace blekenbleu.Haptic
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(
 			Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
-		public static long FrameTimeTicks = 0;
-		public static long FrameCountTicks = 0;
 		public static GameId CurrentGame = GameId.Other;
-		public static string GameDBText;
-		internal static bool Loaded, Waiting, Save, Set, Changed;
+		public string GameDBText;
+		internal bool Loaded, Waiting, Save, Set, Changed;
 		internal string CarId;		// exactly match data.NewData.CarId for DataUpdate()
+#if !slim
 		private static readonly HttpClient client = new();
+#endif
 		private readonly string myfile = $"PluginsData/{pname}.{Environment.UserName}.json";
 //		private readonly string Atlasfile = $"PluginsData/{pname}.Atlas.json";
 		private readonly string Atlasfile = $"PluginsData/{pname}.Atlas_with_orders.json";
-		internal static List<CarSpec> Atlas;
-		internal static int AtlasCt;		// use this to force Atlas
+		private static List<CarSpec> Atlas = new();
 		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
@@ -68,6 +67,7 @@ namespace blekenbleu.Haptic
 
 		// boilerplate SimHub -------------------------------------------
 		public string LeftMenuTitle => pname;
+		public PluginManager PluginManager { get; set; }
 
 		internal SettingsControl SC;
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
@@ -105,14 +105,13 @@ namespace blekenbleu.Haptic
 
 		public Settings Settings { get; set; }
 
-		public PluginManager PluginManager { get; set; }
 		// ----------------------------------------------------------------
 
-		// must be void and static;  invoked by D.SetCar()
 		private static BlekHapt H;
 #if slim
-		internal static void FetchCarData(    // called from SetVehicle() switch
+		internal static void FetchCarData(		// called from SetVehicle() switch
 #else
+		// async must be void and static;  invoked by D.SetCar()
 		internal static async void FetchCarData(	// called from SetCar() switch
 #endif
 			string category,
@@ -121,14 +120,14 @@ namespace blekenbleu.Haptic
 			ushort ushortIdleRPM)							// FetchCarData() argument
 		{
 			Logging.Current.Info(pname + $".FetchCarData({category}):  Index = {H.D.Index}," +
-							   (Save ? " Save " : "") + (Loaded ? " Loaded " : "") + (Waiting ? " Waiting" : "")
-								+ (Set ? " Set": "") + (Changed ? "Changed " : ""));
+							   (H.Save ? " Save " : "") + (H.Loaded ? " Loaded " : "") + (H.Waiting ? " Waiting" : "")
+								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : ""));
 
 			if (-2 == H.D.Index)	// first time for this CarId change?  Also called for retries with Index = -1
 			{
 				H.S.Notes = "";
-				Set = false;
-				H.D.Index = H.S.SelectCar(redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// set game RPM defaults
+				H.Set = false;
+				H.D.Index = H.S.SelectCar(H, Atlas, redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
 /*
 				Logging.Current.Info(pname + ".SelectCar(): "
 									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
@@ -142,17 +141,17 @@ namespace blekenbleu.Haptic
 			// Index should be -1; non-negative values returned
 			try
 			{
-				Waiting = true;
+				H.Waiting = true;
 				string dls = null;
 				category ??= "0";
-				Uri requestUri = new("https://api.simhaptics.com/data/" + GameDBText
+				Uri requestUri = new("https://api.simhaptics.com/data/" + H.GameDBText
 								 + "/" + Uri.EscapeDataString(H.S.Car.id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
 				dls = async.Content.ReadAsStringAsync().Result;
 				if (null != dls && 11 < dls.Length)
 				{
-					Waiting = false;	// ReadAsStringAsync() success
+					H.Waiting = false;	// ReadAsStringAsync() success
 					Download dljc = JsonConvert.DeserializeObject<Download>(dls,
 										new JsonSerializerSettings
 										{
@@ -179,7 +178,7 @@ namespace blekenbleu.Haptic
 					if (-1 == H.D.Index)			// delayed dls? things may have moved on...
 						H.D.Index = -3;				// disable self until other code decides otherwise
 					if (11 == dls.Length)
-						Waiting = false;
+						H.Waiting = false;
 /*
 						Logging.Current.Info(pname + ".FetchCarData(): not in DB");
 					else if (0 < dls.Length)
@@ -192,10 +191,10 @@ namespace blekenbleu.Haptic
 			catch (HttpRequestException ex)		//  treat it like not in DB
 			{
 				Logging.Current.Error(pname + ".FetchCarData() Error: " + ex.Message);
-				Waiting = false;
+				H.Waiting = false;
 			}
 #endif
-		}       // FetchCarData()
+		}	   // FetchCarData()
 
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data.
@@ -232,7 +231,7 @@ namespace blekenbleu.Haptic
 				if ((30 * LoadFailCount) > ++D.CarInitCount)
 					return;
 
-				Waiting = false;			// CarInitCount timeout
+				H.Waiting = false;			// CarInitCount timeout
 				if (4 > LoadFailCount++)
 					return;					// do not give up (yet)
 
@@ -244,7 +243,12 @@ namespace blekenbleu.Haptic
 				Changed = false;
 			}
 			else if (Loaded || Changed)		// save before SetCar()
-				Loaded = S.SaveCar();		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
+			{
+				if (null == S.Car.name)
+					Logging.Current.Info(pname + $".S.SaveCar(): {CarId} missing car name");
+				else S.SaveCar(pname);		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
+				Loaded = false;
+			}
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
@@ -253,7 +257,7 @@ namespace blekenbleu.Haptic
 				Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
-				D.SetCar(this, pluginManager);
+				D.SetCar(pluginManager);
 			}
 		}	// DataUpdate()
 
@@ -344,7 +348,7 @@ namespace blekenbleu.Haptic
 			}
 			else if (D.SuspensionGamma != 1.0)
 				Settings.SuspensionGamma.Add(GameDBText, D.SuspensionGamma);
-#if foo
+#if slip
 			if (Settings.SlipXMult.ContainsKey(GameDBText))
 			{
 				if (D.SlipXMult == 1.0)
@@ -377,7 +381,11 @@ namespace blekenbleu.Haptic
 			}
 			else if (D.SlipYGamma != 1.0)
 				Settings.SlipYGamma.Add(GameDBText, D.SlipYGamma);
+			Settings.SlipXMult["AllGames"] = D.SlipXMultAll;
+			Settings.SlipYMult["AllGames"] = D.SlipYMultAll;
+#endif
 			// unconditionally save some
+#if !slim
 			Settings.RumbleMult["AllGames"] = D.RumbleMultAll;
 			Settings.Motion["MotionPitchOffset"] = D.MotionPitchOffset;
 			Settings.Motion["MotionPitchMult"] = D.MotionPitchMult;
@@ -404,7 +412,7 @@ namespace blekenbleu.Haptic
 		}
 
 		// Init() methods -----------------------------
-		public void SetGame(PluginManager pm)
+		void SetGame(PluginManager pm)
 		{
 			GameDBText = D.GameAltText = pm.GameName;
 			switch (GameDBText)
@@ -491,9 +499,6 @@ namespace blekenbleu.Haptic
 					CurrentGame = GameId.RF2;
 					GameDBText = "RF2";
 					break;
-				case "RRRE":
-					CurrentGame = GameId.RRRE;
-					break;
 				case "SIMBINGTLEGENDS":
 					CurrentGame = GameId.GTL;
 					GameDBText = "GTL";
@@ -578,6 +583,9 @@ namespace blekenbleu.Haptic
 					D.TireDiameterSampleCount = -1;
 #endif
 					break;
+				case "RRRE":
+					CurrentGame = GameId.RRRE;
+					break;
 				default:
 					CurrentGame = GameId.Other;
 					break;
@@ -590,18 +598,18 @@ namespace blekenbleu.Haptic
 
 		public void Init(PluginManager pluginManager)
 		{
+			string Atlasst = "";
+
 			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
-#if !slim
-			E = new();
-			bool ShowTire = false;
-#endif
-			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
-
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
-#if !slim
+            bool ShowSusp = true, ShowPhysics = true;
+			bool ShowFreq = true, ShowTire = false;
+#if slim
+#else
+			E = new();
 			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
 			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
 			 || 4 != Settings.Engine.Tones.Length || 9 != Settings.Engine.Tones[0].Length)
@@ -677,24 +685,18 @@ namespace blekenbleu.Haptic
 				Settings.Motion = new Dictionary<string, double>();
 #endif
 
-			string Atlasst = "";
-			AtlasCt = 0;				// S.Extract() will attempt extracting List<CarSpec> Atlas from json
 			if (File.Exists(Atlasfile))
 			{
 				Dictionary<string, List<CarSpec>> JsonDict =
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(Atlasfile));
 				if (null == JsonDict)
-					Logging.Current.Info("Haptics.Init(): Atlas load failure");
-				else
+					Logging.Current.Info(pname + ".Init(): Atlas load failure");
+				else if (JsonDict.ContainsKey(GameDBText))
 				{
-					if (JsonDict.ContainsKey(GameDBText))
-					{
-						Atlas = JsonDict[GameDBText];
-						AtlasCt = Atlas.Count;
-						Atlasst = $";  {AtlasCt} cars in Atlas";
-					}
-					else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");
+					Atlas = JsonDict[GameDBText];
+					Atlasst = $";  {Atlas.Count} cars in Atlas";
 				}
+				else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");
 			}
 			else Logging.Current.Info(pname + $".Init():  no Atlas");
 
@@ -703,13 +705,15 @@ namespace blekenbleu.Haptic
 				string text = File.ReadAllText(myfile);
 				Dictionary<string, List<CarSpec>> json =
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
-				Logging.Current.Info(pname + ".Init():  " + S.LD.SetGame(json) + myfile + Atlasst);
+				Logging.Current.Info(pname + ".Init():  " + S.LD.SetGame(this, json) + myfile + Atlasst);
 			}
 			else Logging.Current.Info(pname + ".Init():  " + myfile + " not found" + Atlasst);
 
 			D.Init(this);
 #if !slim
 			E.Init(Settings.Engine, this);
+			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
+			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
 #endif
 			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
@@ -729,12 +733,88 @@ namespace blekenbleu.Haptic
 			this.AttachDelegate("PowerMotorHP", () => S.ElectricMaxPower);
 			this.AttachDelegate("MaxTorqueNm", () => S.MaxTorque);
 			this.AttachDelegate("IdleRPM", () => S.IdleRPM);			// Init()
-#if !slim
-			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
+			if (ShowFreq)
+			{
+				this.AttachDelegate("FreqHarmonic", () => D.FreqHarmonic);
+				this.AttachDelegate("FreqLFEAdaptive", () => D.FreqLFEAdaptive);
+				this.AttachDelegate("FreqPeakB1", () => D.FreqPeakB1);
+				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
+				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
+#if slim
+				this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
+				this.AttachDelegate("rpmMain", () => D.rpmMain);
+				this.AttachDelegate("rpmPeakA2Rear", () => D.rpmPeakA2Rear);
+				this.AttachDelegate("rpmPeakB1Rear", () => D.rpmPeakB1Rear);
+				this.AttachDelegate("rpmPeakA1Rear", () => D.rpmPeakA1Rear);
+				this.AttachDelegate("rpmPeakB2Rear", () => D.rpmPeakB2Rear);
+				this.AttachDelegate("rpmPeakA2Front", () => D.rpmPeakA2Front);
+				this.AttachDelegate("rpmPeakB1Front", () => D.rpmPeakB1Front);
+				this.AttachDelegate("rpmPeakA1Front", () => D.rpmPeakA1Front);
+				this.AttachDelegate("rpmPeakB2Front", () => D.rpmPeakB2Front);
+				this.AttachDelegate("rpmMainEQ", () => D.rpmMainEQ);
+				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
+				this.AttachDelegate("LFEhpScale", () => D.LFEhpScale);
+				this.AttachDelegate("peakEQ", () => D.peakEQ);
+				this.AttachDelegate("peakGearMulti", () => D.peakGearMulti);
+#else
+				this.AttachDelegate("FreqOctave", () => D.FreqOctave);
+				this.AttachDelegate("FreqIntervalA1", () => D.FreqIntervalA1);
+				this.AttachDelegate("FreqIntervalA2", () => D.FreqIntervalA2);
+				this.AttachDelegate("Gain1H2", () => D.Gain1H2);
+				this.AttachDelegate("Gain2H", () => D.Gain2H);
+				this.AttachDelegate("Gain4H", () => D.Gain4H);
+				this.AttachDelegate("GainOctave", () => D.GainOctave);
+				this.AttachDelegate("GainIntervalA1", () => D.GainIntervalA1);
+				this.AttachDelegate("GainIntervalA2", () => D.GainIntervalA2);
+				this.AttachDelegate("GainPeakA1Middle", () => D.GainPeakA1);
+				this.AttachDelegate("GainPeakA2Middle", () => D.GainPeakA2);
+				this.AttachDelegate("GainPeakB1Middle", () => D.GainPeakB1);
+				this.AttachDelegate("GainPeakB2Middle", () => D.GainPeakB2);
+				this.AttachDelegate("FreqPeakA1", () => D.FreqPeakA1);
+				this.AttachDelegate("Gain1H", () => D.Gain1H);
+				this.AttachDelegate("GainPeakA1Front", () => D.GainPeakA1Front);
+				this.AttachDelegate("GainPeakA1Rear", () => D.GainPeakA1Rear);
+				this.AttachDelegate("GainPeakA2Front", () => D.GainPeakA2Front);
+				this.AttachDelegate("GainPeakA2Rear", () => D.GainPeakA2Rear);
+				this.AttachDelegate("GainPeakB1Front", () => D.GainPeakB1Front);
+				this.AttachDelegate("GainPeakB1Rear", () => D.GainPeakB1Rear);
+				this.AttachDelegate("GainPeakB2Front", () => D.GainPeakB2Front);
+				this.AttachDelegate("GainPeakB2Rear", () => D.GainPeakB2Rear);
 #endif
-			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
+			}
+#if !slim
+			if (ShowTire) {
+				this.AttachDelegate("SlipXFL", () => D.SlipXFL);
+				this.AttachDelegate("SlipXFR", () => D.SlipXFR);
+				this.AttachDelegate("SlipXRL", () => D.SlipXRL);
+				this.AttachDelegate("SlipXRR", () => D.SlipXRR);
+				this.AttachDelegate("SlipXAll", () => D.SlipXAll);
+				this.AttachDelegate("SlipYFL", () => D.SlipYFL);
+				this.AttachDelegate("SlipYFR", () => D.SlipYFR);
+				this.AttachDelegate("SlipYRL", () => D.SlipYRL);
+				this.AttachDelegate("SlipYRR", () => D.SlipYRR);
+				this.AttachDelegate("SlipYAll", () => D.SlipYAll);
+				this.AttachDelegate("WheelLockAll", () => D.WheelLockAll);
+				this.AttachDelegate("WheelSpinAll", () => D.WheelSpinAll);
+				this.AttachDelegate("TireDiameterFL", () => D.TireDiameterFL);
+				this.AttachDelegate("TireDiameterFR", () => D.TireDiameterFR);
+				this.AttachDelegate("TireDiameterRL", () => D.TireDiameterRL);
+				this.AttachDelegate("TireDiameterRR", () => D.TireDiameterRR);
+				this.AttachDelegate("TireSpeedFL", () => D.WheelSpeedFL);
+				this.AttachDelegate("TireSpeedFR", () => D.WheelSpeedFR);
+				this.AttachDelegate("TireSpeedRL", () => D.WheelSpeedRL);
+				this.AttachDelegate("TireSpeedRR", () => D.WheelSpeedRR);
+				this.AttachDelegate("SpeedMs", () => D.SpeedMs);
+				this.AttachDelegate("TireLoadFL", () => D.WheelLoadFL);
+				this.AttachDelegate("TireLoadFR", () => D.WheelLoadFR);
+				this.AttachDelegate("TireLoadRL", () => D.WheelLoadRL);
+				this.AttachDelegate("TireLoadRR", () => D.WheelLoadRR);
+				this.AttachDelegate("TireSamples", () => D.TireDiameterSampleCount);
+			}
+#endif
 			if (ShowSusp)
 			{
+#if !slim
 				this.AttachDelegate("SuspensionFreqR0a", () => D.SuspensionFreqRa);
 				this.AttachDelegate("SuspensionFreqR0b", () => D.SuspensionFreqRb);
 				this.AttachDelegate("SuspensionFreqR0c", () => D.SuspensionFreqRc);
@@ -747,13 +827,17 @@ namespace blekenbleu.Haptic
 				this.AttachDelegate("SuspensionMultR5", () => D.SuspensionMultR5);
 				this.AttachDelegate("SuspensionRumbleMultR0b", () => D.SuspensionRumbleMultRb);
 				this.AttachDelegate("SuspensionRumbleMultR0c", () => D.SuspensionRumbleMultRc);
+				this.AttachDelegate("SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
+				this.AttachDelegate("SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
 				this.AttachDelegate("SuspensionRumbleMultR1", () => D.SuspensionRumbleMultR1);
 				this.AttachDelegate("SuspensionRumbleMultR2", () => D.SuspensionRumbleMultR2);
 				this.AttachDelegate("SuspensionRumbleMultR3", () => D.SuspensionRumbleMultR3);
-				this.AttachDelegate("SuspensionRumbleMultR4", () => D.SuspensionRumbleMultR4);
-				this.AttachDelegate("SuspensionRumbleMultR5", () => D.SuspensionRumbleMultR5);
-
- 				this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
+				this.AttachDelegate("RumbleFromPlugin", () => D.RumbleFromPlugin);
+				this.AttachDelegate("RumbleMult", () => D.RumbleMult);
+				this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
+				this.AttachDelegate("RumbleRight", () => D.RumbleRight);
+#endif
+				this.AttachDelegate("SuspensionFreq", () => D.SuspensionFreq);
 				this.AttachDelegate("SuspensionFreqR1", () => D.SuspensionFreqR1);
 				this.AttachDelegate("SuspensionFreqR2", () => D.SuspensionFreqR2);
 				this.AttachDelegate("SuspensionFreqR3", () => D.SuspensionFreqR3);
@@ -770,11 +854,6 @@ namespace blekenbleu.Haptic
 				this.AttachDelegate("SuspensionRight", () => D.SuspensionRight);
 				this.AttachDelegate("SuspensionAll", () => D.SuspensionAll);
 				this.AttachDelegate("SuspensionAccAll", () => D.SuspensionAccAll);
-			}
-			this.AttachDelegate("RumbleFromPlugin", () => D.RumbleFromPlugin);
-			this.AttachDelegate("RumbleMult", () => D.RumbleMult);
-			this.AttachDelegate("RumbleLeft", () => D.RumbleLeft);
-			this.AttachDelegate("RumbleRight", () => D.RumbleRight);
 				this.AttachDelegate("Gear", () => D.Gear);
 				this.AttachDelegate("Gears", () => D.Gears);
 				this.AttachDelegate("ShiftDown", () => D.Downshift);
@@ -798,16 +877,18 @@ namespace blekenbleu.Haptic
 					this.AttachDelegate("JerkY", () => D.JerkY);
 					this.AttachDelegate("JerkX", () => D.JerkX);
 					this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
-//					this.AttachDelegate("Throttle", () => D.Accelerator);
-//					this.AttachDelegate("VelocityX", () => D.VelocityX);
+					this.AttachDelegate("Throttle", () => D.Accelerator);
+					this.AttachDelegate("VelocityX", () => D.VelocityX);
+#if !slim
 					this.AttachDelegate("MPitch", () => D.MotionPitch);
 					this.AttachDelegate("MRoll", () => D.MotionRoll);
 					this.AttachDelegate("MYaw", () => D.MotionYaw);
 					this.AttachDelegate("MHeave", () => D.MotionHeave);
 					this.AttachDelegate("MSurge", () => D.MotionSurge);
 					this.AttachDelegate("MSway", () => D.MotionSway);
+#endif
+				}
 			}
-			FrameTimeTicks = DateTime.Now.Ticks;
-		}   // Init()
+		}	// Init()
 	}
 }

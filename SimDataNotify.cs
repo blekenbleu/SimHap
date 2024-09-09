@@ -1,4 +1,3 @@
-
 namespace blekenbleu.Haptic
 {
 	// see Spec.cs for public abstract class NotifyPropertyChanged : INotifyPropertyChanged
@@ -7,14 +6,23 @@ namespace blekenbleu.Haptic
 		private string gameAltText;
 		private string loadStatusText;
 		private string lockedText;
-		private double engineMult;
-		private double engineMultAll;
-		private double rumbleMult;
-		private double rumbleMultAll;
 		private double suspensionMult;
 		private double suspensionMultAll;
 		private double suspensionGamma;
 		private double suspensionGammaAll;
+#if !slim
+		private double engineMult;
+		private double engineMultAll;
+		private double rumbleMult;
+		private double rumbleMultAll;
+		private double slipXMult;
+		private double slipXMultAll;
+		private double slipXGamma;
+		private double slipXGammaAll;
+		private double slipYMult;
+		private double slipYMultAll;
+		private double slipYGamma;
+		private double slipYGammaAll;
 		private double motionPitchOffset;
 		private double motionPitchMult;
 		private double motionPitchGamma;
@@ -33,6 +41,7 @@ namespace blekenbleu.Haptic
 		private double motionSwayOffset;
 		private double motionSwayMult;
 		private double motionSwayGamma;
+#endif
 		private bool locked = false;
 		public bool Locked
 		{
@@ -58,6 +67,30 @@ namespace blekenbleu.Haptic
 			set { SetField(ref lockedText, value, nameof(LockedText)); }
 		}
 
+		public double SuspensionGamma
+		{
+			get => suspensionGamma;
+			set { SetField(ref suspensionGamma, value, nameof(SuspensionGamma)); }
+		}
+
+		public double SuspensionGammaAll
+		{
+			get => suspensionGammaAll;
+			set { SetField(ref suspensionGammaAll, value, nameof(SuspensionGammaAll)); }
+		}
+
+		public double SuspensionMult
+		{
+			get => suspensionMult;
+			set { SetField(ref suspensionMult, value, nameof(SuspensionMult)); }
+		}
+
+		public double SuspensionMultAll
+		{
+			get => suspensionMultAll;
+			set { SetField(ref suspensionMultAll, value, nameof(SuspensionMultAll)); }
+		}
+#if !slim
 		public double EngineMult
 		{
 			get => engineMult;
@@ -82,28 +115,52 @@ namespace blekenbleu.Haptic
 			set { SetField(ref rumbleMultAll, value, nameof(RumbleMultAll)); }
 		}
 
-		public double SuspensionGamma
+		public double SlipXMult
 		{
-			get => suspensionGamma;
-			set { SetField(ref suspensionGamma, value, nameof(SuspensionGamma)); }
+			get => slipXMult;
+			set { SetField(ref slipXMult, value, nameof(SlipXMult)); }
 		}
 
-		public double SuspensionGammaAll
+		public double SlipXMultAll
 		{
-			get => suspensionGammaAll;
-			set { SetField(ref suspensionGammaAll, value, nameof(SuspensionGammaAll)); }
+			get => slipXMultAll;
+			set { SetField(ref slipXMultAll, value, nameof(SlipXMultAll)); }
 		}
 
-		public double SuspensionMult
+		public double SlipXGamma
 		{
-			get => suspensionMult;
-			set { SetField(ref suspensionMult, value, nameof(SuspensionMult)); }
+			get => slipXGamma;
+			set { SetField(ref slipXGamma, value, nameof(SlipXGamma)); }
 		}
 
-		public double SuspensionMultAll
+		public double SlipXGammaAll
 		{
-			get => suspensionMultAll;
-			set { SetField(ref suspensionMultAll, value, nameof(SuspensionMultAll)); }
+			get => slipXGammaAll;
+			set { SetField(ref slipXGammaAll, value, nameof(SlipXGammaAll)); }
+		}
+
+		public double SlipYMult
+		{
+			get => slipYMult;
+			set { SetField(ref slipYMult, value, nameof(SlipYMult)); }
+		}
+
+		public double SlipYMultAll
+		{
+			get => slipYMultAll;
+			set { SetField(ref slipYMultAll, value, nameof(SlipYMultAll)); }
+		}
+
+		public double SlipYGamma
+		{
+			get => slipYGamma;
+			set { SetField(ref slipYGamma, value, nameof(SlipYGamma)); }
+		}
+
+		public double SlipYGammaAll
+		{
+			get => slipYGammaAll;
+			set { SetField(ref slipYGammaAll, value, nameof(SlipYGammaAll)); }
 		}
 
 		public double MotionPitchOffset
@@ -213,5 +270,6 @@ namespace blekenbleu.Haptic
 			get => motionSwayGamma;
 			set { SetField(ref motionSwayGamma, value, nameof(MotionSwayGamma)); }
 		}
+#endif
 	}
 }

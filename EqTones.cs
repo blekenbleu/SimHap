@@ -78,6 +78,11 @@ namespace blekenbleu.Haptic
 			return (ushort)((30 + H.D.Rpms) / 60);     // RPM Hz
 		}
 
+		public ushort Fr2()
+		{
+			return (ushort)((60 + H.D.Rpms) / 120);     // RPM Hz
+		}
+
 		// for Fr[0-8] properties in Init()
 		// interpolate between harmonic frequencies based on throttle %
 		public ushort Fr(byte i)
@@ -87,7 +92,12 @@ namespace blekenbleu.Haptic
 			double d = 1.0 - a;
 
 			// interpolate between Tones[0] (no throttle) and Tones[2] (full throttle)
-			return (ushort)((60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.S.Car.cyl * H.D.Rpms) / 120);		// power stroke harmonic Hz
+			// H.SC.Ratio is either cylinders or BSratio;  SettingsControl.xaml.cs, SimDataMethods.cs
+#if BS
+			return (ushort)((60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.SC.Ratio) / 120);		// power stroke harmonic
+#else
+			return (ushort)((60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.S.Car.cyl) / 120);		// power stroke harmonic
+#endif
 		}
 
 		// interpolate between harmonic amplitudes based on throttle %
@@ -138,7 +148,7 @@ namespace blekenbleu.Haptic
 
 			H.AttachDelegate("E.Fr0", () => Fr0());
 			H.AttachDelegate("E.Fr1", () => Fr(1));
-			H.AttachDelegate("E.Fr2", () => Fr0() / 2);
+			H.AttachDelegate("E.Fr2", () => Fr2());
 			H.AttachDelegate("E.Fr3", () => Fr(3));
 			H.AttachDelegate("E.Fr4", () => Fr(4));
 			H.AttachDelegate("E.Fr5", () => Fr(5));
