@@ -354,6 +354,7 @@ namespace sierses.Sim
 				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
 				this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
 				this.AttachDelegate("rpmMain", () => D.rpmMain);
+
 				this.AttachDelegate("rpmPeakA2Rear", () => D.rpmPeakA2Rear);
 				this.AttachDelegate("rpmPeakB1Rear", () => D.rpmPeakB1Rear);
 				this.AttachDelegate("rpmPeakA1Rear", () => D.rpmPeakA1Rear);
