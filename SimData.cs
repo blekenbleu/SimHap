@@ -1984,7 +1984,7 @@ namespace sierses.Sim
 			EngineLoad *= H.N.Throttle * 0.01 * 0.01;
 			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Runtime() sniff: ignore FrameCountTicks .. for now
 #else
-			if (IdleSampleCount < 0) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Runtime()sniff: ignore FrameCountTicks .. for now
+			if (IdleSampleCount < 0) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Runtime() sniff: ignore FrameCountTicks .. for now
 #endif
 				if (H.N.Rpms > 300 && H.N.Rpms <= idleRPM * 1.1) // Runtime(): supposes that idleRPM is somewhat valid..??
 			{
