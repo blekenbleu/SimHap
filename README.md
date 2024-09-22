@@ -121,12 +121,12 @@
 `Init()` sets `Index = 2`, giving priority to .json for car changes  
 When SimHub calls `DataUpdate()`:  
 if (`null == data.NewData`), then return  
-else if (`data.NewData.CarId == S.Id`), then try to `Refresh()` before returning  
-else if (`-1 != D.Index`), then proceed to `Add()` and `SetVehicle()`  
+else if (`data.NewData.CarId == S.Id`), then try to `Runtime()` before returning  
+else if (`-1 != D.Index`), then proceed to `AddCar()` and `SetCar()`  
 else if (`Waiting && 20 > D.CarInitCount`), then return  
-else if (`null != dljc || -3 == Index)`), then proceed to `Add()` and `SetVehicle()`  
+else if (`null != dljc || -3 == Index)`), then proceed to `AddCar()` and `SetCar()`  
 else set `D.CarInitCount = 0`, and if (`3 > LoadFailCount++`), then return  
-else lock out `FetchCarData()` by `Index = -3` and continue to `Add()` and `SetVehicle()`
+else lock out `FetchCarData()` by `Index = -3` and continue to `AddCar()` and `SetCar()`
 
 - to prevent being recalled while waiting for server response,  
     `async FetchCarData()` immediately returns if called when `null != dljc || -1 != Index`  
@@ -134,15 +134,15 @@ else lock out `FetchCarData()` by `Index = -3` and continue to `Add()` and `SetV
 	- on receipt of server response, `FetchCarData()` set `Waiting = false` 
     	- if a valid `Download`, set `Loaded = true`
 		- else set `Index = -3`, preventing further attempts
-- if (`-2 == Index)`,  `SetVehicle()` *first* tries getting car Spec from JSON, based on `Index >= 0`  
+- if (`-2 == Index)`,  `SetCar()` *first* tries getting car Spec from JSON, based on `Index >= 0`  
 - failed JSON sets `Index = -1`, enabling `FetchCarData()`,   
     which typically sets `Waiting = true` and goes async.  
-- *subsequent* `SetVehicle()` again checks for `null != dljc || -3 == Index`
+- *subsequent* `SetCar()` again checks for `null != dljc || -3 == Index`
 	else eventually setting `Index = -3` and `Waiting = false` for `3 <= Haptics.LoadFailCount`  
 - if (`-3 == Index` ), then `Defaults()`  
 - consequently, server car Specs are associated with `-1 == Index && !Waiting` 
 - `Defaults()` attempts to generate game-specific car `Spec`...  
-- `SetVehicle` depends on noting that `current_car != requested_car`  
+- `SetCar` depends on noting that `current_car != requested_car`  
 - however, SimHub's 60Hz `DataUpdate()` can (and does) make calls  
   when `FetchCarData()` eventually matches `requested_car`,  
      car `Spec` code has not completed dotting I's and crossing T's....  
@@ -167,5 +167,9 @@ should be separate from that used for dictionary indexing.
 	- change `FetchCarData(CarId, category, redline, maxRPM, IdleRPM)`  
 			to `FetchCarData(category, redline, maxRPM, IdleRPM)`
 - consolidate SimData class references to `PluginManager` instance
-	- change `Refresh(this)` to `Refresh(this, pluginManager)`
+	- change `Runtime(this)` to `Runtime(this, pluginManager)`
 - remove untested code for GPBikes, MXBikes
+
+### 21 Sept:&nbsp; enable Refresh button, which was broken by `CarId` refactor
+- rename `Refresh()` to `Runtime()` to reduce confusion with UI Refresh paradigm
+- refactor `Lcache` to discard changes if Refresh

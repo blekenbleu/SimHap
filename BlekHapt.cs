@@ -109,9 +109,9 @@ namespace blekenbleu.Haptic
 
 		private static BlekHapt H;
 #if slim
-		internal static void FetchCarData(		// called from SetVehicle() switch
+		internal static void FetchCarData(			// called from SetCar() switch
 #else
-		// async must be void and static;  invoked by D.SetCar()
+		// async must be void and static
 		internal static async void FetchCarData(	// called from SetCar() switch
 #endif
 			string category,
@@ -220,7 +220,7 @@ namespace blekenbleu.Haptic
 			{
 				if (null != data.OldData && data.GameRunning
 					&& 1 == (On = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
-					D.Refresh(this, pluginManager);
+					D.Runtime(this, pluginManager);
 				return;
 			}
 

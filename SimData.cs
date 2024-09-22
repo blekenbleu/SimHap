@@ -33,7 +33,7 @@ namespace blekenbleu.Haptic
 		public double CylinderDisplacement;
 		public int WiperStatus;
 		public int CarInitCount;
-		public int IdleSampleCount;			// used in Refresh()
+		public int IdleSampleCount;			// used in Runtime()
 		public double IdlePercent;
 		public double RedlinePercent;
 		public double RPMPercent;
@@ -288,7 +288,7 @@ namespace blekenbleu.Haptic
 		internal string raw;
 		private long FrameTimeTicks;
 		private long FrameCountTicks;
-		private ushort idleRPM;						 // for sniffing in Refresh()
+		private ushort idleRPM;						 // for sniffing in Runtime()
 #endif
 
 		public SimData()
@@ -1360,7 +1360,7 @@ namespace blekenbleu.Haptic
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Refresh(BlekHapt bh, PluginManager pluginManager)
+		internal void Runtime(BlekHapt bh, PluginManager pluginManager)
 		{
 			H = bh;
 			PM = pluginManager;
@@ -1982,25 +1982,25 @@ namespace blekenbleu.Haptic
 				EngineLoad += 200.0 * Math.Sin(H.N.OrientationPitch * 0.0174533);
 			EngineLoad -= EngineLoad * (1.0 - MixPower) * 0.5;
 			EngineLoad *= H.N.Throttle * 0.01 * 0.01;
-			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh() sniff: ignore FrameCountTicks .. for now
+			if (IdleSampleCount < 20) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Runtime() sniff: ignore FrameCountTicks .. for now
 #else
-			if (IdleSampleCount < 0) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh()sniff: ignore FrameCountTicks .. for now
+			if (IdleSampleCount < 0) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Runtime()sniff: ignore FrameCountTicks .. for now
 #endif
-				if (H.N.Rpms > 300 && H.N.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
+				if (H.N.Rpms > 300 && H.N.Rpms <= idleRPM * 1.1) // Runtime(): supposes that idleRPM is somewhat valid..??
 			{
 				double num19 = Math.Abs(H.Gdat.OldData.Rpms - H.N.Rpms) * FPS;
 
 				if (num19 < 40.0)
 				{
-					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)H.N.Rpms) >> 1); // Refresh(): averaging with previous average
-					++IdleSampleCount;								// Refresh(): increment if difference < 40
+					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)H.N.Rpms) >> 1); // Runtime(): averaging with previous average
+					++IdleSampleCount;								// Runtime(): increment if difference < 40
 #if !slim
-					double num20 = idleRPM * 0.008333333;		// Refresh(): some FrequencyMultiplier magic
+					double num20 = idleRPM * 0.008333333;		// Runtime(): some FrequencyMultiplier magic
 					FrequencyMultiplier = num20 >= 5.0 ? (num20 >= 10.0 ? (num20 <= 20.0 ? (num20 <= 40.0 ? 1.0 : 0.25) : 0.5) : 2.0) : 4.0;
 #endif
 				}
-				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Refresh(): change H.S.IdleRPM?
-					H.S.Idle(idleRPM);							// Refresh() sniff: only if it was 0
+				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Runtime(): change H.S.IdleRPM?
+					H.S.Idle(idleRPM);							// Runtime() sniff: only if it was 0
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)
@@ -2456,6 +2456,6 @@ namespace blekenbleu.Haptic
 			GainPeakB2Rear *= EngineMult * EngineMultAll;
 			GainPeakB2 *= EngineMult * EngineMultAll;
 #endif
-		}	// Refresh()
+		}	// Runtime()
 	}
 }
