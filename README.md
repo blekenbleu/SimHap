@@ -174,4 +174,13 @@ should be separate from that used for dictionary indexing.
 
 ### 21 Sept:&nbsp; enable Refresh button, which was broken by `CarId` refactor
 - rename `Refresh()` to `Runtime()` to reduce confusion with UI Refresh paradigm
-- refactor `Lcache` to discard changes if Refresh
+
+### 22 Sep:&nbsp;  Car cache
+`CarSpec`s for `CarId`s used during current game session are temporarily cached in the `Lcache` CarSpec List.
+`Lcache.Add()` occurs in `Cache()` and `SaveCar()`.  
+- `Cache()` is called by `SelectCar()` matching `Car.id` in personal or Atlas JSON  .  
+- Otherwise, `Cache()` is called by 'FetchCarData()' for successful Internet downloads, else by `Defaults()`.  
+
+`SaveCar()` is invoked *only if* `Loaded || Changed`, just before `SetCar()` attempts to match CarId to dictionaries.  
+Consequently, `Refresh_Click()` avoids caching any `CarSpec` changes  
+ &emsp; by setting `Loaded = Changed = false;` immediately before `Plugin.CarId = "";`

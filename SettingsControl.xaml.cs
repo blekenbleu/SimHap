@@ -46,9 +46,10 @@ namespace sierses.Sim
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
-			Plugin.CarId = "";		   // Refresh_Click() force a mismatch
 			Logging.Current.Info($"Haptics.Refresh_Click()");
+			Plugin.Loaded = Plugin.Changed = false;
 			Haptics.LoadFailCount = 1;
+			Plugin.CarId = "";		   // Refresh_Click() force a mismatch
 		}
 
 		private void Lock_Click(object sender, RoutedEventArgs e)
