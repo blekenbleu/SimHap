@@ -77,7 +77,7 @@ namespace sierses.Sim
 		// ----------------------------------------------------------------
 
 		private static Haptics H;
-		internal static void FetchCarData(		// called from SetVehicle() switch
+		internal static void FetchCarData(			// called from SetCar() switch
 			string category,
 			ushort redlineFromGame,
 			ushort maxRPMFromGame,
@@ -127,7 +127,7 @@ namespace sierses.Sim
 			{
 				if (null != data.OldData && data.GameRunning
 					&& 1 == (On = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
-					D.Refresh(this, pluginManager);
+					D.Runtime(this, pluginManager);
 				return;
 			}
 

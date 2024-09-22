@@ -129,7 +129,7 @@ namespace sierses.Sim
 			Array.Clear(AccSway, 0, AccSway.Length);
 			Acc1 = 0;
 			IdleSampleCount = 0;
-			idleRPM = 0;							// SetVehicle(): reset to default value for each car
+			idleRPM = 0;							// SetCar(): reset to default value for each car
 			SetRPMMix();
 			H.S.Set();								// NotifyPropertyChanged
 			H.CarId = H.N.CarId;					// SetCar(): car change is complete

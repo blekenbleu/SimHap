@@ -33,7 +33,7 @@ namespace sierses.Sim
 		public double CylinderDisplacement;
 		public int WiperStatus;
 		public int CarInitCount;
-		public int IdleSampleCount;			// used in Refresh()
+		public int IdleSampleCount;			// used in Runtime()
 		public double IdlePercent;
 		public double RedlinePercent;
 		public double RPMPercent;
@@ -427,7 +427,7 @@ namespace sierses.Sim
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Refresh(Haptics shp, PluginManager pluginManager)
+		internal void Runtime(Haptics shp, PluginManager pluginManager)
 		{
 			H = shp;
 			PM = pluginManager;
@@ -707,18 +707,18 @@ namespace sierses.Sim
 				SuspensionMultR2 = num14 * 1.0;
 				SuspensionMultR3 = num15 * 0.5;
 			}
-			if (IdleSampleCount < 0) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Refresh()sniff: ignore FrameCountTicks .. for now
-				if (H.N.Rpms > 300 && H.N.Rpms <= idleRPM * 1.1) // Refresh(): supposes that idleRPM is somewhat valid..??
+			if (IdleSampleCount < 0) /*&& FrameCountTicks % 2500000L <= 150000L*/	// Runtime() sniff: ignore FrameCountTicks .. for now
+				if (H.N.Rpms > 300 && H.N.Rpms <= idleRPM * 1.1) // Runtime(): supposes that idleRPM is somewhat valid..??
 			{
 				double num19 = Math.Abs(H.Gdat.OldData.Rpms - H.N.Rpms) * FPS;
 
 				if (num19 < 40.0)
 				{
-					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)H.N.Rpms) >> 1); // Refresh(): averaging with previous average
-					++IdleSampleCount;								// Refresh(): increment if difference < 40
+					idleRPM = Convert.ToUInt16((1 + idleRPM + (int)H.N.Rpms) >> 1); // Runtime(): averaging with previous average
+					++IdleSampleCount;								// Runtime(): increment if difference < 40
 				}
-				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Refresh(): change H.S.IdleRPM?
-					H.S.Idle(idleRPM);							// Refresh() sniff: only if it was 0
+				if (20 == IdleSampleCount && 0 == H.S.IdleRPM)	// Runtime(): change H.S.IdleRPM?
+					H.S.Idle(idleRPM);							// Runtime() sniff: only if it was 0
 			}
 
 			if (FrameCountTicks % 5000000L <= 150000L)
@@ -1088,6 +1088,6 @@ namespace sierses.Sim
 
 			if (FreqPeakB2 > 15 && FreqPeakB2 < 325)
 				rpmPeakB2Front = rpmPeakB2FrontSum * peakGearMulti * peakEQ;
-		}	// Refresh()
+		}	// Runtime()
 	}
 }
