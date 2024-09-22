@@ -13,7 +13,7 @@ namespace sierses.Sim
 
 			UTcount = 0;
 
-            // D.Refresh() updates D.Rpms when GameRunning
+            // D.Runtime() updates D.Rpms when GameRunning
 			// Slider 0, 8 are min, max frequency
             H.D.Rpms += (ushort)((Q[EQswitch].Slider[8] - Q[EQswitch].Slider[0]) >> 1);
             if ((60 * Q[EQswitch].Slider[8]) < H.D.Rpms)

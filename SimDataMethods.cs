@@ -201,7 +201,7 @@ namespace sierses.Sim
 			Acc1 = 0;
 			IdleSampleCount = 0;
 #if slim
-			idleRPM = 0;							// SetVehicle(): reset to default value for each car
+			idleRPM = 0;							// SetCar(): reset to default value for each car
 #else
 			idleRPM = 2500;							// SetCar(): reset to default (IMO high) value for each car
 			SetRPMIntervals();
