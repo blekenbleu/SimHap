@@ -34,7 +34,7 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <OutDir>..\..\</OutDir>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;BS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
