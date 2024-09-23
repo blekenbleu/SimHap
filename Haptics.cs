@@ -288,7 +288,7 @@ namespace sierses.Sim
 			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
-			bool ShowFreq = true, ShowTire = false, ShowSusp = true, ShowPhysics = true;
+			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
 			if (1 > Settings.DownshiftDurationMs)
