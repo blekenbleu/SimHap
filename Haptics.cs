@@ -164,6 +164,8 @@ namespace sierses.Sim
 				Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
+				Logging.Current.Info(pname + ".pluginManager.GetPropertyValue(\"JSONio.JSONio.Gscale\") = "
+						 + (string)pluginManager.GetPropertyValue("JSONio.JSONio.Gscale"));
 				D.SetCar(pluginManager);
 			}
 		}	// DataUpdate()
