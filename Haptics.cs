@@ -415,6 +415,7 @@ namespace sierses.Sim
 					this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
 					this.AttachDelegate("Throttle", () => D.Accelerator);
 					this.AttachDelegate("VelocityX", () => D.VelocityX);
+					this.AttachDelegate("impactsR1Sway", () => D.impactsR1Sway());
 				}
 			}
 		}	// Init()

@@ -193,6 +193,9 @@ namespace sierses.Sim
 		internal int Index;
 		internal string raw = "DataCorePlugin.GameRawData.";
 		private ushort idleRPM;
+		private double slowerR1Sway;
+		private double fasterR1Sway;
+		private double sluggishR1Sway;
 
 		public SimData()
 		{

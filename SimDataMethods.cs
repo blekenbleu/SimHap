@@ -20,7 +20,19 @@ namespace sierses.Sim
 			SuspensionMultAll = H.Settings.SuspensionMult.TryGetValue("AllGames", out num) ? num : 1.5;
 			SuspensionGamma = H.Settings.SuspensionGamma.TryGetValue(GDBtext, out num) ? num : 1.0;
 			SuspensionGammaAll = H.Settings.SuspensionGamma.TryGetValue("AllGames", out num) ? num : 1.75;
+			slowerR1Sway = 15;
+            fasterR1Sway = 1;
+            sluggishR1Sway = 0;
 		}
+
+		public double impactsR1Sway()
+        {
+//          double sway = SwayR1Front;
+            double sway = AccSway2S;
+            double factor = (sway > sluggishR1Sway) ? fasterR1Sway : slowerR1Sway;
+            sluggishR1Sway += (sway - sluggishR1Sway) / factor;
+            return sluggishR1Sway / 10;
+        }
 
 		// called from DataUpdate(), initially with -2 == Index
 		internal void SetCar(PluginManager pluginManager)
