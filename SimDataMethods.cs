@@ -23,9 +23,17 @@ namespace sierses.Sim
 			slowerR1Sway = 15;
             fasterR1Sway = 1;
             sluggishR1Sway = 0;
+			impactsAccSway2S = 0;
 		}
 
-		public double impactsR1Sway()
+		public double BipolarIIR(double input, double root, double faster, double slower, double scale)
+        {
+            double factor = (input > root) ? faster : slower;
+            root += (input - root) / factor;
+            return scale * root;
+        }
+
+		public double ImpactsR1Sway()
         {
 //          double sway = SwayR1Front;
             double sway = AccSway2S;
