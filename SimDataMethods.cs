@@ -24,6 +24,18 @@ namespace sierses.Sim
             fasterR1Sway = 1;
             sluggishR1Sway = 0;
 			impactsAccSway2S = 0;
+			more = filtered = 0;
+		}
+
+		public double ThrottleIIR()
+		{
+			if (null == PM)	// required when called by this.AttachDelegate()
+				return 0;
+			double throttle = (double)PM.GetPropertyValue("DataCorePlugin.GameData.Throttle");
+			filtered += (throttle - filtered) / 14;
+			more += (throttle > 0.5 + filtered) ? (throttle - filtered) / 6
+												: ((95 < throttle ? 1 : 0) - more) * 0.2;
+			return more;
 		}
 
 		public double BipolarIIR(double input, double root, double faster, double slower, double scale)

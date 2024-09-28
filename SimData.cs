@@ -197,6 +197,7 @@ namespace sierses.Sim
 		private double fasterR1Sway;
 		private double sluggishR1Sway;
 		internal double impactsAccSway2S;
+		private double more, filtered;
 
 		public SimData()
 		{
