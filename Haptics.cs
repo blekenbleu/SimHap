@@ -17,7 +17,7 @@ namespace sierses.Sim
 	[PluginDescription("Car-specific haptic properties")]
 	[PluginAuthor("sierses")]
 	[PluginName("Haptics")]
-	public class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
+	public partial class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
 		static readonly string pname = nameof(Haptics);
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(
@@ -28,9 +28,7 @@ namespace sierses.Sim
 		internal bool Loaded, Waiting, Save, Set, Changed;
 		internal string CarId;		// exactly match data.NewData.CarId for DataUpdate()
 		private readonly string myfile = $"PluginsData/{pname}.{Environment.UserName}.json";
-//		private readonly string Atlasfile = $"PluginsData/{pname}.Atlas.json";
-		private readonly string Atlasfile = $"PluginsData/{pname}.Atlas_with_orders.json";
-		private static List<CarSpec> Atlas = new();
+		private static List<CarSpec> Atlas = [];
 		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
@@ -171,7 +169,7 @@ namespace sierses.Sim
 		}	// DataUpdate()
 
 		// Null0() remove these if 0 value before saving JSON
-		private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" };
+		private readonly List<string> zero = ["ehp", "idlerpm", "maxrpm", "redline"];
 		private string Null0(string j)
 		{
 			for (int i = 0; i < zero.Count; i++)
@@ -304,20 +302,12 @@ namespace sierses.Sim
 			if (!Settings.SuspensionGamma.ContainsKey("AllGames"))
 				Settings.SuspensionGamma.Add("AllGames", 1.75);
 
-			if (File.Exists(Atlasfile))
+			if (AtlasDict.ContainsKey(GameDBText))
 			{
-				Dictionary<string, List<CarSpec>> JsonDict =
-					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(Atlasfile));
-				if (null == JsonDict)
-					Logging.Current.Info(pname + ".Init(): Atlas load failure");
-				else if (JsonDict.ContainsKey(GameDBText))
-				{
-					Atlas = JsonDict[GameDBText];
-					Atlasst = $";  {Atlas.Count} cars in Atlas";
-				}
-				else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");
+				Atlas = AtlasDict[GameDBText];
+				Atlasst = $";  {Atlas.Count} cars in Atlas";
 			}
-			else Logging.Current.Info(pname + $".Init():  no Atlas");
+			else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");
 
 			if (File.Exists(myfile))
 			{
