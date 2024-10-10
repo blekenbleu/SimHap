@@ -75,13 +75,9 @@ namespace sierses.Sim
 		// ----------------------------------------------------------------
 
 		private static Haptics H;
-		internal static void FetchCarData(			// called from SetCar() switch
-			string category,
-			ushort redlineFromGame,
-			ushort maxRPMFromGame,
-			ushort ushortIdleRPM)							// FetchCarData() argument
+		internal static void FetchCarData(ushort redlineFromGame, ushort maxRPMFromGame, ushort ushortIdleRPM) // called from SetCar() switch
 		{
-			Logging.Current.Info(pname + $".FetchCarData({category}):  Index = {H.D.Index}," +
+			Logging.Current.Info(pname + $".FetchCarData():  Index = {H.D.Index}," +
 							   (H.Save ? " Save " : "") + (H.Loaded ? " Loaded " : "") + (H.Waiting ? " Waiting" : "")
 								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : ""));
 
