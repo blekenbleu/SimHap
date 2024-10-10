@@ -80,22 +80,22 @@ namespace blekenbleu.Haptic
 					case GameId.RBR:
 					case GameId.GTR2:
 #endif
-						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						BlekHapt.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 #if !slim
 					case GameId.AMS1:
 					case GameId.RF2:
 #endif
 					case GameId.LMU:
-						BlekHapt.FetchCarData(H.N.CarClass, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						BlekHapt.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 					case GameId.AMS2:
-						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						BlekHapt.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						H.S.CarName = H.N.CarModel;
 						H.S.Category = H.N.CarClass;
 						break;
 					case GameId.BeamNG:
-						BlekHapt.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
+						BlekHapt.FetchCarData(Convert.ToUInt16(0.5 + H.N.MaxRpm),
 								Convert.ToUInt16((Math.Ceiling(H.N.MaxRpm * 0.001) - H.N.MaxRpm * 0.001) > 0.55
 								 	? Math.Ceiling(H.N.MaxRpm * 0.001) * 1000.0
 								 	: Math.Ceiling((H.N.MaxRpm + 1000.0) * 0.001) * 1000.0),
@@ -106,48 +106,47 @@ namespace blekenbleu.Haptic
 					case GameId.D4:
 #endif
 					case GameId.DR2:
-						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+						BlekHapt.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
 						break;
 #if !slim
 					case GameId.F12022:
 					case GameId.F12023:
-						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+						BlekHapt.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetCar(F12023): to FetchCarData()
 						break;
 #endif
 					case GameId.Forza:
 						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
-						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+						BlekHapt.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetCar(Forza)
 						break;
 					case GameId.IRacing:
 						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetCar(IRacing)
-						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
+						BlekHapt.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
 											Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
 #if !slim
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
-						BlekHapt.FetchCarData(null,
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MinAlertRPM")),
+						BlekHapt.FetchCarData(Convert.ToUInt16(PM.GetPropertyValue(raw+"MinAlertRPM")),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MaxAlertRPM")), 0);
 						break;
 					case GameId.RRRE:
 						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
 						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
-						BlekHapt.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						BlekHapt.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 #endif
 					case GameId.WRC23:
-						BlekHapt.FetchCarData(null,
+						BlekHapt.FetchCarData(
 											Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)),
 											Convert.ToUInt16(H.N.MaxRpm),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
 						break;
 					default:
-						BlekHapt.FetchCarData(null,
+						BlekHapt.FetchCarData(
 #if slim
 						0, 0, 0
 #else

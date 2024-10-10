@@ -111,9 +111,7 @@ namespace blekenbleu.Haptic
 	public class Spec : NotifyPropertyChanged
 	{
 		public ListDictionary LD { get; set; }  // needs to be public for JsonConvert
-		private static ushort redlineFromGame;
-		private static ushort maxRPMFromGame;
-		private static ushort ushortIdleRPM;
+		private static ushort redlineFromGame, maxRPMFromGame, ushortIdleRPM;
 		private readonly List<CarSpec> Lcache;
 		private CarSpec Private_Car, DfltCar;
 		internal CarSpec Car { get => Private_Car; }
@@ -405,12 +403,12 @@ namespace blekenbleu.Haptic
 #else
 				{
 					config = "V",
-					cyl = 6,
 					loc = "RM",
 					drive = "R",
+					ehp = 0,
+					cyl = 6,
 					cc = 1600,
 					hp = 300,
-					ehp = 0,
 					nm = 250
 				};
 
@@ -474,6 +472,9 @@ namespace blekenbleu.Haptic
 			DfltCar.name = db.CarModel;
 			DfltCar.category = string.IsNullOrEmpty(db.CarClass) ? "street" : db.CarClass;
 			DfltCar.id = Car.id;						// CarId()
+			DfltCar.redline = redlineFromGame;
+			DfltCar.maxrpm  = maxRPMFromGame;
+			DfltCar.idlerpm = ushortIdleRPM;
 			Cache(DfltCar);
 			Src = StatusText;
 		}												// Defaults()
