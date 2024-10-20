@@ -80,22 +80,22 @@ namespace sierses.Sim
 					case GameId.RBR:
 					case GameId.GTR2:
 #endif
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						Haptics.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 #if !slim
 					case GameId.AMS1:
 					case GameId.RF2:
 #endif
 					case GameId.LMU:
-						Haptics.FetchCarData(H.N.CarClass, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						Haptics.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 					case GameId.AMS2:
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						Haptics.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						H.S.CarName = H.N.CarModel;
 						H.S.Category = H.N.CarClass;
 						break;
 					case GameId.BeamNG:
-						Haptics.FetchCarData(null, Convert.ToUInt16(0.5 + H.N.MaxRpm),
+						Haptics.FetchCarData(Convert.ToUInt16(0.5 + H.N.MaxRpm),
 								Convert.ToUInt16((Math.Ceiling(H.N.MaxRpm * 0.001) - H.N.MaxRpm * 0.001) > 0.55
 								 	? Math.Ceiling(H.N.MaxRpm * 0.001) * 1000.0
 								 	: Math.Ceiling((H.N.MaxRpm + 1000.0) * 0.001) * 1000.0),
@@ -105,45 +105,43 @@ namespace sierses.Sim
 #if !slim
 					case GameId.F12022:
 					case GameId.F12023:
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+						Haptics.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 										 	Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"PlayerCarStatusData.m_idleRPM"))));	// SetCar(F12023): to FetchCarData()
 						break;
 					case GameId.GranTurismo7:
 					case GameId.GranTurismoSport:
-						Haptics.FetchCarData(null,
-										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MinAlertRPM")),
+						Haptics.FetchCarData(Convert.ToUInt16(PM.GetPropertyValue(raw+"MinAlertRPM")),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"MaxAlertRPM")), 0);
 						break;
 					case GameId.RRRE:
 						H.S.CarId(H.N.CarId.Split(',')[0]);		// number before comma
 						H.S.CarModel(H.N.CarModel);				// try for Atlas match on CarName
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
+						Haptics.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm), 0);
 						break;
 					case GameId.D4:
 #endif
 					case GameId.DR2:
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+						Haptics.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 											Convert.ToUInt16(10 * Convert.ToInt32(PM.GetPropertyValue(raw+"IdleRpm"))));	// SetCar(DR2)
 						break;
 					case GameId.Forza:
 						H.S.CarId(H.N.CarId.Substring(4));						// remove "Car_" prefix
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
+						Haptics.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM), Convert.ToUInt16(H.N.MaxRpm),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"EngineIdleRpm")));		// SetCar(Forza)
 						break;
 					case GameId.IRacing:
 						var rpm = PM.GetPropertyValue(raw+"SessionData.DriverInfo.DriverCarIdleRPM");	// SetCar(IRacing)
-						Haptics.FetchCarData(null, Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
+						Haptics.FetchCarData(Convert.ToUInt16(H.N.CarSettings_CurrentGearRedLineRPM),
 											Convert.ToUInt16(H.N.MaxRpm), Convert.ToUInt16(rpm ?? 0));
 						GameAltText = PM.GameName + (string)PM.GetPropertyValue(raw+"SessionData.WeekendInfo.Category");
 						break;
 					case GameId.WRC23:
-						Haptics.FetchCarData(null,
-											Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)),
+						Haptics.FetchCarData(Convert.ToUInt16(Math.Floor(H.N.CarSettings_CurrentGearRedLineRPM)),
 											Convert.ToUInt16(H.N.MaxRpm),
 										 	Convert.ToUInt16(PM.GetPropertyValue(raw+"SessionUpdate.vehicle_engine_rpm_idle")));
 						break;
 					default:
-						Haptics.FetchCarData(null,
+						Haptics.FetchCarData(
 #if slim
 						0, 0, 0
 #else
