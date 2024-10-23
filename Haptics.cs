@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Media;
+using blekenbleu;
 
 namespace sierses.Sim
 {
@@ -279,8 +280,9 @@ namespace sierses.Sim
 		public void Init(PluginManager pluginManager)
 		{
 			string Atlasst = "";
+			CarSpecAtlas CSA = new();
 
-			H = this;								// static pointer to current instance
+            H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
 			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
@@ -291,17 +293,17 @@ namespace sierses.Sim
 			if (1 > Settings.UpshiftDurationMs)
 				Settings.UpshiftDurationMs = 400;
 			if (Settings.SuspensionMult == null)
-				Settings.SuspensionMult = new Dictionary<string, double>();
+				Settings.SuspensionMult = [];
 			if (!Settings.SuspensionMult.ContainsKey("AllGames"))
 				Settings.SuspensionMult.Add("AllGames", 1.5);
 			if (Settings.SuspensionGamma == null)
-				Settings.SuspensionGamma = new Dictionary<string, double>();
+				Settings.SuspensionGamma = [];
 			if (!Settings.SuspensionGamma.ContainsKey("AllGames"))
 				Settings.SuspensionGamma.Add("AllGames", 1.75);
 
-			if (AtlasDict.ContainsKey(GameDBText))
+			if (0 <= CSA.InDict(GameDBText)) // (AtlasDict.ContainsKey(GameDBText))
 			{
-				Atlas = AtlasDict[GameDBText];
+				Atlas = CSA.Atlas(GameDBText);
 				Atlasst = $";  {Atlas.Count} cars in Atlas";
 			}
 			else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");

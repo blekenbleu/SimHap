@@ -83,6 +83,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarSpecAtlas.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="New.cs" />
     <Compile Include="SimData.cs" />

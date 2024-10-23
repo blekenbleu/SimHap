@@ -67,7 +67,7 @@ namespace sierses.Sim
 	public class ListDictionary : NotifyPropertyChanged
 	{
 		internal Dictionary<string, List<CarSpec>> inDict;
-		internal ListDictionary() { inDict = new(); }
+		internal ListDictionary() { inDict = []; }
 		Haptics H;
 
 		// create inDict, return List<CarSpec>
@@ -92,7 +92,7 @@ namespace sierses.Sim
 					inDict[g][idx] = car;				// ListDictionary:  replace car in dictionary
 				else inDict[g].Add(car);				// ListDictionary:  add car to current dictionary
 			}
-			else inDict.Add(g, new() { car } );			// ListDictionary:  add new dictionary with car
+			else inDict.Add(g, [car] );			// ListDictionary:  add new dictionary with car
 			H.Save = true;
 			return;
 		}
@@ -122,7 +122,7 @@ namespace sierses.Sim
 		public Spec()
 		{
 			Private_Car = new() { };				// required 24 May 2024
-			Lcache = new() { };						// required 24 May 2024
+			Lcache = [];						// required 24 May 2024
 			LD = new() { };
 		}
 
