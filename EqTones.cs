@@ -69,7 +69,7 @@ namespace blekenbleu.Haptic
 			
 			LUT.Add(EqSpline(Q[i].Slider));
 			Publish(This, LUT.Count);
-			H.D.LoadText = $"added LUT[{LUT.Count - 1}]";
+			H.D.LoadText = $"added EQ Spline LUT[{LUT.Count - 1}]";
 			return true;
 		}
 

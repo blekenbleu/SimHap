@@ -1386,12 +1386,12 @@
                                     VerticalContentAlignment="Center"
                                     BorderThickness="0"
                                     Checked="EngineView_Switch_Checked"
-                                    Content="Expand"
+                                    Content="Collapse"
                                     FontFamily="roboto"
                                     FontSize="16"
                                     FontWeight="SemiBold"
                                     Foreground="White"
-                                    IsChecked="True"
+                                    IsChecked="False"
                                     Style="{StaticResource dMASSbuttonToggle}"
                                     Unchecked="EngineView_Switch_Unchecked" />
                                 <!--  Lock/unlock button  -->

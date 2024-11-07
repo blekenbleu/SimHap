@@ -19,7 +19,7 @@ namespace blekenbleu.Haptic
 	[PluginName("BlekHapt")]
 	public partial class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
-		internal static readonly string pname = nameof(Haptics);
+		internal static readonly string pname = "BlekHapt";
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(
 			Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
@@ -36,10 +36,7 @@ namespace blekenbleu.Haptic
 #if !slim
 		public Geq E { get; set; } 
 #endif
-		public ImageSource PictureIcon
-		{
-			get { return this.ToIcon(Resources.SimHapticsShakerStyleIcon_alt012); }
-		}
+		public ImageSource PictureIcon => this.ToIcon(Resources.SimHapticsShakerStyleIcon_alt012);
 
 		public ImageSource RPMIcon
 		{
@@ -355,7 +352,6 @@ namespace blekenbleu.Haptic
 					break;
 				case "Automobilista":
 					CurrentGame = GameId.AMS1;
-					GameDBText = "AMS1";
 					break;
 				case "KartKraft":
 					CurrentGame = GameId.KK;

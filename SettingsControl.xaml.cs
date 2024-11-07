@@ -117,7 +117,8 @@ namespace blekenbleu.Haptic
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
-			Logging.Current.Info($"blekHapt.Refresh_Click()");
+//			Logging.Current.Info($"Haptics.Refresh_Click()");
+			Plugin.S.UnCache();
 			Plugin.Changed = false;
 			Haptics.LoadFailCount = 1;
 			Plugin.CarId = "";		   // Refresh_Click() force a mismatch
