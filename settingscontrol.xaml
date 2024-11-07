@@ -200,10 +200,10 @@
                 </Style.Triggers>
             </Style>
 
-            
-            
 
-            
+
+
+
             <!--  button style for toggle button for Full throttle  -->
             <Style x:Key="dMASSbuttonToggleThrottle" TargetType="{x:Type ToggleButton}">
                 <Setter Property="Template">
@@ -1046,8 +1046,7 @@
                                     <TextBlock
                                         x:Name="FiringOrderLabel1"
                                         Foreground="{DynamicResource Foreground}"
-                                        Text="Order ( "
-                                        />
+                                        Text="Order ( " />
                                     <TextBlock
                                         x:Name="FiringOrderLabel2"
                                         Foreground="{DynamicResource Foreground}"
@@ -1055,8 +1054,7 @@
                                     <TextBlock
                                         x:Name="FiringOrderLabel3"
                                         Foreground="{DynamicResource Foreground}"
-                                        Text=" )"
-                                        />
+                                        Text=" )" />
                                 </StackPanel>
 
 

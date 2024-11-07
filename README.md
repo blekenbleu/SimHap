@@ -184,3 +184,6 @@ should be separate from that used for dictionary indexing.
 `SaveCar()` is invoked *only if* `Loaded || Changed`, just before `SetCar()` attempts to match CarId to dictionaries.  
 Consequently, `Refresh_Click()` avoids caching any `CarSpec` changes  
  &emsp; by setting `Loaded = Changed = false;` immediately before `Plugin.CarId = "";`
+
+### 7 Nov:&nbsp; sync to slim `6.3.5.7`
+- for **Refresh**, `UnCache()`, scrubbed JSON

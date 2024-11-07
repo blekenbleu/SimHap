@@ -5,15 +5,13 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
-
-
 namespace blekenbleu.Haptic
 {
-	// see also ToneControl.cs
+	// see also ToneControl.cs in master branch
 
 	public partial class SettingsControl : UserControl //, IComponentConnector
 	{
-		public readonly BlekHapt Plugin;
+		public readonly Haptics Plugin;
 		readonly ResourceDictionary Tres;
 		public SettingsControl()
 		{
@@ -23,7 +21,7 @@ namespace blekenbleu.Haptic
 		}
 
 
-		public SettingsControl(BlekHapt plugin) : this()
+		public SettingsControl(Haptics plugin) : this()
 		{
 			Plugin = plugin;
 			DataContext = Plugin;
@@ -120,8 +118,8 @@ namespace blekenbleu.Haptic
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
 			Logging.Current.Info($"blekHapt.Refresh_Click()");
-			Plugin.Loaded = Plugin.Changed = false;
-			BlekHapt.LoadFailCount = 1;
+			Plugin.Changed = false;
+			Haptics.LoadFailCount = 1;
 			Plugin.CarId = "";		   // Refresh_Click() force a mismatch
 		}
 
@@ -248,7 +246,6 @@ namespace blekenbleu.Haptic
 				LabelRollOffset.Foreground = (SolidColorBrush)this.FindResource("Light");
 				LabelRollOffset.FontWeight = FontWeights.Bold;
 			}
-
 		}
 
 		private void MotionRollOffset_LostFocus(object sender, RoutedEventArgs e)
@@ -265,7 +262,6 @@ namespace blekenbleu.Haptic
 				LabelYawOffset.Foreground = (SolidColorBrush)this.FindResource("Light");
 				LabelYawOffset.FontWeight = FontWeights.Bold;
 			}
-
 		}
 
 		private void MotionYawOffset_LostFocus(object sender, RoutedEventArgs e)
@@ -282,7 +278,6 @@ namespace blekenbleu.Haptic
 				LabelHeaveOffset.Foreground = (SolidColorBrush)this.FindResource("Light");
 				LabelHeaveOffset.FontWeight = FontWeights.Bold;
 			}
-
 		}
 
 		private void MotionHeaveOffset_LostFocus(object sender, RoutedEventArgs e)
@@ -299,7 +294,6 @@ namespace blekenbleu.Haptic
 				LabelSurgeOffset.Foreground = (SolidColorBrush)this.FindResource("Light");
 				LabelSurgeOffset.FontWeight = FontWeights.Bold;
 			}
-
 		}
 
 		private void MotionSurgeOffset_LostFocus(object sender, RoutedEventArgs e)
@@ -316,7 +310,6 @@ namespace blekenbleu.Haptic
 				LabelSwayOffset.Foreground = (SolidColorBrush)this.FindResource("Light");
 				LabelSwayOffset.FontWeight = FontWeights.Bold;
 			}
-
 		}
 
 		private void MotionSwayOffset_LostFocus(object sender, RoutedEventArgs e)
@@ -333,7 +326,6 @@ namespace blekenbleu.Haptic
 				LabelPitchMult.Foreground = (SolidColorBrush)this.FindResource("Light");
 				LabelPitchMult.FontWeight = FontWeights.Bold;
 			}
-
 		}
 
 		private void MotionPitchMult_LostFocus(object sender, RoutedEventArgs e)

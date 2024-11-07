@@ -30,7 +30,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>$(SIMHUB_INSTALL_PATH)SimHubWPF.exe</StartProgram>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <OutDir>..\..\</OutDir>
@@ -48,6 +48,10 @@
     <StartProgram>$(SIMHUB_INSTALL_PATH)SimHubWPF.exe</StartProgram>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Atlas, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Atlas.dll</HintPath>
+    </Reference>
     <Reference Include="GameReaderCommon">
       <Private>False</Private>
     </Reference>
@@ -86,11 +90,12 @@
     <Compile Include="Eq.cs" />
     <Compile Include="EqTones.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="ListDictionary.cs" />
     <Compile Include="SimData.cs" />
     <Compile Include="SimDataMethods.cs" />
     <Compile Include="SimDataNotify.cs" />
     <Compile Include="Spec.cs" />
-    <Compile Include="BlekHapt.cs" />
+    <Compile Include="Haptics.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="GameId.cs" />
     <Compile Include="Properties\Resources.cs" />
@@ -99,6 +104,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="SpecEnd.cs" />
     <Compile Include="Themes.cs" />
     <Compile Include="ToneControl.cs" />
   </ItemGroup>

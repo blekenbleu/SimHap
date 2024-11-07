@@ -216,6 +216,11 @@ namespace blekenbleu.Haptic
 		internal int Index;
 		internal string raw = "DataCorePlugin.GameRawData.";
 		private ushort idleRPM;
+		private double slowerR1Sway;
+		private double fasterR1Sway;
+		private double sluggishR1Sway;
+		internal double impactsAccSway2S;
+		private double more, filtered;
 #else
 		public bool ABSActive;
 		public double ABSPulse;
@@ -283,7 +288,7 @@ namespace blekenbleu.Haptic
 		public double SuspensionRumbleMultR4;
 		public double SuspensionRumbleMultR5;
 
-		internal BlekHapt H;
+		internal Haptics H;
 		internal int Index;
 		internal string raw;
 		private long FrameTimeTicks;
@@ -513,17 +518,13 @@ namespace blekenbleu.Haptic
 		private float Physics(string prop)
 		{
 			var foo = PM.GetPropertyValue(raw+"Physics."+prop);
-			if (foo != null)
-				return Convert.ToSingle(foo);
-			return 0;
+			return (null == foo) ? 0 : Convert.ToSingle(foo);
 		}
 
 		private float Raw(string prop)
 		{
 			var foo = PM.GetPropertyValue(raw+""+prop);
-			if (foo != null)
-				return Convert.ToSingle(foo);
-			return 0;
+			return (null == foo) ? 0 : Convert.ToSingle(foo);
 		}
 
 		private void UpdateVehicle()
@@ -556,7 +557,7 @@ namespace blekenbleu.Haptic
 			ABSActive = H.N.ABSActive == 1;
 #endif
 			bool flag = true;
-			switch (BlekHapt.CurrentGame)
+			switch (Haptics.CurrentGame)
 			{
 				case GameId.AC:
 					SuspensionDistFL = Physics("SuspensionTravel01");
@@ -870,37 +871,37 @@ namespace blekenbleu.Haptic
 #endif
 					break;
 				case GameId.IRacing:
-					if (PM.GetPropertyValue(raw+"Telemetry.LFshockDefl") != null)
+					if (null != PM.GetPropertyValue(raw+"Telemetry.LFshockDefl"))
 					{
 						SuspensionDistFL = Raw("Telemetry.LFshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFshockDefl");
 					}
-					else if (PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl") != null)
+					else if (null != PM.GetPropertyValue(raw+"Telemetry.LFSHshockDefl"))
 					{
 						SuspensionDistFL = Raw("Telemetry.LFSHshockDefl");
 						SuspensionDistFR = Raw("Telemetry.RFSHshockDefl");
 					}
-					if (PM.GetPropertyValue(raw+"Telemetry.LRshockDefl") != null)
+					if (null != PM.GetPropertyValue(raw+"Telemetry.LRshockDefl"))
 					{
 						SuspensionDistRL = Raw("Telemetry.LRshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRshockDefl");
 					}
-					else if (PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl") != null)
+					else if (null != PM.GetPropertyValue(raw+"Telemetry.LRSHshockDefl"))
 					{
 						SuspensionDistRL = Raw("Telemetry.LRSHshockDefl");
 						SuspensionDistRR = Raw("Telemetry.RRSHshockDefl");
 					}
-					if (PM.GetPropertyValue(raw+"Telemetry.CFshockDefl") != null)
+					if (null != PM.GetPropertyValue(raw+"Telemetry.CFshockDefl"))
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.CFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.CFshockDefl");
 					}
-					else if (PM.GetPropertyValue(raw+"Telemetry.HFshockDefl") != null)
+					else if (null != PM.GetPropertyValue(raw+"Telemetry.HFshockDefl"))
 					{
 						SuspensionDistFL = 0.5 * SuspensionDistFL + Raw("Telemetry.HFshockDefl");
 						SuspensionDistFR = 0.5 * SuspensionDistFR + Raw("Telemetry.HFshockDefl");
 					}
-					if (PM.GetPropertyValue(raw+"Telemetry.CRshockDefl") != null)
+					if (null != PM.GetPropertyValue(raw+"Telemetry.CRshockDefl"))
 					{
 						SuspensionDistRL = 0.5 * SuspensionDistRL + Raw("Telemetry.CRshockDefl");
 						SuspensionDistRR = 0.5 * SuspensionDistRR + Raw("Telemetry.CRshockDefl");
@@ -1360,9 +1361,9 @@ namespace blekenbleu.Haptic
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Runtime(BlekHapt bh, PluginManager pluginManager)
+		internal void Runtime(Haptics hp, PluginManager pluginManager)
 		{
-			H = bh;
+			H = hp;
 			PM = pluginManager;
 			FPS = (double) PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			Rpms = Convert.ToUInt16(0.5 + H.N.Rpms);

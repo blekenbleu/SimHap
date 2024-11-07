@@ -7,33 +7,29 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
 using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Atlas;
 
 namespace blekenbleu.Haptic
 {
 	[PluginDescription("Car-specific haptic properties")]
 	[PluginAuthor("blekenbleu")]
 	[PluginName("BlekHapt")]
-	public class BlekHapt : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
+	public partial class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
-		static readonly string pname = nameof(BlekHapt);
+		internal static readonly string pname = nameof(Haptics);
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(
 			Assembly.GetExecutingAssembly().Location).FileVersion.ToString();
 		public static int LoadFailCount;
 		public static GameId CurrentGame = GameId.Other;
 		public string GameDBText;
-		internal bool Loaded, Waiting, Save, Set, Changed;
+		internal bool Save, Set, Changed;
 		internal string CarId;		// exactly match data.NewData.CarId for DataUpdate()
-#if !slim
-		private static readonly HttpClient client = new();
-#endif
-		private readonly string myfile = $"PluginsData/{pname}.{Environment.UserName}.json";
-//		private readonly string Atlasfile = $"PluginsData/{pname}.Atlas.json";
-		private readonly string Atlasfile = $"PluginsData/{pname}.Atlas_with_orders.json";
-		private static List<CarSpec> Atlas = new();
+		// PluginsData/Haptics.bleke.json AC has bad CRX del Sol for testing
+		internal readonly string myfile = $"PluginsData/{pname}.{Environment.UserName}.json";
+		internal static List<CarSpec> Atlas = new();
 		public Spec S { get; } = new() { };
 
 		public SimData D { get; set; }
@@ -106,106 +102,37 @@ namespace blekenbleu.Haptic
 		public Settings Settings { get; set; }
 
 		// ----------------------------------------------------------------
-
-		private static BlekHapt H;
-		internal static			// called from SetCar() switch
-#if !slim
-						async	// async must be void and static
-#endif
-		void FetchCarData(ushort redlineFromGame, ushort maxRPMFromGame, ushort ushortIdleRPM)							// FetchCarData() argument
+		internal					// called from SetCar() switch
+		void FetchCarData(ushort redlineFromGame, ushort maxRPMFromGame, ushort ushortIdleRPM)
 		{
-			Logging.Current.Info(pname + $".FetchCarData():  Index = {H.D.Index}," +
-							   (H.Save ? " Save " : "") + (H.Loaded ? " Loaded " : "") + (H.Waiting ? " Waiting" : "")
-								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : ""));
-
-			if (-2 == H.D.Index)	// first time for this CarId change?  Also called for retries with Index = -1
-			{
-				H.S.Notes = "";
-				H.Set = false;
-				H.D.Index = H.S.SelectCar(H, Atlas, redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
 /*
-				Logging.Current.Info(pname + ".SelectCar(): "
-									+ (Save ? " Save " : "") + (Loaded ? " Loaded " : "")
-									+ (Waiting ? " Waiting" : "") + (Set ? " Set": "")
-									+ (Changed ? "Changed " : "") + $" Index = {H.D.Index}");
+			Logging.Current.Info(pname + $".FetchCarData():  Index = {D.Index}," + (Save ? " Save " : "")
+								+ (Set ? " Set": "") + (Changed ? "Changed " : ""));
  */
-				if (0 <= H.D.Index)
-					return;
-			}
-#if !slim
-			// Index should be -1; non-negative values returned
-			try
+			if (-2 == D.Index)	// first time for this CarId change?  Also called for retries with Index = -1
 			{
-				H.Waiting = true;
-				string dls = null;
-				category ??= "0";
-				Uri requestUri = new("https://api.simhaptics.com/data/" + H.GameDBText
-								 + "/" + Uri.EscapeDataString(H.S.Car.id) + "/" + Uri.EscapeDataString(category));
-				HttpResponseMessage async = await client.GetAsync(requestUri);
-				async.EnsureSuccessStatusCode();
-				dls = async.Content.ReadAsStringAsync().Result;
-				if (null != dls && 11 < dls.Length)
-				{
-					H.Waiting = false;	// ReadAsStringAsync() success
-					Download dljc = JsonConvert.DeserializeObject<Download>(dls,
-										new JsonSerializerSettings
-										{
-											NullValueHandling = NullValueHandling.Ignore,
-											MissingMemberHandling = MissingMemberHandling.Ignore
-										}
-									);
-					if (null != dljc && null != dljc.data && 0 < dljc.data.Count
-					 && null != dljc.data[0].id && null != dljc.data[0].game && null != dljc.data[0].name)
-					{
-						CarSpec car = dljc.data[0];
-						car.defaults = "DB";
-						H.S.Cache(car);					// FetchCarData(): Set(CarId) at the end of SetCar()
-						LoadFailCount = 1;
-					//	Logging.Current.Info(pname + $".FetchCarData({car.name}): Successfully loaded; "
-					//						+ $" CarInitCount = {H.D.CarInitCount}");
-						H.D.CarInitCount = 0;
-						H.D.Index = -4;
-						return;
-					}
-				}
-				else if (null != dls)
-				{
-					if (-1 == H.D.Index)			// delayed dls? things may have moved on...
-						H.D.Index = -3;				// disable self until other code decides otherwise
-					if (11 == dls.Length)
-						H.Waiting = false;
-/*
-						Logging.Current.Info(pname + ".FetchCarData(): not in DB");
-					else if (0 < dls.Length)
-						Logging.Current.Info(pname + $".FetchCarData(): JsonConvert fail;  length {dls.Length}: "
-											+ dls.Substring(0, dls.Length > 20 ? 20 : dls.Length));
- */
-				}
-				// else Waiting
+				S.Notes = "";
+				Set = false;
+				D.Index = S.SelectCar(this, redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
+				Changed = false;
 			}
-			catch (HttpRequestException ex)		//  treat it like not in DB
-			{
-				Logging.Current.Error(pname + ".FetchCarData() Error: " + ex.Message);
-				H.Waiting = false;
-			}
-#endif
 		}	   // FetchCarData()
 
 		/// <summary>
 		/// Called one time per game data update, contains all normalized game data.
-		/// Raw data are intentionnally "hidden" under a generic object type (plugins SHOULD NOT USE)
+		/// Raw data are intentionnally "hidden" under a generic object type (plugins Should NOT USE)
 		/// This method is on the critical path, must execute as fast as possible and avoid throwing any error
 		/// </summary>
 		/// <param name="pluginManager"></param>
 		/// <param name="data">Current game data, including present and previous data frames.</param> 
 		internal GameData Gdat;
-		internal int On;
+		internal int IgnOn;
 		internal StatusDataBase N;
 		public void DataUpdate(PluginManager pluginManager, ref GameData data)
 		{
 			if (null == (N = data.NewData))
 			{
-				On = 0;
+				IgnOn = 0;
 				return;
 			}
 
@@ -214,56 +141,32 @@ namespace blekenbleu.Haptic
 			if (CarId == N.CarId || D.Locked)				// DataUpdate()
 			{
 				if (null != data.OldData && data.GameRunning
-					&& 1 == (On = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
+					&& 1 == (IgnOn = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
 					D.Runtime(this, pluginManager);
 				return;
 			}
 
-			On = 0;
+			IgnOn = 0;
 
-			if (Waiting)		// FetchCarData() has queried online data
-			{
-				if ((30 * LoadFailCount) > ++D.CarInitCount)
-					return;
-
-				H.Waiting = false;			// CarInitCount timeout
-				if (4 > LoadFailCount++)
-					return;					// do not give up (yet)
-
-				D.Index = -3;				// disable FetchCarData(); enable Defaults()
-				D.CarInitCount = 0;
-			//	Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}):  async Waiting timeout" +
-			//						 (Save ? " Save" : "") + (Loaded ? " Loaded" : "")
-			//						+ (Set ? " Set": "") + (Changed ? " Changed" : "" + $" Index = {D.Index}"));
-				Changed = false;
-			}
-			else if (Loaded || Changed)		// save before SetCar()
+			if (Changed)		// save before SetCar()
 			{
 				if (null == S.Car.name)
-					Logging.Current.Info(pname + $".S.SaveCar(): {CarId} missing car name");
-				else S.SaveCar(pname);		// DataUpdate():  add or update changed S.Car in Cars list;  Loaded = false
-				Loaded = false;
+					Logging.Current.Info($"\t{pname}.S.SaveCar(): {CarId} missing car name");
+				else if (S.SaveCar())			// DataUpdate():  add or update changed S.Car in Cache
+				{
+			//		Logging.Current.Info($"\t{pname}.S.SaveCar(): updated {S.Car.id} Index = {S.CacheIndex}/{S.Cars.Count}");
+				}
+				else if (0 < S.CacheIndex)
+					Logging.Current.Info($"\t{pname}.S.SaveCar():  {S.Car.id} makes {S.Cars.Count} {GameDBText} cars");
 			}
 
 			if (data.GameRunning || data.GamePaused || data.GameReplay || data.GameInMenu)
 			{
 				if (-2 == D.Index)
 					Set = Changed = false;
-				Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}): "
-									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
-									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
 				D.SetCar(pluginManager);
 			}
 		}	// DataUpdate()
-
-		// Null0() remove these if 0 value before saving JSON
-		private readonly List<string> zero = new() { "ehp", "idlerpm", "maxrpm", "redline" };
-		private string Null0(string j)
-		{
-			for (int i = 0; i < zero.Count; i++)
-				j = j.Replace($",\r\n	  \"{zero[i]}\": 0,", ",");
-			return j;
-		}
 
 		public void End(PluginManager pluginManager)
 		{
@@ -289,22 +192,8 @@ namespace blekenbleu.Haptic
 			for (int i = 1; i < E.Q.Count; i++)
 				Settings.Engine.Sliders.Add(E.Q[i].Slider);
 #endif
-			if (Save || Loaded || Changed)		// End()
-			{
-				if (Loaded || Changed)
-					S.LD.AddCar(S.Car);			// End()
-				string sjs = (null == S.LD) ? "" : Null0(S.LD.Jstring());	// delete 0 ushorts
-				if (0 == sjs.Length || "{}" == sjs)
-					Logging.Current.Info(pname + ".End(): JSON Serializer failure: "
-									+ $"{S.LD.Count} games, {S.Cars.Count} {S.Car.game} cars;  "
-									+ (Save ? "changes made.." : "(no changes)"));
-				else if (Save)
-				{
-					File.WriteAllText(myfile, sjs);
-					Logging.Current.Info(pname + $".End(): {S.LD.Count} games, including "
-						+ $"{S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
-				}
-			}
+			if (Save || Changed)		// End()
+				Logging.Current.Info(pname + ".End(): " + S.End(myfile, GameDBText, this));
 
 			// Remove default values from Settings per-game dictionaries
 #if !slim
@@ -594,16 +483,15 @@ namespace blekenbleu.Haptic
 		public void Init(PluginManager pluginManager)
 		{
 			string Atlasst = "";
+			CarSpecAtlas CSA = new();
 
-			H = this;								// static pointer to current instance
 			LoadFailCount = 1;
 			D = new SimData();
+			bool ShowFreq = true, ShowSusp = true, ShowPhysics = true;
 			SetGame(pluginManager);
 			Settings = this.ReadCommonSettings("Settings", () => new Settings());
-            bool ShowSusp = true, ShowPhysics = true;
-			bool ShowFreq = true, ShowTire = false;
-#if slim
-#else
+#if !slim
+			bool ShowTire = false;
 			E = new();
 			if (null == Settings.Engine || null == Settings.Engine.Sliders || null == Settings.Engine.Tones
 			 || 1 > Settings.Engine.Sliders.Count || 9 != Settings.Engine.Sliders[0].Length
@@ -641,6 +529,8 @@ namespace blekenbleu.Haptic
 				Settings.DownshiftDurationMs = 600;
 			if (1 > Settings.UpshiftDurationMs)
 				Settings.UpshiftDurationMs = 400;
+			if (null == Settings.SuspensionMult)
+				Settings.SuspensionMult = new();
 #if !slim
 			if (Settings.EngineMult == null)
 				Settings.EngineMult = new Dictionary<string, double>();
@@ -651,12 +541,10 @@ namespace blekenbleu.Haptic
 			if (!Settings.RumbleMult.ContainsKey("AllGames"))
 				Settings.RumbleMult.Add("AllGames", 5.0);
 #endif
-			if (Settings.SuspensionMult == null)
-				Settings.SuspensionMult = new Dictionary<string, double>();
 			if (!Settings.SuspensionMult.ContainsKey("AllGames"))
 				Settings.SuspensionMult.Add("AllGames", 1.5);
-			if (Settings.SuspensionGamma == null)
-				Settings.SuspensionGamma = new Dictionary<string, double>();
+			if (null == Settings.SuspensionGamma)
+				Settings.SuspensionGamma = new();
 			if (!Settings.SuspensionGamma.ContainsKey("AllGames"))
 				Settings.SuspensionGamma.Add("AllGames", 1.75);
 #if !slim
@@ -680,29 +568,24 @@ namespace blekenbleu.Haptic
 				Settings.Motion = new Dictionary<string, double>();
 #endif
 
-			if (File.Exists(Atlasfile))
+			if (0 <= CSA.InDict(GameDBText))
 			{
-				Dictionary<string, List<CarSpec>> JsonDict =
-					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(File.ReadAllText(Atlasfile));
-				if (null == JsonDict)
-					Logging.Current.Info(pname + ".Init(): Atlas load failure");
-				else if (JsonDict.ContainsKey(GameDBText))
-				{
-					Atlas = JsonDict[GameDBText];
-					Atlasst = $";  {Atlas.Count} cars in Atlas";
-				}
-				else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");
+				Atlas = CSA.Atlas(GameDBText);
+				Atlasst = $";  {Atlas.Count} cars in game Atlas";
 			}
-			else Logging.Current.Info(pname + $".Init():  no Atlas");
+			else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");
 
+			Save = Set = Changed = false;		// Init()
+			string text;
 			if (File.Exists(myfile))
 			{
-				string text = File.ReadAllText(myfile);
+				text = File.ReadAllText(myfile);
 				Dictionary<string, List<CarSpec>> json =
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
-				Logging.Current.Info(pname + ".Init():  " + S.LD.SetGame(this, json) + myfile + Atlasst);
+				text = S.LD.Init(this, json);
 			}
-			else Logging.Current.Info(pname + ".Init():  " + myfile + " not found" + Atlasst);
+			else text = ":  not found";
+			Logging.Current.Info(pname + ".Init() " + myfile + text + Atlasst);
 
 			D.Init(this);
 #if !slim
@@ -710,7 +593,6 @@ namespace blekenbleu.Haptic
 			this.AttachDelegate("EngineLoad", () => D.EngineLoad);
 			this.AttachDelegate("ABSPulse", () => D.ABSPulse);
 #endif
-			Save = Loaded = Waiting = Set = Changed = false;		// Init()
 			this.AttachDelegate("CarName", () => S.CarName);
 			this.AttachDelegate("CarId", () => S.Id);
 			this.AttachDelegate("Category", () => S.Category);
@@ -736,8 +618,9 @@ namespace blekenbleu.Haptic
 				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
 				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
 #if slim
-				this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
+                this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
 				this.AttachDelegate("rpmMain", () => D.rpmMain);
+
 				this.AttachDelegate("rpmPeakA2Rear", () => D.rpmPeakA2Rear);
 				this.AttachDelegate("rpmPeakB1Rear", () => D.rpmPeakB1Rear);
 				this.AttachDelegate("rpmPeakA1Rear", () => D.rpmPeakA1Rear);
@@ -874,7 +757,11 @@ namespace blekenbleu.Haptic
 					this.AttachDelegate("JerkYAvg", () => D.JerkYAvg);
 					this.AttachDelegate("Throttle", () => D.Accelerator);
 					this.AttachDelegate("VelocityX", () => D.VelocityX);
-#if !slim
+#if slim
+					this.AttachDelegate("impactsR1Sway", () => D.ImpactsR1Sway());
+					this.AttachDelegate("impactsAccSway2S", () => D.BipolarIIR(D.AccSway2S, D.impactsAccSway2S, 1, 15, 0.1));
+					this.AttachDelegate("ThrottleIIR", () => D.ThrottleIIR());
+#else
 					this.AttachDelegate("MPitch", () => D.MotionPitch);
 					this.AttachDelegate("MRoll", () => D.MotionRoll);
 					this.AttachDelegate("MYaw", () => D.MotionYaw);
