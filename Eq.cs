@@ -159,7 +159,7 @@ namespace blekenbleu.Haptic
 			int L = Lut[1].Length - 1;
 			ushort freq;
 
-			if (0 < harmonic)
+			if (0 < harmonic && null != This.S.Car.cyl)
 				freq = (ushort)((60 + harmonic * This.D.Rpms * This.S.Car.cyl)/120);
 			else freq = (ushort)((30 + This.D.Rpms) / 60);
 			// mute out-of-range frequencies

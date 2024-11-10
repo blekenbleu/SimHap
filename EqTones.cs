@@ -96,7 +96,9 @@ namespace blekenbleu.Haptic
 #if BS
 			return (ushort)((60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.SC.Ratio) / 120);		// power stroke harmonic
 #else
-			return (ushort)((60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * H.S.Car.cyl) / 120);		// power stroke harmonic
+			int c = (null != H.S.Car.cyl) ? (int)H.S.Car.cyl : 1;
+
+            return (ushort)((60 + (d * Tones[0].Freq[i] + a * Tones[2].Freq[i]) * H.D.Rpms * c) / 120);		// power stroke harmonic
 #endif
 		}
 
