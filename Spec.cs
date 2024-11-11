@@ -114,12 +114,12 @@ namespace blekenbleu.Haptic
 	  		Id = c.id;
 	  		EngineConfiguration = c.config;
 			if (null != c.cyl)
-	  			EngineCylinders = (ushort)c.cyl;
+				EngineCylinders = (ushort)c.cyl;
 	  		EngineLocation = c.loc;
 	  		PoweredWheels = c.drive;
 			if (null != c.hp)
 	  			MaxPower = (ushort)c.hp;
-	  		ElectricMaxPower = (ushort)(c.ehp ?? 0);
+	  		ElectricMaxPower = c.ehp ?? 0;
 			if (null != c.cc)
 	  			Displacement = (ushort)c.cc;
 			if (null != c.nm)

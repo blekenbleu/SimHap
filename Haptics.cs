@@ -567,7 +567,7 @@ namespace blekenbleu.Haptic
 			if (0 <= CSA.InDict(GameDBText))
 			{
 				Atlas = CSA.Atlas(GameDBText);
-				Atlasst = $";  {Atlas.Count} cars in game Atlas";
+				Atlasst = $";  {Atlas.Count} cars in game Atlas" + CSA.Oops;
 			}
 			else Logging.Current.Info(pname + $".Init():  {GameDBText} not in Atlas");
 
