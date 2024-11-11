@@ -6,7 +6,7 @@ namespace blekenbleu.Haptic
 {
 	public partial class SimData
 	{
-		internal void Init(Haptics sh)
+		internal void Init(BlekHapt sh)
 		{
 			H = sh;
 			string GDBtext = H.GameDBText;
@@ -99,8 +99,8 @@ namespace blekenbleu.Haptic
 
 			if (-2 == Index || -1 == Index)
 			{
-				H.S.CarId(H);										// SetCar() only exception: Forza
-				switch (Haptics.CurrentGame)
+				H.S.CarId();										// SetCar() only exceptions: Forza, RRRE
+				switch (BlekHapt.CurrentGame)
 				{
 					case GameId.AC:
 					case GameId.ACC:

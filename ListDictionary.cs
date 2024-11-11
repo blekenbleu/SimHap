@@ -16,13 +16,13 @@ namespace blekenbleu.Haptic
 		}
 
 		// initialize inDict
-		internal string Init(Haptics h, Dictionary<string, List<CarSpec>> json)
+		internal string Init(BlekHapt h, Dictionary<string, List<CarSpec>> json)
 		{
 			inDict = json;
 			int fi = inDict.ContainsKey(h.GameDBText) ? inDict[h.GameDBText].Count : 0;
 
 			if (1 > fi)
-				return $":  {inDict.Count} games, no {h.GameDBText} cars;  ";
+				return $":  {inDict.Count} games, no {h.GameDBText} cars";
 
 			// fill null specs from Atlas
 			// set h.Save if redundant specs in JSON
@@ -37,9 +37,9 @@ namespace blekenbleu.Haptic
 					redundant = true;
 					why = "duplicate";
 				}
-				else if (0 <= (fi = Haptics.Atlas.FindIndex(x => x.id == ds.id)))
+				else if (0 <= (fi = BlekHapt.Atlas.FindIndex(x => x.id == ds.id)))
 				{
-					cs = Haptics.Atlas[fi];
+					cs = BlekHapt.Atlas[fi];
 
 					if ((null == ds.name || "" == ds.name || "?" == ds.name) && null != cs.name)
 						ds.name = cs.name;
@@ -131,7 +131,7 @@ namespace blekenbleu.Haptic
 				if (redundant)
 				{
 					inDict[h.GameDBText].RemoveAt(i--);
-					Logging.Current.Info(Haptics.pname + ".ListDictionary.Init(" + h.myfile
+					Logging.Current.Info(BlekHapt.pname + ".ListDictionary.Init(" + h.myfile
 						+ $"): {why} {h.GameDBText} CarID: " + ds.id);
 				}
 			}

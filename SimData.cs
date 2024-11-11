@@ -212,7 +212,7 @@ namespace blekenbleu.Haptic
 #if slim
 		private long FrameTimeTicks;
 		private long FrameCountTicks;
-		internal Haptics H;
+		internal BlekHapt H;
 		internal int Index;
 		internal string raw = "DataCorePlugin.GameRawData.";
 		private ushort idleRPM;
@@ -288,7 +288,7 @@ namespace blekenbleu.Haptic
 		public double SuspensionRumbleMultR4;
 		public double SuspensionRumbleMultR5;
 
-		internal Haptics H;
+		internal BlekHapt H;
 		internal int Index;
 		internal string raw;
 		private long FrameTimeTicks;
@@ -557,7 +557,7 @@ namespace blekenbleu.Haptic
 			ABSActive = H.N.ABSActive == 1;
 #endif
 			bool flag = true;
-			switch (Haptics.CurrentGame)
+			switch (BlekHapt.CurrentGame)
 			{
 				case GameId.AC:
 					SuspensionDistFL = Physics("SuspensionTravel01");
@@ -1361,9 +1361,8 @@ namespace blekenbleu.Haptic
 		internal ushort Rpms;
 
 		// called from DataUpdate()
-		internal void Runtime(Haptics hp, PluginManager pluginManager)
+		internal void Runtime(PluginManager pluginManager)
 		{
-			H = hp;
 			PM = pluginManager;
 			FPS = (double) PM.GetPropertyValue("DataCorePlugin.DataUpdateFps");
 			Rpms = Convert.ToUInt16(0.5 + H.N.Rpms);

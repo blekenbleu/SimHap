@@ -17,7 +17,7 @@ namespace blekenbleu.Haptic
 	[PluginDescription("Car-specific haptic properties")]
 	[PluginAuthor("blekenbleu")]
 	[PluginName("BlekHapt")]
-	public partial class Haptics : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
+	public partial class BlekHapt : IPlugin, IDataPlugin, IWPFSettingsV2 //, IWPFSettings
 	{
 		internal static readonly string pname = "BlekHapt";
 		public string PluginVersion = FileVersionInfo.GetVersionInfo(
@@ -27,7 +27,7 @@ namespace blekenbleu.Haptic
 		public string GameDBText;
 		internal bool Save, Set, Changed;
 		internal string CarId;		// exactly match data.NewData.CarId for DataUpdate()
-		// PluginsData/Haptics.bleke.json AC has bad CRX del Sol for testing
+		// PluginsData/BlekHapt.bleke.json AC has bad CRX del Sol for testing
 		internal readonly string myfile = $"PluginsData/{pname}.{Environment.UserName}.json";
 		internal static List<CarSpec> Atlas = new();
 		public Spec S { get; } = new() { };
@@ -62,18 +62,18 @@ namespace blekenbleu.Haptic
 		public string LeftMenuTitle => pname;
 		public PluginManager PluginManager { get; set; }
 
-		internal SettingsControl SC;
+		internal SettingsControl View;
 		public Control GetWPFSettingsControl(PluginManager pluginManager)
 		{
-			SC = new SettingsControl(this);
+			View = new SettingsControl(this);
 #if slim
 			if (null != Settings.Theme)
-				SC.ChangeTheme(Settings.Theme);
+				View.ChangeTheme(Settings.Theme);
 #else
 			if (null != Settings.Engine)
 			{
 				if (null != Settings.Engine.Theme)
-					SC.ChangeTheme(Settings.Engine.Theme);
+					View.ChangeTheme(Settings.Engine.Theme);
 				if (null != Settings.Engine.Tones)
 				{
 					if (0 < Settings.Engine.Tones.Length)
@@ -93,7 +93,7 @@ namespace blekenbleu.Haptic
 					  + Settings.Engine.Sliders[0].Length.ToString());
 			}
 #endif
-			return SC;
+			return View;
 		}
 
 		public Settings Settings { get; set; }
@@ -110,7 +110,7 @@ namespace blekenbleu.Haptic
 			{
 				S.Notes = "";
 				Set = false;
-				D.Index = S.SelectCar(this, redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
+				D.Index = S.SelectCar(Atlas, redlineFromGame, maxRPMFromGame, ushortIdleRPM);	// pass game defaults
 				Changed = false;
 			}
 		}	   // FetchCarData()
@@ -139,7 +139,7 @@ namespace blekenbleu.Haptic
 			{
 				if (null != data.OldData && data.GameRunning
 					&& 1 == (IgnOn = (int)pluginManager.GetPropertyValue("DataCorePlugin.GameData.EngineIgnitionOn")))
-					D.Runtime(this, pluginManager);
+					D.Runtime(pluginManager);
 				return;
 			}
 
@@ -151,7 +151,7 @@ namespace blekenbleu.Haptic
 					Logging.Current.Info($"\t{pname}.S.SaveCar(): {CarId} missing car name");
 				else if (S.SaveCar())			// DataUpdate():  add or update changed S.Car in Cache
 				{
-			//		Logging.Current.Info($"\t{pname}.S.SaveCar(): updated {S.Car.id} Index = {S.CacheIndex}/{S.Cars.Count}");
+				//	Logging.Current.Info($"\t{pname}.S.SaveCar(): updated {S.Car.id} Index = {S.CacheIndex}/{S.Cars.Count}");
 				}
 				else if (0 < S.CacheIndex)
 					Logging.Current.Info($"\t{pname}.S.SaveCar():  {S.Car.id} makes {S.Cars.Count} {GameDBText} cars");
@@ -168,11 +168,11 @@ namespace blekenbleu.Haptic
 		public void End(PluginManager pluginManager)
 		{
 #if slim
-			Settings.Theme = SC.Theme;
+			Settings.Theme = View.Theme;
 #else
 			if (null == Settings.Engine)
 				Settings.Engine = new();
-			Settings.Engine.Theme = SC.Theme;			// easier to stuff here
+			Settings.Engine.Theme = View.Theme;			// easier to stuff here
 			if (null == Settings.Engine.Tones)
 			{ 
 				Settings.Engine.Tones = new ushort[4][];
@@ -584,6 +584,7 @@ namespace blekenbleu.Haptic
 			Logging.Current.Info(pname + ".Init() " + myfile + text + Atlasst);
 
 			D.Init(this);
+			S.Init(this);
 #if !slim
 			E.Init(Settings.Engine, this);
 			this.AttachDelegate("EngineLoad", () => D.EngineLoad);

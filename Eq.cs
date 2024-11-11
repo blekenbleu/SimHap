@@ -20,7 +20,7 @@ namespace blekenbleu.Haptic
 
 	public partial class Geq
 	{
-		internal Haptics H;	// set in Init()
+		internal BlekHapt H;	// set in Init()
 		internal List<Eq> Q;	// EQ Slider array
 		internal int EQswitch = 0;
 
@@ -151,7 +151,7 @@ namespace blekenbleu.Haptic
 		 ; piecewise linear interpolation wants power-of-2 LUT.Length
 		 ; 10 <= max/min frequency ratio supports LUT.Length = 8
 		 */
-		public ushort Play(Haptics This, byte destination)
+		public ushort Play(BlekHapt This, byte destination)
 		{
 			H = This;
 			byte harmonic = (byte)(destination & 7);

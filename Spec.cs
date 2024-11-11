@@ -50,13 +50,19 @@ namespace blekenbleu.Haptic
 		internal List<CarSpec> Cars { get => Lcache; }
 		internal int CacheIndex = -1;
 		internal string Src;
-		Haptics H;
+		int AtlasId = -1;
+		BlekHapt H;
 
 		public Spec()
 		{
 			Private_Car = new() { };			// required 24 May 2024
 			Lcache = new();						// required 24 May 2024
 			LD = new() { };
+		}
+
+		internal void Init(BlekHapt h)
+		{
+			H = h;
 		}
 
 		private CarSpec NewCar(CarSpec c)
@@ -75,7 +81,7 @@ namespace blekenbleu.Haptic
 				nm = c.nm,
 				redline = c.redline,
 				maxrpm = c.maxrpm,
-				idlerpm = c.idlerpm,						  // CarSpec element
+				idlerpm = c.idlerpm,							// CarSpec element
 				order = c.order,
 				category = c.category,
 				notes = c.notes,
@@ -84,9 +90,8 @@ namespace blekenbleu.Haptic
 			};
 		}
 
-		internal void CarId(Haptics h)						// store CarID until Set()
+		internal void CarId()									// store CarID until Set()
 		{
-			H = h;
 			Private_Car.id = H.N.CarId;
 		}
 
@@ -164,17 +169,18 @@ namespace blekenbleu.Haptic
 			Lcache.RemoveAt(CacheIndex);
 			CacheIndex = -1;
 			int Idx;
-			if (0 < Haptics.Atlas.Count && 0 <= Haptics.Atlas.FindIndex(x => x.id == Private_Car.id)
-				&& LD.inDict.ContainsKey(H.GameDBText) && 0 <= (Idx = LD.inDict[H.GameDBText].FindIndex(x => x.id == Car.id)))
+
+			if (0 <= AtlasId && LD.inDict.ContainsKey(H.GameDBText)
+			  && 0 <= (Idx = LD.inDict[H.GameDBText].FindIndex(x => x.id == Car.id)))
 					LD.inDict[H.GameDBText].RemoveAt(Idx);	// remove JSON entry if also in Atlas
 			return true;
 		}
 
-		internal int SelectCar(Haptics h, ushort r, ushort m, ushort I)
+		internal int SelectCar(List<CarSpec> Atlas, ushort r, ushort m, ushort I)
 		{
-			H = h;
 			redlineFromGame = r;  maxRPMFromGame = m;  ushortIdleRPM = I;
 			CacheIndex = Lcache.FindIndex(x => x.id == Car.id);				// changed Car.id
+			AtlasId = (1 > Atlas.Count) ? -1 : Atlas.FindIndex(x => x.id == Car.id);
 
 			if (0 <= CacheIndex)
 			{
@@ -191,22 +197,22 @@ namespace blekenbleu.Haptic
 				return 0;
 			}
 
-			if (1 > Haptics.Atlas.Count)
+			if (1 > Atlas.Count)
 				return -1;
 
-			if (0 <= (id = Haptics.Atlas.FindIndex(x => x.id == Car.id)))
+			if (0 <= (id = AtlasId))
 			{
 				Src = "Atlas match";
 				Default = "Atlas";
-				Cache(Haptics.Atlas[id]);						// SelectCar()
+				Cache(Atlas[id]);						// SelectCar()
 				return id;
 			}
 
-			if (0 <= (id = Haptics.Atlas.FindIndex(x => x.name == Car.name)))
+			if (0 <= (id = Atlas.FindIndex(x => x.name == Car.name)))
 			{
 				Src = "Atlas CarName match";					// RRRE
 				Default = "Atlas";
-				DfltCar = Haptics.Atlas[id];
+				DfltCar = Atlas[id];
 				DfltCar.id = Car.id;
 				DfltCar.name = Car.name;
 				Cache(DfltCar);									// SelectCar()

@@ -11,7 +11,7 @@ namespace blekenbleu.Haptic
 
 	public partial class SettingsControl : UserControl //, IComponentConnector
 	{
-		public readonly Haptics Plugin;
+		public readonly BlekHapt Plugin;
 		readonly ResourceDictionary Tres;
 		public SettingsControl()
 		{
@@ -21,7 +21,7 @@ namespace blekenbleu.Haptic
 		}
 
 
-		public SettingsControl(Haptics plugin) : this()
+		public SettingsControl(BlekHapt plugin) : this()
 		{
 			Plugin = plugin;
 			DataContext = Plugin;
@@ -117,10 +117,10 @@ namespace blekenbleu.Haptic
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
-//			Logging.Current.Info($"Haptics.Refresh_Click()");
+//			Logging.Current.Info($"BlekHapt.Refresh_Click()");
 			Plugin.S.UnCache();
 			Plugin.Changed = false;
-			Haptics.LoadFailCount = 1;
+			BlekHapt.LoadFailCount = 1;
 			Plugin.CarId = "";		   // Refresh_Click() force a mismatch
 		}
 

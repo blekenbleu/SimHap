@@ -95,7 +95,7 @@
     <Compile Include="SimDataMethods.cs" />
     <Compile Include="SimDataNotify.cs" />
     <Compile Include="Spec.cs" />
-    <Compile Include="Haptics.cs" />
+    <Compile Include="BlekHapt.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="GameId.cs" />
     <Compile Include="Properties\Resources.cs" />

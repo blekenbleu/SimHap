@@ -67,7 +67,7 @@ namespace blekenbleu.Haptic
 		 ;	- scrub Cache and LD.inDict[GameDBText]
 		 ;	- replace JSON for this game and store
 		 */
-		internal string End(string myfile, string GameDBText, Haptics h)
+		internal string End(string myfile, string GameDBText, BlekHapt h)
 		{
 			if (h.Changed)
 				SaveCar();
@@ -75,15 +75,15 @@ namespace blekenbleu.Haptic
 				return "(no changes)";
 
 			List<CarSpec> tlc = new();
-			bool noAt = 1 > Haptics.Atlas.Count;
+			bool noAt = 1 > BlekHapt.Atlas.Count;
 			int ai, li = Lcache.Count;
 
 			for (int i = 0; i < li; i++)	// accumulate Scrub()ed cache
 			{
 				tc = Lcache[i];
-				if (noAt || 0 > (ai = Haptics.Atlas.FindIndex(x => x.id == tc.id)))
+				if (noAt || 0 > (ai = BlekHapt.Atlas.FindIndex(x => x.id == tc.id)))
 					Scrub(null);
-				else Scrub(Haptics.Atlas[ai]);
+				else Scrub(BlekHapt.Atlas[ai]);
 				if (nonnull)
 					tlc.Add(tc);
 			}
@@ -95,9 +95,9 @@ namespace blekenbleu.Haptic
 				if (1 > tlc.Count || 0 > tlc.FindIndex(x => x.id == tc.id))
 				{
 					// Scrub JSON CarSpecs not yet accumulated
-					if (noAt || 0 > (ai = Haptics.Atlas.FindIndex(x => x.id == tc.id)))
+					if (noAt || 0 > (ai = BlekHapt.Atlas.FindIndex(x => x.id == tc.id)))
                     	Scrub(null);
-					else Scrub(Haptics.Atlas[ai]);
+					else Scrub(BlekHapt.Atlas[ai]);
 					if (nonnull)
                     	tlc.Add(tc);
 				}

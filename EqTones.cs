@@ -11,7 +11,7 @@ namespace blekenbleu.Haptic
 	{
 		public Tone[] Tones;			// engine frequency harmonic, amplitude
 
-		public void Publish(Haptics This, int L)
+		public void Publish(BlekHapt This, int L)
 		{
 			switch (L)
 			{
@@ -53,7 +53,7 @@ namespace blekenbleu.Haptic
 
 		// called by UI to add equalizer LUT instances,
 		// which are frequency component gains from Play() using those LUTs
-		public bool AddProps(Haptics This,  int i)
+		public bool AddProps(BlekHapt This,  int i)
 		{
 			if (3 <= LUT.Count)
 			{
@@ -113,7 +113,7 @@ namespace blekenbleu.Haptic
 									   + d * Tones[1].Freq[i]));
 		}
 
-		internal void Init(Engine Engine, Haptics h)
+		internal void Init(Engine Engine, BlekHapt h)
 		{
 			H = h;
 			Tones = new Tone[4];

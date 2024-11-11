@@ -140,7 +140,7 @@ else lock out `FetchCarData()` by `Index = -3` and continue to `AddCar()` and `S
 - failed JSON sets `Index = -1`, enabling `FetchCarData()`,   
     which typically sets `Waiting = true` and goes async.  
 - *subsequent* `SetCar()` again checks for `null != dljc || -3 == Index`
-	else eventually setting `Index = -3` and `Waiting = false` for `3 <= Haptics.LoadFailCount`  
+	else eventually setting `Index = -3` and `Waiting = false` for `3 <= BlekHapt.LoadFailCount`  
 - if (`-3 == Index` ), then `Defaults()`  
 - consequently, server car Specs are associated with `-1 == Index && !Waiting` 
 - `Defaults()` attempts to generate game-specific car `Spec`...  
