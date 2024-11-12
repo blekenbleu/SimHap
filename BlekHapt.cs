@@ -615,7 +615,7 @@ namespace blekenbleu.Haptic
 				this.AttachDelegate("FreqPeakA2", () => D.FreqPeakA2);
 				this.AttachDelegate("FreqPeakB2", () => D.FreqPeakB2);
 #if slim
-                this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
+				this.AttachDelegate("FreqLFEeq", () => D.LFEeq);
 				this.AttachDelegate("rpmMain", () => D.rpmMain);
 
 				this.AttachDelegate("rpmPeakA2Rear", () => D.rpmPeakA2Rear);
