@@ -217,9 +217,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\backraw.png" />
   </ItemGroup>
   <ItemGroup>
