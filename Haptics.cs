@@ -108,9 +108,10 @@ namespace sierses.Sim
 		// ----------------------------------------------------------------
 
 		private static Haptics H;
-		internal static			// called from SetCar() switch
+		static string category;
+		internal static         // called from SetCar() switch
 #if !slim
-						async void	// async must be void and static
+						async   // async must be void and static
 #endif
 		void FetchCarData(ushort redlineFromGame, ushort maxRPMFromGame, ushort ushortIdleRPM)							// FetchCarData() argument
 		{
