@@ -82,6 +82,9 @@ namespace sierses.Sim
 
 		internal void AddCar(CarSpec car)			// ListDictionary: S.LD.AddCar; update Save
 		{
+			if (null == H)
+				return;
+
 			string g = H.GameDBText;
 
 			if (inDict.ContainsKey(g))
@@ -224,7 +227,7 @@ namespace sierses.Sim
 				Lcache.Add(NewCar(c));
 				Idx = Lcache.FindIndex(x => x.id == c.id);
 			}
-			Logging.Current.Info($"H.S.Cache({c.name}): Car {Idx} of {Lcache.Count}");
+//			Logging.Current.Info($"H.S.Cache({c.name}): Car {Idx} of {Lcache.Count}");
 			return Idx;
 		}
 
@@ -284,12 +287,12 @@ namespace sierses.Sim
 			if (0 > Index)
 			{
 				Lcache.Add(Private_Car);		// generic List<CarSpec>.Add()
-				Logging.Current.Info($"\t{pname}.S.SaveCar():  {Car.id} makes {Cars.Count} {Car.game} cars");
+//				Logging.Current.Info($"\t{pname}.S.SaveCar():  {Car.id} makes {Cars.Count} {Car.game} cars");
 				LD.AddCar(Car);
 				return false;
 			}
 
-			Logging.Current.Info($"\t{pname}.S.SaveCar(): {Car.id} Index = {Index}/{Cars.Count}");
+//			Logging.Current.Info($"\t{pname}.S.SaveCar(): {Car.id} Index = {Index}/{Cars.Count}");
 			bool tf = false;
 			if (Lcache[Index].game != Private_Car.game)
 			{

@@ -256,4 +256,8 @@
     <Resource Include="Resources\midi50x50_2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd "$(SIMHUB_INSTALL_PATH)"
+if $(ConfigurationName) == Release (7z u R:\TEMP\SimHap.zip sierses.Sim.dll)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

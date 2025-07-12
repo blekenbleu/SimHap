@@ -63,8 +63,7 @@ namespace sierses.Sim
 		internal void SetCar(PluginManager pluginManager)
 		{
 			PM = pluginManager;
-/*
-			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}): " +
+/*			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}): " +
 								(H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "") + (H.Waiting ? " Waiting" : "")
 								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
  */
@@ -156,9 +155,10 @@ namespace sierses.Sim
 
 			if (H.Waiting)	// still hoping for online match?
 			{
-				Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) Waiting return: "
+/*				Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) Waiting return: "
 									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
 									+ (H.Set ? " Set": "") + (H.Changed ? " Changed" : "") + $" Index = {Index}");
+ */
 				return;				// FetchCarData() DB accesses run SetCar() at least twice.
 			}
 
@@ -167,12 +167,12 @@ namespace sierses.Sim
 			else if (0 > Index)
 				H.S.Defaults(H.N);	// SetCar()
 
-			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}/{H.S.Id}): "
+/*			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}/{H.S.Id}): "
 								+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
 								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "")
 								+ $" {H.N.CarModel}; "
 								+ (LoadText = $" {H.S.Game} " + H.S.Src));
-
+ */
 			// finalize car
 			Gears = H.N.CarSettings_MaxGears > 0 ? H.N.CarSettings_MaxGears : 1;
 			GearInterval = 1 / Gears;
@@ -216,9 +216,10 @@ namespace sierses.Sim
 			H.CarId = H.N.CarId;					// SetCar(): car change is complete
 			CarInitCount = 0;
 			Index = -2;	// for next time
-			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) ending: "
+/*			Logging.Current.Info($"Haptics.SetCar({H.N.CarId}) ending: "
 									+ (H.Save ? " Save" : "") + (H.Loaded ? " Loaded" : "")
 									+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : "") + $" Index = {Index}");
+ */
 #if BS
 			switch (H.S.EngineCylinders)	// BS
 			{

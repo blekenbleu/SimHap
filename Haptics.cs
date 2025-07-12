@@ -81,8 +81,9 @@ namespace sierses.Sim
 			{
 				if (null != Settings.Engine.Theme)
 					SC.ChangeTheme(Settings.Engine.Theme);
-				if (null != Settings.Engine.Tones)
-				{
+				if (null == Settings.Engine.Tones)
+					Logging.Current.Info(pname  + ":  null Settings.Engine.Tones");
+/*				else {
 					if (0 < Settings.Engine.Tones.Length)
 					{
 						if (8 != Settings.Engine.Tones[0].Length)
@@ -90,14 +91,15 @@ namespace sierses.Sim
 							+ Settings.Engine.Tones[0].Length.ToString());
 					} else Logging.Current.Info(pname + ": zero Settings.Engine.Tones.Length");
 				}
-				else Logging.Current.Info(pname  + ":  null Settings.Engine.Tones");
+ */
 				if (null == Settings.Engine.Sliders)
 					Logging.Current.Info(pname + ":  null Settings.Engine.Sliders");
 				else if (1 > Settings.Engine.Sliders.Count)
 					Logging.Current.Info(pname + ": zero Settings.Engine.Sliders.Count");
-				else if (9 != Settings.Engine.Sliders[0].Length)
+/*				else if (9 != Settings.Engine.Sliders[0].Length)
 					Logging.Current.Info(pname + ": Settings.Engine.Sliders[0].Length = "
 					  + Settings.Engine.Sliders[0].Length.ToString());
+ */
 			}
 #endif
 			return SC;
@@ -108,17 +110,18 @@ namespace sierses.Sim
 		// ----------------------------------------------------------------
 
 		private static Haptics H;
-		static string category;
+		static string category = "0";
 		internal static         // called from SetCar() switch
 #if !slim
 						async   // async must be void and static
 #endif
 		void FetchCarData(ushort redlineFromGame, ushort maxRPMFromGame, ushort ushortIdleRPM)							// FetchCarData() argument
 		{
+/*
 			Logging.Current.Info(pname + $".FetchCarData():  Index = {H.D.Index}," +
 							   (H.Save ? " Save " : "") + (H.Loaded ? " Loaded " : "") + (H.Waiting ? " Waiting" : "")
 								+ (H.Set ? " Set": "") + (H.Changed ? "Changed " : ""));
-
+ */
 			if (-2 == H.D.Index)	// first time for this CarId change?  Also called for retries with Index = -1
 			{
 				H.S.Notes = "";
@@ -137,11 +140,12 @@ namespace sierses.Sim
 			// Index should be -1; non-negative values returned
 			try
 			{
+                Uri requestUri = new("https://api.simhaptics.com/data/" + H.GameDBText
+								 + "/" + Uri.EscapeDataString(H.S.Car.id) + "/" + Uri.EscapeDataString(category));
+				if (null == requestUri)
+					return;
 				H.Waiting = true;
 				string dls = null;
-				category ??= "0";
-				Uri requestUri = new("https://api.simhaptics.com/data/" + H.GameDBText
-								 + "/" + Uri.EscapeDataString(H.S.Car.id) + "/" + Uri.EscapeDataString(category));
 				HttpResponseMessage async = await client.GetAsync(requestUri);
 				async.EnsureSuccessStatusCode();
 				dls = async.Content.ReadAsStringAsync().Result;
@@ -250,9 +254,10 @@ namespace sierses.Sim
 			{
 				if (-2 == D.Index)
 					Set = Changed = false;
-				Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}): "
+/*				Logging.Current.Info(pname + $".DataUpdate({N.CarId}/{S.Id}): "
 									+ (Save ? " Save" : "") + (Loaded ? " Loaded" : "") + (Waiting ? " Waiting" : "")
 									+ (Set ? " Set": "") + (Changed ? " Changed" : "") + $" Index = {D.Index}");
+ */
 				D.SetCar(pluginManager);
 			}
 		}	// DataUpdate()
@@ -302,8 +307,9 @@ namespace sierses.Sim
 				else if (Save)
 				{
 					File.WriteAllText(myfile, sjs);
-					Logging.Current.Info(pname + $".End(): {S.LD.Count} games, including "
+/*					Logging.Current.Info(pname + $".End(): {S.LD.Count} games, including "
 						+ $"{S.LD.CarCount(GameDBText)} {GameDBText} cars, written to " + myfile);
+ */
 				}
 			}
 
@@ -615,12 +621,13 @@ namespace sierses.Sim
 						Logging.Current.Info(pname + $".Init(): null Settings.Engine.Sliders");
 					else if (1 > Settings.Engine.Sliders.Count)
 						Logging.Current.Info(pname + $".Init(): 0 Settings.Engine.Sliders");
-					else if (9 != Settings.Engine.Sliders[0].Length)
+/*					else if (9 != Settings.Engine.Sliders[0].Length)
 						Logging.Current.Info(pname + $".Init(): Settings.Engine.Sliders[0].Slider.Length = "
 								+ Settings.Engine.Sliders[0].Length.ToString());
+ */
 					if (null == Settings.Engine.Tones)
 						Logging.Current.Info(pname + $".Init(): null Settings.Engine.Tones");
-					else {
+/*					else {
 						if (4 != Settings.Engine.Tones.Length)
 							Logging.Current.Info(pname + $".Init():  Settings.Engine.Tones.Length = "
 								+ Settings.Engine.Tones.Length.ToString());
@@ -628,9 +635,10 @@ namespace sierses.Sim
 							Logging.Current.Info(pname + $".Init():  Settings.Engine.Tones[0].Freq.Length = "
 								+ Settings.Engine.Tones[0].Length.ToString()); 
 					}
+ */
 				}
 				Settings = new();	// Settings.Engine will be initialized in End()
-				Logging.Current.Info(pname + $".Init(): re-initializing Settings");
+//				Logging.Current.Info(pname + $".Init(): re-initializing Settings");
 			}
 
 			if (1 > Settings.ABSPulseLength)
@@ -699,7 +707,7 @@ namespace sierses.Sim
 				string text = File.ReadAllText(myfile);
 				Dictionary<string, List<CarSpec>> json =
 					JsonConvert.DeserializeObject<Dictionary<string, List<CarSpec>>>(text);
-				Logging.Current.Info(pname + ".Init():  " + S.LD.SetGame(this, json) + myfile + Atlasst);
+//				Logging.Current.Info(pname + ".Init():  " + S.LD.SetGame(this, json) + myfile + Atlasst);
 			}
 			else Logging.Current.Info(pname + ".Init():  " + myfile + " not found" + Atlasst);
 
