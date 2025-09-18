@@ -28,7 +28,7 @@
 		<ResourceDictionary>
 			<!--  needed for Designer debugging  -->
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/sierses.Sim;component/Themes/SteelTheme.xaml" />
+				<ResourceDictionary Source="Themes/SteelTheme.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<!--  gets overridden by ChangeTheme()  -->
 

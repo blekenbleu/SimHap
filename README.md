@@ -1,5 +1,5 @@
 # Haptics  
-- decompiled by @**dMASS** from @**sierses**' `.dll`   
+- decompiled by @**dMASS** from @**sierses**' `.dll` &emsp; [history](Doc/history.md)
 - decompiled `Haptics.csproj` hacked for SimHub plugin compatibility by @**blekenbleu**  
 - [initial build errors](Doc/error1.txt)  
 - [JToken.explicit build errors](Doc/error2.txt) after others addressed
@@ -11,7 +11,7 @@
 -  blank engine data;&nbsp; *was*:  
 	![](Doc/blank.jpg)  
 	*now*:  
-	![](Doc/engine.jpg)  
+	![](Doc/Engine.png)  
 	- caused by wrong fix for [build errors](Doc/message.txt)  
 	- *14 May 2024*:&nbsp;  eliminated `SettingsControl.xaml.cs` stripping for missing engine data
 		- `Untoken()` replaced disallowed `JToken.op_Explicit(jtoken[(object) "name"])` 
